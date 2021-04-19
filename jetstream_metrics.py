@@ -41,12 +41,6 @@ def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
         return None, None
     
 
-# def weighted_sum(x, axis, weights):
-#     if x.shape[0] == len(weights):
-#         return np.sum(x * weights, axis=axis)
-#     else:
-#         return np.nan
-
 
 def Ceppi_et_al_2015(data):
     """

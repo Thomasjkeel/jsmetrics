@@ -54,5 +54,5 @@ class DataFormatter:
         return DataFormatter(subset_data)
 
 
-    def calc_metric(self):
+    def compute_metric(self):
         return

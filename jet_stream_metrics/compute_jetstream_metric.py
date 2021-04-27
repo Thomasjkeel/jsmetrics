@@ -71,6 +71,18 @@ def get_available_metric_list(data, all_metrics):
     return available_metrics
 
 
+def get_usable_metrics_list(data, all_metrics):
+    """
+        Only looks at if correct variables exist for metrics and
+        ignores lat/lon, temporal and spatial resolution and plev 
+    """
+    usuable_metrics = []
+    for metric in all_metrics:
+        if check_all_variables_available(data, all_metrics[metric]):
+            usuable_metrics.append(metric)
+    return usuable_metrics
+
+
 def check_all_variables_available(data, metric):
     """
         Checks if all variables required to compute metric exist in the data

@@ -11,10 +11,18 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-# JETSTREAM_METRICS will have list of all metrics and how the data is being subset
-JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "plev": [
-    "85000",  "70000"], "metric": jetstream_metrics.woolings_et_al_2010}}
-
+# RULES for JETSTREAM_METRICS
+    # 1. must have the keys: 'variables', 'coords' and 'metric'
+    # 2. 'variables' will contain the required CMIP6? model output variable names
+    # 3. 'coords' will contain the required CMIP6? standard coords and each coord
+    #  will provide a list of 2 values: mininum value for coord and maximum
+    #  value for coord and must be a number
+        # 3.1 for 'plev' coord it is in millibars and higher pressure is
+        #  considered the minimum value (e.g. 85000 mbar - 50000 mbar) 
+    # 4. 'metric' is the name of a function in jetstream_metrics.py
+JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
+    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010}}
+# , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
 
 def subset_data(data, metric):
     """
@@ -39,7 +47,7 @@ def compute_metric(data, metric):
     return
 
 
-def get_available_metric_list(data, all_metrics):
+def get_available_metric_list(data, all_metrics, return_coord_error=False):
     """
     Checks which variables can be used by the data
         
@@ -47,6 +55,14 @@ def get_available_metric_list(data, all_metrics):
         ----------
         data : xr.Dataset or similar
             Xarray dataset 
+        
+        all_metrics : dict
+            all jet-stream metrics
+
+        return_coord_error : bool
+            whether a message about where the correct coords but wrong
+            coord values should be returned in available metrics list
+            e.g. wrong pressure level (plev) 
 
         Returns
         -------
@@ -56,18 +72,35 @@ def get_available_metric_list(data, all_metrics):
     """
     available_metrics = []
     for metric in all_metrics:
-        metric_usable = False
-        if check_all_variables_available(data, all_metrics[metric]):
-            for metric_property in all_metrics[metric].keys():
-                # check that data exists in the data loaded by the class
-                # if not metric_property in data.coord:
-                # metric_usuable = False
-                # break # TODO: check logic and test
-                if metric_property in data.coords:
-                    print('this',metric_property)
-                pass
+        metric_usable = True
+        if check_all_variables_available(data, metric=all_metrics[metric]):
+            # check that all coords exists in xarray data i.e. plev, lat, etc.
+            if return_coord_error:
+                coord_error_message = ""
+            for coord in all_metrics[metric]['coords'].keys():
+                if coord in data.coords:
+                    coord_vals = all_metrics[metric]['coords'][coord]
+                    coord_available = check_if_coord_vals_available(data, coord, coord_vals)
+                    # if coord fails check, provide user information why
+                    if return_coord_error and not coord_available:
+                            coord_error_message += "coord: %s needs to be between %s and %s. " % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
+                    else:
+                        metric_usable = False
+                        break
+                else:
+                    # if it does not exist then break loop as it is required for the metric
+                    metric_usable = False
+                    break
+        else:
+            metric_usable = False
+            
+        ## will make return error message
+        if return_coord_error and len(coord_error_message) > 0:
+            metric = [metric, coord_error_message]
         if metric_usable:
             available_metrics.append(metric)
+        
+
     return available_metrics
 
 
@@ -75,6 +108,7 @@ def get_usable_metrics_list(data, all_metrics):
     """
         Only looks at if correct variables exist for metrics and
         ignores lat/lon, temporal and spatial resolution and plev 
+        TODO: add more informative 
     """
     usuable_metrics = []
     for metric in all_metrics:
@@ -85,7 +119,8 @@ def get_usable_metrics_list(data, all_metrics):
 
 def check_all_variables_available(data, metric):
     """
-        Checks if all variables required to compute metric exist in the data
+        Checks if all variables required to compute metric
+        exist in the data.
     """
     for var in metric['variables']:
         if var in data.variables:
@@ -93,3 +128,18 @@ def check_all_variables_available(data, metric):
         else:
             return False
     return True
+
+
+def check_if_coord_vals_available(data, coord, coord_vals):
+    """
+        Checks if the data has the correct coordinate values required
+        for the metric.
+    """
+    min_val = float(coord_vals[0])
+    max_val = float(coord_vals[1])
+    coord_val_avaialable = data[coord].loc[min_val: max_val]
+    if len(coord_val_avaialable) == 0:
+        return False
+
+    return True
+

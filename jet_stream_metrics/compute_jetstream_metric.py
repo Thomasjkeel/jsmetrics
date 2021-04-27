@@ -93,7 +93,7 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
                     break
         else:
             metric_usable = False
-            
+
         ## will make return error message
         if return_coord_error and len(coord_error_message) > 0:
             metric = [metric, coord_error_message]
@@ -137,9 +137,13 @@ def check_if_coord_vals_available(data, coord, coord_vals):
     """
     min_val = float(coord_vals[0])
     max_val = float(coord_vals[1])
-    coord_val_avaialable = data[coord].loc[min_val: max_val]
-    if len(coord_val_avaialable) == 0:
-        return False
+    ## check that the data is more than one value
+    if data[coord].count() > 1:
+        coord_val_avaialable = data[coord].loc[min_val: max_val]
+        if len(coord_val_avaialable) == 0:
+            return False
+    else:
+        return data[coord] > min_val and data[coord] < max_val
 
     return True
 

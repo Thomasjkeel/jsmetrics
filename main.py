@@ -5,6 +5,7 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 
 def main():
+    print("Starting!")
     all_metrics = compute_jetstream_metric.JETSTREAM_METRICS
     
     UKESM1_SSP585_U = xr.open_dataset(
@@ -15,7 +16,7 @@ def main():
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90), plev=25000)
     ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
-    print(ukesm1_ssp585.variables)
+    print("done!")
     return
 
 if __name__ == '__main__':

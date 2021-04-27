@@ -14,7 +14,7 @@ def main():
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90), plev=25000)
     ukesm1_ssp585.get_available_metrics(all_metrics)
-    print(ukesm1_ssp585)
+    print(ukesm1_ssp585.variables)
     return
 
 if __name__ == '__main__':

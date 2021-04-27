@@ -17,10 +17,12 @@ __description__ = "Data formatter class for interacting, subsetting and calculat
 class DataFormatter:
     def __init__(self, data):
         self.data = data
+        self.variables = self.get_variable_list()
 
     @classmethod
     def with_available_metrics(self, data, all_metrics):
         self.data = data
+        self.variables = self.get_variable_list()
         self.get_available_metrics(self, all_metrics)
 
     def get_available_metrics(self, all_metrics):
@@ -31,6 +33,12 @@ class DataFormatter:
               (len(self.available_metrics)))
         print("Metrics available:", self.available_metrics)
 
+    def get_variable_list(self):
+        variable_list = []
+        for var in self.data.keys():
+            if not '_bnds' in var:
+                variable_list.append(var)
+        return variable_list
 
     def subset(self, inplace=False, **kwargs):
         subset_data = self.data.copy()

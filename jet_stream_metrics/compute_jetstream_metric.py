@@ -48,7 +48,6 @@ def get_available_metric_list(data, all_metrics):
             # if not metric_property in data.coord:
             # metric_usuable = False
             # break # TODO: check logic and test
-            print(data.coords)
             if metric_property in data.coords:
                 print('this',metric_property)
             pass

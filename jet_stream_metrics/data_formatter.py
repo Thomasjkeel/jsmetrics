@@ -29,10 +29,10 @@ class DataFormatter:
         self.variables = self.get_variable_list()
         self.get_available_metrics(self, all_metrics)
 
-    def get_available_metrics(self, all_metrics):
+    def get_available_metrics(self, all_metrics, return_coord_error=False):
         self.all_metrics = all_metrics
         self.available_metrics = compute_jetstream_metric.get_available_metric_list(
-            self.data, all_metrics)
+            self.data, all_metrics, return_coord_error)
         print("%s metrics available for this dataset:" %
               (len(self.available_metrics)))
         print("Metrics available:", self.available_metrics)

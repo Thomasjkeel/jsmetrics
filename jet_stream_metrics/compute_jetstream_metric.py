@@ -21,8 +21,9 @@ __status__ = "Development"
         #  considered the minimum value (e.g. 85000 mbar - 50000 mbar) 
     # 4. 'metric' is the name of a function in jetstream_metrics.py
 JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
-    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010}}
+    92500,  7000]}, "metric": jetstream_metrics.woolings_et_al_2010}}
 # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
+
 
 def subset_data(data, metric):
     """
@@ -83,7 +84,7 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
                     coord_available = check_if_coord_vals_available(data, coord, coord_vals)
                     # if coord fails check, provide user information why
                     if return_coord_error and not coord_available:
-                            coord_error_message += "coord: %s needs to be between %s and %s. " % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
+                            coord_error_message += "To use this metric the coord: %s needs to be between %s and %s. " % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
                     elif not coord_available:
                         metric_usable = False
                         break

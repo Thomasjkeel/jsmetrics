@@ -14,7 +14,7 @@ def main():
     UKESM1_SSP585 = xr.merge([UKESM1_SSP585_U, UKESM1_SSP585_V])
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90), plev=25000)
-    ukesm1_ssp585.get_available_metrics(all_metrics)
+    ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     print(ukesm1_ssp585.variables)
     return
 

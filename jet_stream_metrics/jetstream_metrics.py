@@ -42,11 +42,20 @@ def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
     
 
 
+
+def Koch_et_al_2006(data):
+    """
+        Write function description
+    """
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    return
+
+
 def Ceppi_et_al_2015(data):
     """
         Write function description
     """
-    # i.e. will calculate woolings metric based on data (regardless of pressure level of time span etc.)
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 

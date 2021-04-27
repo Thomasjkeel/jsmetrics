@@ -13,7 +13,17 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+def get_resultant_wind(u_data, v_data):
+    """
+        TODO: work out where and how this will be used
+    """
+    return np.sqrt( u_data**2 + v_data**2 )
+
+
 def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
+    """
+        Write function description
+    """
     if not data_row.isnull().all():
         max_speed_loc = data_row.argmax().data
         max_speed = data_row[max_speed_loc]

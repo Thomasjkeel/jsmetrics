@@ -16,6 +16,14 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+def Koch_et_al_2006(data):
+    """
+        Write function description
+    """
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    return
+
+
 def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     """
         Write function description
@@ -33,7 +41,7 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     return max_lat_ws
     
 
-def Koch_et_al_2006(data):
+def Hudson_2012(data):
     """
         Write function description
     """
@@ -41,7 +49,7 @@ def Koch_et_al_2006(data):
     return
 
 
-def Ceppi_et_al_2015(data):
+def Screen_and_Simmonds_2014(data):
     """
         Write function description
     """
@@ -49,7 +57,7 @@ def Ceppi_et_al_2015(data):
     return
 
 
-def Ceppi_et_al_2015(data):
+def Kuang_et_al_2014(data):
     """
         Write function description
     """
@@ -57,7 +65,7 @@ def Ceppi_et_al_2015(data):
     return
 
 
-def Ceppi_et_al_2015(data):
+def Huang_and_Nakamura_2015(data):
     """
         Write function description
     """
@@ -65,7 +73,7 @@ def Ceppi_et_al_2015(data):
     return
 
 
-def Ceppi_et_al_2015(data):
+def Cattiaux_et_al_2016(data):
     """
         Write function description
     """
@@ -73,7 +81,7 @@ def Ceppi_et_al_2015(data):
     return
 
 
-def Ceppi_et_al_2015(data):
+def Ceppi_et_al_2018(data):
     """
         Write function description
     """
@@ -81,9 +89,44 @@ def Ceppi_et_al_2015(data):
     return
 
 
-def Ceppi_et_al_2015(data):
+def Kern_et_al_2018(data):
     """
         Write function description
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
+
+
+def Manney_et_al_2018(data):
+    """
+        Write function description
+
+        Extend Manney 2011, 2014 and 2017
+    """
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    return
+
+
+def Simpson_et_al_2018(data):
+    """
+        Write function description
+    """
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    return
+
+
+def Lee_et_al_2019(data):
+    """
+        Write function description
+    """
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    return
+
+
+def Chemke_and_Ming_2020(data):
+    """
+        Write function description
+    """
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    return
+

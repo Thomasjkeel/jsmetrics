@@ -84,7 +84,7 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
                     # if coord fails check, provide user information why
                     if return_coord_error and not coord_available:
                             coord_error_message += "coord: %s needs to be between %s and %s. " % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
-                    else:
+                    elif not coord_available:
                         metric_usable = False
                         break
                 else:
@@ -143,7 +143,10 @@ def check_if_coord_vals_available(data, coord, coord_vals):
         if len(coord_val_avaialable) == 0:
             return False
     else:
-        return data[coord] > min_val and data[coord] < max_val
+        if coord == 'plev': ## TODO: think about changing this
+            return data[coord].values > max_val and data[coord].values < min_val
+        else:
+            return data[coord].values > min_val and data[coord].values < max_val
 
     return True
 

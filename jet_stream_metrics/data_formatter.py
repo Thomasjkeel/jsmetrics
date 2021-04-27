@@ -15,6 +15,10 @@ __description__ = "Data formatter class for interacting, subsetting and calculat
 
 
 class DataFormatter:
+    """
+    The DataFormatter object ...
+    (see https://www.datacamp.com/community/tutorials/docstrings-python for docstring format)
+    """
     def __init__(self, data):
         self.data = data
         self.variables = self.get_variable_list()

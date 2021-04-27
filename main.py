@@ -1,3 +1,4 @@
+import jet_stream_metrics
 from jet_stream_metrics import data_formatter, compute_jetstream_metric
 import xarray as xr
 import cartopy.crs as ccrs

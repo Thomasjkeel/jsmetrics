@@ -12,7 +12,7 @@ __status__ = "Development"
 
 
 # JETSTREAM_METRICS will have list of all metrics and how the data is being subset
-JETSTREAM_METRICS = {"Woolings2010": {"variable": ["ua"], "plev": [
+JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "plev": [
     "85000",  "70000"], "metric": jetstream_metrics.woolings_et_al_2010}}
 
 
@@ -40,19 +40,44 @@ def compute_metric(data, metric):
 
 
 def get_available_metric_list(data, all_metrics):
+    """
+    Checks which variables can be used by the data
+        
+        Parameters
+        ----------
+        data : xr.Dataset or similar
+            Xarray dataset 
+
+        Returns
+        -------
+        metric_available_list : list
+            
+        
+    """
     available_metrics = []
     for metric in all_metrics:
         metric_usable = False
-        for metric_property in all_metrics[metric].keys():
-            # check that data exists in the data loaded by the class
-            # if not metric_property in data.coord:
-            # metric_usuable = False
-            # break # TODO: check logic and test
-            if metric_property in data.coords:
-                print('this',metric_property)
-            pass
+        if check_all_variables_available(data, all_metrics[metric]):
+            for metric_property in all_metrics[metric].keys():
+                # check that data exists in the data loaded by the class
+                # if not metric_property in data.coord:
+                # metric_usuable = False
+                # break # TODO: check logic and test
+                if metric_property in data.coords:
+                    print('this',metric_property)
+                pass
         if metric_usable:
             available_metrics.append(metric)
     return available_metrics
 
 
+def check_all_variables_available(data, metric):
+    """
+        Checks if all variables required to compute metric exist in the data
+    """
+    for var in metric['variables']:
+        if var in data.variables:
+            pass
+        else:
+            return False
+    return True

@@ -11,8 +11,8 @@ RUN conda env create -f environment.yml
 SHELL ["conda", "run", "-n", "jsmet", "/bin/bash", "-c"]
 
 # activate conda environment and check installs
-RUN echo "Make sure xarray is installed:"
-RUN python -c "import xarray"
+RUN echo "Make sure xarray is installed properly:"
+RUN python -c "import netCDF4"
 
 # Copy source code
 COPY . .

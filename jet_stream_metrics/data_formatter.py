@@ -26,7 +26,7 @@ class DataFormatter:
     @classmethod
     def with_available_metrics(self, data, all_metrics):
         self.data = data
-        self.variables = self.get_variable_list()
+        self.variables = self.get_variable_list
         self.get_available_metrics(self, all_metrics)
 
     def get_available_metrics(self, all_metrics, return_coord_error=False):

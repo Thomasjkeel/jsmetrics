@@ -6,10 +6,10 @@ dependencies:
   - matplotlib==3.3.2
   - numpy==1.19.2
   - dask
-  - netcdf4
+  - netcdf4==1.5.4
   - bottleneck
-  - scipy
+  - scipy==1.5.3
   - Cartopy==0.18.0
-  - pip
+  - pip==21.1
   - pip:
-     - xarray
+     - xarray==0.17.0

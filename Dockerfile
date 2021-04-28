@@ -16,7 +16,8 @@ RUN python -c "import xarray"
 
 # Copy source code
 COPY jet_stream_metrics/ .
+COPY experiments/ .
 
-# The code to run when container is started -> will allow running of experiement.py
-# using docker run image_name experiments.py
+# The code to run when container is started -> will allow running of experiements
+# using docker run image_name experiments/experiments.py
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "jsmet", "python"]

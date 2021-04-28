@@ -84,7 +84,7 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
                     coord_available = check_if_coord_vals_available(data, coord, coord_vals)
                     # if coord fails check, provide user information why
                     if return_coord_error and not coord_available:
-                            coord_error_message += "To use this metric the coord: %s needs to be between %s and %s. " % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
+                            coord_error_message += " the coord: %s needs to be between %s and %s." % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
                     elif not coord_available:
                         metric_usable = False
                         break
@@ -97,7 +97,7 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
 
         ## will make return error message
         if return_coord_error and len(coord_error_message) > 0:
-            metric = [metric, coord_error_message]
+            metric = metric + " – To use this metric" + coord_error_message
         if metric_usable:
             available_metrics.append(metric)
         

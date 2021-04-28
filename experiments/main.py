@@ -10,7 +10,7 @@ def main():
     print("Starting!")
     all_metrics = compute_jetstream_metric.JETSTREAM_METRICS
     
-    data_dir = '../data/'
+    data_dir = 'data/'
 
     UKESM1_SSP585_U = xr.open_dataset(
         data_dir + "ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")

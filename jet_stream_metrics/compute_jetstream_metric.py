@@ -14,16 +14,14 @@ __status__ = "Development"
 # RULES for JETSTREAM_METRICS
     # 1. must have the keys: 'variables', 'coords' and 'metric'
     # 2. 'variables' will contain the required CMIP6? model output variable names
-    # 3. 'coords' will contain the required CMIP6? standard coords and each coord
-    #  will provide a list of 2 values: mininum value for coord and maximum
-    #  value for coord and must be a number
+    # 3. 'coords' will contain the required CMIP6? standard coords and each coord will provide a list of 2 values:
+    #  mininum value for coord and maximum value for coord and must be a number
         # 3.1 for 'plev' coord it is in millibars and higher pressure is
         #  considered the minimum value (e.g. 85000 mbar - 50000 mbar) 
     # 4. 'metric' is the name of a function in jetstream_metrics.py
+    
 JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
-    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010}}
-# , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
-
+    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010}} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
 
 def subset_data(data, metric):
     """
@@ -68,7 +66,10 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
         Returns
         -------
         metric_available_list : list
-            
+        
+        Usage
+        -----
+        m_list = get_available_metric_list(vwind_data, js_metrics)
         
     """
     available_metrics = []
@@ -105,19 +106,6 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
     return available_metrics
 
 
-def get_usable_metrics_list(data, all_metrics):
-    """
-        Only looks at if correct variables exist for metrics and
-        ignores lat/lon, temporal and spatial resolution and plev 
-        TODO: add more informative 
-    """
-    usuable_metrics = []
-    for metric in all_metrics:
-        if check_all_variables_available(data, all_metrics[metric]):
-            usuable_metrics.append(metric)
-    return usuable_metrics
-
-
 def check_all_variables_available(data, metric):
     """
         Checks if all variables required to compute metric
@@ -150,4 +138,3 @@ def check_if_coord_vals_available(data, coord, coord_vals):
             return data[coord].values > min_val and data[coord].values < max_val
 
     return True
-

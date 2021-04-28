@@ -1,0 +1,9 @@
+name: jsmet
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - matplotlib==3.3.2
+  - numpy==1.19.2
+  - xarray==0.16.2
+  - Cartopy==0.18.0

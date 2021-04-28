@@ -5,7 +5,10 @@ dependencies:
   - python=3.9
   - matplotlib==3.3.2
   - numpy==1.19.2
-  # - netcdf4
+  - dask
+  - netcdf4
+  - bottleneck
+  - scipy
   - Cartopy==0.18.0
   - pip
   - pip:

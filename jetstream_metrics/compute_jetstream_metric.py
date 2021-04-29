@@ -21,12 +21,20 @@ __status__ = "Development"
     # 4. 'metric' is the name of a function in jetstream_metrics.py
     
 JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
-    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
+    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010,
+    "description":"Woolings et al. 2010 TODO"}} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
 
 def subset_data(data, metric):
     """
-        Write function description
+        Will subset the data based on the metric chosen
+
+        Parameters
+        ----------
+        data : xarray.Dataset
     """
+    ## 
+    # for coord in all_metrics[metric]['coords'].keys():
+    #     pass
     # i.e. data.sel(plev=())
     # i.e. if the term is not found, then user input to slightly adjust or skip?
     
@@ -74,35 +82,16 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
     """
     available_metrics = []
     for metric in all_metrics:
-        metric_usable = True
         if check_all_variables_available(data, metric=all_metrics[metric]):
             # check that all coords exists in xarray data i.e. plev, lat, etc.
-            if return_coord_error:
-                coord_error_message = ""
-            for coord in all_metrics[metric]['coords'].keys():
-                if coord in data.coords:
-                    coord_vals = all_metrics[metric]['coords'][coord]
-                    coord_available = check_if_coord_vals_available(data, coord, coord_vals)
-                    # if coord fails check, provide user information why
-                    if return_coord_error and not coord_available:
-                            coord_error_message += " the coord: %s needs to be between %s and %s." % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
-                    elif not coord_available:
-                        metric_usable = False
-                        break
-                else:
-                    # if it does not exist then break loop as it is required for the metric
-                    metric_usable = False
-                    break
-        else:
-            metric_usable = False
+            metric_usable, coord_error_message = check_all_coords_available(data, metric, all_metrics, return_coord_error)
 
         ## will make return error message
         if return_coord_error and len(coord_error_message) > 0:
             metric = metric + " – To use this metric" + coord_error_message
         if metric_usable:
             available_metrics.append(metric)
-        
-
+            
     return available_metrics
 
 
@@ -119,7 +108,33 @@ def check_all_variables_available(data, metric):
     return True
 
 
-def check_if_coord_vals_available(data, coord, coord_vals):
+def check_all_coords_available(data, metric, all_metrics, return_coord_error):
+    """
+        Checks if all coords required to compute metric
+        exist in the data.
+    """
+    coord_error_message = ""
+    metric_usable = True
+    assert len(all_metrics[metric]['coords']) >= 1, "Metric dictionary has less than 1 coordinate" # TODO
+
+    for coord in all_metrics[metric]['coords'].keys():
+        if coord in data.coords:
+            coord_vals = all_metrics[metric]['coords'][coord]
+            coord_available = check_if_coord_vals_meet_reqs(data, coord, coord_vals)
+            # if coord fails check, provide user information why
+            if return_coord_error and not coord_available:
+                    coord_error_message += " the coord: %s needs to be between %s and %s." % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
+            elif not coord_available:
+                metric_usable = False
+                break
+        else:
+            # if it does not exist then break loop as it is required for the metric
+            metric_usable = False
+            break
+    return metric_usable, coord_error_message
+
+
+def check_if_coord_vals_meet_reqs(data, coord, coord_vals):
     """
         Checks if the data has the correct coordinate values required
         for the metric.

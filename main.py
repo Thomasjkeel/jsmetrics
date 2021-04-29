@@ -12,7 +12,8 @@ if __name__ == '__main__':
     print("Running script: ", args.experiment)
 
     ## TODO: make error handling smarter
-    try:
+    if args.experiment not in ALL_EXPERIMENTS.keys():
+        print(args.experiment, 'is not a known experiment')
+    else:
         ALL_EXPERIMENTS[args.experiment]()
-    except Exception as e:
-        print(e, 'is not a known experiment')
+        

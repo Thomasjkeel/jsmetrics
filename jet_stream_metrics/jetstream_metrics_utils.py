@@ -61,3 +61,37 @@ def low_pass_weights(window, cutoff):
     w[n-1:0:-1] = firstfactor * sigma
     w[n+1:-1] = firstfactor * sigma
     return w[0+(window%2):-1] # edited from w[1:-1]
+
+
+    from scipy import fftpack
+
+
+def fourier_filter(data, timestep=1):
+    """
+        Carries out a Fourier transform for high frequency filtering
+        TAKEN FROM: https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
+        NOTE: NOT CURRENTLY WORKING PROPERLY
+        
+        Parameters
+        ----------
+        data : np.array (1-d) 
+            time series data
+        timestep : float or int
+            number used in the Discrete Fourier Transform sample frequencies (fftfreq)
+    """
+    fourier_transform = fftpack.fft(data)
+    
+    # The corresponding frequencies TODO: what does this do?
+    sample_freq = fftpack.fftfreq(data.size, d=timestep)
+    
+    # And the power (sig_fft is of complex dtype)
+    power = np.abs(data)**2
+    pos_mask = np.where(sample_freq > 0)
+    freqs = sample_freq[pos_mask]
+    peak_freq = freqs[power[pos_mask].argmax()]
+    
+    high_freq_fft = fourier_transform.copy()
+    high_freq_fft[np.abs(sample_freq) > peak_freq] = 0
+    filtered_sig = fftpack.ifft(high_freq_fft)
+    return filtered_sig
+    

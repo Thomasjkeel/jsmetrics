@@ -132,7 +132,7 @@ def check_if_coord_vals_available(data, coord, coord_vals):
         if len(coord_val_avaialable) == 0:
             return False
     else:
-        if coord == 'plev': ## TODO: think about changing this
+        if coord == 'plev' and min_val > max_val:
             return data[coord].values > max_val and data[coord].values < min_val
         else:
             return data[coord].values > min_val and data[coord].values < max_val

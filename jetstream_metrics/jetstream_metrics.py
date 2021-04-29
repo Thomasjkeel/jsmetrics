@@ -32,14 +32,21 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
         TODO: maybe note about using season or not
     """
     ## Step 1
-    mean_data = data.mean(['lon','plev'])
+    dims_for_mean = ['lon', 'plev']
+    if 'plev' not in data.dims:
+        dims_for_mean = ['lon']
+    print('Step 1: calculating long and plev mean...')
+    mean_data = data.mean(dims_for_mean)
     ## Step 2
+    print('Step 2: Subsetting to lat to between %s and %s...' % (lat_min, lat_max))
     mean_data = mean_data.sel(lat=slice(lat_min, lat_max))
     ## Step 3
+    print('Step 3: Applying %s day lancoz filter...' % (filter_freq))
     lanczos_weights = jetstream_metrics_utils.low_pass_weights(61, 1/filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
     window_cons = mean_data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
     ## Step 4
+    print('Step 4: Calculating max windspeed and latitude where max windspeed found...')
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, window_cons[:])))
     # Step 5 — fourier filtering  TODO
     ## make seasonal (DJF, MAM, JJA, SON)

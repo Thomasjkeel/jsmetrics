@@ -23,11 +23,13 @@ class DataFormatter:
         self.data = data
         self.variables = self.get_variable_list()
 
+
     @classmethod
     def with_available_metrics(self, data, all_metrics):
         self.data = data
         self.variables = self.get_variable_list
         self.get_available_metrics(self, all_metrics)
+
 
     def get_available_metrics(self, all_metrics, return_coord_error=False):
         self.all_metrics = all_metrics
@@ -37,6 +39,7 @@ class DataFormatter:
               (len(self.available_metrics)))
         print("Metrics available:", self.available_metrics)
 
+
     def get_variable_list(self):
         variable_list = []
         for var in self.data.keys():
@@ -44,7 +47,11 @@ class DataFormatter:
                 variable_list.append(var)
         return variable_list
 
+
     def subset(self, inplace=False, **kwargs):
+        """
+            Exposes the xarray .sel function
+        """
         subset_data = self.data.copy()
         subset_data = subset_data.sel(**kwargs)
         if inplace:
@@ -54,5 +61,15 @@ class DataFormatter:
         return DataFormatter(subset_data)
 
 
-    def compute_metric(self):
+    def compute_metric_from_data(self, metric_name, **kwargs):
+        compute_jetstream_metric.compute_metric(self.data, metric_name, **kwargs)
         return
+    
+    def compute_all_metrics(self):
+        """
+            will go through and compute all metric which are available
+        """
+        if not hasattr(self, 'available_metrics'):
+            print('please run .get_available_metrics() first')
+            return
+        

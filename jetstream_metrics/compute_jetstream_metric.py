@@ -25,7 +25,7 @@ JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
     "description":"Woolings et al. 2010 TODO"}} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
 
 
-def subset_data(data, metric, coords_to_remove=None):
+def subset_data(data, metric, ignore_coords=None):
     """
         Will subset the data based on the metric chosen
         TODO add way of only subsetting some coords data partially
@@ -36,30 +36,32 @@ def subset_data(data, metric, coords_to_remove=None):
             climate data
         metric : dict
             jetstream metric from jetstream metric dictionary
-        coords_to_remove : list or set
+        ignore_coords : list or set
             coordiantes to not subset
     """
     ## overwrite which coords will be changed
-    if coords_to_remove:
+    if ignore_coords:
         coords_to_change = set(metric['coords'].keys()) 
-        coords_to_change = coords_to_change.difference(coords_to_change)
+        coords_to_change = coords_to_change.difference(set(ignore_coords))
         coords_to_change = list(coords_to_change)
     else:
-        coords_to_change = metric['coords'].keys()
+        coords_to_change = list(metric['coords'].keys())
 
     ## check if subset is still possible
     if len(coords_to_change) != 0:
         subset = data.copy()
-        for coord in coords_to_change:
-            min_val = float(coord[0])
-            max_val = float(coord[1])
-            subset = subset[coord].loc[min_val:max_val]
+        for coord in metric['coords'].keys():
+            if coord in coords_to_change:
+                min_val = float(metric['coords'][coord][0])
+                max_val = float(metric['coords'][coord][1])
+                selection = {coord:slice(min_val, max_val)}
+                subset = subset.sel(selection)
         return subset 
     else:
         return data
 
 
-def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False):
+def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False, subset_kwargs={}, calc_kwargs={}):
     """
         Write function description
         
@@ -78,15 +80,18 @@ def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False
     if check_all_coords_available(data, all_metrics[metric_name], return_coord_error)[0] and check_all_variables_available(data, all_metrics[metric_name]):
         print('all checks passed')
     else:
-        print('cannot calculate %s metric from data provide' % (metric_name)) # TODO have this return a useful message
+        print('cannot calculate %s metric from data provided' % (metric_name)) # TODO have this return a useful message
         return 
 
     ## subset data for metric
-    subset = subset_data(data, all_metrics[metric_name])
-
+    subset = subset_data(data, all_metrics[metric_name], **subset_kwargs)
+    
     ## calculate metric
-    result = all_metrics[metric_name]['metric'](subset)
-
+    if subset:
+        result = all_metrics[metric_name]['metric'](subset, **calc_kwargs)
+    else:
+        print('could not calculate metric from subsetted data')
+        return False
     return result
 
 

@@ -1,7 +1,7 @@
 import argparse
-from experiments import test_uvwind
+from experiments import test_woolings
 
-ALL_EXPERIMENTS = {'experiment1':test_uvwind.main}
+ALL_EXPERIMENTS = {'experiment1':test_woolings.main}
 
 
 if __name__ == '__main__':

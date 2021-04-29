@@ -24,34 +24,70 @@ JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
     92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010,
     "description":"Woolings et al. 2010 TODO"}} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
 
-def subset_data(data, metric):
+
+def subset_data(data, metric, coords_to_remove=None):
     """
         Will subset the data based on the metric chosen
+        TODO add way of only subsetting some coords data partially
 
         Parameters
         ----------
         data : xarray.Dataset
+            climate data
+        metric : dict
+            jetstream metric from jetstream metric dictionary
+        coords_to_remove : list or set
+            coordiantes to not subset
     """
-    ## 
-    # for coord in all_metrics[metric]['coords'].keys():
-    #     pass
-    # i.e. data.sel(plev=())
-    # i.e. if the term is not found, then user input to slightly adjust or skip?
-    
-    # for key in JETSTREAM_METRICS[metric].keys():
-    #  subset
-    return
+    ## overwrite which coords will be changed
+    if coords_to_remove:
+        coords_to_change = set(metric['coords'].keys()) 
+        coords_to_change = coords_to_change.difference(coords_to_change)
+        coords_to_change = list(coords_to_change)
+    else:
+        coords_to_change = metric['coords'].keys()
+
+    ## check if subset is still possible
+    if len(coords_to_change) != 0:
+        subset = data.copy()
+        for coord in coords_to_change:
+            min_val = float(coord[0])
+            max_val = float(coord[1])
+            subset = subset[coord].loc[min_val:max_val]
+        return subset 
+    else:
+        return data
 
 
-def compute_metric(data, metric):
+def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False):
     """
         Write function description
+        
+        Parameters
+        ----------
+        data : xarray.Dataset
+            climate data
+        metric_name : str
+            name from jetstream metric file
     """
-    # subset_data(data, metric)
-    # then
-    # if JETSTREAM_METRICS[metric]["metric"]:
-    # JETSTREAM_METRICS[metric]["metric"](data)
-    return
+    if not all_metrics:
+        print('No metrics provided, defaulting to local JETSTREAM_METRICS file')
+        all_metrics = JETSTREAM_METRICS
+
+    ## check that you can actually compute metrics
+    if check_all_coords_available(data, all_metrics[metric_name], return_coord_error)[0] and check_all_variables_available(data, all_metrics[metric_name]):
+        print('all checks passed')
+    else:
+        print('cannot calculate %s metric from data provide' % (metric_name)) # TODO have this return a useful message
+        return 
+
+    ## subset data for metric
+    subset = subset_data(data, all_metrics[metric_name])
+
+    ## calculate metric
+    result = all_metrics[metric_name]['metric'](subset)
+
+    return result
 
 
 def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
@@ -151,10 +187,10 @@ def check_if_coord_vals_meet_reqs(data, coord, coord_vals):
         coord_val_avaialable = data[coord].loc[min_val: max_val]
         if len(coord_val_avaialable) == 0:
             return False
+
+        return True
     else:
         if coord == 'plev' and min_val > max_val:
             return data[coord].values > max_val and data[coord].values < min_val
         else:
             return data[coord].values > min_val and data[coord].values < max_val
-
-    return True

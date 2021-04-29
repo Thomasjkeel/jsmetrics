@@ -1,7 +1,7 @@
 try:
-    from jet_stream_metrics import compute_jetstream_metric, data_formatter
+    from jetstream_metrics import compute_jetstream_metric, data_formatter
 except:
-    from jet_stream_metrics_recipe.jet_stream_metrics import compute_jetstream_metric, data_formatter
+    from jetstream_metrics_recipe.jet_stream_metrics import compute_jetstream_metric, data_formatter
 import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt

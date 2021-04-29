@@ -44,7 +44,9 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     print('Step 3: Applying %s day lancoz filter...' % (filter_freq))
     lanczos_weights = jetstream_metrics_utils.low_pass_weights(61, 1/filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
+    print(lanczos_weights_arr)
     window_cons = mean_data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
+    print(window_cons[40])
     ## Step 4
     print('Step 4: Calculating max windspeed and latitude where max windspeed found...')
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, window_cons[:])))

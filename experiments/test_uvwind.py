@@ -16,8 +16,7 @@ def main():
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90), plev=25000)
     ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
-    one_metric = ukesm1_ssp585.available_metrics[0][:12]
-    print(one_metric)
+    one_metric = ukesm1_ssp585.available_metrics[0][:12] ## TODO fix 
     result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=True, subset_kwargs={'ignore_coords':['plev']})
     print('-'*60)
     print('result:', result)

@@ -62,8 +62,8 @@ class DataFormatter:
 
 
     def compute_metric_from_data(self, metric_name, **kwargs):
-        compute_jetstream_metric.compute_metric(self.data, metric_name, **kwargs)
-        return
+        result = compute_jetstream_metric.compute_metric(self.data, metric_name, **kwargs)
+        return result
     
     def compute_all_metrics(self):
         """

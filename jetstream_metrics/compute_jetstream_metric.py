@@ -54,7 +54,7 @@ def compute_metric(data, metric):
     return
 
 
-def get_available_metric_list(data, all_metrics, return_coord_error=False):
+def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
     """
     Checks which variables can be used by the data
         
@@ -80,6 +80,10 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
         m_list = get_available_metric_list(vwind_data, js_metrics)
         
     """
+    if not all_metrics:
+        print('No metrics provided, defaulting to local JETSTREAM_METRICS file')
+        all_metrics = JETSTREAM_METRICS
+
     available_metrics = []
     for metric in all_metrics:
         if check_all_variables_available(data, metric=all_metrics[metric]):
@@ -91,7 +95,7 @@ def get_available_metric_list(data, all_metrics, return_coord_error=False):
             metric = metric + " – To use this metric" + coord_error_message
         if metric_usable:
             available_metrics.append(metric)
-            
+
     return available_metrics
 
 
@@ -108,11 +112,15 @@ def check_all_variables_available(data, metric):
     return True
 
 
-def check_all_coords_available(data, metric, all_metrics, return_coord_error):
+def check_all_coords_available(data, metric, all_metrics=None, return_coord_error=False):
     """
         Checks if all coords required to compute metric
         exist in the data.
     """
+    if not all_metrics:
+        print('No metrics provided, defaulting to local JETSTREAM_METRICS file')
+        all_metrics = JETSTREAM_METRICS
+
     coord_error_message = ""
     metric_usable = True
     assert len(all_metrics[metric]['coords']) >= 1, "Metric dictionary has less than 1 coordinate" # TODO

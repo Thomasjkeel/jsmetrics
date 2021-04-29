@@ -10,4 +10,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     print("Running script: ", args.experiment)
 
-    ALL_EXPERIMENTS[args.experiment]()
+    try:
+        ALL_EXPERIMENTS[args.experiment]()
+    except Exception as e:
+        print(e, 'is not a known experiment')

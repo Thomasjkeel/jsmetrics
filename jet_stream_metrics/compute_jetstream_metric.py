@@ -21,7 +21,7 @@ __status__ = "Development"
     # 4. 'metric' is the name of a function in jetstream_metrics.py
     
 JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
-    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010}} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
+    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010}, "description":"Woolings et al. 2010 TODO"} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
 
 def subset_data(data, metric):
     """

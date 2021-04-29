@@ -7,6 +7,8 @@
 ### imports
 import numpy as np
 import xarray as xr
+from scipy import fftpack
+
 ### docs
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"

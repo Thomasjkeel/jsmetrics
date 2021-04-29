@@ -63,8 +63,8 @@ def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
         data : xr.Dataset or similar
             Xarray dataset 
         
-        all_metrics : dict
-            all jet-stream metrics
+        all_metrics : dict (default: None)
+            dictionary of jet-stream metrics
 
         return_coord_error : bool
             whether a message about where the correct coords but wrong
@@ -85,16 +85,16 @@ def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
         all_metrics = JETSTREAM_METRICS
 
     available_metrics = []
-    for metric in all_metrics:
-        if check_all_variables_available(data, metric=all_metrics[metric]):
+    for metric_name in all_metrics:
+        if check_all_variables_available(data, metric=all_metrics[metric_name]):
             # check that all coords exists in xarray data i.e. plev, lat, etc.
-            metric_usable, coord_error_message = check_all_coords_available(data, metric, all_metrics, return_coord_error)
+            metric_usable, coord_error_message = check_all_coords_available(data, all_metrics[metric_name], return_coord_error)
 
         ## will make return error message
         if return_coord_error and len(coord_error_message) > 0:
-            metric = metric + " – To use this metric" + coord_error_message
+            metric_name = metric_name + " – To use this metric" + coord_error_message
         if metric_usable:
-            available_metrics.append(metric)
+            available_metrics.append(metric_name)
 
     return available_metrics
 
@@ -112,22 +112,19 @@ def check_all_variables_available(data, metric):
     return True
 
 
-def check_all_coords_available(data, metric, all_metrics=None, return_coord_error=False):
+def check_all_coords_available(data, metric, return_coord_error=False):
     """
         Checks if all coords required to compute metric
         exist in the data.
     """
-    if not all_metrics:
-        print('No metrics provided, defaulting to local JETSTREAM_METRICS file')
-        all_metrics = JETSTREAM_METRICS
-
     coord_error_message = ""
     metric_usable = True
-    assert len(all_metrics[metric]['coords']) >= 1, "Metric dictionary has less than 1 coordinate" # TODO
+    assert len(metric['coords']) >= 1, "Metric dictionary has less than 1 coordinate" # TODO
 
-    for coord in all_metrics[metric]['coords'].keys():
+    ## Loop over each coordinate in all metric dictionary and check if the coords exist in data and can be used for the metric calculation
+    for coord in metric['coords'].keys():
         if coord in data.coords:
-            coord_vals = all_metrics[metric]['coords'][coord]
+            coord_vals = metric['coords'][coord]
             coord_available = check_if_coord_vals_meet_reqs(data, coord, coord_vals)
             # if coord fails check, provide user information why
             if return_coord_error and not coord_available:

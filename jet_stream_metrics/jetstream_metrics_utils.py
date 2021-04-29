@@ -65,8 +65,6 @@ def low_pass_weights(window, cutoff):
     return w[0+(window%2):-1] # edited from w[1:-1]
 
 
-    from scipy import fftpack
-
 
 def fourier_filter(data, timestep=1):
     """

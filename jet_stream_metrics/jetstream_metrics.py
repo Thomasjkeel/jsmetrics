@@ -38,6 +38,16 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
     window_cons = mean_data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, window_cons[:])))
+
+    ## fourier filtering TODO
+    ## make seasonal (DJF, MAM, JJA, SON)
+    # seasonal_data = window_cons.resample(time='Q-NOV').mean()
+    # filled_seasonal_data = seasonal_data[:,0].fillna(0)
+    ## loop over each latitude and calculate high frequency
+    # for lat in seasonal_data['lat']:
+    #     lat_data = seasonal_data.sel(lat=lat)
+    #     lat_data = np.array(lat_data.fillna(0))
+    #     filtered_sig = jetstream_metrics_utilsfourier_filter(lat_data)
     return max_lat_ws
     
 

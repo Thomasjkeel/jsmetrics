@@ -132,4 +132,4 @@ dmypy.json
 # Data files
 data/
 .vscode/
-/figures/*
+figures/*

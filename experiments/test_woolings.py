@@ -24,7 +24,7 @@ def main():
     fig, ax = plt.subplots(1)
     ax.plot(max_lats)
     ax.plot(max_ws)
-    fig.savefig('figures/woolings_test.png', bbox_inches='tight')
+    fig.savefig('experiments/figures/woolings_test.png', bbox_inches='tight')
     print("done!")
     return 
 

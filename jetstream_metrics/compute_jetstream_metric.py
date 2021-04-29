@@ -42,6 +42,8 @@ def subset_data(data, metric, ignore_coords=None):
     ## overwrite which coords will be changed
     if ignore_coords:
         coords_to_change = set(metric['coords'].keys()) 
+        for removed_coord in coords_to_change.intersection(ignore_coords): 
+            print('Note:', removed_coord, 'has not been subset for the experiment')
         coords_to_change = coords_to_change.difference(set(ignore_coords))
         coords_to_change = list(coords_to_change)
     else:
@@ -78,7 +80,8 @@ def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False
 
     ## check that you can actually compute metrics
     if check_all_coords_available(data, all_metrics[metric_name], return_coord_error)[0] and check_all_variables_available(data, all_metrics[metric_name]):
-        print('all checks passed')
+        # print('all checks passed')
+        pass
     else:
         print('cannot calculate %s metric from data provided' % (metric_name)) # TODO have this return a useful message
         return 

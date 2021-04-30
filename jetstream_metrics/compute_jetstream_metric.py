@@ -130,15 +130,16 @@ def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
 
     available_metrics = []
     for metric_name in all_metrics:
+        metric_is_usuable = {metric_name: 'usuable'} 
         if check_all_variables_available(data, metric=all_metrics[metric_name]):
             # check that all coords exists in xarray data i.e. plev, lat, etc.
             metric_usable, coord_error_message = check_all_coords_available(data, all_metrics[metric_name], return_coord_error)
 
         ## will make return error message
         if return_coord_error and len(coord_error_message) > 0:
-            metric_name = metric_name + " – To use this metric" + coord_error_message
+            metric_is_usuable =  {metric_name: "To use this metric" + coord_error_message}
         if metric_usable:
-            available_metrics.append(metric_name)
+            available_metrics.append(metric_is_usuable)
 
     return available_metrics
 
@@ -172,7 +173,7 @@ def check_all_coords_available(data, metric, return_coord_error=False):
             coord_available = check_if_coord_vals_meet_reqs(data, coord, coord_vals)
             # if coord fails check, provide user information why
             if return_coord_error and not coord_available:
-                    coord_error_message += " the coord: %s needs to be between %s and %s." % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
+                    coord_error_message += " '%s' needs to be between %s and %s." % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
             elif not coord_available:
                 metric_usable = False
                 break

@@ -1,7 +1,4 @@
-try:
-    from jetstream_metrics import compute_jetstream_metric, data_formatter
-except:
-    from jetstream_metrics_recipe.jet_stream_metrics import compute_jetstream_metric, data_formatter
+from jetstream_metrics import compute_jetstream_metric, data_formatter
 import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
@@ -24,6 +21,7 @@ def main():
     fig, ax = plt.subplots(1)
     ax.plot(max_lats)
     ax.plot(max_ws)
+    plt.legend(['latitude of max windspeed', 'windspeed'])
     fig.savefig('experiments/figures/woolings_test.png', bbox_inches='tight')
     print("done!")
     return 

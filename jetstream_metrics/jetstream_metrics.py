@@ -18,7 +18,7 @@ __status__ = "Development"
 
 def koch_et_al_2006(data):
     """
-        Write function description
+        TODO: Ask Chris about the equation
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
@@ -28,8 +28,8 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     """
         Follows an in-text description of 5-steps describing the algorithm mof jet-stream identification from Woolings et al. (2010). 
         Will calculate this metric based on data (regardless of pressure level of time span etc.). 
-        TODO: ask Chris about fourier filtering 
-        TODO: maybe note about using season or not
+        TODO: Ask Chris about fourier filtering 
+        TODO: Maybe note about using season or not
     """
     ## Step 1
     dims_for_mean = ['lon', 'plev']
@@ -64,6 +64,7 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
 def hudson_2012(data):
     """
         Write function description
+        Uses Ozone
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return

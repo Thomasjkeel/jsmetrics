@@ -24,8 +24,9 @@ JETSTREAM_METRICS = {
     "Koch2006":
         {"variables": ["ua","va"], "coords": {"plev": [40000, 10000]}, "metric": jetstream_metrics.koch_et_al_2006, "description":"Koch et al. 2006"},
     "Woolings2010":
-         {"variables": ["ua"], "coords": {"plev": [92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
-    
+         {"variables": ["ua"], "coords": {"plev": [92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
+    "Hudson2012":
+        {"variables":["ozone"], "coords":{"DU": [450, 250]}, "metric": jetstream_metrics.hudson_2012, "description":"Hudson et al. 2012"}
     } 
 
 def subset_data(data, metric, ignore_coords=None):

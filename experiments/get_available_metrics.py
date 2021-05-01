@@ -1,11 +1,12 @@
 from jetstream_metrics import compute_jetstream_metric, data_formatter
+from jetstream_metrics.jetstream_metric_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 
 def main(data_path):
     print("Starting!")
-    all_metrics = compute_jetstream_metric.JETSTREAM_METRICS
+    all_metrics = JETSTREAM_METRIC_DICT
     data_dir = 'data/'
     UKESM1_SSP585_U = xr.open_dataset(data_dir + "ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
     UKESM1_SSP585_V = xr.open_dataset(data_dir + "va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")

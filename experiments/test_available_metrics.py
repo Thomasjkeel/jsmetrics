@@ -12,10 +12,10 @@ def main():
     UKESM1_SSP585 = xr.merge([UKESM1_SSP585_U, UKESM1_SSP585_V])
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90), plev=50000)
-    ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
+    ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=False)
     
     one_metric = 'Koch2006'
-    result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=False, subset_kwargs={'ignore_coords':['ple']})
+    result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=False, subset_kwargs={'ignore_coords':['plev']})
     if result:
         max_lats = result[:,0]
         max_ws = result[:,1]

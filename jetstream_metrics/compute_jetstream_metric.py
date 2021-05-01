@@ -137,12 +137,11 @@ def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
         if check_all_variables_available(data, metric=all_metrics[metric_name]):
             # check that all coords exists in xarray data i.e. plev, lat, etc.
             metric_usable, coord_error_message = check_all_coords_available(data, all_metrics[metric_name], return_coord_error)
-
-        ## will make return error message
-        if return_coord_error and len(coord_error_message) > 0:
-            metric_is_usuable =  {metric_name: "To use this metric" + coord_error_message}
-        if metric_usable:
-            available_metrics.append(metric_is_usuable)
+            ## will make return error message
+            if return_coord_error and len(coord_error_message) > 0:
+                metric_is_usuable =  {metric_name: "To use this metric" + coord_error_message}
+            if metric_usable:
+                available_metrics.append(metric_is_usuable)
 
     return available_metrics
 
@@ -167,7 +166,10 @@ def check_all_coords_available(data, metric, return_coord_error=False):
     """
     coord_error_message = ""
     metric_usable = True
-    assert len(metric['coords']) >= 1, "Metric dictionary has less than 1 coordinate" # TODO
+    try: # TODO
+        assert len(metric['coords']) >= 1, "Metric dictionary has less than 1 coordinate" 
+    except:
+        return metric_usable, "Metric has no coordinates to subset"
 
     ## Loop over each coordinate in all metric dictionary and check if the coords exist in data and can be used for the metric calculation
     for coord in metric['coords'].keys():

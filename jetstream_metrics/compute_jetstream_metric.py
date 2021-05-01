@@ -20,10 +20,13 @@ __status__ = "Development"
         #  considered the minimum value (e.g. 85000 mbar - 50000 mbar) 
     # 4. 'metric' is the name of a function in jetstream_metrics.py
     
-JETSTREAM_METRICS = {"Woolings2010": {"variables": ["ua"], "coords": {"plev": [
-    92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010,
-    "description":"Woolings et al. 2010 TODO"}} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
-
+JETSTREAM_METRICS = {
+    "Koch2006":
+        {"variables": ["ua","va"], "coords": {"plev": [40000, 10000]}, "metric": jetstream_metrics.koch_et_al_2006, "description":"Koch et al. 2006"},
+    "Woolings2010":
+         {"variables": ["ua"], "coords": {"plev": [92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"} # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
+    
+    } 
 
 def subset_data(data, metric, ignore_coords=None):
     """

@@ -16,7 +16,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-def Koch_et_al_2006(data):
+def koch_et_al_2006(data):
     """
         Write function description
     """
@@ -61,7 +61,7 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     return max_lat_ws
     
 
-def Hudson_2012(data):
+def hudson_2012(data):
     """
         Write function description
     """
@@ -69,7 +69,7 @@ def Hudson_2012(data):
     return
 
 
-def Screen_and_Simmonds_2014(data):
+def screen_and_simmonds_2014(data):
     """
         Write function description
     """
@@ -77,7 +77,7 @@ def Screen_and_Simmonds_2014(data):
     return
 
 
-def Kuang_et_al_2014(data):
+def kuang_et_al_2014(data):
     """
         Write function description
     """
@@ -85,7 +85,7 @@ def Kuang_et_al_2014(data):
     return
 
 
-def Huang_and_Nakamura_2015(data):
+def huang_and_nakamura_2015(data):
     """
         Write function description
     """
@@ -93,7 +93,7 @@ def Huang_and_Nakamura_2015(data):
     return
 
 
-def Cattiaux_et_al_2016(data):
+def cattiaux_et_al_2016(data):
     """
         Write function description
     """
@@ -101,7 +101,7 @@ def Cattiaux_et_al_2016(data):
     return
 
 
-def Ceppi_et_al_2018(data):
+def ceppi_et_al_2018(data):
     """
         Write function description
     """
@@ -109,7 +109,7 @@ def Ceppi_et_al_2018(data):
     return
 
 
-def Kern_et_al_2018(data):
+def kern_et_al_2018(data):
     """
         Write function description
     """
@@ -117,7 +117,7 @@ def Kern_et_al_2018(data):
     return
 
 
-def Manney_et_al_2018(data):
+def manney_et_al_2018(data):
     """
         Write function description
 
@@ -127,7 +127,7 @@ def Manney_et_al_2018(data):
     return
 
 
-def Simpson_et_al_2018(data):
+def simpson_et_al_2018(data):
     """
         Write function description
     """
@@ -135,7 +135,7 @@ def Simpson_et_al_2018(data):
     return
 
 
-def Lee_et_al_2019(data):
+def lee_et_al_2019(data):
     """
         Write function description
     """
@@ -143,7 +143,7 @@ def Lee_et_al_2019(data):
     return
 
 
-def Chemke_and_Ming_2020(data):
+def chemke_and_ming_2020(data):
     """
         Write function description
     """

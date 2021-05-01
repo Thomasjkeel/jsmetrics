@@ -14,7 +14,7 @@ def main():
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90), plev=25000)
     ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     
-    one_metric = 'Woolings2010'
+    one_metric = 'Koch2006'
     result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=True, subset_kwargs={'ignore_coords':['plev']})
     max_lats = result[:,0]
     max_ws = result[:,1]

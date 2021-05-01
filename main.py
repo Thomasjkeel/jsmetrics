@@ -1,7 +1,7 @@
 import argparse
-from experiments import test_available_metrics
+from experiments import get_available_metrics
 
-ALL_EXPERIMENTS = {'test_metrics':test_available_metrics.main}
+ALL_EXPERIMENTS = {'test_metrics':get_available_metrics.main}
 
 
 if __name__ == '__main__':
@@ -15,5 +15,5 @@ if __name__ == '__main__':
     if args.experiment not in ALL_EXPERIMENTS.keys():
         print(args.experiment, 'is not a known experiment')
     else:
-        ALL_EXPERIMENTS[args.experiment]()
+        ALL_EXPERIMENTS[args.experiment](args.data)
         

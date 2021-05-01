@@ -3,7 +3,7 @@ import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 
-def main():
+def main(data_path):
     print("Starting!")
     all_metrics = compute_jetstream_metric.JETSTREAM_METRICS
     data_dir = 'data/'

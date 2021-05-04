@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Functions for subsetting and compute metrics from standardised climate model output data
+    Functions for subsetting and compute metrics from standardised netcdf data
 """
 
-from .jetstream_metric_dict import JETSTREAM_METRIC_DICT
+from .jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"

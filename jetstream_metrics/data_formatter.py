@@ -6,7 +6,7 @@
     A: When the data is in an object form, it can ... . Also, allows for information hiding.
 """
 
-from . import compute_jetstream_metric
+from . import compute_metrics
 
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
@@ -33,7 +33,7 @@ class DataFormatter:
 
     def get_available_metrics(self, all_metrics, return_coord_error=False):
         self.all_metrics = all_metrics
-        self.available_metrics = compute_jetstream_metric.get_available_metric_list(
+        self.available_metrics = compute_metrics.get_available_metric_list(
             self.data, all_metrics, return_coord_error)
         print("%s metrics available for this dataset:" %
               (len(self.available_metrics)))
@@ -62,7 +62,7 @@ class DataFormatter:
 
 
     def compute_metric_from_data(self, metric_name, **kwargs):
-        result = compute_jetstream_metric.compute_metric(self.data, metric_name, **kwargs)
+        result = compute_metrics.compute_metric(self.data, metric_name, **kwargs)
         return result
     
     def compute_all_metrics(self):

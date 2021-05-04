@@ -1,5 +1,5 @@
-from jetstream_metrics import compute_jetstream_metric, data_formatter
-from jetstream_metrics.jetstream_metric_dict import JETSTREAM_METRIC_DICT
+from jetstream_metrics import compute_metrics, data_formatter
+from jetstream_metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt

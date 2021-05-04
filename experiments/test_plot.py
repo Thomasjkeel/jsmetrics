@@ -1,5 +1,5 @@
-from jetstream_metrics import compute_metrics, data_formatter
-from jetstream_metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
+from metrics import compute_metrics, data_formatter
+from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
@@ -16,7 +16,7 @@ def main(data_path):
     ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     
     one_metric = 'Woolings2010'
-    result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=False, subset_kwargs={'ignore_coords':['plev']})
+    result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=False) # , subset_kwargs={'ignore_coords':['plev']
     if result is not None:
         max_lats = result[:,0]
         max_ws = result[:,1]

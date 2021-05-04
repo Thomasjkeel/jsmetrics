@@ -17,4 +17,4 @@ c.retrieve("reanalysis-era5-pressure-levels",
     "format": 'netcdf',
     "grid": "1.0/1.0"
     },
-"era5_u_wind_99to21.nc")
+"era5_u_wind_79to21.nc")

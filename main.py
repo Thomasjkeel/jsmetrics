@@ -1,5 +1,6 @@
 import argparse
-from experiments import get_available_metrics, test_plot
+from experiments import get_available_metrics
+from tests import test_plot
 
 ALL_EXPERIMENTS = {'get_available_metrics':{"description": "Will print out all metrics available for this dataset","script":get_available_metrics.main},
                    'test_plot': {"description": "Will test the subset and calculate a metric from the data and produce a plot (under experiments/figures)", "script": test_plot.main}}

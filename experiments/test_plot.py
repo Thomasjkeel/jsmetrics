@@ -1,6 +1,8 @@
 from jetstream_metrics import compute_jetstream_metric, data_formatter
 from jetstream_metrics.jetstream_metric_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
 
 def main(data_path):
     print("Starting!")
@@ -11,6 +13,17 @@ def main(data_path):
     UKESM1_SSP585 = xr.merge([UKESM1_SSP585_U, UKESM1_SSP585_V])
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90)) # , plev=50000)
-    ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=False)
-    return 
+    ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
+    
+    one_metric = 'Woolings2010'
+    result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=True, subset_kwargs={'ignore_coords':['plev']})
+    if result:
+        max_lats = result[:,0]
+        max_ws = result[:,1]
+        fig, ax = plt.subplots(1)
+        ax.plot(max_lats)
+        ax.plot(max_ws)
+        plt.legend(['latitude of max windspeed', 'windspeed'])
+        fig.savefig('experiments/figures/woolings_test.png', bbox_inches='tight')
+    print("done!")
 

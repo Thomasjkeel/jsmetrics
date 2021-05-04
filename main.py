@@ -1,7 +1,8 @@
 import argparse
-from experiments import get_available_metrics
+from experiments import get_available_metrics, test_plot
 
-ALL_EXPERIMENTS = {'get_available_metrics':{"description":"Will print out all metrics available for this dataset","script":get_available_metrics.main}}
+ALL_EXPERIMENTS = {'get_available_metrics':{"description": "Will print out all metrics available for this dataset","script":get_available_metrics.main},
+                   'test_plot': {"description": "Will test the subset and calculate a metric from the data and produce a plot (under experiments/figures)", "script": test_plot.main}}
 
 
 if __name__ == '__main__':
@@ -16,7 +17,7 @@ if __name__ == '__main__':
         print("\nAll experiments:\n")
         print("-"*20)
         for exp in ALL_EXPERIMENTS.keys():
-            print(exp, "—", ALL_EXPERIMENTS[exp]["description"])
+            print(exp, "—", ALL_EXPERIMENTS[exp]["description"]) # maybe right allign this print
         print("-"*20)
         print("\n")
 

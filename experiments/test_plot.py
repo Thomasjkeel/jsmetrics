@@ -4,7 +4,7 @@ import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 
-def main(data_path):
+def main(data_path, metric_to_use):
     print("Starting!")
     all_metrics = JETSTREAM_METRIC_DICT
     data_dir = 'data/'
@@ -15,7 +15,7 @@ def main(data_path):
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90)) # , plev=50000)
     ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     
-    one_metric = 'Woolings2010'
+    one_metric = 'Woolings2010' # metric_to_use
     result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=False) # , subset_kwargs={'ignore_coords':['plev']
     if result is not None:
         max_lats = result[:,0]

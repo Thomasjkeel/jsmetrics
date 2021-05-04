@@ -39,6 +39,9 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     mean_data = data.mean(dims_for_mean)
     ## Step 2
     print('Step 2: Subsetting to lat to between %s and %s...' % (lat_min, lat_max))
+    ### check lat max and min are the correct way around
+    if mean_data.lat[0] > mean_data.lat[-1]:
+        mean_data = mean_data.reindex(lat=list(reversed(mean_data.lat)))
     mean_data = mean_data.sel(lat=slice(lat_min, lat_max))
     ## Step 3
     print('Step 3: Applying %s day lancoz filter...' % (filter_freq))
@@ -48,8 +51,8 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     ## Step 4
     print('Step 4: Calculating max windspeed and latitude where max windspeed found...')
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, window_cons[:])))
-    # Step 5 — fourier filtering  TODO
-    ## make seasonal (DJF, MAM, JJA, SON)
+    ## Step 5 — fourier filtering  TODO
+    ### make seasonal (DJF, MAM, JJA, SON)
     # seasonal_data = window_cons.resample(time='Q-NOV').mean()
     # filled_seasonal_data = seasonal_data[:,0].fillna(0)
     ## loop over each latitude and calculate high frequency
@@ -57,7 +60,7 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     #     lat_data = seasonal_data.sel(lat=lat)
     #     lat_data = np.array(lat_data.fillna(0))
     #     filtered_sig = jetstream_metrics_utils.fourier_filter(lat_data)
-    #     # code to put back into xarray format
+    #     ### code to put back into xarray format
     return max_lat_ws
     
 

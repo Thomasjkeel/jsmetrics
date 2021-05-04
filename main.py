@@ -32,6 +32,7 @@ def run_experiments(args):
         print("Running script: ", args.experiment)
         if args.metrics:
             print("Metrics to use: ", args.metrics)
+            # TODO: add allowance for zero to multiple metrics
         ALL_EXPERIMENTS[args.experiment]["script"](args.data)
         
 

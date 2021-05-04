@@ -16,8 +16,8 @@ def main(data_path):
     ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     
     one_metric = 'Woolings2010'
-    result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=True, subset_kwargs={'ignore_coords':['plev']})
-    if result:
+    result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=False, subset_kwargs={'ignore_coords':['plev']})
+    if result is not None:
         max_lats = result[:,0]
         max_ws = result[:,1]
         fig, ax = plt.subplots(1)

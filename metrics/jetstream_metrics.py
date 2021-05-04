@@ -61,14 +61,6 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     return max_lat_ws
     
 
-def hudson_2012(data):
-    """
-        Write function description
-        Uses Ozone
-    """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
-    return
-
 
 def screen_and_simmonds_2014(data):
     """

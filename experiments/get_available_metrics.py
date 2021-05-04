@@ -1,5 +1,5 @@
-from jetstream_metrics import compute_metrics, data_formatter
-from jetstream_metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
+from metrics import compute_metrics, data_formatter
+from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
 
 def main(data_path):

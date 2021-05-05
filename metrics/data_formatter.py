@@ -14,7 +14,7 @@ __status__ = "Development"
 __description__ = "Data formatter class for interacting, subsetting and calculating metrics from climate model outputs"
 
 
-class DataFormatter(object):
+class DataFormatter:
     """
     The DataFormatter object ...
     (see https://www.datacamp.com/community/tutorials/docstrings-python for docstring format)

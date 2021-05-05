@@ -26,6 +26,6 @@ def main(data_path, metrics_to_use=None):
             result = ukesm1_ssp585.compute_metric_from_data(metric, all_metrics=all_metrics, return_coord_error=False)
             print('result:', result)
         except Exception as e:
-            print("Unable to complete experiment. Error is:",e)
+            print("Unable to perform experiment. Error is:",e)
     print("done!")
 

@@ -63,6 +63,9 @@ class DataFormatter:
 
 
     def compute_metric_from_data(self, metric_name, **kwargs):
+        """
+            TODO: maybe add catch. Will print which metrics are available
+        """
         result = compute_metrics.compute_metric(self.data, metric_name, **kwargs)
         return result
     

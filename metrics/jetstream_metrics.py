@@ -16,14 +16,19 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-def koch_et_al_2006(data):
+def koch_et_al_2006(data, ws_threshold=30):
     """
         TODO: check with chris
         TODO: add equation
+
+        Returns
+        ----------
+        weighted_average_ws : DataArray
     """
     # Step 1: get all pressure levels in data as list and make sure hPa TODO: what if mbar? 
     all_plevs_hPa = jetstream_metrics_utils.get_all_plev_hPa(data)
     ## Step 2: calculate sum of weighted windspeed
+    print('Step 1: Calculate weighted sum...')
     sum_weighted_ws = 0
     for plev, (i,plev_hPa) in zip(data['plev'], enumerate(all_plevs_hPa)):
         if i != 0:
@@ -31,7 +36,13 @@ def koch_et_al_2006(data):
         sum_weighted_ws += ((data.sel(plev=plev)['ua']** 2 + data.sel(plev=plev)['va']**2)**(1/2)) * plev_hPa
     
     ## Step 3: calculate average weighted
+    print('Step 2: Calculate weighted average...')
     weighted_average_ws = sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
+
+    ## Step 4: apply threshold
+    print('Step 3: Apply windspeed threshold of %s m/s...' % (ws_threshold))
+    weighted_average_ws = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
+    weighted_average_ws = weighted_average_ws.fillna(0.0)
     return weighted_average_ws
 
 

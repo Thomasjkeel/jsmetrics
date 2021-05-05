@@ -66,10 +66,9 @@ def swap_coord_order(data, coord, ascending=True):
     """
     first_val = 0
     last_val = -1
-    if ascending:
+    if not ascending:
         first_val = -1
         last_val = 0
-
     if data[coord][first_val] > data[coord][last_val]:
         data = data.reindex(**{coord:list(reversed(data[coord]))})
     return data
@@ -214,7 +213,4 @@ def check_if_coord_vals_meet_reqs(data, coord, coord_vals):
 
         return True
     else:
-        if coord == 'plev' and min_val > max_val:
-            return data[coord].values > max_val and data[coord].values < min_val
-        else:
-            return data[coord].values > min_val and data[coord].values < max_val
+        return data[coord].values > min_val and data[coord].values < max_val

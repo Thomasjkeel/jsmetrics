@@ -9,9 +9,9 @@ from . import jetstream_metrics
 
 JETSTREAM_METRIC_DICT = {
     "Koch2006":
-        {"variables": ["ua","va"], "coords": {"plev": [40000, 10000]}, "metric": jetstream_metrics.koch_et_al_2006, "description":"Koch et al. 2006"},
+        {"variables": ["ua","va"], "coords": {"plev": [10000, 40000]}, "metric": jetstream_metrics.koch_et_al_2006, "description":"Koch et al. 2006"},
     "Woolings2010":
-         {"variables": ["ua"], "coords": {"plev": [92500,  70000]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
+         {"variables": ["ua"], "coords": {"plev": [70000, 92500]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
     "ScreenSimmonds2014":
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2014, "description":"Screen & Simmonds 2014"},
     "Kuang2014":
@@ -23,10 +23,10 @@ JETSTREAM_METRIC_DICT = {
     "Ceppi2018":
         {"variables":["ua"], "coords":{"plev": [85000, 85000]}, "metric": jetstream_metrics.ceppi_et_al_2018, "description":"Ceppi et al. 2018"},
     "Kern2018":
-        {"variables":["ua", "va"], "coords":{"plev": [100000,0]}, "metric": jetstream_metrics.kern_et_al_2018, "description":"Kern 2018"},
+        {"variables":["ua", "va"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.kern_et_al_2018, "description":"Kern 2018"},
     "Simpson2018":
         {"variables":["zg"], "coords":{"plev": [70000, 70000]}, "metric": jetstream_metrics.simpson_et_al_2018, "description":"Simpson et al. 2018"},
     "ChemkeMing2020":
-        {"variables":["ua","va"], "coords":{"plev": [100000,0]}, "metric": jetstream_metrics.chemke_and_ming_2020, "description":"Chemke & Ming 2020"}
+        {"variables":["ua","va"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.chemke_and_ming_2020, "description":"Chemke & Ming 2020"}
     } 
 

@@ -22,12 +22,14 @@ class DataFormatter:
     def __init__(self, data):
         self.data = data
         self.variables = self.get_variable_list()
+        self.swap_all_coords()
 
 
     @classmethod
     def with_available_metrics(self, data, all_metrics):
         self.data = data
         self.variables = self.get_variable_list
+        self.swap_all_coords
         self.get_available_metrics(self, all_metrics)
 
 
@@ -47,6 +49,10 @@ class DataFormatter:
                 variable_list.append(var)
         return variable_list
 
+    def swap_all_coords(self):
+        for coord in self.data.coords:
+            print(coord)
+            self.data = compute_metrics.swap_coord_order(self.data, coord)
 
     def subset(self, inplace=False, **kwargs):
         """

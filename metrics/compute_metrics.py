@@ -49,6 +49,33 @@ def subset_data(data, metric, ignore_coords=None):
         return data
 
 
+def swap_coord_order(data, coord, ascending=True):
+    """
+        Will reverse the dimension if a higher number is first
+        
+        Parameters
+        ----------
+        data : xarray.Dataset
+            climate data
+        coord : str
+            name from coord to change
+
+        Useage
+        ----------
+        new_data = swap_coord_order(data, "lat")
+    """
+    first_val = 0
+    last_val = -1
+    if ascending:
+        first_val = -1
+        last_val = 0
+
+    if data[coord][first_val] > data[coord][last_val]:
+        data = data.reindex(**{coord:list(reversed(data[coord]))})
+    return data
+
+
+
 def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False, subset_kwargs={}, calc_kwargs={}):
     """
         Write function description

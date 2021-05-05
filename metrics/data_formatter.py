@@ -51,7 +51,6 @@ class DataFormatter:
 
     def swap_all_coords(self):
         for coord in self.data.coords:
-            print(coord)
             self.data = compute_metrics.swap_coord_order(self.data, coord)
 
     def subset(self, inplace=False, **kwargs):

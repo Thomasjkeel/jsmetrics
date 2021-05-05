@@ -22,6 +22,17 @@ def get_resultant_wind(u_data, v_data):
     return np.sqrt( u_data**2 + v_data**2 )
 
 
+
+def get_all_plev_hPa(data):
+    """
+        Will get a list of all the pressure levels in the data in hPa 
+    """
+    plevs = np.array([plev for plev in data['plev']])
+    if data['plev'].units == 'Pa':
+        plevs = plevs/100 
+    return plevs
+
+
 def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
     """
         Write function description
@@ -94,4 +105,3 @@ def fourier_filter(data, timestep=1):
     high_freq_fft[np.abs(sample_freq) > peak_freq] = 0
     filtered_sig = fftpack.ifft(high_freq_fft)
     return filtered_sig
-    

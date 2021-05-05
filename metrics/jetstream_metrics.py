@@ -18,10 +18,21 @@ __status__ = "Development"
 
 def koch_et_al_2006(data):
     """
-        TODO: Ask Chris about the equation
+        TODO: check with chris
+        TODO: add equation
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
-    return
+    # Step 1: get all pressure levels in data as list and make sure hPa TODO: what if mbar? 
+    all_plevs_hPa = jetstream_metrics_utils.get_all_plev_hPa(data)
+    ## Step 2: calculate sum of weighted windspeed
+    sum_weighted_ws = 0
+    for plev, (i,plev_hPa) in zip(data['plev'], enumerate(all_plevs_hPa)):
+        if i != 0:
+            plev_hPa = plev_hPa - all_plevs_hPa[i-1]
+        sum_weighted_ws += ((data.sel(plev=plev)['ua']** 2 + data.sel(plev=plev)['va']**2)**(1/2)) * plev_hPa
+    
+    ## Step 3: calculate average weighted
+    weighted_average_ws = sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
+    return weighted_average_ws
 
 
 def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):

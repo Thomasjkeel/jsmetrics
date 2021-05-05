@@ -14,24 +14,21 @@ __status__ = "Development"
 __description__ = "Data formatter class for interacting, subsetting and calculating metrics from climate model outputs"
 
 
-class DataFormatter:
+class DataFormatter(object):
     """
     The DataFormatter object ...
     (see https://www.datacamp.com/community/tutorials/docstrings-python for docstring format)
     """
     def __init__(self, data):
         self.data = data
-        self.variables = self.get_variable_list()
+        self.get_variable_list()
         self.swap_all_coords()
 
-
     @classmethod
-    def with_available_metrics(self, data, all_metrics):
-        self.data = data
-        self.variables = self.get_variable_list
-        self.swap_all_coords
-        self.get_available_metrics(self, all_metrics)
-
+    def with_available_metrics(cls, data, all_metrics):
+        aval = cls(data)
+        aval.get_available_metrics(all_metrics)
+        return aval
 
     def get_available_metrics(self, all_metrics, return_coord_error=False):
         self.all_metrics = all_metrics
@@ -43,11 +40,10 @@ class DataFormatter:
 
 
     def get_variable_list(self):
-        variable_list = []
+        self.variable_list = []
         for var in self.data.keys():
             if not '_bnds' in var:
-                variable_list.append(var)
-        return variable_list
+                self.variable_list.append(var)
 
     def swap_all_coords(self):
         for coord in self.data.coords:

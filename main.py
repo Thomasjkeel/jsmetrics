@@ -1,9 +1,11 @@
 import argparse
-from experiments import get_available_metrics
+from experiments import get_available_metrics, calculate_metrics
 from tests import test_plot
 
 ALL_EXPERIMENTS = {'get_available_metrics':{"description": "Will print out all metrics available for this dataset","script":get_available_metrics.main},
+                   'calc_metrics':{"description":"will calcualte one metric. Use -m tag to state which one", "script":calculate_metrics.main},
                    'test_plot': {"description": "Will test the subset and calculate a metric from the data and produce a plot (under experiments/figures)", "script": test_plot.main}}
+
 
 
 def list_all_experiments():
@@ -34,14 +36,16 @@ def run_experiments(args):
         if args.metrics:
             print("Metrics to use: ", args.metrics)
             # TODO: add allowance for zero to multiple metrics
-        ALL_EXPERIMENTS[args.experiment]["script"](args.data)
+            ALL_EXPERIMENTS[args.experiment]["script"](args.data, args.metrics)
+        else:
+            ALL_EXPERIMENTS[args.experiment]["script"](args.data)
         
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run an experiment.')
     parser.add_argument('-e','--experiment', type=str, help='path to a python script')
     parser.add_argument('-d', '--data', type=str, help='path to a netcdf4 data')
-    parser.add_argument('-m', '--metrics', type=tuple, help='names of metrics to use')
+    parser.add_argument('-m', '--metrics', nargs='+', help='names of metrics to use')
     parser.add_argument('-l', '--ls', help='list all experiments', action='store_true')
     args = parser.parse_args()
 

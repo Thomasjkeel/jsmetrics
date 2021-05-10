@@ -78,7 +78,7 @@ def low_pass_weights(window, cutoff):
 
 def meridional_circulation_index(data):
     """
-    Caluculates the Meridional Circulation Index (MCI) proposed Francis and Vavrus 2015
+    Calculates the Meridional Circulation Index (MCI) proposed Francis and Vavrus 2015
     When MCI = 0, the wind is purely zonal, and when MCI= 1 (−1), the flow is from the South (North).
     
            v * abs(v)

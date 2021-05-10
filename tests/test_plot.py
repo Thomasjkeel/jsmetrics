@@ -4,7 +4,7 @@ import xarray as xr
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 
-def main(data_path):
+def main(data_path, **kwargs):
     print("Starting!")
     all_metrics = JETSTREAM_METRIC_DICT
     data_dir = 'data/'

@@ -2,7 +2,7 @@ from metrics import compute_metrics, data_formatter
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
 
-def main(data_path):
+def main(data_path, **kwargs):
     print("Starting!")
     all_metrics = JETSTREAM_METRIC_DICT
     data_dir = 'data/'

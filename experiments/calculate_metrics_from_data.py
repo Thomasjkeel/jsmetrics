@@ -3,7 +3,7 @@ from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
 
 
-def main(experiment, data_path, metrics=None, subset=False, ls=None, subset_kwargs={}):
+def main(data_path, metrics=None, subset=False, subset_kwargs={}, **kwargs):
     print(data_path)
     print("Starting!")
     all_metrics = JETSTREAM_METRIC_DICT

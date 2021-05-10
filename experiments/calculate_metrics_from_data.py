@@ -3,7 +3,8 @@ from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import xarray as xr
 
 
-def main(data_path, metrics_to_use=None):
+def main(experiment, data_path, metrics=None, subset=False, ls=None, subset_kwargs={}):
+    print(data_path)
     print("Starting!")
     all_metrics = JETSTREAM_METRIC_DICT
     data_dir = 'data/'
@@ -14,16 +15,19 @@ def main(data_path, metrics_to_use=None):
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90))
     # ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     
-    if metrics_to_use is None:
+    if metrics is None:
         print('Warning: No metric given. Using Woolings2010')
         metric_to_use = 'Woolings2010'
         result = ukesm1_ssp585.compute_metric_from_data(metric_to_use, all_metrics=all_metrics, return_coord_error=False)
     
-    for  metric in metrics_to_use:
+    for metric in metrics:
         print("calculating metric: %s" % (metric))
         try:
             # TODO: move this try and catch to the actual method
-            result = ukesm1_ssp585.compute_metric_from_data(metric, all_metrics=all_metrics, return_coord_error=False)
+            if subset:
+                print('Warning: User has chosen to not subset data')
+                subset_kwargs = {"ignore_coords":["plev"]}
+            result = ukesm1_ssp585.compute_metric_from_data(metric, all_metrics=all_metrics, return_coord_error=False, subset_kwargs=subset_kwargs)
             print('result:', result)
         except Exception as e:
             print("Unable to perform experiment. Error is:",e)

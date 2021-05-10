@@ -105,14 +105,19 @@ def kuang_et_al_2014(data):
     return
 
 
-def francis_vavrus_2015(data):
+def francis_vavrus_2015(data, lat_min=20, lat_max=80):
     """
         Write function description
         MCI
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
-    abs()
-    return
+    ## Step 1 calculate MCI index for data
+    print('calculating Meridional Circulation Index from data')
+    mci_data = jetstream_metrics_utils.meridional_circulation_index(data) 
+    
+    ## maybe TODO: Step ?? Calculate anomaly from season
+    
+    return mci_data
+
 
 
 def huang_and_nakamura_2015(data):

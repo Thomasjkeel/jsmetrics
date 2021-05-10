@@ -84,10 +84,11 @@ def meridional_circulation_index(data):
            v * abs(v)
     MCI =  ――――――――――
            u**2 * v**2
-        
+           
+    NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1   
     """
     assert 'ua' and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
-    return abs(data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2))
+    return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
     
 
 def fourier_filter(data, timestep=1):

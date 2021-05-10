@@ -16,6 +16,8 @@ JETSTREAM_METRIC_DICT = {
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2013, "description":"Screen & Simmonds 2014"},
     "Kuang2014":
         {"variables":["ua"], "coords":{"plev": [20000,20000]}, "metric": jetstream_metrics.kuang_et_al_2014, "description":"Kuang et al. 2014"},
+    "FrancisVavrus2015":
+        {"variables":["ua","va"], "coords":{"plev": [50000,50000]}, "metric": jetstream_metrics.francis_vavrus_2015, "description":"Francis & Vavrus 2015"},
     "HuangNakamura2015":
         {"variables":["rv850?"], "coords":{"plev": [85000,85000]}, "metric": jetstream_metrics.huang_and_nakamura_2015, "description":"Huang & Nakamura 2015"},
     "Cattiaux2016":

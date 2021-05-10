@@ -120,9 +120,10 @@ def francis_vavrus_2015(data, lat_min=20, lat_max=80):
 
 
 
-def huang_and_nakamura_2015(data):
+def local_wave_activity(data):
     """
-        Write function description
+        TODO: Ask Chris about equation in Blackport 2020 and others
+        Introduced by Huang and Nakamura for Potential Vorticity, but then used by:
         Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA with 500 hPa zg instead of pv
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)

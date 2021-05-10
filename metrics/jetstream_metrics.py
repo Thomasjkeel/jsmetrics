@@ -87,9 +87,11 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     
 
 
-def screen_and_simmonds_2014(data):
+def screen_and_simmonds_2013(data):
     """
         Write function description
+        Also used in screen and simmonds 2014
+        TODO: ask Chris about interpolation
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
@@ -103,9 +105,20 @@ def kuang_et_al_2014(data):
     return
 
 
+def francis_vavrus_2015(data):
+    """
+        Write function description
+        MCI
+    """
+    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    abs()
+    return
+
+
 def huang_and_nakamura_2015(data):
     """
         Write function description
+        Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA with 500 hPa zg instead of pv
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return

@@ -13,7 +13,7 @@ JETSTREAM_METRIC_DICT = {
     "Woolings2010":
          {"variables": ["ua"], "coords": {"plev": [70000, 92500]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
     "ScreenSimmonds2014":
-        {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2014, "description":"Screen & Simmonds 2014"},
+        {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2013, "description":"Screen & Simmonds 2014"},
     "Kuang2014":
         {"variables":["ua"], "coords":{"plev": [20000,20000]}, "metric": jetstream_metrics.kuang_et_al_2014, "description":"Kuang et al. 2014"},
     "HuangNakamura2015":

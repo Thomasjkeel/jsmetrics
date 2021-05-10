@@ -5,3 +5,4 @@ To-Do:
 - argparse to parse a list for additional arguments i.e. return_coord_error (do more user testing)
 - Improve readme(s) and add links (DOI?)
 - add lat and lon subsetting to jetstream_metrics_dict
+- look into bash arrays and running multiple metrics

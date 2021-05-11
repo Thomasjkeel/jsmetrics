@@ -76,21 +76,6 @@ def low_pass_weights(window, cutoff):
     return w[0+(window%2):-1] # edited from w[1:-1]
 
 
-def meridional_circulation_index(data):
-    """
-    Calculates the Meridional Circulation Index (MCI) proposed Francis and Vavrus 2015
-    When MCI = 0, the wind is purely zonal, and when MCI= 1 (−1), the flow is from the South (North).
-    
-           v * abs(v)
-    MCI =  ――――――――――
-           u**2 * v**2
-           
-    NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1   
-    """
-    assert 'ua' and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
-    return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
-    
-
 def fourier_filter(data, timestep=1):
     """
         Carries out a Fourier transform for high frequency filtering
@@ -119,3 +104,19 @@ def fourier_filter(data, timestep=1):
     high_freq_fft[np.abs(sample_freq) > peak_freq] = 0
     filtered_sig = fftpack.ifft(high_freq_fft)
     return filtered_sig
+
+
+def meridional_circulation_index(data):
+    """
+    Calculates the Meridional Circulation Index (MCI) proposed Francis and Vavrus 2015
+    When MCI = 0, the wind is purely zonal, and when MCI= 1 (−1), the flow is from the South (North).
+    
+           v * abs(v)
+    MCI =  ――――――――――
+           u**2 * v**2
+           
+    NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1   
+    """
+    assert 'ua' and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
+    return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
+    

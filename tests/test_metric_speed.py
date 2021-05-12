@@ -17,6 +17,7 @@ def main(data_path, **kwargs):
     
     one_metric = 'Woolings2010' # metric_to_use
     result = ukesm1_ssp585.compute_metric_from_data(one_metric, all_metrics=all_metrics, return_coord_error=False) # , subset_kwargs={'ignore_coords':['plev']
+    del result
     # if result is not None:
     #     max_lats = result[:,0]
     #     max_ws = result[:,1]

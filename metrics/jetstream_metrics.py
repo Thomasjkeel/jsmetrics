@@ -100,6 +100,7 @@ def screen_and_simmonds_2013(data):
 def kuang_et_al_2014(data):
     """
         Write function description
+        TODO: move from notebook
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return

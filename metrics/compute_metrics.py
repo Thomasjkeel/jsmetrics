@@ -37,6 +37,7 @@ def subset_data(data, metric, ignore_coords=None):
 
     ## check if subset is still possible
     if len(coords_to_change) != 0:
+        print('Subsetting data...')
         subset = data.copy()
         for coord in metric['coords'].keys():
             if coord in coords_to_change:

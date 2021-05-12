@@ -97,13 +97,21 @@ def screen_and_simmonds_2013(data):
     return
 
 
-def kuang_et_al_2014(data):
+def kuang_et_al_2014(data, ws_threshold=30):
     """
         Write function description
-        TODO: move from notebook
+        May take a long time for a lot of data
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
-    return
+    print('Step 1. Calculate resultant wind vector')    
+    ws_data = jetstream_metrics_utils.get_resultant_wind(data['ua'], data['va'])
+    
+    print('Step 2. Get values with windspeeds above %s m/s (\'jet-stream occurence\' points)' % (ws_threshold))
+    jet_occurence = ws_data.where(ws_data.variable >= ws_threshold)
+    
+    print('Step 3. Get values of jet-stream centre points (\'jet-stream centre\' points)')
+    jet_centres = jetstream_metrics_utils.get_jet_centre_data(jet_occurence)
+    return jet_occurence, jet_centres
+
 
 
 def francis_vavrus_2015(data, lat_min=20, lat_max=80):

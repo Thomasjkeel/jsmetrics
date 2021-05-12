@@ -50,7 +50,7 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--ls', help='list all experiments', action='store_true')
     args = parser.parse_args()
     args = vars(args)
-    print(args)
+    
     # list all experiements
     if args['ls']:
         list_all_experiments()

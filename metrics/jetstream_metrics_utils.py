@@ -123,6 +123,9 @@ def meridional_circulation_index(data):
 
 
 def get_all_coords_of_jet_occurence(jet_occurence_data):
+    """
+        for Kuang et al 2014
+    """
     all_coords = []
     for val in jet_occurence_data.notnull():
         if val.any():
@@ -135,7 +138,8 @@ def get_all_coords_of_jet_occurence(jet_occurence_data):
 def get_all_lats_of_jet_centre_for_search(all_coords, lat_resolution, lon_resolution):
     """
         Will get all latitudes that 'may' be a jet-stream centre-point i.e. where latitude appears at least three times for 3*3 lat/lon grid.
-        
+        for Kuang et al 2014
+
         NOTE: speeds up calculation as less values are searched through
     """
     ## Step 1. get a counter of all the latitude coordinates
@@ -158,6 +162,7 @@ def get_all_lats_of_jet_centre_for_search(all_coords, lat_resolution, lon_resolu
 def calculate_jet_centre_points(all_coords, lat_resolution, lon_resolution):
     """
         Will return a list of the coordinates for all jet-centre points
+        for Kuang et al 2014
     """
 
     lats_for_search = get_all_lats_of_jet_centre_for_search(all_coords, lat_resolution, lon_resolution)
@@ -188,6 +193,7 @@ def calculate_jet_centre_points(all_coords, lat_resolution, lon_resolution):
 def get_jet_centre_data(jet_occurence_data):
     """
         Calculates jet-stream centres based on if one jet-stream occurence grid is surrounded by 8 cells of jet-stream occurence (default is 30 m/s)
+        for Kuang et al 2014
     """
     ## latitude and longitude resolution
     lat_resolution = float(jet_occurence_data['lat'][1] - jet_occurence_data['lat'][0])
@@ -201,16 +207,16 @@ def get_jet_centre_data(jet_occurence_data):
     for time_ind in range(jet_centre_data['time'].size):
         print('On time step: %s' % (time_ind))
         mutliple_time_index = jet_centre_data['time'].size > 1
-        
+
         ## get the lat lon coords of where a jet occurence point is identified
         if mutliple_time_index:
             all_coords = get_all_coords_of_jet_occurence(jet_occurence_data.isel(time=time_ind))
         else:
             all_coords = get_all_coords_of_jet_occurence(jet_occurence_data)
-            
+
         ## calculate jet cores i.e. the central point of a 3*3 grid of jet occurence points
         jet_centres = calculate_jet_centre_points(all_coords, lat_resolution, lon_resolution)
-
+        
         ## TODO: there's got to be a quicker way
         if mutliple_time_index:
             for centre in jet_centres:

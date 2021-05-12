@@ -91,7 +91,7 @@ def screen_and_simmonds_2013(data):
     """
         Write function description
         Also used in screen and simmonds 2014
-        TODO: ask Chris about interpolation
+        TODO: ask Chris about interpolation method
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
@@ -101,6 +101,7 @@ def kuang_et_al_2014(data, ws_threshold=30):
     """
         Write function description
         May take a long time for a lot of data
+        TODO: ask chris to check
     """
     print('Step 1. Calculate resultant wind vector')    
     ws_data = jetstream_metrics_utils.get_resultant_wind(data['ua'], data['va'])
@@ -117,7 +118,7 @@ def kuang_et_al_2014(data, ws_threshold=30):
 def francis_vavrus_2015(data, lat_min=20, lat_max=80):
     """
         Write function description
-        MCI
+        TODO: maybe add anomaly 
     """
     ## Step 1 calculate MCI index for data
     print('calculating Meridional Circulation Index from data')

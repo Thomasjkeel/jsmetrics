@@ -25,10 +25,12 @@ def main(data_path, metrics=None, subset=False, subset_kwargs={}, **kwargs):
         print("calculating metric: %s" % (metric))
         try:
             # TODO: move this try and catch to the actual method
+            return_coord_error = False
             if subset:
-                print('Warning: User has chosen to not subset data')
+                print('Warning: User has chosen to not subset data. Watch RAM usuage!!')
                 subset_kwargs = {"ignore_coords":["plev"]}
-            result = ukesm1_ssp585.compute_metric_from_data(metric, all_metrics=all_metrics, return_coord_error=False, subset_kwargs=subset_kwargs)
+                return_coord_error = True
+            result = ukesm1_ssp585.compute_metric_from_data(metric, all_metrics=all_metrics, return_coord_error=return_coord_error, subset_kwargs=subset_kwargs)
             print('result:', result)
         except Exception as e:
             print("Unable to perform experiment. Error is:",e)

@@ -44,10 +44,21 @@ def subset_data(data, metric, ignore_coords=None):
                 max_val = float(metric['coords'][coord][1])
                 selection = {coord:slice(min_val, max_val)}
                 subset = subset.sel(selection)
+        subset = flatten_dims(subset)
         return subset 
     else:
         return data
 
+
+def flatten_dims(data):
+    """
+        Supports subset and will flatten coordinates of an Xarray DataSet/DataArray with one value (so they are standardised)
+    """
+    for dim in data.dims:
+        if data.dims[dim] == 1:
+            selection = {dim:0}
+            data = data.isel(selection)
+    return data
 
 def swap_coord_order(data, coord, ascending=True):
     """

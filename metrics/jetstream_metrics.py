@@ -143,6 +143,7 @@ def local_wave_activity(data):
 def cattiaux_et_al_2016(data):
     """
         Write function description
+        TODO: waiting on Chris' help with the interpolation method from screen and simmonds
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
@@ -151,6 +152,8 @@ def cattiaux_et_al_2016(data):
 def ceppi_et_al_2018(data):
     """
         Write function description
+        TODO: the centroid??
+        "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
     """
     # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return

@@ -23,7 +23,7 @@ JETSTREAM_METRIC_DICT = {
     "Cattiaux2016":
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.cattiaux_et_al_2016, "description":"Cattiaux et al. 2016"},
     "Ceppi2018":
-        {"variables":["ua"], "coords":{"plev": [85000, 85000]}, "metric": jetstream_metrics.ceppi_et_al_2018, "description":"Ceppi et al. 2018"},
+        {"variables":["ua"], "coords":{"plev": [85000, 85000], "lat": [30,60]}, "metric": jetstream_metrics.ceppi_et_al_2018, "description":"Ceppi et al. 2018"},
     "Kern2018":
         {"variables":["ua", "va"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.kern_et_al_2018, "description":"Kern 2018"},
     "Simpson2018":

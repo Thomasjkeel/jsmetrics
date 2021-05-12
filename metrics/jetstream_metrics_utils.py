@@ -199,6 +199,7 @@ def get_jet_centre_data(jet_occurence_data):
         
     ## loop over every day
     for time_ind in range(jet_centre_data['time'].size):
+        print('On time step: %s' % (time_ind))
         mutliple_time_index = jet_centre_data['time'].size > 1
         
         ## get the lat lon coords of where a jet occurence point is identified

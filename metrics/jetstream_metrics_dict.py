@@ -15,7 +15,7 @@ JETSTREAM_METRIC_DICT = {
     "ScreenSimmonds2013":
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2013, "description":"Screen & Simmonds 2013 TODO"},
     "Kuang2014":
-        {"variables":["ua", "va"], "coords":{"plev": [20000,25000]}, "metric": jetstream_metrics.kuang_et_al_2014, "description":"Kuang et al. 2014"},
+        {"variables":["ua", "va"], "coords":{"plev": [20000,25000]}, "metric": jetstream_metrics.kuang_et_al_2014, "description":"Kuang et al. 2014. NOTE: Should be 200hPa only"},
     "FrancisVavrus2015":
         {"variables":["ua","va"], "coords":{"plev": [50000,50000]}, "metric": jetstream_metrics.francis_vavrus_2015, "description":"Francis & Vavrus 2015"},
     "LocalWaveActivty":

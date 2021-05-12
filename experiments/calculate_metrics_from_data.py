@@ -16,9 +16,10 @@ def main(data_path, metrics=None, subset=False, subset_kwargs={}, **kwargs):
     # ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     
     if metrics is None:
-        print('Warning: No metric given. Using Woolings2010')
-        metric_to_use = 'Woolings2010'
-        result = ukesm1_ssp585.compute_metric_from_data(metric_to_use, all_metrics=all_metrics, return_coord_error=False)
+        print('Warning: No metric given. Aborting process')
+        # metric_to_use = 'Woolings2010'
+        # result = ukesm1_ssp585.compute_metric_from_data(metric_to_use, all_metrics=all_metrics, return_coord_error=False)
+        return
     
     for metric in metrics:
         print("calculating metric: %s" % (metric))

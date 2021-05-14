@@ -10,8 +10,10 @@ from . import jetstream_metrics
 JETSTREAM_METRIC_DICT = {
     "Koch2006":
         {"variables": ["ua","va"], "coords": {"plev": [10000, 40000]}, "metric": jetstream_metrics.koch_et_al_2006, "description":"Koch et al. 2006"},
+    "ArcherCaldeira2008":
+        {"variables": ["ua","va"], "coords": {"plev": [10000, 40000]}, "metric": jetstream_metrics.archer_caldeira_2008, "description":"Archer & Caldeira 2008"},
     "Woolings2010":
-         {"variables": ["ua"], "coords": {"plev": [70000, 92500]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
+         {"variables": ["ua"], "coords": {"plev": [70000, 92500], "lat": [15, 75]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
     "ScreenSimmonds2013":
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2013, "description":"Screen & Simmonds 2013 TODO"},
     "Kuang2014":

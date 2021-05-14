@@ -46,11 +46,19 @@ def koch_et_al_2006(data, ws_threshold=30):
     return weighted_average_ws
 
 
+def archer_caldeira_2008(data):
+    """
+        Will calculate only the mass-weighted wind speed
+        Similar to Koch et al. 2006 -> "To overcome this problem, we define jet stream properties via integrated quantities, which are more numerically stable and less grid-dependent than are simple maxima and minima."
+    """
+    return
+
+
 def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
     """
-        Follows an in-text description of 5-steps describing the algorithm mof jet-stream identification from Woolings et al. (2010). 
+        Follows an in-text description of 4-steps describing the algorithm mof jet-stream identification from Woolings et al. (2010). 
         Will calculate this metric based on data (regardless of pressure level of time span etc.). 
-        TODO: Ask Chris about fourier filtering 
+        TODO: Ask Chris about fourier filtering (step 4)
         TODO: Maybe note about using season or not
     """
     ## Step 1
@@ -59,21 +67,20 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
         dims_for_mean = ['lon']
     print('Step 1: calculating long and plev mean...')
     mean_data = data.mean(dims_for_mean)
-    ## Step 2
-    print('Step 2: Subsetting to lat to between %s and %s...' % (lat_min, lat_max))
-    ### check lat max and min are the correct way around
-    if mean_data.lat[0] > mean_data.lat[-1]:
-        mean_data = mean_data.reindex(lat=list(reversed(mean_data.lat)))
-    mean_data = mean_data.sel(lat=slice(lat_min, lat_max))
-    ## Step 3
-    print('Step 3: Applying %s day lancoz filter...' % (filter_freq))
+    # print('Step not 2: Subsetting to lat to between %s and %s...' % (lat_min, lat_max))
+    # ### check lat max and min are the correct way around
+    # # if mean_data.lat[0] > mean_data.lat[-1]:
+    # #     mean_data = mean_data.reindex(lat=list(reversed(mean_data.lat)))
+    # # mean_data = mean_data.sel(lat=slice(lat_min, lat_max))
+    # ## Step 2
+    print('Step 2: Applying %s day lancoz filter...' % (filter_freq))
     lanczos_weights = jetstream_metrics_utils.low_pass_weights(61, 1/filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
     window_cons = mean_data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
-    ## Step 4
-    print('Step 4: Calculating max windspeed and latitude where max windspeed found...')
+    ## Step 3
+    print('Step 3: Calculating max windspeed and latitude where max windspeed found...')
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, window_cons[:])))
-    ## Step 5 — fourier filtering  TODO
+    ## Step 4 — fourier filtering  TODO
     ### make seasonal (DJF, MAM, JJA, SON)
     # seasonal_data = window_cons.resample(time='Q-NOV').mean()
     # filled_seasonal_data = seasonal_data[:,0].fillna(0)

@@ -54,7 +54,7 @@ def archer_caldeira_2008(data):
     return
 
 
-def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
+def woolings_et_al_2010(data, filter_freq=10):
     """
         Follows an in-text description of 4-steps describing the algorithm mof jet-stream identification from Woolings et al. (2010). 
         Will calculate this metric based on data (regardless of pressure level of time span etc.). 
@@ -67,11 +67,6 @@ def woolings_et_al_2010(data, filter_freq=10, lat_min=15, lat_max=75):
         dims_for_mean = ['lon']
     print('Step 1: calculating long and plev mean...')
     mean_data = data.mean(dims_for_mean)
-    # print('Step not 2: Subsetting to lat to between %s and %s...' % (lat_min, lat_max))
-    # ### check lat max and min are the correct way around
-    # # if mean_data.lat[0] > mean_data.lat[-1]:
-    # #     mean_data = mean_data.reindex(lat=list(reversed(mean_data.lat)))
-    # # mean_data = mean_data.sel(lat=slice(lat_min, lat_max))
     # ## Step 2
     print('Step 2: Applying %s day lancoz filter...' % (filter_freq))
     lanczos_weights = jetstream_metrics_utils.low_pass_weights(61, 1/filter_freq)

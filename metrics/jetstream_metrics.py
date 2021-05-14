@@ -19,7 +19,7 @@ __status__ = "Development"
 def koch_et_al_2006(data, ws_threshold=30):
     """
         TODO: check with chris
-        TODO: add equation
+        TODO: add equation to this doc
 
         Returns
         ----------
@@ -92,8 +92,8 @@ def screen_and_simmonds_2013(data):
         Write function description
         Also used in screen and simmonds 2014
         TODO: ask Chris about interpolation method
+        TODO: insure that the Earth sphericity is accounted for in the perimeter calculation
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 
@@ -118,7 +118,7 @@ def kuang_et_al_2014(data, ws_threshold=30):
 def francis_vavrus_2015(data, lat_min=20, lat_max=80):
     """
         Write function description
-        TODO: maybe add anomaly 
+        TODO: maybe add seasonal anomaly calculation 
     """
     ## Step 1 calculate MCI index for data
     print('calculating Meridional Circulation Index from data')
@@ -132,11 +132,10 @@ def francis_vavrus_2015(data, lat_min=20, lat_max=80):
 
 def local_wave_activity(data):
     """
-        TODO: Ask Chris about equation in Blackport 2020 and others
         Introduced by Huang and Nakamura for Potential Vorticity, but then used by:
         Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA with 500 hPa zg instead of pv
+        TODO: Ask Chris about equation in Blackport 2020 and others
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 
@@ -145,7 +144,6 @@ def cattiaux_et_al_2016(data):
         Write function description
         TODO: waiting on Chris' help with the interpolation method from screen and simmonds
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 
@@ -153,9 +151,12 @@ def ceppi_et_al_2018(data):
     """
         Write function description
         TODO: the centroid??
+        TODO: calc for each time period
         "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
+    # lat_mean_vals = []
+    # for lat in data['lat']:
+    #     lat_mean_vals.append([float(lat), float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean())])
     return
 
 
@@ -163,7 +164,6 @@ def kern_et_al_2018(data):
     """
         Write function description
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 
@@ -173,7 +173,6 @@ def manney_et_al_2018(data):
 
         Extend Manney 2011, 2014 and 2017
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 
@@ -181,7 +180,6 @@ def simpson_et_al_2018(data):
     """
         Write function description
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 
@@ -189,7 +187,6 @@ def lee_et_al_2019(data):
     """
         Write function description
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 
 
@@ -197,6 +194,5 @@ def chemke_and_ming_2020(data):
     """
         Write function description
     """
-    # i.e. will calculate metric based on data (regardless of pressure level of time span etc.)
     return
 

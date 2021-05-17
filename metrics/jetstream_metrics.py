@@ -88,6 +88,14 @@ def woolings_et_al_2010(data, filter_freq=10):
     return max_lat_ws
     
 
+def manney_et_al_2011(data):
+    """
+        Write function description
+
+        Used in Manney 2011, 2014, 2017 and 2018
+    """
+    return
+
 
 def screen_and_simmonds_2013(data):
     """
@@ -165,15 +173,7 @@ def ceppi_et_al_2018(data):
 def kern_et_al_2018(data):
     """
         Write function description
-    """
-    return
-
-
-def manney_et_al_2018(data):
-    """
-        Write function description
-
-        Extend Manney 2011, 2014 and 2017
+        TODO: ask Chris about equation
     """
     return
 

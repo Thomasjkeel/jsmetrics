@@ -15,7 +15,7 @@ JETSTREAM_METRIC_DICT = {
     "Woolings2010":
          {"variables": ["ua"], "coords": {"plev": [70000, 92500], "lat": [15, 75]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
     "Manney2011":
-        {"variables":["ua", "va"], "coords":{"plev": [100, 100000]}, "metric": jetstream_metrics.manney_et_al_2011, "description":"Manney et al. 2011 surface to 0.1 hPa TODO"},
+        {"variables":["ua", "va"], "coords":{"plev": [10000, 40000]}, "metric": jetstream_metrics.manney_et_al_2011, "description":"Manney et al. 2011 surface to 0.1 hPa TODO"},
     "ScreenSimmonds2013":
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2013, "description":"Screen & Simmonds 2013 TODO"},
     "Kuang2014":

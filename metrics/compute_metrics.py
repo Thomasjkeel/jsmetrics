@@ -61,6 +61,7 @@ def flatten_dims(data):
             data = data.isel(selection)
     return data
 
+
 def swap_coord_order(data, coord, ascending=True):
     """
         Will reverse the dimension if a higher number is first

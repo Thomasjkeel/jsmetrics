@@ -6,7 +6,6 @@
 
 ### imports
 import numpy as np
-import xarray as xr
 from scipy import fftpack
 import collections
 

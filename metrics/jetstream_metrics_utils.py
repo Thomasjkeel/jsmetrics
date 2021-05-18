@@ -8,6 +8,7 @@
 import numpy as np
 from scipy import fftpack
 import collections
+import itertools
 
 ### docs
 __author__ = "Thomas Keel"

@@ -26,9 +26,9 @@ class DataFormatter:
 
     @classmethod
     def with_available_metrics(cls, data, all_metrics):
-        aval = cls(data)
-        aval.get_available_metrics(all_metrics)
-        return aval
+        data_with_available_metrics = cls(data)
+        data_with_available_metrics.get_available_metrics(all_metrics)
+        return data_with_available_metrics
 
     def get_available_metrics(self, all_metrics, return_coord_error=False):
         self.all_metrics = all_metrics

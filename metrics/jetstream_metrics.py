@@ -157,6 +157,14 @@ def cattiaux_et_al_2016(data):
     return
 
 
+def grise_et_al_2017(data):
+    """
+        Write function description
+        See also Ceppi et al. 2012
+    """
+    return
+
+
 def ceppi_et_al_2018(data):
     """
         Write function description

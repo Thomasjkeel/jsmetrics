@@ -109,7 +109,7 @@ def screen_and_simmonds_2013(data):
 
 def kuang_et_al_2014(data, ws_threshold=30):
     """
-        Write function description
+        Looks to get event-based jet occurrence percentage and jet center occurrence of (UT)JS
         May take a long time for a lot of data
         TODO: ask chris to check
     """

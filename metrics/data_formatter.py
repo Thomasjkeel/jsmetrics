@@ -38,7 +38,6 @@ class DataFormatter:
               (len(self.available_metrics)))
         print("Metrics available:", self.available_metrics)
 
-
     def get_variable_list(self):
         self.variable_list = []
         for var in self.data.keys():
@@ -60,7 +59,6 @@ class DataFormatter:
                 return DataFormatter.with_available_metrics(subset_data, self.all_metrics)
 
         return DataFormatter(subset_data)
-
 
     def compute_metric_from_data(self, metric_name, **kwargs):
         """

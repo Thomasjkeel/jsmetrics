@@ -9,19 +9,12 @@ import numpy as np
 from scipy import fftpack
 import collections
 import itertools
+from .windspeed_utils import PressureLevelWindSpeedSlice, LatitudeWindSpeedSlice
 
 ### docs
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
-
-
-def get_resultant_wind(u_data, v_data):
-    """
-        TODO: work out where and how this will be used
-    """
-    return np.sqrt( u_data**2 + v_data**2 )
-
 
 
 def get_all_plev_hPa(data):
@@ -122,112 +115,97 @@ def meridional_circulation_index(data):
     return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
 
 
-def get_all_coords_of_jet_occurence(jet_occurence_data):
+class JetStreamOccurenceAndCentreAlgorithm:
     """
-        for Kuang et al 2014
+        Have this class inherit from some sort of WS slice of one plev and all Lats + Lons
     """
-    all_coords = []
-    for val in jet_occurence_data.notnull():
-        if val.any():
-            for sub_val in val:
-                if sub_val:
-                    all_coords.append([float(sub_val['lat']), float(sub_val['lon'])])
-    return np.array(all_coords)
-
-
-def get_all_lats_of_jet_centre_for_search(all_coords, lat_resolution, lon_resolution):
-    """
-        Will get all latitudes that 'may' be a jet-stream centre-point i.e. where latitude appears at least three times for 3*3 lat/lon grid.
-        for Kuang et al 2014
-
-        NOTE: speeds up calculation as less values are searched through
-    """
-    ## Step 1. get a counter of all the latitude coordinates
-    count_lats = collections.Counter(all_coords[:,0])
     
-    ## Step 2. look for all latitudes with at least 3 occurences i.e. X component 3*3 grid
-    lats_with_3 = []
-    for lat in count_lats.items():
-        if lat[1] >= 3:
-            lats_with_3.append(lat[0])
-    
-    ## Step 3. Check if the latitudes above and below the lats with 3 values are present i.e. Y component of for 3*3
-    lats_for_search = []
-    for lat in lats_with_3:
-        if lat-lat_resolution in lats_with_3 and lat+lat_resolution in lats_with_3:
-            lats_for_search.append(lat)
-    return lats_for_search
-            
-    
-def calculate_jet_centre_points(all_coords, lat_resolution, lon_resolution):
-    """
-        Will return a list of the coordinates for all jet-centre points
-        for Kuang et al 2014
-    """
-
-    lats_for_search = get_all_lats_of_jet_centre_for_search(all_coords, lat_resolution, lon_resolution)
-    
-    jet_centres = []
-    for lat in lats_for_search:
-        coords_to_search = all_coords[np.where(all_coords[::,0] == lat)]
-        for coord in coords_to_search:
-            check_for_invalid_coord = coord[0] == 0 or coord[1] == 0 and 360 - lon_resolution not in coords_to_search[::, 1]
-            if check_for_invalid_coord:
-                continue
-            ## check if coord is jet centre point i.e. 9*9 all above 30
-            lat_grid_vals = np.arange(coord[0]-lat_resolution, coord[0]+lat_resolution+0.1, lat_resolution)
-            lon_grid_vals = np.arange(coord[1]-lon_resolution, coord[1]+lon_resolution+0.1, lon_resolution)
-            matrix_vals_to_check = np.array(np.meshgrid(lat_grid_vals, lon_grid_vals)).T.reshape(-1,2)
-            matrix_vals_to_check = matrix_vals_to_check % 360 # loop around
-            add_coord = True
-            for val in matrix_vals_to_check:
-                if not val.tolist() in all_coords.tolist():
-                    add_coord = False
-                    break
-            if add_coord:
-                jet_centres.append(coord)
-            
-    return jet_centres
-    
-    
-def get_jet_centre_data(jet_occurence_data):
-    """
-        Calculates jet-stream centres based on if one jet-stream occurence grid is surrounded by 8 cells of jet-stream occurence (default is 30 m/s)
-        for Kuang et al 2014
-    """
-    ## latitude and longitude resolution
-    lat_resolution = float(jet_occurence_data['lat'][1] - jet_occurence_data['lat'][0])
-    lon_resolution = float(jet_occurence_data['lon'][1] - jet_occurence_data['lon'][0])
-    
-    ## make_duplicate data
-    jet_centre_data = jet_occurence_data.copy()
-    jet_centre_data.loc[:] = np.nan
+    def __init__(self, data, occurence_ws_threshold=30):
+        ## Load in data as a pressure level 2d wind-speed slice
+        self.data = PressureLevelWindSpeedSlice(data).values
+        self.jet_occurence = self.data.where(self.data['ws'] >= occurence_ws_threshold)
+        self.lat_resolution = float(self.data['lat'][1] - self.data['lat'][0])
+        self.lon_resolution = float(self.data['lon'][1] - self.data['lon'][0])
         
-    ## loop over every day
-    for time_ind in range(jet_centre_data['time'].size):
-        print('On time step: %s' % (time_ind))
-        mutliple_time_index = jet_centre_data['time'].size > 1
-
-        ## get the lat lon coords of where a jet occurence point is identified
-        if mutliple_time_index:
-            all_coords = get_all_coords_of_jet_occurence(jet_occurence_data.isel(time=time_ind))
-        else:
-            all_coords = get_all_coords_of_jet_occurence(jet_occurence_data)
-
-        ## calculate jet cores i.e. the central point of a 3*3 grid of jet occurence points
-        jet_centres = calculate_jet_centre_points(all_coords, lat_resolution, lon_resolution)
+        ## make_duplicate data for output
+        self.output = self.jet_occurence.copy(deep=True)
+        self.output['ws'].loc[:] = np.nan
         
+        ## Initialise lists needed for search algorithm
+        self.all_coords = []
+        self.lats_with_3 = []
+        self.lats_for_search = []
+        self.jet_centres = []
+        
+    @classmethod
+    def run_algorithm(cls, data):
+        return cls(data).run()
+    
+    def run(self):
+        print('starting')
+        self.get_all_coords_of_jet_occurence()
+        self.all_coords_arr = np.array(self.all_coords)
+        ## Get a counter of all the latitude coordinates
+        self.count_lats = collections.Counter(self.all_coords_arr[:,0])
+        self.get_all_lats_of_jet_centre_for_search()
+        self.calculate_jet_centre_points()
+        self.get_jet_centre_data()
+        print('done!')
+    
+    def get_jet_centre_data(self):
+        """
+            Calculates jet-stream centres based on if one jet-stream occurence grid is surrounded by 8 cells of jet-stream occurence (default is 30 m/s)
+        """
         ## TODO: there's got to be a quicker way
-        if mutliple_time_index:
-            for centre in jet_centres:
-                jet_centre_data.isel(time=time_ind).loc[dict(lat=centre[0], lon=centre[1])] = 1
-        else:
-            for centre in jet_centres:
-                jet_centre_data.loc[dict(lat=centre[0], lon=centre[1])] = 1
-        
-        ## TODO temporary break if too much data
-        if time_ind >= 10:
-            print("Stopping calculation as it will take too long, remove this code if more calculation needed!")
-            break
+        for centre in self.jet_centres:
+            self.output['ws'].loc[dict(lat=centre[0], lon=centre[1])] = 1
+    
+    
+    def get_all_coords_of_jet_occurence(self):
+        for val in self.jet_occurence['ws'].notnull():
+            if val.any():
+                for sub_val in val:
+                    if sub_val:
+                        self.all_coords.append([float(sub_val['lat']), float(sub_val['lon'])])
 
-    return jet_centre_data
+    def get_all_lats_of_jet_centre_for_search(self):
+        """
+            Will get all latitudes that 'may' be a jet-stream centre-point i.e. where latitude appears at least three times for 3*3 lat/lon grid.
+            NOTE: speeds up calculation as less values are searched through
+        """
+        ## Step 1. look for all latitudes with at least 3 occurences i.e. X component 3*3 grid
+        self.get_all_latitudes_that_occur_at_least_three_times()
+        ## Step 2. Check if the latitudes above and below the lats with 3 values are present i.e. Y component of for 3*3
+        self.get_all_latitudes_available_in_3by3_grid()
+    
+    def get_all_latitudes_that_occur_at_least_three_times(self):
+        for lat in self.count_lats.items():
+            if lat[1] >= 3:
+                self.lats_with_3.append(lat[0])
+    
+    def get_all_latitudes_available_in_3by3_grid(self):
+        for lat in self.lats_with_3:
+            if lat-self.lat_resolution in self.lats_with_3 and lat+self.lat_resolution in self.lats_with_3:
+                self.lats_for_search.append(lat)
+
+    def calculate_jet_centre_points(self):
+        """
+            Will return a list of the coordinates for all jet-centre points
+        """
+        for lat in self.lats_for_search:
+            coords_to_search = self.all_coords_arr[np.where(self.all_coords_arr[::,0] == lat)]
+            for coord in coords_to_search:
+                if coord[0] == 0 or coord[1] == 0 and 360 - self.lon_resolution not in coords_to_search[::, 1]:
+                    continue
+                ## check if coord is jet centre point i.e. 9*9 all above 30
+                lat_grid_vals = np.arange(coord[0]-self.lat_resolution, coord[0]+self.lat_resolution+0.1, self.lat_resolution)
+                lon_grid_vals = np.arange(coord[1]-self.lon_resolution, coord[1]+self.lon_resolution+0.1, self.lon_resolution)
+                matrix_vals_to_check = np.array(np.meshgrid(lat_grid_vals, lon_grid_vals)).T.reshape(-1,2)
+                matrix_vals_to_check = matrix_vals_to_check % 360 # loop around
+                add_coord = True
+                for val in matrix_vals_to_check:
+                    if not val.tolist() in self.all_coords:
+                        add_coord = False
+                        break
+                if add_coord:
+                    self.jet_centres.append(coord)

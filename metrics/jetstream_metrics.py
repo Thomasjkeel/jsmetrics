@@ -112,16 +112,9 @@ def kuang_et_al_2014(data, ws_threshold=30):
         Looks to get event-based jet occurrence percentage and jet center occurrence of (UT)JS
         May take a long time for a lot of data
         TODO: ask chris to check
-    """
-    print('Step 1. Calculate resultant wind vector')    
-    ws_data = jetstream_metrics_utils.get_resultant_wind(data['ua'], data['va'])
-    
-    print('Step 2. Get values with windspeeds above %s m/s (\'jet-stream occurence\' points)' % (ws_threshold))
-    jet_occurence = ws_data.where(ws_data.variable >= ws_threshold)
-    
-    print('Step 3. Get values of jet-stream centre points (\'jet-stream centre\' points)')
-    jet_centres = jetstream_metrics_utils.get_jet_centre_data(jet_occurence)
-    return jet_occurence, jet_centres
+    """ 
+    occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(data)
+    return occurence_alg
 
 
 

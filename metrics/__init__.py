@@ -1,1 +1,1 @@
-from . import compute_metrics, data_formatter, jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
+from . import compute_metrics, data_formatter, jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict, windspeed_utils

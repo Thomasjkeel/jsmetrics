@@ -87,16 +87,23 @@ def woolings_et_al_2010(data, filter_freq=10):
     #     ### code to put back into xarray format
     return max_lat_ws
     
-
-def manney_et_al_2011(data):
+        
+def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
         Write function description
 
         Used in Manney 2011, 2014, 2017 and 2018
     """
-    return
-
-
+    if data['time'].count() > 1:
+        for time_coord in data['time']:
+            sub_data = data.sel(time=time_coord)
+            core_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm(sub_data, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
+            yield core_alg
+    else:
+        core_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm(data, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
+        yield core_alg
+        
+        
 def screen_and_simmonds_2013(data):
     """
         Write function description
@@ -107,15 +114,19 @@ def screen_and_simmonds_2013(data):
     return
 
 
-def kuang_et_al_2014(data, ws_threshold=30):
+def kuang_et_al_2014(data, occurence_ws_threshold=30):
     """
         Looks to get event-based jet occurrence percentage and jet center occurrence of (UT)JS
         May take a long time for a lot of data
         TODO: ask chris to check
     """ 
-    for time_coord in data['time']:
-        sub_data = data.sel(time=time_coord)
-        occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(sub_data)
+    if data['time'].count() > 1:
+        for time_coord in data['time']:
+            sub_data = data.sel(time=time_coord)
+            occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(sub_data, occurence_ws_threshold=occurence_ws_threshold)
+            yield occurence_alg
+    else:
+        occurence_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm(data, occurence_ws_threshold=occurence_ws_threshold)
         yield occurence_alg
 
 

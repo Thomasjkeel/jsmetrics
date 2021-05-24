@@ -126,7 +126,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
             occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(sub_data, occurence_ws_threshold=occurence_ws_threshold)
             yield occurence_alg
     else:
-        occurence_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm(data, occurence_ws_threshold=occurence_ws_threshold)
+        occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(data, occurence_ws_threshold=occurence_ws_threshold)
         yield occurence_alg
 
 

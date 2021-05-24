@@ -28,7 +28,7 @@ def run_experiments(args):
         TODO: make error handling smarter
     """
     if not args['experiment']:
-        print('Error: No experiment declared. Use: \'-e experiment_name\'')
+        print('Error: No experiment declared. Use: \'-e experiment_name\' or \'-l to list all experiments\'')
     elif args['experiment'] not in ALL_EXPERIMENTS.keys():
         print('Error: \'%s\' is not a known experiment. Run \'-l\' for list of experiments' % (args['experiment']))
     else:

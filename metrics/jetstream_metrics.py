@@ -113,8 +113,10 @@ def kuang_et_al_2014(data, ws_threshold=30):
         May take a long time for a lot of data
         TODO: ask chris to check
     """ 
-    occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(data)
-    return occurence_alg
+    for time_coord in data['time']:
+        sub_data = data.sel(time=time_coord)
+        occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(sub_data)
+        yield occurence_alg
 
 
 

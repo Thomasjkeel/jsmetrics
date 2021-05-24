@@ -17,6 +17,16 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+def remove_duplicates(vals):
+    """
+        removes duplicates see: https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
+    """
+
+    vals.sort()
+    vals = list(v for v,_ in itertools.groupby(vals))
+    return vals
+
+
 def get_all_plev_hPa(data):
     """
         Will get a list of all the pressure levels in the data in hPa 
@@ -209,3 +219,165 @@ class JetStreamOccurenceAndCentreAlgorithm:
                         break
                 if add_coord:
                     self.jet_centres.append(coord)
+
+
+
+class JetStreamCoreIdentificationAlgorithm:
+    """        
+        "As far as object-oriented design is concerned, the breakdown of an algorithm into steps depends on whether the algorithm itself is better seen,
+            from its user's point of view, as being executed in one single step, or as multiple steps. If the algorithm is better seen as a single step, 
+            the object-oriented implementation can choose to hide all of the implementation details, leaving only the "inputs, process, outputs" visible to the user."
+        
+        For Manney et al. 2011 etc.
+    """
+    def __init__(self, data, ws_core_threshold=40, ws_boundary_threshold=30):
+        """
+            input will need to be longitudinal slice of windspeed values
+            
+            ws_slice -> one longitude for one day as slice of windspeed
+        """
+        ## Step 1. make windspeed slice
+        self.data = LatitudeWindSpeedSlice(data)
+        
+        ## Step 2. Get core and potential boundary points
+        self.output = self.data.label_slice(self.data['ws'] < ws_core_threshold, 'Core')
+        self.output = self.output.where((self.data['ws'] < ws_boundary_threshold) | (self.data['ws'] > ws_core_threshold), other='Potential Boundary')
+        
+        ## Step 3. Get indexes of jet-stream cores and potential boundaries
+        self.core_ids, self.pot_boundary_ids = self.get_indexes_of_core_and_boundaries()
+        
+        ## Step 4. Set variables needed to keep track of 
+        self.current_core_lat = -1
+        self.currently_a_core = None
+
+    def __add__(self, other):
+        print("TODO: need to implement behaviour for adding slices together")
+        pass
+        
+    
+    def __repr__(self):
+        """
+            Representation of the class. Have it return the labelled data
+        """
+        print("A total of %d Jet-stream cores have been found in the wind-speed slice" % (self.output['ws'].where(lambda x: x=='Core').count()))
+        print("A total of %d potential Jet-stream boundaries have been found in the wind-speed slice" % (self.output['ws'].where(lambda x: x=='Potential Boundary').count()))
+        return repr(self.output)
+    
+    @classmethod
+    def run_algorithm(cls, data, ws_core_threshold=40, ws_boundary_threshold=30):
+        """
+            
+        """
+        js_algorithm = cls(data, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
+
+        js_core_indexes = js_algorithm.run()
+        return js_core_indexes
+    
+    
+    def run(self):
+        return self.get_jet_core_boundary()
+    
+    
+    def get_indexes_of_core_and_boundaries(self):
+        """
+            Will return the indexes in the ws data that ARE jet-stream cores and COULD BE jet-stream core boundaries
+        """
+        pot_boundary_ids = np.where(self.output['ws'] == 'Potential Boundary')
+        core_ids = np.where(self.output['ws'] == 'Core')
+        pot_boundary_ids = np.stack(pot_boundary_ids, axis=-1)
+        core_ids = np.stack(core_ids, axis=-1)
+        return pot_boundary_ids, core_ids
+
+    @staticmethod
+    def get_indexes_to_check(pot_boundary):
+        """
+            Will return an array of indexes to check for potential boundaries or jetstream cores
+            Used in Manney et al. 2011
+        """
+        vals_to_check = []
+        if pot_boundary[0] != 0:
+            vals_to_check.append([pot_boundary[0]-1, pot_boundary[1]])
+        vals_to_check.append([pot_boundary[0]+1, pot_boundary[1]])
+        if pot_boundary[1] != 0:
+            vals_to_check.append([pot_boundary[0], pot_boundary[1]-1])
+        vals_to_check.append([pot_boundary[0], pot_boundary[1]+1])
+        return vals_to_check
+
+
+    def make_pot_jetcore_area(self, vals, area, core_found=False):
+        """
+        Recursive function that will return the IDs of a jet core boundary i.e. above 30 m/s surrounding a core of 40 m/s
+        Will check one an area of potential boundaries contains a core and thus can be called boundaries.
+
+        Used for Manney et al. 2011
+        """
+        vals_copy = vals.copy()
+        for val in vals:
+            if val in area:
+                continue
+            if val in self.core_ids.tolist():
+                core_found = True
+                ## look for a new core if it is more than 15 degrees away
+                if val[1] - self.current_core_lat > 15 and val[1] > self.current_core_lat:
+#                     print('THIS IS A NEW CORE')
+                    self.current_core_lat = val[1]
+#                 print('core found', val)
+                area.append(val)
+                new_vals = self.get_indexes_to_check(val)
+                vals_copy.extend(new_vals)
+                vals_copy = remove_duplicates(vals_copy)
+                return self.make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
+
+            elif val in self.pot_boundary_ids.tolist():
+                area.append(val)
+#                 print('boundary found', val)
+                new_vals = self.get_indexes_to_check(val)
+                vals_copy.extend(new_vals)
+                vals_copy = remove_duplicates(vals_copy)
+                return self.make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
+            else:
+#                 print('removed', val)
+                vals_copy.remove(val)
+                continue
+        
+        ## reset current core variables
+        self.current_core_lat = -1
+        self.currently_a_core = None
+        return area, core_found
+
+
+    def get_jet_core_boundary(self):
+        """
+            Recursive function that will return the IDs of all jet core boundaries i.e. above 30 m/s surrounding a core of 40 m/s
+            Will check if an area of potential boundaries contains a core and thus can be called boundaries.
+
+            Used for Manney et al. 2011
+        """
+        already_covered = []
+        js_core_indexes = []
+        id_number = 0
+        for pot_boundary in self.pot_boundary_ids:
+#             print('#'*40)
+            if pot_boundary.tolist() in already_covered:
+#                 print('missed:', pot_boundary)
+                continue
+#             print('not missed', pot_boundary)
+            vals_to_check = self.get_indexes_to_check(pot_boundary)
+            area, core_found = self.make_pot_jetcore_area(vals_to_check, area=[])
+            already_covered.extend(area)
+            already_covered = remove_duplicates(already_covered)
+            ## attach area if part of core
+            if core_found:
+                js_core_indexes.extend([{"id":id_number, "index_of_area":area, "num_of_cores":core_found}])
+#                 print("area found:", area)
+                id_number += 1
+
+
+        return js_core_indexes
+
+    
+    def work_out_if_two_seperate_cores(self):
+        """
+            After Manney et al. 2011, will work out if two or more jet cores found within one boundary are seperate or not
+        """
+        return 

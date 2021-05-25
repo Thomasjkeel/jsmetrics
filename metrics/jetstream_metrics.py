@@ -177,6 +177,8 @@ def ceppi_et_al_2018(data):
         Write function description
         TODO: what is meant by the centroid??
         "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
+
+        Returns: centroid latitude of u-wind for one day
     """
     if data['time'].count() > 1:
         for time_coord in data['time']:

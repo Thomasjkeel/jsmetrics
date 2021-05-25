@@ -321,7 +321,6 @@ class JetStreamCoreIdentificationAlgorithm:
                 if val[1] - self.current_core_lat > 15 and val[1] > self.current_core_lat:
 #                     print('THIS IS A NEW CORE')
                     self.current_core_lat = val[1]
-#                 print('core found', val)
                 area.append(val)
                 new_vals = self.get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
@@ -330,13 +329,11 @@ class JetStreamCoreIdentificationAlgorithm:
 
             elif val in self.pot_boundary_ids.tolist():
                 area.append(val)
-#                 print('boundary found', val)
                 new_vals = self.get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
                 vals_copy = remove_duplicates(vals_copy)
                 return self.make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
             else:
-#                 print('removed', val)
                 vals_copy.remove(val)
                 continue
         
@@ -357,11 +354,8 @@ class JetStreamCoreIdentificationAlgorithm:
         js_core_indexes = []
         id_number = 0
         for pot_boundary in self.pot_boundary_ids:
-#             print('#'*40)
             if pot_boundary.tolist() in already_covered:
-#                 print('missed:', pot_boundary)
                 continue
-#             print('not missed', pot_boundary)
             vals_to_check = self.get_indexes_to_check(pot_boundary)
             area, core_found = self.make_pot_jetcore_area(vals_to_check, area=[])
             already_covered.extend(area)
@@ -369,7 +363,6 @@ class JetStreamCoreIdentificationAlgorithm:
             ## attach area if part of core
             if core_found:
                 js_core_indexes.extend([{"id":id_number, "index_of_area":area, "num_of_cores":core_found}])
-#                 print("area found:", area)
                 id_number += 1
 
 

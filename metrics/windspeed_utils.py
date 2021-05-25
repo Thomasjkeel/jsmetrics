@@ -34,12 +34,8 @@ class WindSpeedSlice():
         self.values = self.values.rename('ws').to_dataset()
     
     def __init_subclass__(cls, req_coords, *a, **kw):
-#         print(cls, req_coords, a, kw)
         cls.req_coords = req_coords
-    
-#     def __repr__(self):
-#         return repr(self.ws_slice)
-    
+
     def __getitem__(self, item):
          return self.values[item]
     

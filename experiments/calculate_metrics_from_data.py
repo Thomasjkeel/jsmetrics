@@ -13,12 +13,9 @@ def main(data_path, metrics=None, subset=False, subset_kwargs={}, **kwargs):
     UKESM1_SSP585 = xr.merge([UKESM1_SSP585_U, UKESM1_SSP585_V])
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90))
-    # ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
     
     if metrics is None:
-        print('Warning: No metric given. Aborting process')
-        # metric_to_use = 'Woolings2010'
-        # result = ukesm1_ssp585.compute_metric_from_data(metric_to_use, all_metrics=all_metrics, return_coord_error=False)
+        print('Warning: No metric given. Aborting process. Please use \'-m\' tag to declare metric name and see jetstream_metric_dict.py for a list of all metrics')
         return
     
     for metric in metrics:

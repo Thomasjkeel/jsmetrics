@@ -12,7 +12,5 @@ def main(data_path, **kwargs):
     ukesm1_ssp585 = data_formatter.DataFormatter(UKESM1_SSP585)
     ukesm1_ssp585 = ukesm1_ssp585.subset(lat=slice(0, 90)) # , plev=50000)
     ukesm1_ssp585.get_available_metrics(all_metrics, return_coord_error=True)
-    # a = data_formatter.DataFormatter.with_available_metrics(UKESM1_SSP585, all_metrics)
-    # print(a.data)
     return 
 

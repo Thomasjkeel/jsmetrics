@@ -167,6 +167,7 @@ def grise_et_al_2017(data):
     """
         Write function description
         See also Ceppi et al. 2012
+        TODO: work out if relevant as this method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record 
     """
     return
 
@@ -174,7 +175,7 @@ def grise_et_al_2017(data):
 def ceppi_et_al_2018(data):
     """
         Write function description
-        TODO: the centroid??
+        TODO: what is meant by the centroid??
         TODO: calc for each time period
         "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
     """
@@ -187,7 +188,7 @@ def ceppi_et_al_2018(data):
 def kern_et_al_2018(data):
     """
         Write function description
-        TODO: ask Chris about equation
+        TODO: ask about equation
     """
     return
 
@@ -195,6 +196,10 @@ def kern_et_al_2018(data):
 def simpson_et_al_2018(data):
     """
         Write function description
+        TODO: ask about interpolation
+        Before comparing the variability between the reanalyses and the models, each dataset is first interpolated onto a 2*2
+        longitude–latitude grid using a cubic spline interpolation and then isotropically smoothed in the spectral domain retaining
+         only scales larger than total wavenumber 42 according to Sardeshmukh and Hoskins [1984, their Eq. (9) with n0=42 and r=1]. T
     """
     return
 
@@ -202,6 +207,8 @@ def simpson_et_al_2018(data):
 def lee_et_al_2019(data):
     """
         Write function description
+        TODO: work out if relevant as wind shear of jet-stream rather than location
+        variable used: temperature, u-wind, specific gas constant for dry air, the Coriolis parameter, pressure, northward distance.
     """
     return
 
@@ -209,6 +216,7 @@ def lee_et_al_2019(data):
 def chemke_and_ming_2020(data):
     """
         Write function description
+        TODO: ask about equation
     """
     return
 

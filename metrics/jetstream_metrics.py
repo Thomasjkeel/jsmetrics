@@ -176,13 +176,14 @@ def ceppi_et_al_2018(data):
     """
         Write function description
         TODO: what is meant by the centroid??
-        TODO: calc for each time period
         "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
     """
-    # lat_mean_vals = []
-    # for lat in data['lat']:
-    #     lat_mean_vals.append([float(lat), float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean())])
-    return
+    if data['time'].count() > 1:
+        for time_coord in data['time']:
+            sub_data = data.sel(time=time_coord)
+            yield jetstream_metrics_utils.get_centroid_jet_lat(sub_data)
+    else:
+        yield jetstream_metrics_utils.get_centroid_jet_lat(data)
 
 
 def kern_et_al_2018(data):

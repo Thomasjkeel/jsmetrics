@@ -271,8 +271,9 @@ class JetStreamCoreIdentificationAlgorithm:
         """
             Representation of the class. Have it return the labelled data
         """
-        print("A total of %d Jet-stream cores have been found in the wind-speed slice" % (self.output['ws'].where(lambda x: x=='Core').count()))
-        print("A total of %d potential Jet-stream boundaries have been found in the wind-speed slice" % (self.output['ws'].where(lambda x: x=='Potential Boundary').count()))
+        print("A total of %d Jet-stream cores have been found in the wind-speed slice" % (len(np.where(self.output['ws'] == 'Core')[1])))
+        print("A total of %d potential Jet-stream boundaries have been found in the wind-speed slice" % (len(np.where(self.output['ws'] == 'Potential Boundary')[1])))
+
         return repr(self.output)
     
     @classmethod

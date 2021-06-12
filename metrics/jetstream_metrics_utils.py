@@ -299,7 +299,7 @@ class JetStreamCoreIdentificationAlgorithm:
         core_ids = np.where(self.output['ws'] == 'Core')
         pot_boundary_ids = np.stack(pot_boundary_ids, axis=-1)
         core_ids = np.stack(core_ids, axis=-1)
-        return pot_boundary_ids, core_ids
+        return core_ids, pot_boundary_ids
 
     @staticmethod
     def get_indexes_to_check(pot_boundary):

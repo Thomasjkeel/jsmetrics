@@ -102,7 +102,8 @@ def check_only_required_coords_are_in_data(data, req_coords, to_remove=()):
         try:
             dims.remove(rem)
         except:
-            print('cannot remove %s from dims' % (rem))
+            pass
+            # print('cannot remove %s from dims' % (rem))
 
     req_coords = set(req_coords)
     difference = dims.difference(set(req_coords))

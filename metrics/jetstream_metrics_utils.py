@@ -42,7 +42,7 @@ def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
         Write function description
     """
     if not data_row.isnull().all():
-        max_speed_loc = data_row.argmax().data
+        max_speed_loc = np.argmax(data_row.data)
         max_speed = data_row[max_speed_loc]
         lat_at_max = float(max_speed['lat'].values)
         speed_at_max = float(max_speed.data)
@@ -102,7 +102,7 @@ def fourier_filter(data, timestep=1):
     power = np.abs(data)**2
     pos_mask = np.where(sample_freq > 0)
     freqs = sample_freq[pos_mask]
-    peak_freq = freqs[power[pos_mask].argmax()]
+    peak_freq = freqs[power[pos_mask].argmax()] # TODO change to np.argmax(data) after the tests for Woolings is set up
     
     high_freq_fft = fourier_transform.copy()
     high_freq_fft[np.abs(sample_freq) > peak_freq] = 0

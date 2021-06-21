@@ -1,6 +1,11 @@
 import numpy as np
 from seawater import dist
 
+
+"""
+    TODO: find alternative to seawater dist
+"""
+
 def calc_ZWRI(ua, dlon):
     """
         To quantify the response to Arctic sea ice loss, we define a Zonal Wind Response Index (ZWRI) that is calculated

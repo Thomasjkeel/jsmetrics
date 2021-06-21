@@ -39,7 +39,7 @@ def get_all_plev_hPa(data):
 
 def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
     """
-        Will return the index of the maximum wind speed and the speed in m/s 
+        Will return the latitude and windspeed at the index of maximum wind speed 
     """
     if not data_row.isnull().all():
         max_speed_loc = np.argmax(data_row.data)

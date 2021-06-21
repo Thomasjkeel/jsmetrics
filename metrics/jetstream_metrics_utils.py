@@ -44,7 +44,7 @@ def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
     if not data_row.isnull().all():
         max_speed_loc = np.argmax(data_row.data)
         max_speed = data_row[max_speed_loc]
-        lat_at_max = float(max_speed['lat'].values)
+        lat_at_max = float(max_speed[latitude_col].values)
         speed_at_max = float(max_speed.data)
         return lat_at_max, speed_at_max 
     else:

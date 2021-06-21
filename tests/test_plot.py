@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+
+"""
+    Tests for plotting outputs from metrics
+"""
+
+### imports
 from metrics import compute_metrics
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import numpy as np

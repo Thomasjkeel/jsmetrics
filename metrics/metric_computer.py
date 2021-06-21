@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    Data formatter class for interacting, subsetting and calculating metrics from climate model outputs.
+    Metric Computer class for interacting, subsetting and calculating metrics from climate model outputs.
 
     Q: Why make a data formatter class and not just use functions to handle and format the data?
     A: When the data is in an object form, it can ... . Also, allows for information hiding.
@@ -14,9 +14,9 @@ __status__ = "Development"
 __description__ = "Data formatter class for interacting, subsetting and calculating metrics from climate model outputs"
 
 
-class DataFormatter:
+class MetricComputer:
     """
-    The DataFormatter object ...
+    The MetricComputer object ...
     (see https://www.datacamp.com/community/tutorials/docstrings-python for docstring format)
     """
     def __init__(self, data):
@@ -56,9 +56,9 @@ class DataFormatter:
         subset_data = subset_data.sel(**kwargs)
         if inplace:
             if hasattr(self, 'all_metrics'):
-                return DataFormatter.with_available_metrics(subset_data, self.all_metrics)
+                return MetricComputer.with_available_metrics(subset_data, self.all_metrics)
 
-        return DataFormatter(subset_data)
+        return MetricComputer(subset_data)
 
     def compute_metric_from_data(self, metric_name, **kwargs):
         """

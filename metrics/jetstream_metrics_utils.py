@@ -110,13 +110,13 @@ def fourier_filter(data, timestep=1):
     return filtered_sig
 
 
-def get_centroid_jet_lat(data):
+def get_centroid_jet_lat(data, latitude_col='lat'):
     """
         Used in Ceppi et al. 2018
     """
     xs = []
     ys = []
-    for lat in data['lat']:
+    for lat in data[latitude_col]:
         xs.append(float(lat))
         ys.append(float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean()))
     return np.dot(xs, ys) / np.sum(ys)

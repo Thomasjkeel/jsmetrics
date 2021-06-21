@@ -12,7 +12,8 @@ class TestPlot(unittest.TestCase):
         UKESM1_SSP585_V = xr.open_dataset("data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
         UKESM1_SSP585 = xr.merge([UKESM1_SSP585_U, UKESM1_SSP585_V])
         ukesm1_ssp585 = compute_metrics.MetricComputer(UKESM1_SSP585)
-        self.data = ukesm1_ssp585.subset(lat=slice(0, 90))
+        self.data = ukesm1_ssp585.sel(lat=slice(0, 90))
+        self.data = self.data.isel(time=slice(0,100))
         self.all_metrics = JETSTREAM_METRIC_DICT
 
     def plot_fig(self, save=False):
@@ -27,7 +28,7 @@ class TestPlot(unittest.TestCase):
 
     def test_plot(self): 
         self.result = self.data.compute_metric_from_data('Woolings2010', all_metrics=self.all_metrics, return_coord_error=False)
-        self.assertIsInstance(self.result, np.array)
+        self.assertIsInstance(self.result, np.ndarray)
         self.plot_fig()
         self.plot_fig(save=True)
         

@@ -140,6 +140,8 @@ def meridional_circulation_index(data):
 class JetStreamOccurenceAndCentreAlgorithm:
     """
         Have this class inherit from some sort of WS slice of one plev and all Lats + Lons
+        
+        For Kuang et al. 2015
     """
     
     def __init__(self, data, occurence_ws_threshold=30):

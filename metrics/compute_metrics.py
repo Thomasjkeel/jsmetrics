@@ -109,21 +109,13 @@ def subset_data(data, metric, ignore_coords=None):
             coordiantes to not subset
     """
     ## overwrite which coords will be changed
-    if ignore_coords:
-        coords_to_change = set(metric['coords'].keys()) 
-        for removed_coord in coords_to_change.intersection(ignore_coords): 
-            print('Note:', removed_coord, 'has not been subset for the experiment')
-        coords_to_change = coords_to_change.difference(set(ignore_coords))
-        coords_to_change = list(coords_to_change)
-    else:
-        coords_to_change = list(metric['coords'].keys())
-
+    coords_to_subset = get_coords_to_subset(ignore_coords, metric)
     ## check if subset is still possible
-    if len(coords_to_change) != 0:
+    if len(coords_to_subset) != 0:
         print('Subsetting data...')
         subset = data.copy()
         for coord in metric['coords'].keys():
-            if coord in coords_to_change:
+            if coord in coords_to_subset:
                 min_val = float(metric['coords'][coord][0])
                 max_val = float(metric['coords'][coord][1])
                 selection = {coord:slice(min_val, max_val)}
@@ -132,6 +124,18 @@ def subset_data(data, metric, ignore_coords=None):
         return subset 
     else:
         return data
+
+
+def get_coords_to_subset(ignore_coords, metric):
+    if ignore_coords:
+        coords_to_subset = set(metric['coords'].keys()) 
+        for removed_coord in coords_to_subset.intersection(ignore_coords): 
+            print('Note:', removed_coord, 'has not been subset for the experiment')
+        coords_to_subset = coords_to_subset.difference(set(ignore_coords))
+        coords_to_subset = list(coords_to_subset)
+    else:
+        coords_to_subset = list(metric['coords'].keys())
+    return coords_to_subset
 
 
 def flatten_dims(data):

@@ -47,7 +47,8 @@ class MetricComputer:
 
     def swap_all_coords(self):
         for coord in self.data.coords:
-            self.data = swap_coord_order(self.data, coord)
+            if not self.data[coord].count() == 1:
+                self.data = swap_coord_order(self.data, coord)
 
     def subset(self, inplace=False, **kwargs):
         """

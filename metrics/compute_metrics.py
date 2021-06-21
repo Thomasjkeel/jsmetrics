@@ -50,17 +50,29 @@ class MetricComputer:
             if not self.data[coord].count() == 1:
                 self.data = swap_coord_order(self.data, coord)
 
-    def subset(self, inplace=False, **kwargs):
+    def sel(self, inplace=False, **kwargs):
         """
             Exposes the xarray .sel function
         """
-        subset_data = self.data.copy()
-        subset_data = subset_data.sel(**kwargs)
+        new_data = self.data.copy()
+        new_data = new_data.sel(**kwargs)
         if inplace:
             if hasattr(self, 'all_metrics'):
-                return MetricComputer.with_available_metrics(subset_data, self.all_metrics)
+                return MetricComputer.with_available_metrics(new_data, self.all_metrics)
 
-        return MetricComputer(subset_data)
+        return MetricComputer(new_data)
+
+    def isel(self, inplace=False, **kwargs):
+        """
+            Exposes the xarray .sel function
+        """
+        new_data = self.data.copy()
+        new_data = new_data.isel(**kwargs)
+        if inplace:
+            if hasattr(self, 'all_metrics'):
+                return MetricComputer.with_available_metrics(new_data, self.all_metrics)
+
+        return MetricComputer(new_data)
 
     def compute_metric_from_data(self, metric_name, **kwargs):
         """

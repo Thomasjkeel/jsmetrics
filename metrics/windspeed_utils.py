@@ -19,7 +19,7 @@ def get_resultant_wind(u_data, v_data):
     """
         Gets wind vector from u-wind and v-wind
     """
-    return np.sqrt( u_data**2 + v_data**2 )
+    return np.sqrt(u_data**2 + v_data**2)
 
 
 class WindSpeedSlice():

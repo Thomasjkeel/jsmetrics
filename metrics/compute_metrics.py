@@ -76,6 +76,10 @@ class MetricComputer:
             print('please run .get_available_metrics() first')
             return
         
+"""
+    Functions that run inside of the MetricComputer class...
+"""
+
 
 def subset_data(data, metric, ignore_coords=None):
     """

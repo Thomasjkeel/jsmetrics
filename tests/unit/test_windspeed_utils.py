@@ -15,9 +15,8 @@ from metrics import windspeed_utils
 
 class TestWindSpeedSlice(unittest.TestCase):
     def test_basic(self):
-        self.assertRaises(ValueError, lambda: windspeed_utils.WindSpeedSlice(None, None))
-        self.assertRaises(ValueError, lambda: windspeed_utils.WindSpeedSlice('asf', None))
-        self.assertRaises(ValueError, lambda: windspeed_utils.WindSpeedSlice(None, 'dasf'))
+        self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None))
+        self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None))
 
 #     @parameterized.expand([
 #     ("negative", -1.5, -2.0),

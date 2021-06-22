@@ -57,10 +57,10 @@ def woolings_et_al_2010(data, filter_freq=10):
         TODO: Maybe note about using season or not
     """
     ## Step 1
+    print('Step 1: calculating long and plev mean...')
     dims_for_mean = ['lon', 'plev']
     if 'plev' not in data.dims:
         dims_for_mean = ['lon']
-    print('Step 1: calculating long and plev mean...')
     mean_data = data.mean(dims_for_mean)
     ## Step 2
     print('Step 2: Applying %s day lancoz filter...' % (filter_freq))

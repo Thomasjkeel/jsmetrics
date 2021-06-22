@@ -8,7 +8,6 @@
 """
 
 ### imports
-from tests import unit
 import numpy as np
 import xarray as xr
 from metrics import compute_metrics
@@ -19,7 +18,6 @@ import unittest
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
-
 
 
 class TestMetricComputer(unittest.TestCase):
@@ -35,9 +33,10 @@ class TestMetricComputer(unittest.TestCase):
         self.data = self.data.isel(time=slice(0,100))
         self.all_metrics = JETSTREAM_METRIC_DICT
 
-    def test_metric_class_inputs(self):
-        # compute_metrics.MetricComputer()
-        pass
+    def test_basic(self):
+        self.assertRaises(ValueError, lambda: compute_metrics.MetricComputer(None))
+        self.assertRaises(ValueError, lambda: compute_metrics.MetricComputer('asf'))
+        self.assertRaises(ValueError, lambda: compute_metrics.MetricComputer((None, 'dasf')))
 
     def test_available_metrics(self):
         pass
@@ -51,7 +50,9 @@ class TestMetricComputer(unittest.TestCase):
     def test_sel(self):
         with self.assertRaises(TypeError): #TODO
             self.data.sel(fake=slice(0, 90))
-            
+
+
+class TestComputeMetricFunctions(unittest.TestCase):
     def test_subset_data(self):
         pass
 
@@ -68,6 +69,9 @@ class TestMetricComputer(unittest.TestCase):
         pass
 
     def test_compute_metrics(self):
+        pass
+
+    def test_swap_coords(self):
         pass
 
 

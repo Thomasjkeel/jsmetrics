@@ -16,6 +16,39 @@ __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
+# @pytest.mark.parametrize(["metric_name, all_metrics", ("'Woolings2010', ALL_METRICS", "this works")]) # example TODO
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
+
+class TestKoch2006(unittest.TestCase):
+    def test_basic(self):
 
 if __name__ == "__main__":
     unittest.main()

@@ -48,7 +48,7 @@ class TestMetricComputer(unittest.TestCase):
         pass
  
     def test_sel(self):
-        with self.assertRaises(TypeError): #TODO
+        with self.assertRaises(ValueError): #TODO
             self.data.sel(fake=slice(0, 90))
 
 

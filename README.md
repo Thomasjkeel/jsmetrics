@@ -3,6 +3,7 @@
 To-Do:
 - way of dealing with data from different sources (some sort of data translator module or maybe included in tests)
     - for example what if 'v' or 'v-wind' is passed to func instead of 'va'
+    - for example what if 'mbar' or 'model levels' instead of 'plev'
 - argparse to parse a list for additional arguments (do more user testing)
 - Improve readme(s) and add links (DOI?)m (https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
 - add lat and lon subsetting to jetstream_metrics_dict

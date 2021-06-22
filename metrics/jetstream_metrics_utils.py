@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
-    Algorithms and calculations for the metrics used to identify or classify jet-stream in the literature
+    Algorithms and calculations for the metrics used to identify or classify jet-stream in the literature.
+
+    This file is in order of publish year of the metrics (see jetstream_metrics_dict.py)
 """
 
 ### imports
@@ -37,9 +39,29 @@ def get_all_plev_hPa(data):
     return plevs
 
 
+def get_sum_weighted_ws(data, all_plevs_hPa):
+    """
+        Used in Koch et al. 2006
+    """
+    sum_weighted_ws = 0
+    for plev, (i,plev_hPa) in zip(data['plev'], enumerate(all_plevs_hPa)):
+        if i != 0:
+            plev_hPa = plev_hPa - all_plevs_hPa[i-1]
+        sum_weighted_ws += ((data.sel(plev=plev)['ua']** 2 + data.sel(plev=plev)['va']**2)**(1/2)) * plev_hPa
+    return sum_weighted_ws
+
+
+def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
+    """
+        Used in Koch et al. 2006
+    """
+    return sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
+
+
 def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
     """
         Will return the latitude and windspeed at the index of maximum wind speed 
+        Used in Woolings et al. 2010
     """
     if not data_row.isnull().all():
         max_speed_loc = np.argmax(data_row.data)
@@ -55,6 +77,8 @@ def low_pass_weights(window, cutoff):
     """Calculate weights for a low pass Lanczos filter.
     
     A low-pass filter removes short-term random fluctations in a time series
+
+    Used in Woolings et al. 2010
 
     Args:
 
@@ -86,6 +110,7 @@ def fourier_filter(data, timestep=1):
         TAKEN FROM: https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
         NOTE: NOT CURRENTLY WORKING PROPERLY
         
+        Used in Woolings et al. 2010
         Parameters
         ----------
         data : np.array (1-d) 
@@ -108,18 +133,6 @@ def fourier_filter(data, timestep=1):
     high_freq_fft[np.abs(sample_freq) > peak_freq] = 0
     filtered_sig = fftpack.ifft(high_freq_fft)
     return filtered_sig
-
-
-def get_centroid_jet_lat(data, latitude_col='lat'):
-    """
-        Used in Ceppi et al. 2018
-    """
-    xs = []
-    ys = []
-    for lat in data[latitude_col]:
-        xs.append(float(lat))
-        ys.append(float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean()))
-    return np.dot(xs, ys) / np.sum(ys)
 
 
 def meridional_circulation_index(data):
@@ -389,3 +402,16 @@ class JetStreamCoreIdentificationAlgorithm:
             After Manney et al. 2011, will work out if two or more jet cores found within one boundary are seperate or not
         """
         return 
+
+
+def get_centroid_jet_lat(data, latitude_col='lat'):
+    """
+        Used in Ceppi et al. 2018
+    """
+    xs = []
+    ys = []
+    for lat in data[latitude_col]:
+        xs.append(float(lat))
+        ys.append(float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean()))
+    return np.dot(xs, ys) / np.sum(ys)
+

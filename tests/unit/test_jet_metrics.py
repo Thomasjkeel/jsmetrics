@@ -9,11 +9,9 @@
 
 ### imports
 import xarray as xr
-from metrics import jetstream_metrics
+from metrics import jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
 import unittest
-
-
-
+from parameterized import parameterized
 
 
 ### docs
@@ -21,6 +19,8 @@ __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
+
+MAX_VARIABLES = 4
 
 def set_up_test_uv_data():
     u_data = xr.open_dataset("data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
@@ -45,12 +45,58 @@ def set_up_test_zg_data():
     return data
 
 
+class TestJetStreamMetricDict(unittest.TestCase): 
+    def setUp(self):
+        self.metric_dict = jetstream_metrics_dict.JETSTREAM_METRIC_DICT
+        
+    def test_metric_dict_keys(self):
+        for metric_name in self.metric_dict.keys():
+            self.assertIsInstance(metric_name, str)
+    
+    def test_metric_dict_values(self):
+        for metric in self.metric_dict.values():
+            self.assertIsInstance(metric, dict)
+            self.assertEqual(len(metric.keys()),4)
+            self.assertListEqual(list(metric.keys()), ["variables", "coords", "metric", "description"])
+
+    def test_variables(self):
+        for metric in self.metric_dict.values():
+            self.assertIsInstance(metric["variables"], list)
+            self.assertGreaterEqual(len(metric["variables"]), 0)
+            self.assertLessEqual(len(metric["variables"]), MAX_VARIABLES)
+
+    def test_metric_coords(self):
+        for metric in self.metric_dict.values():
+            self.assertIsInstance(metric["coords"], dict)
+            for coord in metric["coords"].keys():
+                self.assertIsInstance(coord, str)
+
+    @parameterized.expand([
+    ("plev", 0, 100000),
+    ("lat", -91, 91),
+    ("lon", -1, 361),
+   ])
+    def test_each_coord(self, coord, min_value, max_value):
+        for metric in self.metric_dict.values():
+            if coord in metric["coords"].keys():
+                self.assertEqual(len(metric["coords"][coord]), 2)
+                self.assertGreaterEqual(min(metric["coords"][coord]), min_value)
+                self.assertLessEqual(max(metric["coords"][coord]), max_value)
+
+    def test_funcs(self):
+        for metric in self.metric_dict.values():
+            self.assertTrue(callable(metric['metric']))
+
 class TestKoch2006(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()
     
     def test_basic(self):
         pass
+
+    def test_get_all_plevs(self):
+        pass
+        
 
 
 class TestArcherCaldeira2008(unittest.TestCase):

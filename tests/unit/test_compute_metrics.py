@@ -56,12 +56,6 @@ class TestComputeMetricFunctions(unittest.TestCase):
     def test_subset_data(self):
         pass
 
-    def test_all_metrics(self):
-        """
-            maybe not needed as in test_jet_metrics.py TODO: remove if not needed
-        """
-        pass
-
     def test_check_all_variables(self):
         pass
 

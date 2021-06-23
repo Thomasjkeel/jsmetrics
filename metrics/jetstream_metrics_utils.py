@@ -359,6 +359,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
     def __init__(self, data, occurence_ws_threshold=30):
         ## Load in data as a pressure level 2d wind-speed slice
         self.data = PressureLevelWindSpeedSlice(data).values
+        assert occurence_ws_threshold > 0, "occurence threshold needs to be more than 0"
         self.jet_occurence = self.data.where(self.data['ws'] >= occurence_ws_threshold)
         self.lat_resolution = float(self.data['lat'][1] - self.data['lat'][0])
         self.lon_resolution = float(self.data['lon'][1] - self.data['lon'][0])

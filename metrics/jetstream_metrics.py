@@ -93,6 +93,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
         Used in Manney 2011, 2014, 2017 and 2018
     """
+        
     if data['time'].count() > 1:
         for time_coord in data['time']:
             sub_data = data.sel(time=time_coord)

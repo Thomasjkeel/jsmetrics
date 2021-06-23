@@ -208,6 +208,9 @@ class JetStreamCoreIdentificationAlgorithm:
         ## Step 1. make windspeed slice
         self.data = LatitudeWindSpeedSlice(data)
         
+        assert ws_core_threshold > ws_boundary_threshold, "core threshold needs to be higher than boundary threshold"
+        assert ws_core_threshold > 0, "core threshold needs to be more than 0"
+        assert ws_boundary_threshold > 0, "boundary threshold needs to be more than 0"
         ## Step 2. Get core and potential boundary points
         self.output = self.data.label_slice(self.data['ws'] < ws_core_threshold, 'Core')
         self.output = self.output.where((self.data['ws'] < ws_boundary_threshold) | (self.data['ws'] > ws_core_threshold), other='Potential Boundary')

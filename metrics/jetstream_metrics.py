@@ -164,6 +164,7 @@ def grise_et_al_2017(data):
         Write function description
         See also Ceppi et al. 2012
         TODO: work out if relevant as this method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record 
+        TODO: and add to dict if relevant
     """
     return
 
@@ -208,6 +209,7 @@ def lee_et_al_2019(data):
         Write function description
         TODO: work out if relevant as wind shear of jet-stream rather than location
         variable used: temperature, u-wind, specific gas constant for dry air, the Coriolis parameter, pressure, northward distance.
+        TODO: and add to dict if relevant
     """
     return
 

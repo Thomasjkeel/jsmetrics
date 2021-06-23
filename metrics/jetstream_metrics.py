@@ -141,7 +141,8 @@ def francis_vavrus_2015(data, lat_min=20, lat_max=80):
     mci_data = jetstream_metrics_utils.meridional_circulation_index(data) 
     
     ## maybe TODO: Step ?? Calculate anomaly from season
-    
+    mci_data = mci_data.rename('mci').to_dataset()
+
     return mci_data
 
 

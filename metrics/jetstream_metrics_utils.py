@@ -136,7 +136,13 @@ def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
         Will return the latitude and windspeed at the index of maximum wind speed 
         Used in Woolings et al. 2010
     """
+    try:
+        assert hasattr(data_row, 'isnull')
+    except:
+        raise AttributeError("input needs to have isnull method")
+        
     if not data_row.isnull().all():
+        data_row = data_row.fillna(0.0)
         max_speed_loc = np.argmax(data_row.data)
         max_speed = data_row[max_speed_loc]
         lat_at_max = float(max_speed[latitude_col].values)

@@ -10,6 +10,7 @@
 ### imports
 import xarray as xr
 import numpy as np
+import pandas as pd
 from metrics import jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
 import unittest
 from parameterized import parameterized
@@ -45,6 +46,24 @@ def set_up_test_zg_data():
     data = data.isel(time=slice(0,4))
     return data
 
+def set_up_nan_dataset():
+    lon = [[-99.83, -99.32], [-99.79, -99.23]]
+    lat = [[42.25, 42.21], [42.63, 42.59]]
+    time = pd.date_range("2014-09-06", periods=3)
+    reference_time = pd.Timestamp("2014-09-05")
+    an_array = np.empty((2,2,3))
+    an_array[:] = np.NaN
+    da = xr.DataArray(
+        data=an_array,
+        dims=["x", "y", "time"],
+        coords=dict(
+            lon=(["x", "y"], lon),
+            lat=(["x", "y"], lat),
+            time=time,
+            reference_time=reference_time,
+        )
+    )
+    return da
 
 class TestJetStreamMetricDict(unittest.TestCase): 
     def setUp(self):
@@ -155,9 +174,15 @@ class TestWoolings2010(unittest.TestCase):
         self.assertIsInstance(tested_func(self.data), xr.Dataset)
 
     def test_get_latitude_and_speed_where_max_ws(self):
-        ## TODO
-        pass
-
+        tested_func = jetstream_metrics_utils.get_latitude_and_speed_where_max_ws
+        self.assertRaises(AttributeError, lambda: tested_func(['lol']))
+        tested_data = self.data['ua'].isel(plev=0, lon=0, time=0)
+        self.assertEqual(tested_func(tested_data)[0], 70.0)
+        self.assertEqual(tested_func(tested_data)[1], 3.105090856552124)
+        self.assertRaises(KeyError, lambda: tested_func(tested_data.rename({'lat':'lt'})))
+        nan_dataset = set_up_nan_dataset()
+        self.assertEquals(tested_func(nan_dataset), (None, None))
+        
 
 class TestManney2011(unittest.TestCase):
     def setUp(self):

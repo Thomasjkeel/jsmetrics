@@ -269,8 +269,9 @@ class TestCeppi2018(unittest.TestCase):
         self.data  = set_up_test_u_data()
     
     def test_metric(self):
-        # result = jetstream_metrics.ceppi_et_al_2018(self.data)
-        pass
+        result = jetstream_metrics.ceppi_et_al_2018(self.data)
+        current = next(result)
+        self.assertEqual(current, 37.96227342516621)
 
 class TestKern2018(unittest.TestCase):
     def setUp(self):

@@ -23,6 +23,8 @@ __status__ = "Development"
 def remove_duplicates(vals):
     """
         removes duplicates see: https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
+
+        Used in a few metrics
     """
 
     vals.sort()
@@ -86,21 +88,6 @@ def get_zonal_mean(data):
     return mean_data
 
 
-def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
-    """
-        Will return the latitude and windspeed at the index of maximum wind speed 
-        Used in Woolings et al. 2010
-    """
-    if not data_row.isnull().all():
-        max_speed_loc = np.argmax(data_row.data)
-        max_speed = data_row[max_speed_loc]
-        lat_at_max = float(max_speed[latitude_col].values)
-        speed_at_max = float(max_speed.data)
-        return lat_at_max, speed_at_max 
-    else:
-        return None, None
-
-
 def low_pass_weights(window, cutoff):
     """Calculate weights for a low pass Lanczos filter.
     
@@ -143,6 +130,21 @@ def apply_lancoz_filter(data, filter_freq, window_size):
     window_cons = data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
     return window_cons
     
+
+def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
+    """
+        Will return the latitude and windspeed at the index of maximum wind speed 
+        Used in Woolings et al. 2010
+    """
+    if not data_row.isnull().all():
+        max_speed_loc = np.argmax(data_row.data)
+        max_speed = data_row[max_speed_loc]
+        lat_at_max = float(max_speed[latitude_col].values)
+        speed_at_max = float(max_speed.data)
+        return lat_at_max, speed_at_max 
+    else:
+        return None, None
+
 
 def fourier_filter(data, timestep=1):
     """

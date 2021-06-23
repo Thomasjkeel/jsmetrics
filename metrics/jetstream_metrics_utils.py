@@ -125,6 +125,14 @@ def apply_lancoz_filter(data, filter_freq, window_size):
 
         Used in Woolings et al. 2010
     """
+    assert filter_freq <= data['time'].count() and filter_freq > 0, "Filter frequency needs to be less\
+                                                                     than the number of days in the data\
+                                                                    and more than 0 "
+    assert window_size <= data['time'].count() and window_size > 0, "Window size needs to be less\
+                                                                     than the number of days in the data\
+                                                                     and more than 0 "
+    assert filter_freq <= window_size, "Filter freq cannot be bigger than window size"
+
     lanczos_weights = low_pass_weights(window_size, 1/filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
     window_cons = data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
@@ -140,7 +148,7 @@ def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
         assert hasattr(data_row, 'isnull')
     except:
         raise AttributeError("input needs to have isnull method")
-        
+
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
         max_speed_loc = np.argmax(data_row.data)

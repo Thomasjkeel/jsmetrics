@@ -40,6 +40,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     print('Step 3: Apply windspeed threshold of %s m/s...' % (ws_threshold))
     weighted_average_ws = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
     weighted_average_ws = weighted_average_ws.fillna(0.0)
+    ## turn into dataset
     weighted_average_ws = weighted_average_ws.rename('weighted_average_ws').to_dataset()
     return weighted_average_ws
 

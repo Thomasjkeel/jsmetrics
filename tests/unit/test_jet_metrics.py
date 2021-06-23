@@ -47,7 +47,7 @@ def set_up_test_zg_data():
     return data
 
 def set_up_nan_dataset():
-    lon = [[-99.83, -99.32], [-99.79, -99.23]]
+    lon = [[99.32, 99.83], [99.23, 99.73]]
     lat = [[42.25, 42.21], [42.63, 42.59]]
     time = pd.date_range("2014-09-06", periods=3)
     reference_time = pd.Timestamp("2014-09-05")
@@ -172,6 +172,15 @@ class TestWoolings2010(unittest.TestCase):
         new_data = self.data.rename({'lon':'ln'})
         self.assertRaises(KeyError, lambda: tested_func(new_data))
         self.assertIsInstance(tested_func(self.data), xr.Dataset)
+
+    def test_apply_lancoz_filter(self):
+        tested_func = jetstream_metrics_utils.apply_lancoz_filter
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, -2, 1))
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, -1))
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 1))
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, self.data['time'].count()+2, 1))
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, self.data['time'].count()+1))
+        self.assertEqual(float(tested_func(self.data, 2,4).max()), 99.514892578125)
 
     def test_get_latitude_and_speed_where_max_ws(self):
         tested_func = jetstream_metrics_utils.get_latitude_and_speed_where_max_ws

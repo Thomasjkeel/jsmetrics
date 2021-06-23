@@ -9,6 +9,7 @@
 
 ### imports
 import xarray as xr
+import numpy as np
 from metrics import jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
 import unittest
 from parameterized import parameterized
@@ -87,6 +88,7 @@ class TestJetStreamMetricDict(unittest.TestCase):
         for metric in self.metric_dict.values():
             self.assertTrue(callable(metric['metric']))
 
+
 class TestKoch2006(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()
@@ -95,8 +97,29 @@ class TestKoch2006(unittest.TestCase):
         pass
 
     def test_get_all_plevs(self):
-        pass
-        
+        ## make sure it returns an array
+        self.assertIsInstance(jetstream_metrics_utils.get_all_plev_hPa(self.data), (np.ndarray))
+        ## make sure it takes errors wrong types
+        # self.assertRaises(TypeError, lambda: jetstream_metrics_utils.get_all_plev_hPa(['plev']))
+        new_data = self.data.rename({'plev':'pl'})
+        self.assertRaises(KeyError, lambda: jetstream_metrics_utils.get_all_plev_hPa(new_data))
+
+    def test_sum_weighted_ws(self):    
+        self.assertRaises(TypeError, lambda: jetstream_metrics_utils.get_sum_weighted_ws(self.data, 1))
+        self.assertIsInstance(jetstream_metrics_utils.get_sum_weighted_ws(self.data, [0,100]), xr.DataArray)
+        self.assertGreater(jetstream_metrics_utils.get_sum_weighted_ws(self.data, [0,1000]).max(), 0)
+
+    def test_weighted_average_ws(self):
+        self.assertRaises(TypeError, lambda: jetstream_metrics_utils.get_weighted_average_ws(self.data, 1))
+        sum_weighted = jetstream_metrics_utils.get_sum_weighted_ws(self.data, [0,100])
+        weighted_av = jetstream_metrics_utils.get_weighted_average_ws(sum_weighted, np.array([0,100]))
+        self.assertGreater(weighted_av.min(), 0)
+        self.assertGreaterEqual(weighted_av.max(), 0)
+
+        weighted_av_threshold = weighted_av.where(weighted_av >= 30)
+        self.assertGreater(weighted_av_threshold.max(), 0)
+        self.assertGreaterEqual(weighted_av_threshold.min(), 0)
+
 
 
 class TestArcherCaldeira2008(unittest.TestCase):

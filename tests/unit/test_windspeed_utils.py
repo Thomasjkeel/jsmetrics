@@ -18,14 +18,6 @@ class TestWindSpeedSlice(unittest.TestCase):
         self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None))
         self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None))
 
-#     @parameterized.expand([
-#     ("negative", -1.5, -2.0),
-#     ("integer", 1, 1.0),
-#     ("large fraction", 1.6, 1),
-#    ])
-#     def test_floor(self, name, input, expected):
-#         self.assertEqual(math.floor(input), expected)
-
 
 class TestLatitudeWindSpeedSlice(unittest.TestCase):
     def test_basic(self):

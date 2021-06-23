@@ -8,6 +8,7 @@
 
 ### imports
 import numpy as np
+import xarray as xr
 from scipy import fftpack
 import collections
 import itertools
@@ -33,6 +34,9 @@ def get_all_plev_hPa(data):
     """
         Will get a list of all the pressure levels in the data in hPa 
     """
+    if not 'plev' in data.coords:
+        raise KeyError("Data does not contain coord: 'plev'")
+
     plevs = np.array([plev for plev in data['plev']])
     if data['plev'].units == 'Pa':
         plevs = plevs/100 
@@ -43,6 +47,12 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
     """
         Used in Koch et al. 2006
     """
+    if not 'plev' in data.coords:
+        raise KeyError("Data does not contain coord: 'plev'")
+
+    if not isinstance(all_plevs_hPa, (list, np.ndarray)):
+        raise TypeError("array of pressure level needs to be list or numpy.array")
+
     sum_weighted_ws = 0
     for plev, (i,plev_hPa) in zip(data['plev'], enumerate(all_plevs_hPa)):
         if i != 0:
@@ -55,6 +65,9 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
     """
         Used in Koch et al. 2006
     """
+    if not isinstance(all_plevs_hPa, (list, np.ndarray)):
+        raise TypeError("array of pressure level needs to be list or numpy.array")
+        
     return sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
 
 

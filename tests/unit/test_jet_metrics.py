@@ -28,21 +28,21 @@ def set_up_test_uv_data():
     v_data = xr.open_dataset("data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
     data = xr.merge([u_data, v_data])
     data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,10))
+    data = data.isel(time=slice(0,4))
     return data
 
 
 def set_up_test_u_data():
     data = xr.open_dataset("data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
     data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,10))
+    data = data.isel(time=slice(0,4))
     return data
 
 
 def set_up_test_zg_data():
     data = xr.open_dataset("data/zg_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
     data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,10))
+    data = data.isel(time=slice(0,4))
     return data
 
 
@@ -133,12 +133,8 @@ class TestArcherCaldeira2008(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()
 
-
     def test_metric(self):
         # result = jetstream_metrics.archer_caldeira_2008(self.data)
-        pass
-
-    def test_basic(self):
         pass
 
 
@@ -146,10 +142,8 @@ class TestWoolings2010(unittest.TestCase):
     def setUp(self):
         self.data  = set_up_test_u_data()
     
-
     def test_metric(self):
-        # result = jetstream_metrics.woolings_et_al_2010(self.data)
-        pass
+        result = jetstream_metrics.woolings_et_al_2010(self.data)
 
     def test_get_zonal_mean(self):
         tested_func = jetstream_metrics_utils.get_zonal_mean
@@ -169,7 +163,6 @@ class TestManney2011(unittest.TestCase):
     def test_metric(self):
         # result = jetstream_metrics.manney_et_al_2011(self.data)
         pass
-
 
 
 class TestScreenSimmonds2013(unittest.TestCase):

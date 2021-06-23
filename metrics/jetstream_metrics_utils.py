@@ -78,6 +78,7 @@ def get_zonal_mean(data):
     """
     if not 'lon' in data.coords:
         raise KeyError("data does not contain 'lon' coord")
+        
     coords_for_mean = ['lon', 'plev']
     if 'plev' not in data.coords:
         coords_for_mean = ['lon']

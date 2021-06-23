@@ -53,8 +53,9 @@ def archer_caldeira_2008(data):
     return data
     
 
-def woolings_et_al_2010(data, filter_freq=10):
+def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     """
+        window_size int: number of days
         Follows an in-text description of 4-steps describing the algorithm mof jet-stream identification from Woolings et al. (2010). 
         Will calculate this metric based on data (regardless of pressure level of time span etc.). 
         TODO: Ask Chris about fourier filtering (step 4)
@@ -65,7 +66,7 @@ def woolings_et_al_2010(data, filter_freq=10):
     mean_data = jetstream_metrics_utils.get_zonal_mean(data)
     ## Step 2
     print('Step 2: Applying %s day lancoz filter...' % (filter_freq))
-    lanczos_weights = jetstream_metrics_utils.low_pass_weights(61, 1/filter_freq)
+    lanczos_weights = jetstream_metrics_utils.low_pass_weights(window_size, 1/filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
     window_cons = mean_data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
     ## Step 3

@@ -67,8 +67,22 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
     """
     if not isinstance(all_plevs_hPa, (list, np.ndarray)):
         raise TypeError("array of pressure level needs to be list or numpy.array")
-        
+
     return sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
+
+
+def get_zonal_mean(data):
+    """
+        Will get the zonal mean either by pressure level (plev) or for one layer
+        Used in Woolings et al. 2010
+    """
+    if not 'lon' in data.coords:
+        raise KeyError("data does not contain 'lon' coord")
+    coords_for_mean = ['lon', 'plev']
+    if 'plev' not in data.coords:
+        coords_for_mean = ['lon']
+    mean_data = data.mean(coords_for_mean)
+    return mean_data
 
 
 def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):

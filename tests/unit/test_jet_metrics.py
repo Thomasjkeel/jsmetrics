@@ -198,8 +198,18 @@ class TestManney2011(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.manney_et_al_2011(self.data)
-        pass
+        ## NOTE: this metric is a generator
+        result = jetstream_metrics.manney_et_al_2011(self.data)
+        self.assertRaises(ValueError, lambda: next(result))
+        lon_data = self.data.isel(lon=0)
+        result = jetstream_metrics.manney_et_al_2011(lon_data)
+        current = next(result)
+        self.assertEqual(current.core_ids.mean(), 30.07608695652174)
+        self.assertEqual(len(np.where(current.output['ws'] == 'Core')[1]), 46)
+        self.assertEqual(len(np.where(current.output['ws'] == 'Potential Boundary')[1]), 81)
+        alg_results = current.run()
+        self.assertEqual(len(alg_results), 3)
+        self.assertListEqual(alg_results[0]['index_of_area'][0], [5,15])
 
 
 class TestScreenSimmonds2013(unittest.TestCase):
@@ -216,8 +226,14 @@ class TestKuang2014(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.kuang_et_al_2014(self.data)
-        pass
+        result = jetstream_metrics.kuang_et_al_2014(self.data)
+        self.assertRaises(ValueError, lambda: next(result))
+        lon_data = self.data.sel(plev=50000)
+        result = jetstream_metrics.kuang_et_al_2014(lon_data)
+        current = next(result)
+        self.assertEqual(float(current.jet_occurence['ws'].max()), 50.63158416748047) 
+        current.run()
+        self.assertListEqual(current.jet_centres[0].tolist(), [28.75, 60.])
 
 
 class TestFrancisVavrus2015(unittest.TestCase):
@@ -225,9 +241,10 @@ class TestFrancisVavrus2015(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.francis_vavrus_2015(self.data)
-        pass
-
+        result = jetstream_metrics.francis_vavrus_2015(self.data)
+        self.assertEqual(float(result['mci'].mean()), -0.019083017483353615)
+        self.assertTrue(len(np.where(result['mci'] <= 1)) ==  len(result['mci']))
+        self.assertTrue(len(np.where(result['mci'] >= 1)) ==  len(result['mci']))
 
 class TestLocalWaveActivity(unittest.TestCase):
     def setUp(self):
@@ -281,20 +298,31 @@ class TestChemkeMing2020(unittest.TestCase):
         pass
 
 
-class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
-    def setUp(self):
-        self.data = set_up_test_uv_data()
-
-    def test_basic(self):
-        pass
-
-
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()
 
-    def test_basic(self):
-        pass
+    def test_ws_thresholds(self):
+        tested_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm
+        self.assertRaises(ValueError, lambda: tested_alg(self.data, 40, 30))
+        test_data = self.data.isel(lon=0, time=0)
+        self.assertRaises(AssertionError, lambda: tested_alg(test_data,-10,10))
+        self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,-10))
+        self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,30))
+        self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,10))
+
+
+
+class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_uv_data()
+
+    def test_ws_thresholds(self):
+        tested_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm
+        self.assertRaises(ValueError, lambda: tested_alg(self.data, 40))
+        test_data = self.data.isel(plev=0, time=0)
+        self.assertRaises(AssertionError, lambda: tested_alg(test_data,-10))
+
 
 
 if __name__ == "__main__":

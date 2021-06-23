@@ -29,21 +29,21 @@ def set_up_test_uv_data():
     v_data = xr.open_dataset("data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
     data = xr.merge([u_data, v_data])
     data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,4))
+    data = data.isel(time=slice(0,5))
     return data
 
 
 def set_up_test_u_data():
     data = xr.open_dataset("data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
     data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,4))
+    data = data.isel(time=slice(0,5))
     return data
 
 
 def set_up_test_zg_data():
     data = xr.open_dataset("data/zg_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
     data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,4))
+    data = data.isel(time=slice(0,5))
     return data
 
 def set_up_nan_dataset():
@@ -113,10 +113,10 @@ class TestKoch2006(unittest.TestCase):
         self.data = set_up_test_uv_data()
     
     def test_metric(self):
-        result = jetstream_metrics.koch_et_al_2006(self.data, ws_threshold=10)
+        result = jetstream_metrics.koch_et_al_2006(self.data, ws_threshold=8)
         ## check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEquals(float(result['weighted_average_ws'].max()), 14.106743812561035)
+        self.assertEquals(float(result['weighted_average_ws'].max()), 8.775158882141113)
 
     def test_get_all_plevs(self):
         tested_func = jetstream_metrics_utils.get_all_plev_hPa
@@ -162,10 +162,10 @@ class TestWoolings2010(unittest.TestCase):
         self.data  = set_up_test_u_data()
     
     def test_metric(self):
-        result = jetstream_metrics.woolings_et_al_2010(self.data, window_size=2)
+        result = jetstream_metrics.woolings_et_al_2010(self.data, filter_freq=1, window_size=2)
         self.assertIsInstance(result, np.ndarray)
         self.assertEqual(result[1][0], 36.25)
-        self.assertEqual(result[1][1], 4.453265762329102)
+        self.assertEqual(result[1][1], 44.532657623291016)
 
     def test_get_zonal_mean(self):
         tested_func = jetstream_metrics_utils.get_zonal_mean

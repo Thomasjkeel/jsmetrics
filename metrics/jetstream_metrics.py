@@ -2,6 +2,8 @@
 
 """
     Metrics used to identify or classify jet-stream in the literature
+
+    All functions should return a xarray.Dataset
 """
 
 ### imports
@@ -15,7 +17,6 @@ from .import jetstream_metrics_utils
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
-
 
 
 def koch_et_al_2006(data, ws_threshold=30):
@@ -39,6 +40,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     print('Step 3: Apply windspeed threshold of %s m/s...' % (ws_threshold))
     weighted_average_ws = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
     weighted_average_ws = weighted_average_ws.fillna(0.0)
+    weighted_average_ws = weighted_average_ws.rename('weighted_average_ws').to_dataset()
     return weighted_average_ws
 
 
@@ -47,8 +49,8 @@ def archer_caldeira_2008(data):
         Will calculate only the mass-weighted wind speed
         Similar to Koch et al. 2006 -> "To overcome this problem, we define jet stream properties via integrated quantities, which are more numerically stable and less grid-dependent than are simple maxima and minima."
     """
-    return
-
+    return data
+    
 
 def woolings_et_al_2010(data, filter_freq=10):
     """

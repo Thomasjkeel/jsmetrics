@@ -243,8 +243,9 @@ class TestFrancisVavrus2015(unittest.TestCase):
     def test_metric(self):
         result = jetstream_metrics.francis_vavrus_2015(self.data)
         self.assertEqual(float(result['mci'].mean()), -0.01847001537680626)
-        self.assertTrue(len(np.where(result['mci'] <= 1)) ==  len(result['mci']))
-        self.assertTrue(len(np.where(result['mci'] >= 1)) ==  len(result['mci']))
+        self.assertTrue(result['mci'].max() == 1)
+        self.assertTrue(result['mci'].min() == -1)
+
 
 class TestLocalWaveActivity(unittest.TestCase):
     def setUp(self):

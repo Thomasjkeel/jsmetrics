@@ -143,7 +143,10 @@ class TestWoolings2010(unittest.TestCase):
         self.data  = set_up_test_u_data()
     
     def test_metric(self):
-        result = jetstream_metrics.woolings_et_al_2010(self.data)
+        result = jetstream_metrics.woolings_et_al_2010(self.data, window_size=2)
+        self.assertIsInstance(result, np.ndarray)
+        self.assertEqual(result[1][0], 36.25)
+        self.assertEqual(result[1][1], 4.453265762329102)
 
     def test_get_zonal_mean(self):
         tested_func = jetstream_metrics_utils.get_zonal_mean

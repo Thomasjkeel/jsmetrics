@@ -132,6 +132,18 @@ def low_pass_weights(window, cutoff):
     return w[0+(window%2):-1] # edited from w[1:-1]
 
 
+def apply_lancoz_filter(data, filter_freq, window_size):
+    """
+        Will carry out Lanczos low-pass filter
+
+        Used in Woolings et al. 2010
+    """
+    lanczos_weights = low_pass_weights(window_size, 1/filter_freq)
+    lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
+    window_cons = data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
+    return window_cons
+    
+
 def fourier_filter(data, timestep=1):
     """
         Carries out a Fourier transform for high frequency filtering

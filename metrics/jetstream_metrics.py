@@ -3,7 +3,7 @@
 """
     Metrics used to identify or classify jet-stream in the literature
 
-    All functions should return a xarray.Dataset
+    All functions should return a xarray.Dataset unless otherwise stated
 """
 
 ### imports
@@ -51,7 +51,7 @@ def archer_caldeira_2008(data):
         Similar to Koch et al. 2006 -> "To overcome this problem, we define jet stream properties via integrated quantities, which are more numerically stable and less grid-dependent than are simple maxima and minima."
     """
     return data
-    
+
 
 def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     """
@@ -60,21 +60,22 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
         Will calculate this metric based on data (regardless of pressure level of time span etc.). 
         TODO: Ask Chris about fourier filtering (step 4)
         TODO: Maybe note about using season or not
+
+        returns:
+            max_lat_ws (numpy.ndarray):
     """
     ## Step 1
     print('Step 1: calculating long and/or plev mean...')
     mean_data = jetstream_metrics_utils.get_zonal_mean(data)
     ## Step 2
     print('Step 2: Applying %s day lancoz filter...' % (filter_freq))
-    lanczos_weights = jetstream_metrics_utils.low_pass_weights(window_size, 1/filter_freq)
-    lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=['window'])
-    window_cons = mean_data['ua'].rolling(time=len(lanczos_weights_arr), center=True).construct('window').dot(lanczos_weights_arr)
+    filtered_mean_data = jetstream_metrics_utils.apply_lancoz_filter(mean_data, filter_freq, window_size)
     ## Step 3
     print('Step 3: Calculating max windspeed and latitude where max windspeed found...')
-    max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, window_cons[:])))
+    max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, filtered_mean_data[:])))
     ## Step 4 — fourier filtering  TODO
     ### make seasonal (DJF, MAM, JJA, SON)
-    # seasonal_data = window_cons.resample(time='Q-NOV').mean()
+    # seasonal_data = filtered_mean_data.resample(time='Q-NOV').mean()
     # filled_seasonal_data = seasonal_data[:,0].fillna(0)
     ## loop over each latitude and calculate high frequency
     # for lat in seasonal_data['lat']:
@@ -82,6 +83,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     #     lat_data = np.array(lat_data.fillna(0))
     #     filtered_sig = jetstream_metrics_utils.fourier_filter(lat_data)
     #     ### code to put back into xarray format
+
     return max_lat_ws
     
         

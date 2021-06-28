@@ -24,6 +24,4 @@ jobs:
           conda env create -f environment.yml
       - name: Run tests with pytest
         run: |
-          conda activate jsmet
-          pip install pytest
-          pytest
+          conda run -n jsmet pytest

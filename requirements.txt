@@ -7,4 +7,3 @@ bottleneck
 scipy==1.5.3
 xarray==0.17.0
 Cartopy==0.18.0
-pytest==6.2.4

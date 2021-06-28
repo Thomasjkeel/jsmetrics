@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install Python 3
-        uses: actions/setup-python@v1
+        uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: 3.9
       - name: Install dependencies
@@ -24,4 +24,6 @@ jobs:
           conda env create -f environment.yml
       - name: Run tests with pytest
         run: |
+          pip install pytest==6.2.4
+          pip install parameterized==0.8.1
           conda run -n jsmet pytest

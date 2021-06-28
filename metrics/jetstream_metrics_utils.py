@@ -68,7 +68,7 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
         Used in Koch et al. 2006
     """
     if not isinstance(all_plevs_hPa, (list, np.ndarray)):
-        raise TypeError("array of pressure level needs to be list or numpy.array")
+        raise TypeError("array of pressure level needs to be a list or numpy.array")
 
     return sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
 

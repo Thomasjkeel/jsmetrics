@@ -116,7 +116,7 @@ class TestKoch2006(unittest.TestCase):
         result = jetstream_metrics.koch_et_al_2006(self.data, ws_threshold=8)
         ## check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEquals(float(result['weighted_average_ws'].max()), 8.775158882141113)
+        self.assertEqual(float(result['weighted_average_ws'].max()), 8.775158882141113)
 
     def test_get_all_plevs(self):
         tested_func = jetstream_metrics_utils.get_all_plev_hPa
@@ -192,7 +192,7 @@ class TestWoolings2010(unittest.TestCase):
         self.assertEqual(tested_func(tested_data)[1], 3.105090856552124)
         self.assertRaises(KeyError, lambda: tested_func(tested_data.rename({'lat':'lt'})))
         nan_dataset = set_up_nan_dataset()
-        self.assertEquals(tested_func(nan_dataset), (None, None))
+        self.assertEqual(tested_func(nan_dataset), (None, None))
         
 
 class TestManney2011(unittest.TestCase):

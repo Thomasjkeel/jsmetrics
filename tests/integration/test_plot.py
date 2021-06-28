@@ -28,10 +28,10 @@ class TestPlot(unittest.TestCase):
         ax.plot(max_ws)
         plt.legend(['latitude of max windspeed', 'windspeed'])
         if save:
-            fig.savefig('experiments/figures/woolings_test.png', bbox_inches='tight')
+            fig.savefig('tests/figures/woolings_test.png', bbox_inches='tight')
 
     def test_plot(self): 
-        self.result = self.metric_computer.compute_metric_from_data('Woolings2010', calc_kwargs={"filter_freq":2, "window_size":5})
+        self.result = self.metric_computer.compute_metric_from_data('Woolings2010', calc_kwargs={"filter_freq":1, "window_size":5})
         self.assertIsInstance(self.result, np.ndarray)
         self.plot_fig()
         self.plot_fig(save=True)

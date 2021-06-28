@@ -19,11 +19,10 @@ jobs:
           python-version: 3.9
       - name: Install dependencies
         run: |
-          # $CONDA is an environment variable pointing to the root of the miniconda directory
-          # $CONDA/bin/conda env update --file environment.yml --name base
           conda env create -f environment.yml
       - name: Run tests with pytest
         run: |
+          conda activate jsmet
           pip install pytest==6.2.4
           pip install parameterized==0.8.1
-          conda run -n jsmet pytest
+          pytest

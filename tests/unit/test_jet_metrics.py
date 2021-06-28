@@ -130,6 +130,8 @@ class TestKoch2006(unittest.TestCase):
     def test_sum_weighted_ws(self):    
         tested_func = jetstream_metrics_utils.get_sum_weighted_ws
         self.assertRaises(TypeError, lambda: tested_func(self.data, 1))
+        new_data = self.data.rename({'plev':'pl'})
+        self.assertRaises(KeyError, lambda: tested_func(new_data, [10,20]))
         sum_weighted = tested_func(self.data, [0,100])
         self.assertIsInstance(sum_weighted, xr.DataArray)
         self.assertGreater(sum_weighted.max(), 0)

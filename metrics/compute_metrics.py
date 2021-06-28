@@ -20,21 +20,21 @@ class MetricComputer:
 
     (see https://www.datacamp.com/community/tutorials/docstrings-python for docstring format)
     """
-    def __init__(self, data):
+    def __init__(self, data, all_metrics):
         self.data = data
         self.get_variable_list()
         self.swap_all_coords()
+        self.all_metrics = all_metrics
 
     @classmethod
     def with_available_metrics(cls, data, all_metrics):
-        data_with_available_metrics = cls(data)
+        data_with_available_metrics = cls(data, all_metrics)
         data_with_available_metrics.get_available_metrics(all_metrics)
         return data_with_available_metrics
 
-    def get_available_metrics(self, all_metrics, return_coord_error=False):
-        self.all_metrics = all_metrics
+    def get_available_metrics(self, return_coord_error=False):
         self.available_metrics = get_available_metric_list(
-            self.data, all_metrics, return_coord_error)
+            self.data, self.all_metrics, return_coord_error)
         print("%s metrics available for this dataset:" %
               (len(self.available_metrics)))
         print("Metrics available:", self.available_metrics)
@@ -57,37 +57,42 @@ class MetricComputer:
         new_data = self.data.copy()
         new_data = new_data.sel(**kwargs)
         if inplace:
-            if hasattr(self, 'all_metrics'):
-                return MetricComputer.with_available_metrics(new_data, self.all_metrics)
+            return MetricComputer.with_available_metrics(new_data, self.all_metrics)
 
-        return MetricComputer(new_data)
+        return MetricComputer(new_data, self.all_metrics)
 
-    def isel(self, inplace=False, **kwargs):
+    def isel(self, **kwargs):
         """
             Exposes the xarray .sel function
         """
         new_data = self.data.copy()
         new_data = new_data.isel(**kwargs)
-        if inplace:
-            if hasattr(self, 'all_metrics'):
-                return MetricComputer.with_available_metrics(new_data, self.all_metrics)
+        if hasattr(self, 'available_metrics'):
+            return MetricComputer.with_available_metrics(new_data, self.all_metrics)
+        else:
+            return MetricComputer(new_data, self.all_metrics)
 
-        return MetricComputer(new_data)
-
-    def compute_metric_from_data(self, metric_name, **kwargs):
+    def compute_metric_from_data(self, metric_name, calc_kwargs={}, subset_kwargs={}):
         """
             TODO: maybe add catch. Will print which metrics are available
         """
-        result = compute_metric(self.data, metric_name, **kwargs)
-        return result
+        if not hasattr(self, 'available_metrics'):
+            try:
+                self.get_available_metrics()
+            except Exception as e:
+                raise KeyError('A dictionary of all metrics is required. Error is: %s ' % (e))  
+        result = compute_metric(self.data, metric_name, all_metrics=self.all_metrics, subset_kwargs=subset_kwargs, calc_kwargs=calc_kwargs)
+        return result 
     
     def compute_all_metrics(self):
         """
             will go through and compute all metric which are available
         """
         if not hasattr(self, 'available_metrics'):
-            print('please run .get_available_metrics() first')
-            return
+            try:
+                self.get_available_metrics()
+            except Exception as e:
+                raise KeyError('A dictionary of all metrics is required. Error is: %s ' % (e))  
         
 """
     Functions that run inside of the MetricComputer class...

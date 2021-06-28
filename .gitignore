@@ -135,6 +135,5 @@ dmypy.json
 !/data/get_era5_v_data.py
 !/data/get_era5_zg_data.py
 /.vscode/
-/experiments/figures/*
-!/experiments/figures/.keep
+/tests/figures/*
 scratch

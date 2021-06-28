@@ -25,12 +25,10 @@ class TestMetricComputer(unittest.TestCase):
         maybe split these classes
     """
     def setUp(self):
-        u_data = xr.open_dataset("data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
-        v_data = xr.open_dataset("data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
+        u_data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
+        v_data = xr.open_dataset("tests/data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
         uv_data = xr.merge([u_data, v_data])
         self.data = compute_metrics.MetricComputer(uv_data, all_metrics=JETSTREAM_METRIC_DICT)
-        self.data = self.data.sel(lat=slice(0, 90))
-        self.data = self.data.isel(time=slice(0,100))
 
     def test_basic(self):
         # self.assertRaises(ValueError, lambda: compute_metrics.MetricComputer(None))

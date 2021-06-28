@@ -25,26 +25,21 @@ __status__ = "Development"
 MAX_VARIABLES = 4
 
 def set_up_test_uv_data():
-    u_data = xr.open_dataset("data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
-    v_data = xr.open_dataset("data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
+    u_data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
+    v_data = xr.open_dataset("tests/data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
     data = xr.merge([u_data, v_data])
-    data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,5))
     return data
 
 
 def set_up_test_u_data():
-    data = xr.open_dataset("data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
-    data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,5))
+    data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
     return data
 
 
 def set_up_test_zg_data():
-    data = xr.open_dataset("data/zg_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20491230.nc")
-    data = data.sel(lat=slice(0, 90))
-    data = data.isel(time=slice(0,5))
+    data = xr.open_dataset("tests/data/zg_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
     return data
+
 
 def set_up_nan_dataset():
     lon = [[99.32, 99.83], [99.23, 99.73]]

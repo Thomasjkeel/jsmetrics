@@ -20,6 +20,6 @@ def load_uv_data(data_path):
 def main(data_path, **kwargs):
     print("Starting!")
     ukesm1_ssp585 = load_uv_data(data_path)
-    ukesm1_ssp585.data.get_available_metrics(return_coord_error=True)
+    ukesm1_ssp585.get_available_metrics(return_coord_error=True)
     return 
 

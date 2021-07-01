@@ -79,7 +79,16 @@ class TestMetricComputer(unittest.TestCase):
         new2 = self.data.isel(lon=slice(0, 90))
         self.assertListEqual(list(new1.data.lon.values), list(new2.lon.values))
 
-
+    def test_compute_metric_from_data(self):
+        metric_computer = compute_metrics.MetricComputer.with_available_metrics(self.data, all_metrics=JETSTREAM_METRIC_DICT)
+        test_metric_name = 'FrancisVavrus2015'
+        result = metric_computer.compute_metric_from_data(test_metric_name)
+        self.assertEquals(float(result['mci'][0][0][0]), -0.015743955969810486)
+        bad_metric_computer = compute_metrics.MetricComputer(self.data, all_metrics={"1":1})
+        self.assertRaises(KeyError, lambda: bad_metric_computer.compute_metric_from_data(test_metric_name))
+        #TODO: add subset and calc kwarg tests
+ 
+ 
 class TestComputeMetricFunctions(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()

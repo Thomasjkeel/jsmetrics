@@ -198,10 +198,11 @@ def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False
         metric_name : str
             name from jetstream metric file
     """
+    assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
     if not all_metrics:
         print('No metrics provided, defaulting to local JETSTREAM_METRICS file')
         all_metrics = JETSTREAM_METRIC_DICT
-
+    assert isinstance(all_metrics, dict), "all metrics needs to be a dict with at least one value"
     ## check that you can actually compute metrics
     if check_all_coords_available(data, all_metrics[metric_name], return_coord_error)[0] and check_all_variables_available(data, all_metrics[metric_name]):
         # print('all checks passed')
@@ -248,6 +249,7 @@ def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
         m_list = get_available_metric_list(vwind_data, js_metrics)
         
     """
+    assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
     if not all_metrics:
         print('No metrics provided, defaulting to local JETSTREAM_METRICS file')
         all_metrics = JETSTREAM_METRIC_DICT
@@ -285,6 +287,7 @@ def check_all_coords_available(data, metric, return_coord_error=False):
         Checks if all coords required to compute metric
         exist in the data.
     """
+    assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
     coord_error_message = ""
     metric_usable = True
     try: # TODO

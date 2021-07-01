@@ -4,6 +4,8 @@
     Contains the MetricComputer class and functions that run inside that class for subsetting and compute metrics from standardised netcdf data
 """
 
+import xarray as xr
+from xarray.core import dataarray
 from .jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 
 __author__ = "Thomas Keel"
@@ -21,6 +23,8 @@ class MetricComputer:
     (see https://www.datacamp.com/community/tutorials/docstrings-python for docstring format)
     """
     def __init__(self, data, all_metrics):
+        assert isinstance(data, (xr.Dataset, xr.DataArray)), "data needs to be xarray.dataset or xarray.dataarray"
+        assert isinstance(all_metrics, dict) and len(all_metrics) > 0, "all metrics needs to be a dict with at least one value"
         self.data = data
         self.get_variable_list()
         self.swap_all_coords()

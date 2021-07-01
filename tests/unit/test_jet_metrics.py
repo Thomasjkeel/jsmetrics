@@ -10,8 +10,8 @@
 ### imports
 import xarray as xr
 import numpy as np
-import pandas as pd
 from metrics import jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
+from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset
 import unittest
 from parameterized import parameterized
 
@@ -23,42 +23,6 @@ __status__ = "Development"
 
 
 MAX_VARIABLES = 4
-
-def set_up_test_uv_data():
-    u_data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
-    v_data = xr.open_dataset("tests/data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
-    data = xr.merge([u_data, v_data])
-    return data
-
-
-def set_up_test_u_data():
-    data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
-    return data
-
-
-def set_up_test_zg_data():
-    data = xr.open_dataset("tests/data/zg_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
-    return data
-
-
-def set_up_nan_dataset():
-    lon = [[99.32, 99.83], [99.23, 99.73]]
-    lat = [[42.25, 42.21], [42.63, 42.59]]
-    time = pd.date_range("2014-09-06", periods=3)
-    reference_time = pd.Timestamp("2014-09-05")
-    an_array = np.empty((2,2,3))
-    an_array[:] = np.NaN
-    da = xr.DataArray(
-        data=an_array,
-        dims=["x", "y", "time"],
-        coords=dict(
-            lon=(["x", "y"], lon),
-            lat=(["x", "y"], lat),
-            time=time,
-            reference_time=reference_time,
-        )
-    )
-    return da
 
 class TestJetStreamMetricDict(unittest.TestCase): 
     def setUp(self):

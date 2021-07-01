@@ -11,6 +11,8 @@
 import numpy as np
 import xarray as xr
 from metrics import compute_metrics
+import metrics
+from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import unittest
 
@@ -20,6 +22,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+
 class TestMetricComputer(unittest.TestCase):
     """
         maybe split these classes
@@ -27,16 +30,30 @@ class TestMetricComputer(unittest.TestCase):
     def setUp(self):
         u_data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
         v_data = xr.open_dataset("tests/data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
-        uv_data = xr.merge([u_data, v_data])
-        self.data = compute_metrics.MetricComputer(uv_data, all_metrics=JETSTREAM_METRIC_DICT)
+        self.data = xr.merge([u_data, v_data])
+        
+    def test_inputs(self):
+        theClass = compute_metrics.MetricComputer
+        self.assertRaises(AssertionError, lambda: theClass("wrong", {}))
+        self.assertRaises(AssertionError, lambda: theClass(self.data, {}))
+        self.assertRaises(AssertionError, lambda: theClass(self.data, [0]))
+
+    def test_inputs_with_available_metrics(self):
+        metric_computer = compute_metrics.MetricComputer.with_available_metrics(self.data, all_metrics=JETSTREAM_METRIC_DICT)
+        self.assertTrue(hasattr(metric_computer, 'available_metrics'))
 
     def test_basic(self):
-        # self.assertRaises(ValueError, lambda: compute_metrics.MetricComputer(None))
-        # self.assertRaises(ValueError, lambda: compute_metrics.MetricComputer('asf'))
-        # self.assertRaises(ValueError, lambda: compute_metrics.MetricComputer((None, 'dasf')))
-        pass
+        metric_computer = compute_metrics.MetricComputer(self.data, all_metrics=JETSTREAM_METRIC_DICT)
+        self.assertTrue(hasattr(metric_computer, 'data'))
+        self.assertTrue(hasattr(metric_computer, 'variable_list'))
+        self.assertTrue(hasattr(metric_computer, 'all_metrics'))
+        self.assertIsInstance(metric_computer.variable_list, list)
+        self.assertIsInstance(metric_computer.all_metrics, dict)
+    
 
     def test_available_metrics(self):
+        metric_computer = compute_metrics.MetricComputer(self.data, all_metrics=JETSTREAM_METRIC_DICT)
+        self.assertTrue(hasattr(metric_computer, 'all_metrics'))
         pass
 
     def test_get_variables(self):

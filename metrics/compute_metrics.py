@@ -23,7 +23,7 @@ class MetricComputer:
     (see https://www.datacamp.com/community/tutorials/docstrings-python for docstring format)
     """
     def __init__(self, data, all_metrics):
-        assert isinstance(data, (xr.Dataset, xr.DataArray)), "data needs to be xarray.dataset or xarray.dataarray"
+        assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
         assert isinstance(all_metrics, dict) and len(all_metrics) > 0, "all metrics needs to be a dict with at least one value"
         self.data = data
         self.get_variable_list()
@@ -54,13 +54,13 @@ class MetricComputer:
             if not self.data[coord].count() == 1:
                 self.data = swap_coord_order(self.data, coord)
 
-    def sel(self, inplace=False, **kwargs):
+    def sel(self, **kwargs):
         """
             Exposes the xarray .sel function
         """
         new_data = self.data.copy()
         new_data = new_data.sel(**kwargs)
-        if inplace:
+        if hasattr(self, 'available_metrics'):
             return MetricComputer.with_available_metrics(new_data, self.all_metrics)
 
         return MetricComputer(new_data, self.all_metrics)

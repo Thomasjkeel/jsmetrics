@@ -114,9 +114,12 @@ def subset_data(data, metric, ignore_coords=None):
             climate data
         metric : dict
             jetstream metric from jetstream metric dictionary
-        ignore_coords : list or set
+        ignore_coords : list or tuple
             coordiantes to not subset
     """
+    if ignore_coords:
+        assert isinstance(ignore_coords, (list, tuple)), "ignore coords need to be list or set"
+    assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
     ## overwrite which coords will be changed
     coords_to_subset = get_coords_to_subset(ignore_coords, metric)
     ## check if subset is still possible

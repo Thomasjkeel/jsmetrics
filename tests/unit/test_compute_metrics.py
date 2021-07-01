@@ -82,7 +82,7 @@ class TestMetricComputer(unittest.TestCase):
         metric_computer = compute_metrics.MetricComputer.with_available_metrics(self.data, all_metrics=JETSTREAM_METRIC_DICT)
         test_metric_name = 'FrancisVavrus2015'
         result = metric_computer.compute_metric_from_data(test_metric_name)
-        self.assertEquals(float(result['mci'][0][0][0]), -0.015743955969810486)
+        self.assertEqual(float(result['mci'][0][0][0]), -0.015743955969810486)
         bad_metric_computer = compute_metrics.MetricComputer(self.data, all_metrics={"1":1})
         self.assertRaises(KeyError, lambda: bad_metric_computer.compute_metric_from_data(test_metric_name))
         #TODO: add subset and calc kwarg tests
@@ -110,7 +110,7 @@ class TestComputeMetricFunctions(unittest.TestCase):
         result = tested_func(self.data, test_metric, ignore_coords=['plev'])
         plev_coords_before = list(self.data['plev'].values)
         plev_coords_after = result['plev'].values.tolist()
-        self.assertEquals(len(plev_coords_before), len(plev_coords_after))
+        self.assertEqual(len(plev_coords_before), len(plev_coords_after))
 
     def test_get_coords_to_subset(self):
         tested_func = compute_metrics.get_coords_to_subset

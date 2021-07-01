@@ -11,7 +11,6 @@
 import numpy as np
 import xarray as xr
 from metrics import compute_metrics
-import metrics
 from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 import unittest
@@ -88,27 +87,52 @@ class TestMetricComputer(unittest.TestCase):
         self.assertRaises(KeyError, lambda: bad_metric_computer.compute_metric_from_data(test_metric_name))
         #TODO: add subset and calc kwarg tests
  
- 
+
 class TestComputeMetricFunctions(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()
+
     def test_subset_data(self):
+        tested_func = compute_metrics.subset_data
+        self.assertRaises(AssertionError, lambda: tested_func([], 'hello'))
+        test_metric = JETSTREAM_METRIC_DICT['FrancisVavrus2015']
+        result = tested_func(self.data, test_metric)
+        plev_coords_before = list(self.data['plev'].values)
+        plev_coords_after = [result['plev'].values.tolist()]
+        self.assertTrue(plev_coords_after[0] in plev_coords_before)
+        self.assertNotEqual(len(plev_coords_before), len(plev_coords_after))
+
+    def test_subset_data_with_ignore_coords(self):
+        tested_func = compute_metrics.subset_data
+        test_metric = JETSTREAM_METRIC_DICT['FrancisVavrus2015']
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, test_metric, ignore_coords="wrong"))
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, test_metric, ignore_coords=("wrong")))
+        result = tested_func(self.data, test_metric, ignore_coords=['plev'])
+        plev_coords_before = list(self.data['plev'].values)
+        plev_coords_after = result['plev'].values.tolist()
+        self.assertEquals(len(plev_coords_before), len(plev_coords_after))
+
+    def test_get_coords_to_subset(self):
+        tested_func = compute_metrics.get_coords_to_subset
         pass
 
     def test_check_all_variables(self):
+        tested_func = compute_metrics.check_all_variables_available
         pass
 
     def test_check_all_chords(self):
-        pass
+        tested_func = compute_metrics.check_all_coords_available
+
 
     def test_check_coords_meet_reqs(self):
-        pass
+        tested_func = compute_metrics.check_if_coord_vals_meet_reqs
 
     def test_compute_metrics(self):
-        pass
+        tested_func = compute_metrics.compute_metric
+
 
     def test_swap_coords(self):
-        pass
+        tested_func = compute_metrics.swap_coord_order
 
 
 if __name__ == "__main__":

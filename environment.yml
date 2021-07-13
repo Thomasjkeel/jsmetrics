@@ -12,5 +12,7 @@ dependencies:
   - scipy==1.5.3
   - Cartopy==0.18.0
   - pip==21.1
+  - pytest
+  - parameterized
   - pip:
      - xarray==0.17.0

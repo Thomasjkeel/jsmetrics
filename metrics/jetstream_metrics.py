@@ -58,8 +58,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
         window_size int: number of days
         Follows an in-text description of 4-steps describing the algorithm mof jet-stream identification from Woolings et al. (2010). 
         Will calculate this metric based on data (regardless of pressure level of time span etc.). 
-        TODO: Ask Chris about fourier filtering (step 4)
-        TODO: Maybe note about using season or not
+        TODO: Ask Chris about fourier filtering (step 5)
 
         returns:
             max_lat_ws (numpy.ndarray):
@@ -69,22 +68,24 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     mean_data = jetstream_metrics_utils.get_zonal_mean(data)
     ## Step 2
     print('Step 2: Applying %s day lancoz filter...' % (filter_freq))
-    filtered_mean_data = jetstream_metrics_utils.apply_lancoz_filter(mean_data, filter_freq, window_size)
+    lancoz_filtered_mean_data = jetstream_metrics_utils.apply_lancoz_filter(mean_data, filter_freq, window_size)
     ## Step 3
     print('Step 3: Calculating max windspeed and latitude where max windspeed found...')
-    max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, filtered_mean_data[:])))
-    ## Step 4 — fourier filtering  TODO
-    ### make seasonal (DJF, MAM, JJA, SON)
-    # seasonal_data = filtered_mean_data.resample(time='Q-NOV').mean()
-    # filled_seasonal_data = seasonal_data[:,0].fillna(0)
-    ## loop over each latitude and calculate high frequency
-    # for lat in seasonal_data['lat']:
-    #     lat_data = seasonal_data.sel(lat=lat)
-    #     lat_data = np.array(lat_data.fillna(0))
-    #     filtered_sig = jetstream_metrics_utils.fourier_filter(lat_data)
-    #     ### code to put back into xarray format
-
-    return max_lat_ws
+    max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, lancoz_filtered_mean_data[:])))
+    mean_data_lat_ws = jetstream_metrics_utils.assign_lat_ws_to_data(mean_data, max_lat_ws)
+    ## Step 4 get seasonal data (DJF, MAM, JJA, SON)
+    print('Step 4: Get DJF data')
+    seasonal_data = mean_data_lat_ws.resample(time='Q-NOV').mean()
+    djf_data = seasonal_data.sel(time=jetstream_metrics_utils.is_djf(seasonal_data['time.month']))
+    ## Step 5
+    print('Step 5: Apply low-freq fourier filter to both max lats and max windspeed')
+    # TODO: Chris
+    djf_max_lats = np.array(djf_data['max_lats'])
+    djf_max_ws = np.array(djf_data['max_ws'])
+    fourier_filtered_djf_lats = jetstream_metrics_utils.apply_low_freq_fourier_filter(djf_max_lats, freq_to_use=2)
+    fourier_filtered_djf_ws = jetstream_metrics_utils.apply_low_freq_fourier_filter(djf_max_ws, freq_to_use=2)
+    fourier_filtered_djf_data = jetstream_metrics_utils.assign_filtered_vals_to_data(djf_data, fourier_filtered_djf_lats, fourier_filtered_djf_ws)
+    return fourier_filtered_djf_data
     
         
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):

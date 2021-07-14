@@ -183,13 +183,12 @@ def fourier_filter(data, timestep=1):
     power = np.abs(data)**2
     pos_mask = np.where(sample_freq > 0)
     freqs = sample_freq[pos_mask]
-    peak_freq = freqs[power[pos_mask].argmax()] # TODO change to np.argmax(data) after the tests for Woolings is set up
+    peak_freq = freqs[np.argmax(power[pos_mask])]
     
     high_freq_fft = fourier_transform.copy()
     high_freq_fft[np.abs(sample_freq) > peak_freq] = 0
     filtered_sig = fftpack.ifft(high_freq_fft)
     return filtered_sig
-
 
 class JetStreamCoreIdentificationAlgorithm:
     """        

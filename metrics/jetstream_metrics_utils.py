@@ -20,6 +20,13 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+def is_djf(month):
+    """
+        Mask used for getting DJF
+    """
+    return (month == 12) | (month >= 1) & (month <= 2)
+
+
 def remove_duplicates(vals):
     """
         removes duplicates see: https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
@@ -139,31 +146,48 @@ def apply_lancoz_filter(data, filter_freq, window_size):
     return window_cons
     
 
-def get_latitude_and_speed_where_max_ws(data_row, latitude_col='lat'):
+def get_latitude_and_speed_where_max_ws(data_row):
     """
-        Will return the latitude and windspeed at the index of maximum wind speed 
+        Will return the latitude and windspeed at the index of maximum wind speed from a row of data
         Used in Woolings et al. 2010
     """
     try:
         assert hasattr(data_row, 'isnull')
     except:
         raise AttributeError("input needs to have isnull method")
-
+    
+    if not 'lat' in data_row.coords:
+        raise AttributeError("input need to have \'lat\' column")
+    
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
         max_speed_loc = np.argmax(data_row.data)
         max_speed = data_row[max_speed_loc]
-        lat_at_max = float(max_speed[latitude_col].values)
+        lat_at_max = float(max_speed['lat'].values)
         speed_at_max = float(max_speed.data)
         return lat_at_max, speed_at_max 
     else:
         return None, None
 
 
-def fourier_filter(data, timestep=1):
+def assign_lat_ws_to_data(data, max_lat_ws):
     """
-        Carries out a Fourier transform for high frequency filtering
-        TAKEN FROM: https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
+        Will return a data array with the maximum windspeed and latitude of that 
+        maximum wind speed
+        Used in Woolings et al. 2010
+    """
+    max_lats = max_lat_ws[:,0]
+    max_ws = max_lat_ws[:,1]
+    data_with_max_lats_ws = data.assign({'max_lats':(('time'),max_lats), 'max_ws':(('time'),max_ws)})
+    data_with_max_lats_ws['max_lats'] = data_with_max_lats_ws['max_lats'].astype(float)
+    data_with_max_lats_ws['max_ws'] = data_with_max_lats_ws['max_ws'].astype(float)
+    return data_with_max_lats_ws
+
+
+def apply_low_freq_fourier_filter(data, timestep=1, freq_to_use=2):
+    """
+        Carries out a Fourier transform for filtering keeping only low frequencies
+        ADAPTED FROM: https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
         NOTE: NOT CURRENTLY WORKING PROPERLY
         
         Used in Woolings et al. 2010
@@ -173,6 +197,7 @@ def fourier_filter(data, timestep=1):
             time series data
         timestep : float or int
             number used in the Discrete Fourier Transform sample frequencies (fftfreq)
+            
     """
     fourier_transform = fftpack.fft(data)
     
@@ -183,12 +208,27 @@ def fourier_filter(data, timestep=1):
     power = np.abs(data)**2
     pos_mask = np.where(sample_freq > 0)
     freqs = sample_freq[pos_mask]
-    peak_freq = freqs[np.argmax(power[pos_mask])]
+    peak_freq = freqs[np.argsort(power[pos_mask])[:freq_to_use][::1]]  ## I MODIFIED THIS TO GET THE X lowest freqs
     
+    ## remove low frequencies
     high_freq_fft = fourier_transform.copy()
-    high_freq_fft[np.abs(sample_freq) > peak_freq] = 0
+    high_freq_fft[np.abs(sample_freq) > np.max(peak_freq)] = 0
     filtered_sig = fftpack.ifft(high_freq_fft)
     return filtered_sig
+
+
+def assign_filtered_vals_to_data(data, filtered_max_lats, filtered_max_ws):
+    """
+        Assigns the filtered data back to the returned dataset
+        Used in Woolings et al. 2010
+        
+    """
+    filtered_data = data.assign({'filtered_max_lats':(('time'), filtered_max_lats),\
+                      'filtered_max_ws':(('time'), filtered_max_ws)})
+    filtered_data['filtered_max_lats'] = filtered_data['filtered_max_lats'].astype(float)
+    filtered_data['filtered_max_ws'] = filtered_data['filtered_max_ws'].astype(float)
+    return filtered_data
+
 
 class JetStreamCoreIdentificationAlgorithm:
     """        

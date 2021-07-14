@@ -8,7 +8,6 @@
 
 ### imports
 import numpy as np
-from numpy.core.fromnumeric import mean
 import xarray as xr
 from .import jetstream_metrics_utils
 # import jetstream_metrics.jetstream_metrics_utils

@@ -156,9 +156,6 @@ def get_latitude_and_speed_where_max_ws(data_row):
     except:
         raise AttributeError("input needs to have isnull method")
     
-    if not 'lat' in data_row.coords:
-        raise AttributeError("input need to have \'lat\' column")
-    
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
         max_speed_loc = np.argmax(data_row.data)

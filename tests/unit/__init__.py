@@ -1,7 +1,9 @@
 import numpy as np
 import pandas as pd
 import xarray as xr
+import random
 
+random.seed(42)
 
 def set_up_test_uv_data():
     u_data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
@@ -20,12 +22,16 @@ def set_up_test_zg_data():
     return data
 
 
+def make_fake_data(data, variable_name):
+    data[variable_name] = data[variable_name] + random.randint(0,5)
+    return data 
+
+
 def make_fake_seasonal_data(data):
     data['time'] = np.array(['2015-01-01T00:00:00.000000000', '2015-01-02T00:00:00.000000000',
        '2016-01-01T00:00:00.000000000', '2016-01-02T00:00:00.000000000',
        '2017-01-01T00:00:00.000000000'], dtype='datetime64[ns]')
     return data
-
 
 def set_up_nan_dataset():
     lon = [[99.32, 99.83], [99.23, 99.73]]

@@ -11,7 +11,7 @@
 import xarray as xr
 import numpy as np
 from metrics import jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
-from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset, make_fake_seasonal_data
+from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset, make_fake_seasonal_data, make_fake_data
 import unittest
 from parameterized import parameterized
 
@@ -126,8 +126,9 @@ class TestWoolings2010(unittest.TestCase):
     def test_metric(self):
         result = jetstream_metrics.woolings_et_al_2010(self.data, filter_freq=1, window_size=2)
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(result[1][0], 36.25)
-        self.assertEqual(result[1][1], 44.532657623291016)
+        print(result['filtered_max_ws'][0])
+        self.assertEqual(result['filtered_max_lats'][0], 36.25)
+        self.assertEqual(result['filtered_max_ws'][0], 44.532657623291016)
 
     def test_get_zonal_mean(self):
         tested_func = jetstream_metrics_utils.get_zonal_mean

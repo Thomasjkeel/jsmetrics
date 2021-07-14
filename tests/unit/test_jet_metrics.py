@@ -122,6 +122,17 @@ class TestWoolings2010(unittest.TestCase):
     def setUp(self):
         self.data  = set_up_test_u_data()
         self.data = make_fake_seasonal_data(self.data)
+        self.test_sig = self._get_test_sig()
+    
+    @staticmethod
+    def _get_test_sig():
+        # Seed the random number generator
+        np.random.seed(42)
+        time_step = 0.25
+        period = 5.
+        time_vec = np.arange(0, 5, time_step)
+        test_sig = sig = (np.sin(2 * np.pi / period * time_vec) + 0.5 * np.random.randn(time_vec.size))
+        return test_sig
     
     def test_metric(self):
         result = jetstream_metrics.woolings_et_al_2010(self.data, filter_freq=1, window_size=2)
@@ -157,7 +168,9 @@ class TestWoolings2010(unittest.TestCase):
 
     def test_apply_fourier_filter(self):
         tested_func = jetstream_metrics_utils.apply_low_freq_fourier_filter
-                
+        res = tested_func(self.test_sig)
+        self.assertEqual(float(res[10]), -0.20561732775899255)
+
 
 class TestManney2011(unittest.TestCase):
     def setUp(self):

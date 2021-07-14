@@ -25,8 +25,8 @@ class TestPlot(unittest.TestCase):
         self.metric_computer = compute_metrics.MetricComputer(UKESM1_SSP585, all_metrics=JETSTREAM_METRIC_DICT)
 
     def plot_fig(self, save=False):
-        max_lats = self.result[:,0]
-        max_ws = self.result[:,1]
+        max_lats = self.result['filtered_max_lats']
+        max_ws = self.result['filtered_max_ws']
         fig, ax = plt.subplots(1)
         ax.plot(max_lats)
         ax.plot(max_ws)
@@ -35,8 +35,8 @@ class TestPlot(unittest.TestCase):
             fig.savefig('tests/figures/woolings_test.png', bbox_inches='tight')
 
     def test_plot(self): 
-        self.result = self.metric_computer.compute_metric_from_data('Woolings2010', calc_kwargs={"filter_freq":1, "window_size":5})
-        self.assertIsInstance(self.result, np.ndarray)
+        self.result = self.metric_computer.compute_metric_from_data('Woolings2010', calc_kwargs={"filter_freq":1, "window_size":2})
+        self.assertIsInstance(self.result, xr.Dataset)
         self.plot_fig()
         self.plot_fig(save=True)
         

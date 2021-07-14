@@ -18,6 +18,10 @@ class TestPlot(unittest.TestCase):
         UKESM1_SSP585_U = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
         UKESM1_SSP585_V = xr.open_dataset("tests/data/va_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
         UKESM1_SSP585 = xr.merge([UKESM1_SSP585_U, UKESM1_SSP585_V])
+        ## make fake seasonal data
+        UKESM1_SSP585['time'] = np.array(['2015-01-01T00:00:00.000000000', '2015-01-02T00:00:00.000000000',
+       '2016-01-01T00:00:00.000000000', '2016-01-02T00:00:00.000000000',
+       '2017-01-01T00:00:00.000000000'], dtype='datetime64[ns]')
         self.metric_computer = compute_metrics.MetricComputer(UKESM1_SSP585, all_metrics=JETSTREAM_METRIC_DICT)
 
     def plot_fig(self, save=False):

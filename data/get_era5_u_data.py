@@ -10,7 +10,7 @@ c.retrieve("reanalysis-era5-pressure-levels",
     "date":"1979-01-01/2020-03-01",
     "time": "00:00",
     "pressure_level": p_levels,
-    "area": [90, -360, 0, -0],
+    "area": [90, 0, 0, 360],
     "product_type": "reanalysis",
     "format": 'netcdf',
     "grid": "1.0/1.0"

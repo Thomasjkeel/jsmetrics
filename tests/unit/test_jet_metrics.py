@@ -121,7 +121,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
 class TestWoolings2010(unittest.TestCase):
     def setUp(self):
         self.data  = set_up_test_u_data()
-        self.data = make_fake_seasonal_data(self.data)
+        # self.data = make_fake_seasonal_data(self.data)
         self.test_sig = self._get_test_sig()
     
     @staticmethod
@@ -137,9 +137,9 @@ class TestWoolings2010(unittest.TestCase):
     def test_metric(self):
         result = jetstream_metrics.woolings_et_al_2010(self.data, filter_freq=1, window_size=2)
         self.assertIsInstance(result, xr.Dataset)
-        print(result['filtered_max_ws'][0])
-        self.assertEqual(result['filtered_max_lats'][0], 36.25)
-        self.assertEqual(result['filtered_max_ws'][0], 44.532657623291016)
+        print(result['ff_max_lats'][0])
+        self.assertEqual(float(result['ff_max_lats'][0]), 36.25)
+        self.assertEqual(float(result['ff_max_ws'][0]), 43.365413665771484)
 
     def test_get_zonal_mean(self):
         tested_func = jetstream_metrics_utils.get_zonal_mean
@@ -168,8 +168,8 @@ class TestWoolings2010(unittest.TestCase):
 
     def test_apply_fourier_filter(self):
         tested_func = jetstream_metrics_utils.apply_low_freq_fourier_filter
-        res = tested_func(self.test_sig)
-        self.assertEqual(float(res[10]), -0.20561732775899255)
+        res = tested_func(self.test_sig, 2)
+        self.assertEqual(float(res[10]), -0.23170884640623124)
 
 
 class TestManney2011(unittest.TestCase):

@@ -5,6 +5,7 @@ To-Do:
     - for example what if 'v' or 'v-wind' is passed to func instead of 'va'
     - for example what if 'mbar' or 'model levels' instead of 'plev'
 - add raise exception statements to required 
+- Add way of subsetting longitude if it wraps around 0-360
 - Improve readme(s) and add links (DOI?)m (https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
 - add lat and lon subsetting to jetstream_metrics_dict
 - look into bash arrays and running multiple metrics

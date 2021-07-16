@@ -169,7 +169,7 @@ class TestWoolings2010(unittest.TestCase):
     def test_apply_fourier_filter(self):
         tested_func = jetstream_metrics_utils.apply_low_freq_fourier_filter
         res = tested_func(self.test_sig, 2)
-        self.assertEqual(float(res[10]), -0.23170884640623124)
+        self.assertEqual(float(res[10]), -0.0956296962962675)
 
 
 class TestManney2011(unittest.TestCase):

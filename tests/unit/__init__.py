@@ -3,7 +3,6 @@ import pandas as pd
 import xarray as xr
 import random
 
-random.seed(42)
 
 def set_up_test_uv_data():
     u_data = xr.open_dataset("tests/data/ua_day_UKESM1-0-LL_ssp585_r2i1p1f2_gn_20150101-20150105.nc")
@@ -23,6 +22,7 @@ def set_up_test_zg_data():
 
 
 def make_fake_data(data, variable_name):
+    random.seed(42)
     data[variable_name] = data[variable_name] + random.randint(0,5)
     return data 
 

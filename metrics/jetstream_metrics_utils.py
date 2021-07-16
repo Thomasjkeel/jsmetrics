@@ -235,18 +235,18 @@ def apply_low_freq_fourier_filter(data, timestep=1, freq_to_use=2):
     return filtered_sig
 
 
-def assign_filtered_vals_to_data(data, filtered_max_lats, filtered_max_ws):
+def assign_filtered_vals_to_data(data, filtered_max_lats, filtered_max_ws, dim):
     """
         Assigns the filtered data back to the returned dataset
         Used in Woolings et al. 2010
         
     """
-    filtered_data = data.assign({'filtered_max_lats':(('time'), filtered_max_lats),\
-                      'filtered_max_ws':(('time'), filtered_max_ws)})
-    filtered_data['filtered_max_lats'] = filtered_data['filtered_max_lats'].astype(float)
-    filtered_data['filtered_max_ws'] = filtered_data['filtered_max_ws'].astype(float)
+    filtered_data = data.assign({'ff_max_lats':((dim), filtered_max_lats),\
+                      'ff_max_ws':((dim), filtered_max_ws)})
+    filtered_data['ff_max_lats'] = filtered_data['ff_max_lats'].astype(float)
+    filtered_data['ff_max_ws'] = filtered_data['ff_max_ws'].astype(float)
     return filtered_data
-
+    
 
 class JetStreamCoreIdentificationAlgorithm:
     """        

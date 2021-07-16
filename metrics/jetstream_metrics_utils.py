@@ -202,36 +202,35 @@ def assign_lat_ws_to_data(data, max_lat_ws):
     return data_with_max_lats_ws
 
 
-def apply_low_freq_fourier_filter(data, timestep=1, freq_to_use=2):
+def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
     """
         Carries out a Fourier transform for filtering keeping only low frequencies
         ADAPTED FROM: https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
-        NOTE: NOT CURRENTLY WORKING PROPERLY
         
         Used in Woolings et al. 2010
         Parameters
         ----------
-        data : np.array (1-d) 
-            time series data
-        timestep : float or int
-            number used in the Discrete Fourier Transform sample frequencies (fftfreq)
+        data : (np.array - 1-d) 
+            time series data at regular intervals
+        highest_freq_to_keep : (int)
+            highest frequency to keep in the fourier transform expression
+            NOTE: starts at 0, so highest_freq_to_keep=1 will only keep the constant and first expresion
+            
+        
+        Usage
+        ----------
+        # Apply filter of the two lowest frequencies
+        apply_low_freq_fourier_filter(data, highest_freq_to_keep=2)
             
     """
+    ## Fast Fourier Transform on the time series data
     fourier_transform = fftpack.fft(data)
     
-    # The corresponding frequencies TODO: what does this do?
-    sample_freq = fftpack.fftfreq(data.size, d=timestep)
+    ## Remove low frequencies
+    fourier_transform[highest_freq_to_keep+1:] = 0
     
-    # And the power (sig_fft is of complex dtype)
-    power = np.abs(data)**2
-    pos_mask = np.where(sample_freq > 0)
-    freqs = sample_freq[pos_mask]
-    peak_freq = freqs[np.argsort(power[pos_mask])[:freq_to_use][::1]]  ## I MODIFIED THIS TO GET THE X lowest freqs
-    
-    ## remove low frequencies
-    high_freq_fft = fourier_transform.copy()
-    high_freq_fft[np.abs(sample_freq) > np.max(peak_freq)] = 0
-    filtered_sig = fftpack.ifft(high_freq_fft)
+    ## Inverse Fast Fourier Transform the time series data back
+    filtered_sig = fftpack.ifft(fourier_transform)
     return filtered_sig
 
 
@@ -246,7 +245,7 @@ def assign_filtered_vals_to_data(data, filtered_max_lats, filtered_max_ws, dim):
     filtered_data['ff_max_lats'] = filtered_data['ff_max_lats'].astype(float)
     filtered_data['ff_max_ws'] = filtered_data['ff_max_ws'].astype(float)
     return filtered_data
-    
+
 
 class JetStreamCoreIdentificationAlgorithm:
     """        

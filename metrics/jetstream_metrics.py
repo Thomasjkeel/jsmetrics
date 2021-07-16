@@ -86,7 +86,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     fourier_filtered_ws = jetstream_metrics_utils.apply_low_freq_fourier_filter(climatology['max_ws'].values, highest_freq_to_keep=2)
     ## Step 6
     print('Step 6: Join filtered climatology back to the data')
-    time_dim = climatology['max_ws'].dim[0]
+    time_dim = climatology['max_ws'].dims[0]
     fourier_filtered_data = jetstream_metrics_utils.assign_filtered_vals_to_data(mean_data_lat_ws, fourier_filtered_lats, fourier_filtered_ws, dim=time_dim)
     return fourier_filtered_data
         

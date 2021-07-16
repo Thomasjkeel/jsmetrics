@@ -61,8 +61,8 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
         Parameters
         ----------
         data (xarray.Dataset): input data containing u and v wind
-        filter_freq int: number of days in filter
-        window_size int: number of days in window for Lancoz filter
+        filter_freq (int): number of days in filter
+        window_size (int): number of days in window for Lancoz filter
 
         returns:
             max_lat_ws (numpy.ndarray):
@@ -77,20 +77,18 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     print('Step 3: Calculating max windspeed and latitude where max windspeed found...')
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, lancoz_filtered_mean_data[:])))
     mean_data_lat_ws = jetstream_metrics_utils.assign_lat_ws_to_data(mean_data, max_lat_ws)
-    ## Step 4 get seasonal data (DJF, MAM, JJA, SON)
-    print('Step 4: Get DJF data')
-    seasonal_data = mean_data_lat_ws.resample(time='Q-NOV').mean()
-    djf_data = seasonal_data.sel(time=jetstream_metrics_utils.is_djf(seasonal_data['time.month']))
+    ## Step 4
+    print('Step 4: Make climatology')
+    climatology = jetstream_metrics_utils.make_climatology(mean_data_lat_ws, 'month')
     ## Step 5
     print('Step 5: Apply low-freq fourier filter to both max lats and max windspeed')
-    # TODO: Chris
-    djf_max_lats = np.array(djf_data['max_lats'])
-    djf_max_ws = np.array(djf_data['max_ws'])
-    fourier_filtered_djf_lats = jetstream_metrics_utils.apply_low_freq_fourier_filter(djf_max_lats, freq_to_use=2)
-    fourier_filtered_djf_ws = jetstream_metrics_utils.apply_low_freq_fourier_filter(djf_max_ws, freq_to_use=2)
-    fourier_filtered_djf_data = jetstream_metrics_utils.assign_filtered_vals_to_data(djf_data, fourier_filtered_djf_lats, fourier_filtered_djf_ws)
-    return fourier_filtered_djf_data
-    
+    fourier_filtered_lats = jetstream_metrics_utils.apply_low_freq_fourier_filter(climatology['max_lats'].values, highest_freq_to_keep=2)
+    fourier_filtered_ws = jetstream_metrics_utils.apply_low_freq_fourier_filter(climatology['max_ws'].values, highest_freq_to_keep=2)
+    ## Step 6
+    print('Step 6: Join filtered climatology back to the data')
+    time_dim = climatology['max_ws'].dim[0]
+    fourier_filtered_data = jetstream_metrics_utils.assign_filtered_vals_to_data(mean_data_lat_ws, fourier_filtered_lats, fourier_filtered_ws, dim=time_dim)
+    return fourier_filtered_data
         
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """

@@ -20,17 +20,21 @@ class TestPlot(unittest.TestCase):
         UKESM1_SSP585 = xr.merge([UKESM1_SSP585_U, UKESM1_SSP585_V])
         ## make fake seasonal data
         UKESM1_SSP585['time'] = np.array(['2015-01-01T00:00:00.000000000', '2015-01-02T00:00:00.000000000',
-       '2016-01-01T00:00:00.000000000', '2016-01-02T00:00:00.000000000',
-       '2017-01-01T00:00:00.000000000'], dtype='datetime64[ns]')
+       '2015-02-01T00:00:00.000000000', '2015-02-02T00:00:00.000000000',
+       '2015-02-03T00:00:00.000000000'], dtype='datetime64[ns]')
         self.metric_computer = compute_metrics.MetricComputer(UKESM1_SSP585, all_metrics=JETSTREAM_METRIC_DICT)
 
     def plot_fig(self, save=False):
-        max_lats = self.result['filtered_max_lats']
-        max_ws = self.result['filtered_max_ws']
+        max_lats = self.result['max_lats']
+        max_ws = self.result['max_ws']
+        ff_max_lats = self.result['ff_max_lats']
+        ff_max_ws = self.result['ff_max_ws']
         fig, ax = plt.subplots(1)
         ax.plot(max_lats)
+        ax.plot(ff_max_lats)
         ax.plot(max_ws)
-        plt.legend(['latitude of max windspeed', 'windspeed'])
+        ax.plot(ff_max_ws)
+        plt.legend(['latitude', 'fourier filtered latitude', 'windspeed', 'fourier filtered wind-speed'])
         if save:
             fig.savefig('tests/figures/woolings_test.png', bbox_inches='tight')
 
@@ -38,7 +42,7 @@ class TestPlot(unittest.TestCase):
         self.result = self.metric_computer.compute_metric_from_data('Woolings2010', calc_kwargs={"filter_freq":1, "window_size":2})
         self.assertIsInstance(self.result, xr.Dataset)
         self.plot_fig()
-        self.plot_fig(save=True)
+        self.plot_fig(save=False)
         
 
 if __name__ == "__main__":

@@ -20,6 +20,26 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+## GENERAL UTILS
+def make_climatology(data, freq):
+    """
+        Makes a climatology at given interval (i.e. days, months, season)
+        
+        Parameters
+        ----------
+        data (xarray.Dataset): data with regular time stamp
+        freq (str): 'day', 'month' or 'season'
+        
+        Usage
+        ----------
+        climatology = make_climatology(data, 'month')
+        
+        
+    """
+    climatology = data.groupby("time.%s" % (freq)).mean("time")
+    return climatology
+
+
 def is_djf(month):
     """
         Mask used for getting DJF
@@ -51,6 +71,7 @@ def get_all_plev_hPa(data):
         plevs = plevs/100 
     return plevs
 
+## END OF GENERAL UTILS
 
 def get_sum_weighted_ws(data, all_plevs_hPa):
     """

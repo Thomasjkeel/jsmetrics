@@ -131,7 +131,7 @@ class TestWoolings2010(unittest.TestCase):
         time_step = 0.25
         period = 5.
         time_vec = np.arange(0, 5, time_step)
-        test_sig = sig = (np.sin(2 * np.pi / period * time_vec) + 0.5 * np.random.randn(time_vec.size))
+        test_sig = (np.sin(2 * np.pi / period * time_vec) + 0.5 * np.random.randn(time_vec.size))
         return test_sig
     
     def test_metric(self):

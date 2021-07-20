@@ -71,7 +71,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     mean_data = jetstream_metrics_utils.get_zonal_mean(data)
     ## Step 2
     print('Step 2: Applying %s day lancoz filter...' % (filter_freq))
-    lancoz_filtered_mean_data = jetstream_metrics_utils.apply_lancoz_filter(mean_data, filter_freq, window_size)
+    lancoz_filtered_mean_data = jetstream_metrics_utils.apply_lanczos_filter(mean_data, filter_freq, window_size)
     ## Step 3
     print('Step 3: Calculating max windspeed and latitude where max windspeed found...')
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, lancoz_filtered_mean_data[:])))

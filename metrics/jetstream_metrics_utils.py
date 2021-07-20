@@ -147,7 +147,7 @@ def low_pass_weights(window, cutoff):
     return w[0+(window%2):-1] # edited from w[1:-1]
 
 
-def apply_lancoz_filter(data, filter_freq, window_size):
+def apply_lanczos_filter(data, filter_freq, window_size):
     """
         Will carry out Lanczos low-pass filter
 

@@ -148,7 +148,7 @@ class TestWoolings2010(unittest.TestCase):
         self.assertIsInstance(tested_func(self.data), xr.Dataset)
 
     def test_apply_lancoz_filter(self):
-        tested_func = jetstream_metrics_utils.apply_lancoz_filter
+        tested_func = jetstream_metrics_utils.apply_lanczos_filter
         self.assertRaises(AssertionError, lambda: tested_func(self.data, -2, 1))
         self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, -1))
         self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 1))

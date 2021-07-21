@@ -49,6 +49,15 @@ def archer_caldeira_2008(data):
         Will calculate only the mass-weighted wind speed
         Similar to Koch et al. 2006 -> "To overcome this problem, we define jet stream properties via integrated quantities, which are more numerically stable and less grid-dependent than are simple maxima and minima."
     """
+    print('Step 1. Get monthly means')
+    mon_mean = data.groupby('time.month').mean()
+    print('Step 2. Calculate mass weighted average')
+    mass_weighted_average = jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
+    mass_flux_weighted_pressure = jetstream_metrics_utils.calc_mass_flux_weighted_pressure(mon_mean)
+    mass_flux_weighted_latitude = jetstream_metrics_utils.calc_mass_flux_weighted_latitude(mon_mean, lat_min=15, lat_max=75)
+    data = data.assign({'mass_weighted_average_ws':(('month', 'lat', 'lon'), mass_weighted_average),\
+                        'mass_flux_weighted_pressure':(('month', 'lat', 'lon'), mass_flux_weighted_pressure) ,\
+                        'mass_flux_weighted_latitude':(('month', 'lon'), mass_flux_weighted_latitude)})
     return data
 
 

@@ -101,6 +101,126 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
     return sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
 
 
+def calc_atmospheric_mass_at_kPa(pressure, gravity=9.81, atmospheric_area=5.1e8):
+    """
+        Will calculate the atmospheric mass at a given pressure level.
+        
+        Radius of earth (R) = 6.372E3 km;
+        Surface area of earth = 4 Pi R^2 = 5.1E8 km^2
+
+        Used in Archer & Caldeira 2008
+        
+        Returns 
+
+        Parameters
+        ---------------
+        pressure (float):
+            in kPa
+        gravity (float):
+            m/s^2
+    """
+    return (pressure/gravity) * atmospheric_area
+
+
+def get_atm_mass_at_one_hPa(hPa):
+    """
+        Used in Archer & Caldeira 2008
+    """
+    kPa = hPa / 10
+    atm_mass = calc_atmospheric_mass_at_kPa(kPa) 
+    return atm_mass
+
+
+def get_weighted_average_at_one_Pa(data, Pa, atm_mass):
+    """
+        Used in Archer & Caldeira 2008
+    """
+    return atm_mass * (np.sqrt(data['ua'].sel(plev=Pa)**2 + data['va'].sel(plev=Pa)**2))
+
+
+def get_mass_weighted_average_ws(data, plev_flux=False):
+    """
+        Used in Archer & Caldeira 2008
+    
+        TODO: Refactor so neat
+    """
+    sum_weighted_ws = None
+    for plev_Pa in data['plev'].data:
+        plev_hPa = plev_Pa / 100 ## TODO
+        atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
+        weighted_average = get_weighted_average_at_one_Pa(data, plev_Pa, atm_mass)
+        if sum_weighted_ws is None:
+            if plev_flux:
+                sum_weighted_ws = weighted_average * plev_hPa
+            else:
+                sum_weighted_ws = weighted_average
+        else:
+            if plev_flux:
+                sum_weighted_ws += weighted_average * plev_hPa
+            else:
+                sum_weighted_ws += weighted_average
+    return sum_weighted_ws
+
+
+def get_sum_atm_mass(data):
+    """
+        Used in Archer & Caldeira 2008
+    """
+    sum_atm_mass = 0
+    for plev_Pa in data['plev'].data:
+        plev_hPa = plev_Pa / 100 ## TODO
+        atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
+        sum_atm_mass += atm_mass
+    return sum_atm_mass
+
+
+def calc_mass_weighted_average(data):
+    """
+        Used in Archer & Caldeira 2008
+        TODO: add equation
+        TODO: write func desc
+    """
+    sum_atm_mass = get_sum_atm_mass(data)
+    sum_weighted_ws = get_mass_weighted_average_ws(data)
+    weighted_average = sum_weighted_ws / sum_atm_mass
+    return weighted_average
+
+
+def calc_mass_flux_weighted_pressure(data):
+    """
+        Used in Archer & Caldeira 2008
+        TODO: add equation
+    """
+    sum_weighted_ws = get_mass_weighted_average_ws(data)
+    sum_weighted_ws_plev_flux = get_mass_weighted_average_ws(data, plev_flux=True)
+    mass_flux_weighted_pressure = sum_weighted_ws_plev_flux / sum_weighted_ws
+    return mass_flux_weighted_pressure
+
+
+def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
+    """
+        Used in Archer & Caldeira 2008
+        TODO: add equation
+    """
+    assert 'lat' in data.coords, "\'lat\' needs to be in data.coords"
+    
+    sub_data = data.sel(lat=slice(lat_min, lat_max))
+    
+    sum_weighted_lat_flux = None
+    sum_weighted_ws_by_lat = None
+    for lat in sub_data['lat'].data:
+        lat_data = sub_data.sel(lat=lat)
+        lat_sum_weighted_ws = get_mass_weighted_average_ws(lat_data) 
+        if sum_weighted_lat_flux is None:
+            sum_weighted_ws_by_lat = lat_sum_weighted_ws
+            sum_weighted_lat_flux = lat_sum_weighted_ws * lat
+        else:
+            sum_weighted_ws_by_lat += lat_sum_weighted_ws
+            sum_weighted_lat_flux += lat_sum_weighted_ws * lat
+    mass_flux_weighted_latitude = sum_weighted_lat_flux / sum_weighted_ws_by_lat  
+    return mass_flux_weighted_latitude
+    
+
 def get_zonal_mean(data):
     """
         Will get the zonal mean either by pressure level (plev) or for one layer

@@ -211,6 +211,13 @@ def simpson_et_al_2018(data):
     return
 
 
+def bracegirdle_et_al_2019(data):
+    """
+        Write function description
+        TODO: work out if relevant
+=    """
+    return
+
 def lee_et_al_2019(data):
     """
         Write function description

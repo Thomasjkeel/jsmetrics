@@ -224,16 +224,16 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
 def get_zonal_mean(data):
     """
         Will get the zonal mean either by pressure level (plev) or for one layer
-        Used in Woolings et al. 2010
+        Used in Woolings et al. 2010 & Grise & Polvani 2017
     """
     if not 'lon' in data.coords:
         raise KeyError("data does not contain 'lon' coord")
         
     coords_for_mean = ['lon', 'plev']
-    if 'plev' not in data.coords:
+    if 'plev' not in data.coords or int(data['plev'].count()) == 1:
         coords_for_mean = ['lon']
-    mean_data = data.mean(coords_for_mean)
-    return mean_data
+    zonal_mean = data.mean(coords_for_mean)
+    return zonal_mean
 
 
 def low_pass_weights(window, cutoff):

@@ -147,17 +147,18 @@ class TestComputeMetricFunctions(unittest.TestCase):
         tested_func = compute_metrics.get_available_metric_list
         self.assertRaises(AssertionError, lambda: tested_func("wrong", JETSTREAM_METRIC_DICT))
         result = tested_func(self.data, JETSTREAM_METRIC_DICT)
-        self.assertListEqual(result, [{'FrancisVavrus2015': 'usuable'}, {'Ceppi2018': 'usuable'}])
+        self.assertListEqual(result, [{'FrancisVavrus2015': 'usuable'}, {'GrisePolvani2017': 'usuable'}, {'Ceppi2018': 'usuable'}])
 
     def test_check_all_chords(self):
+        ## TODO: need to write better test here
         tested_func = compute_metrics.check_all_coords_available
         self.assertRaises(AssertionError, lambda: tested_func("wrong", JETSTREAM_METRIC_DICT[TEST_METRIC_NAME]))
         metric_usuable, _ = tested_func(self.data, JETSTREAM_METRIC_DICT[TEST_METRIC_NAME])
         self.assertTrue(metric_usuable)
         new_data = self.data.sel(plev=1000)
-        metric_usuable, _ = tested_func(self.data, JETSTREAM_METRIC_DICT["Manney2011"])
+        metric_usuable, _ = tested_func(new_data, JETSTREAM_METRIC_DICT["Manney2011"])
         self.assertFalse(metric_usuable)
-        metric_usuable, coord_error_message = tested_func(self.data, JETSTREAM_METRIC_DICT["Manney2011"], return_coord_error=True)
+        metric_usuable, coord_error_message = tested_func(new_data, JETSTREAM_METRIC_DICT["Manney2011"], return_coord_error=True)
         self.assertTrue(coord_error_message, "'plev' needs to be between 10000 and 40000.")
 
     def test_check_all_variables(self):

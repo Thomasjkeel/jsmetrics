@@ -19,19 +19,23 @@ JETSTREAM_METRIC_DICT = {
     "ScreenSimmonds2013":
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.screen_and_simmonds_2013, "description":"Screen & Simmonds 2013 TODO"},
     "Kuang2014":
-        {"variables":["ua", "va"], "coords":{"plev": [20000,25000]}, "metric": jetstream_metrics.kuang_et_al_2014, "description":"Kuang et al. 2014. NOTE: Should be 200hPa only"},
+        {"variables":["ua", "va"], "coords":{"plev": [20000, 25000]}, "metric": jetstream_metrics.kuang_et_al_2014, "description":"Kuang et al. 2014. NOTE: Should be 200hPa only"},
     "FrancisVavrus2015":
-        {"variables":["ua","va"], "coords":{"plev": [50000,50000]}, "metric": jetstream_metrics.francis_vavrus_2015, "description":"Francis & Vavrus 2015"},
+        {"variables":["ua","va"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.francis_vavrus_2015, "description":"Francis & Vavrus 2015"},
     "LocalWaveActivity":
-        {"variables":["zg"], "coords":{"plev": [50000,50000]}, "metric": jetstream_metrics.local_wave_activity, "description":"First introduced by Huang & Nakamura 2015, then modified by Chen et al. 2015 and Martineau et al. 2017"},
+        {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.local_wave_activity, "description":"First introduced by Huang & Nakamura 2015, then modified by Chen et al. 2015 and Martineau et al. 2017"},
     "Cattiaux2016":
         {"variables":["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.cattiaux_et_al_2016, "description":"Cattiaux et al. 2016"},
+    "GrisePolvani2017":
+        {"variables":["ua"], "coords":{"plev":[85000, 85000]}, "metric": jetstream_metrics.grise_polvani_2017, "description": "Grise & Polvani 2017"},
     "Ceppi2018":
         {"variables":["ua"], "coords":{"plev": [85000, 85000], "lat": [30,60]}, "metric": jetstream_metrics.ceppi_et_al_2018, "description":"Ceppi et al. 2018"},
     "Kern2018":
         {"variables":["ua", "va"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.kern_et_al_2018, "description":"Kern 2018"},
     "Simpson2018":
         {"variables":["zg"], "coords":{"plev": [70000, 70000]}, "metric": jetstream_metrics.simpson_et_al_2018, "description":"Simpson et al. 2018"},
+    "Bracegirdle2019":
+        {"variables":["ua"], "coords":{"plev": [85000, 85000], "lat": [-75, -10]}, "metric": jetstream_metrics.bracegirdle_et_al_2019, "description":"Bracegirdle et al. 2019"},
     "ChemkeMing2020":
         {"variables":["ua","va"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.chemke_and_ming_2020, "description":"Chemke & Ming 2020"}
     } 

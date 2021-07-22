@@ -9,69 +9,17 @@
 ### imports
 import numpy as np
 import xarray as xr
-from scipy import fftpack
+import scipy.fftpack
+import scipy.interpolate
 import collections
-import itertools
 from .windspeed_utils import PressureLevelWindSpeedSlice, LatitudeWindSpeedSlice
+from .general_utils import remove_duplicates, get_num_of_decimal_places
 
 ### docs
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
-
-## GENERAL UTILS
-def make_climatology(data, freq):
-    """
-        Makes a climatology at given interval (i.e. days, months, season)
-        
-        Parameters
-        ----------
-        data (xarray.Dataset): data with regular time stamp
-        freq (str): 'day', 'month' or 'season'
-        
-        Usage
-        ----------
-        climatology = make_climatology(data, 'month')
-        
-        
-    """
-    climatology = data.groupby("time.%s" % (freq)).mean("time")
-    return climatology
-
-
-def is_djf(month):
-    """
-        Mask used for getting DJF
-    """
-    return (month == 12) | (month >= 1) & (month <= 2)
-
-
-def remove_duplicates(vals):
-    """
-        removes duplicates see: https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
-
-        Used in a few metrics
-    """
-
-    vals.sort()
-    vals = list(v for v,_ in itertools.groupby(vals))
-    return vals
-
-
-def get_all_plev_hPa(data):
-    """
-        Will get a list of all the pressure levels in the data in hPa 
-    """
-    if not 'plev' in data.coords:
-        raise KeyError("Data does not contain coord: 'plev'")
-
-    plevs = np.array([plev for plev in data['plev']])
-    if data['plev'].units == 'Pa':
-        plevs = plevs/100 
-    return plevs
-
-## END OF GENERAL UTILS
 
 def get_sum_weighted_ws(data, all_plevs_hPa):
     """
@@ -101,19 +49,139 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
     return sum_weighted_ws * (1/(all_plevs_hPa.max() - all_plevs_hPa.min()))
 
 
+def calc_atmospheric_mass_at_kPa(pressure, gravity=9.81, atmospheric_area=5.1e8):
+    """
+        Will calculate the atmospheric mass at a given pressure level.
+        
+        Radius of earth (R) = 6.372E3 km;
+        Surface area of earth = 4 Pi R^2 = 5.1E8 km^2
+
+        Used in Archer & Caldeira 2008
+        
+        Returns 
+
+        Parameters
+        ---------------
+        pressure (float):
+            in kPa
+        gravity (float):
+            m/s^2
+    """
+    return (pressure/gravity) * atmospheric_area
+
+
+def get_atm_mass_at_one_hPa(hPa):
+    """
+        Used in Archer & Caldeira 2008
+    """
+    kPa = hPa / 10
+    atm_mass = calc_atmospheric_mass_at_kPa(kPa) 
+    return atm_mass
+
+
+def get_weighted_average_at_one_Pa(data, Pa, atm_mass):
+    """
+        Used in Archer & Caldeira 2008
+    """
+    return atm_mass * (np.sqrt(data['ua'].sel(plev=Pa)**2 + data['va'].sel(plev=Pa)**2))
+
+
+def get_mass_weighted_average_ws(data, plev_flux=False):
+    """
+        Used in Archer & Caldeira 2008
+    
+        TODO: Refactor so neat
+    """
+    sum_weighted_ws = None
+    for plev_Pa in data['plev'].data:
+        plev_hPa = plev_Pa / 100 ## TODO
+        atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
+        weighted_average = get_weighted_average_at_one_Pa(data, plev_Pa, atm_mass)
+        if sum_weighted_ws is None:
+            if plev_flux:
+                sum_weighted_ws = weighted_average * plev_hPa
+            else:
+                sum_weighted_ws = weighted_average
+        else:
+            if plev_flux:
+                sum_weighted_ws += weighted_average * plev_hPa
+            else:
+                sum_weighted_ws += weighted_average
+    return sum_weighted_ws
+
+
+def get_sum_atm_mass(data):
+    """
+        Used in Archer & Caldeira 2008
+    """
+    sum_atm_mass = 0
+    for plev_Pa in data['plev'].data:
+        plev_hPa = plev_Pa / 100 ## TODO
+        atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
+        sum_atm_mass += atm_mass
+    return sum_atm_mass
+
+
+def calc_mass_weighted_average(data):
+    """
+        Used in Archer & Caldeira 2008
+        TODO: add equation
+        TODO: write func desc
+    """
+    sum_atm_mass = get_sum_atm_mass(data)
+    sum_weighted_ws = get_mass_weighted_average_ws(data)
+    weighted_average = sum_weighted_ws / sum_atm_mass
+    return weighted_average
+
+
+def calc_mass_flux_weighted_pressure(data):
+    """
+        Used in Archer & Caldeira 2008
+        TODO: add equation
+    """
+    sum_weighted_ws = get_mass_weighted_average_ws(data)
+    sum_weighted_ws_plev_flux = get_mass_weighted_average_ws(data, plev_flux=True)
+    mass_flux_weighted_pressure = sum_weighted_ws_plev_flux / sum_weighted_ws
+    return mass_flux_weighted_pressure
+
+
+def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
+    """
+        Used in Archer & Caldeira 2008
+        TODO: add equation
+    """
+    assert 'lat' in data.coords, "\'lat\' needs to be in data.coords"
+    
+    sub_data = data.sel(lat=slice(lat_min, lat_max))
+    
+    sum_weighted_lat_flux = None
+    sum_weighted_ws_by_lat = None
+    for lat in sub_data['lat'].data:
+        lat_data = sub_data.sel(lat=lat)
+        lat_sum_weighted_ws = get_mass_weighted_average_ws(lat_data) 
+        if sum_weighted_lat_flux is None:
+            sum_weighted_ws_by_lat = lat_sum_weighted_ws
+            sum_weighted_lat_flux = lat_sum_weighted_ws * lat
+        else:
+            sum_weighted_ws_by_lat += lat_sum_weighted_ws
+            sum_weighted_lat_flux += lat_sum_weighted_ws * lat
+    mass_flux_weighted_latitude = sum_weighted_lat_flux / sum_weighted_ws_by_lat  
+    return mass_flux_weighted_latitude
+    
+
 def get_zonal_mean(data):
     """
         Will get the zonal mean either by pressure level (plev) or for one layer
-        Used in Woolings et al. 2010
+        Used in Woolings et al. 2010 & Grise & Polvani 2017
     """
     if not 'lon' in data.coords:
         raise KeyError("data does not contain 'lon' coord")
         
     coords_for_mean = ['lon', 'plev']
-    if 'plev' not in data.coords:
+    if 'plev' not in data.coords or int(data['plev'].count()) == 1:
         coords_for_mean = ['lon']
-    mean_data = data.mean(coords_for_mean)
-    return mean_data
+    zonal_mean = data.mean(coords_for_mean)
+    return zonal_mean
 
 
 def low_pass_weights(window, cutoff):
@@ -147,7 +215,7 @@ def low_pass_weights(window, cutoff):
     return w[0+(window%2):-1] # edited from w[1:-1]
 
 
-def apply_lancoz_filter(data, filter_freq, window_size):
+def apply_lanczos_filter(data, filter_freq, window_size):
     """
         Will carry out Lanczos low-pass filter
 
@@ -170,7 +238,7 @@ def apply_lancoz_filter(data, filter_freq, window_size):
 def get_latitude_and_speed_where_max_ws(data_row):
     """
         Will return the latitude and windspeed at the index of maximum wind speed from a row of data
-        Used in Woolings et al. 2010
+        Used in Woolings et al. 2010 & Grise & Polvani 2017
     """
     try:
         assert hasattr(data_row, 'isnull')
@@ -224,13 +292,13 @@ def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
             
     """
     ## Fast Fourier Transform on the time series data
-    fourier_transform = fftpack.fft(data)
+    fourier_transform = scipy.fftpack.fft(data)
     
     ## Remove low frequencies
     fourier_transform[highest_freq_to_keep+1:] = 0
     
     ## Inverse Fast Fourier Transform the time series data back
-    filtered_sig = fftpack.ifft(fourier_transform)
+    filtered_sig = scipy.fftpack.ifft(fourier_transform)
     return filtered_sig
 
 
@@ -518,6 +586,100 @@ def meridional_circulation_index(data):
     assert 'ua' and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
     return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
 
+    
+def get_3_latitudes_and_speed_around_max_ws(row):
+    """
+        Will get the latitude before, on and after where the max windspeed is found
+        TODO: think of better name
+        TODO: finish func descr
+        
+        Used in Grise & Polvani 2017 
+        
+        Parameters
+        --------------
+        row (xr.DataArray):
+    """
+    assert 'lat' in row.coords, "\'lat\' needs to be in data.coords"
+    
+    lat_resolution = float(row['lat'][1] - row['lat'][0])
+    lat_min, lat_max = float(row['lat'].min()), float(row['lat'].max())
+    max_lat, _ = get_latitude_and_speed_where_max_ws(row)
+    neighbouring_lats = get_3_neighbouring_coord_values(max_lat, lat_resolution)
+    neighbouring_lats = neighbouring_lats[(neighbouring_lats >= lat_min) & (neighbouring_lats <= lat_max)]
+    neighbouring_speeds = row.sel(lat=neighbouring_lats).data 
+    return (neighbouring_lats, neighbouring_speeds)
+
+
+def get_3_neighbouring_coord_values(coord_val, coord_resolution):
+    """
+        TODO: add to JetStreamOccurenceAndCentreAlgorithm and ...
+        
+        Used in Grise & Polvani 2017 and ...
+        
+        Parameters
+        --------------
+        coord_val (float, int):
+            
+        coord_resolution (float, int):
+            
+        Usage
+        --------------
+        get_3_neighbouring_coord_values(45.0, 1.25)
+        >>> [43.75, 45.0, 46.25]
+    """
+    if type(coord_val) != float or type(coord_resolution) != float:
+        coord_val = float(coord_val)
+        coord_resolution = float(coord_resolution)
+        
+    return np.array([coord_val-coord_resolution, coord_val, coord_val+coord_resolution])
+
+
+def quadratic_func(x, y):
+    """
+        Used in Grise & Polvani 2017
+    """
+    p = np.polyfit(x, y, deg=2)
+    return p
+
+
+def apply_quadratic_func(x, y, vals):
+    """
+        Used in Grise & Polvani 2017
+    """
+    a, b, c = quadratic_func(x, y)
+    return (a * vals**2) + (b * vals) + c
+
+
+def refine_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
+    """
+        Will downscale or upscale the resolution of latitude using a quadratic func
+        TODO: rename better pls
+        
+        Used by Grise & Polvani 2017 
+    """
+    refined_lat_vals = apply_quadratic_func(lats, speeds, lat_vals)
+    return refined_lat_vals
+
+
+def reduce_lat_resolution(lat, resolution):
+    """
+        Used by Grise & Polvani 2017 & Bracegirdle et al. 2019
+    """
+    return np.arange(min(lat), max(lat)+resolution, resolution)
+
+
+def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
+    """
+        Makes use of the quadratic func to refine latitude values
+        
+        Used by Grise & Polvani 2017 
+    """ 
+    lats, ws = lats_and_ws
+    lat_vals =  reduce_lat_resolution(lats, resolution)
+    refined_lat_vals = refine_lat_vals_with_quadratic_func(lats, ws, lat_vals)
+    decimal_places = get_num_of_decimal_places(resolution)
+    return round(lat_vals[np.argmax(refined_lat_vals)], decimal_places)
+
 
 def get_centroid_jet_lat(data, latitude_col='lat'):
     """
@@ -530,3 +692,37 @@ def get_centroid_jet_lat(data, latitude_col='lat'):
         ys.append(float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean()))
     return np.dot(xs, ys) / np.sum(ys)
 
+
+def cubic_spline_interpolation(x, y):
+    """
+        Used in  Bracegirdle et al. 2019
+    """
+    return scipy.interpolate.interp1d(x, y, kind='cubic', fill_value='extrapolate')
+
+
+def run_cubic_spline_interpolation_to_get_max_lat_and_ws(data, resolution, ws_col='ua'):
+    """
+        Used in  Bracegirdle et al. 2019
+        
+        Parameters 
+        --------------
+        data (xr.Dataset):
+            must contain coords lat
+    """
+    refined_lats = reduce_lat_resolution(data['lat'], resolution)
+    csi = cubic_spline_interpolation(data['lat'], data[ws_col])
+    interpolated_ws = csi(refined_lats)
+    max_lat = refined_lats[np.argmax(interpolated_ws)]
+    max_ws = max(interpolated_ws)
+    return max_lat, max_ws
+
+
+def run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(data, resolution, time_col):
+    max_lats = []
+    max_ws = []
+    for period in data[time_col].data:
+        period_data = data.sel({time_col:period})
+        lat, ws = run_cubic_spline_interpolation_to_get_max_lat_and_ws(period_data, resolution=resolution)
+        max_lats.append(lat)
+        max_ws.append(ws)
+    return max_lats, max_ws 

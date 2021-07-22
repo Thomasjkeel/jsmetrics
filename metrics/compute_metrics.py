@@ -186,7 +186,6 @@ def swap_coord_order(data, coord, ascending=True):
     return data
 
 
-
 def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False, subset_kwargs={}, calc_kwargs={}):
     """
         Write function description

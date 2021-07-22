@@ -98,7 +98,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     fourier_filtered_data = jetstream_metrics_utils.assign_filtered_vals_to_data(mean_data_lat_ws, fourier_filtered_lats, fourier_filtered_ws, dim=time_dim)
     return fourier_filtered_data
         
-        
+
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
         Write function description
@@ -181,7 +181,6 @@ def grise_polvani_2017(data):
         Write function description
         See also Ceppi et al. 2012
         TODO: work out if relevant as this method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record 
-        TODO: and add to dict if relevant
     """
     return
 

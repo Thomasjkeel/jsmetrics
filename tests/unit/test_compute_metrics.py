@@ -147,7 +147,7 @@ class TestComputeMetricFunctions(unittest.TestCase):
         tested_func = compute_metrics.get_available_metric_list
         self.assertRaises(AssertionError, lambda: tested_func("wrong", JETSTREAM_METRIC_DICT))
         result = tested_func(self.data, JETSTREAM_METRIC_DICT)
-        self.assertListEqual(result, [{'FrancisVavrus2015': 'usuable'}, {'GrisePolvani2017': 'usuable'}, {'Ceppi2018': 'usuable'}, {'Bracegirdle2019': 'usuable'}])
+        self.assertListEqual(result, [{'FrancisVavrus2015': 'usuable'}, {'GrisePolvani2017': 'usuable'}, {'Ceppi2018': 'usuable'}])
 
     def test_check_all_chords(self):
         ## TODO: need to write better test here

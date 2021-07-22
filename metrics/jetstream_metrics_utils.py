@@ -9,9 +9,9 @@
 ### imports
 import numpy as np
 import xarray as xr
-from scipy import fftpack
+import scipy.fftpack
+import scipy.interpolate
 import collections
-import itertools
 from .windspeed_utils import PressureLevelWindSpeedSlice, LatitudeWindSpeedSlice
 from .general_utils import remove_duplicates, get_num_of_decimal_places
 
@@ -292,13 +292,13 @@ def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
             
     """
     ## Fast Fourier Transform on the time series data
-    fourier_transform = fftpack.fft(data)
+    fourier_transform = scipy.fftpack.fft(data)
     
     ## Remove low frequencies
     fourier_transform[highest_freq_to_keep+1:] = 0
     
     ## Inverse Fast Fourier Transform the time series data back
-    filtered_sig = fftpack.ifft(fourier_transform)
+    filtered_sig = scipy.fftpack.ifft(fourier_transform)
     return filtered_sig
 
 
@@ -692,3 +692,37 @@ def get_centroid_jet_lat(data, latitude_col='lat'):
         ys.append(float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean()))
     return np.dot(xs, ys) / np.sum(ys)
 
+
+def cubic_spline_interpolation(x, y):
+    """
+        Used in  Bracegirdle et al. 2019
+    """
+    return scipy.interpolate.interp1d(x, y, kind='cubic', fill_value='extrapolate')
+
+
+def run_cubic_spline_interpolation_to_get_max_lat_and_ws(data, resolution, ws_col='ua'):
+    """
+        Used in  Bracegirdle et al. 2019
+        
+        Parameters 
+        --------------
+        data (xr.Dataset):
+            must contain coords lat
+    """
+    refined_lats = reduce_lat_resolution(data['lat'], resolution)
+    csi = cubic_spline_interpolation(data['lat'], data[ws_col])
+    interpolated_ws = csi(refined_lats)
+    max_lat = refined_lats[np.argmax(interpolated_ws)]
+    max_ws = max(interpolated_ws)
+    return max_lat, max_ws
+
+
+def run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(data, resolution, time_col):
+    max_lats = []
+    max_ws = []
+    for period in data[time_col].data:
+        period_data = data.sel({time_col:period})
+        lat, ws = run_cubic_spline_interpolation_to_get_max_lat_and_ws(period_data, resolution=resolution)
+        max_lats.append(lat)
+        max_ws.append(ws)
+    return max_lats, max_ws 

@@ -10,7 +10,7 @@
 ### imports
 import xarray as xr
 import numpy as np
-from metrics import jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
+from metrics import general_utils, jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
 from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset, make_fake_seasonal_data, make_fake_data
 import unittest
 from parameterized import parameterized
@@ -78,7 +78,7 @@ class TestKoch2006(unittest.TestCase):
         self.assertEqual(float(result['weighted_average_ws'].max()), 8.775158882141113)
 
     def test_get_all_plevs(self):
-        tested_func = jetstream_metrics_utils.get_all_plev_hPa
+        tested_func = general_utils.get_all_plev_hPa
         ## make sure it returns an array
         self.assertIsInstance(tested_func(self.data), (np.ndarray))
         ## make sure it takes errors wrong types
@@ -286,10 +286,15 @@ class TestSimpson2018(unittest.TestCase):
 class TestBracegirdle2019(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()
+        self.data = self.data.sel(plev=85000)
 
     def test_metric(self):
-        # result = jetstream_metrics.grise_polvani_2017(self.data)
-        pass
+        result = jetstream_metrics.bracegirdle_et_al_2019(self.data)
+        # self.assertRaises(self.dat) ## TODO: mutliple plevs raise assertionerror
+        self.assertEqual(float(result['seasonal_JPOS'].max()), 37.725)
+        self.assertEqual(float(result['annual_JPOS'].max()), 37.725)
+        self.assertEqual(float(result['seasonal_JSTR'].max()), 8.588595695199576)
+        self.assertEqual(float(result['annual_JSTR'].max()), 8.588595695199576)
 
 
 class TestChemkeMing2020(unittest.TestCase):

@@ -234,8 +234,27 @@ def bracegirdle_et_al_2019(data):
     """
         Write function description
         TODO: work out if relevant
+        TODO: check southern hemisphere works
+        NOTE: for Southern Hemisphere
     """
-    return
+    assert data['plev'].count() == 1, "data needs to have one \'plev\' value"
+    ## Step 1 
+    print('Step 1. Make seasonal & annual climatologies')
+    seasonal_climatology = general_utils.make_climatology(data, 'season')
+    annual_climatology = general_utils.make_climatology(data, 'year')
+    ## Step 2
+    print('Step 2. Get zonal mean from climatologies')
+    seasonal_zonal_mean = seasonal_climatology.mean('lon')
+    annual_zonal_mean = annual_climatology.mean('lon')
+    ## Step 3
+    print('Step 3. Cubic spline interpolation to each climatology at latitude resolution of 0.075 degrees')
+    seasonal_max_lats, seasonal_max_ws = jetstream_metrics_utils.run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(seasonal_zonal_mean, resolution=0.075, time_col='season')
+    annual_max_lats, annual_max_ws = jetstream_metrics_utils.run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(annual_zonal_mean, resolution=0.075, time_col='year')
+    ## Step 4
+    print('Step 4. Assign jet-stream position (JPOS) and jet-stream strength (JSTR) back to data')
+    data = data.assign({'seasonal_JPOS':(('season'), seasonal_max_lats), 'annual_JPOS':(('year'), annual_max_lats),\
+                        'seasonal_JSTR':(('season'), seasonal_max_ws), 'annual_JSTR':(('year'), annual_max_ws)})
+    return data
 
 
 def lee_et_al_2019(data):

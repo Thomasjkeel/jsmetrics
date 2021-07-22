@@ -182,8 +182,19 @@ def grise_polvani_2017(data):
         See also Ceppi et al. 2012
         TODO: work out if relevant as this method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record 
     """
-    return
-
+    ## Step 1.
+    print('Step 1. Calculate zonal-mean')
+    zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
+    print('Step 2. Get the 3 latitudes and speeds around max zonal wind-speed (e.g. lat-1, lat, lat+1)')
+    all_max_lats_and_ws = np.array(list(map(jetstream_metrics_utils.get_3_latitudes_and_speed_around_max_ws, zonal_mean['ua'])))
+    print('Step 3. Apply quadratic function to get max latitude at 0.01 degree resolution')
+    refined_max_lats = []
+    for max_lat_and_ws in all_max_lats_and_ws:
+        refined_max_lat = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(max_lat_and_ws, resolution=0.01)
+        refined_max_lats.append(refined_max_lat)
+    print('Step 4. Assign refined max lats back to data')
+    data = data.assign({'max_lat_0.01':(('time'), refined_max_lats)})
+    return data
 
 def ceppi_et_al_2018(data):
     """

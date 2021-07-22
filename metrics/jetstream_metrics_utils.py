@@ -246,7 +246,7 @@ def get_zonal_mean(data):
         coords_for_mean = ['lon']
     zonal_mean = data.mean(coords_for_mean)
     return zonal_mean
-
+    
 
 def low_pass_weights(window, cutoff):
     """Calculate weights for a low pass Lanczos filter.
@@ -302,7 +302,7 @@ def apply_lanczos_filter(data, filter_freq, window_size):
 def get_latitude_and_speed_where_max_ws(data_row):
     """
         Will return the latitude and windspeed at the index of maximum wind speed from a row of data
-        Used in Woolings et al. 2010
+        Used in Woolings et al. 2010 & Grise & Polvani 2017
     """
     try:
         assert hasattr(data_row, 'isnull')
@@ -650,6 +650,99 @@ def meridional_circulation_index(data):
     assert 'ua' and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
     return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
 
+    
+def get_3_latitudes_and_speed_around_max_ws(row):
+    """
+        Will get the latitude before, on and after where the max windspeed is found
+        TODO: think of better name
+        TODO: finish func descr
+        
+        Used in Grise & Polvani 2017 
+        
+        Parameters
+        --------------
+        row (xr.DataArray):
+    """
+    assert 'lat' in row.coords, "\'lat\' needs to be in data.coords"
+    
+    lat_resolution = float(row['lat'][1] - row['lat'][0])
+    lat_min, lat_max = float(row['lat'].min()), float(row['lat'].max())
+    max_lat, _ = get_latitude_and_speed_where_max_ws(row)
+    neighbouring_lats = get_3_neighbouring_coord_values(max_lat, lat_resolution)
+    neighbouring_lats = neighbouring_lats[(neighbouring_lats >= lat_min) & (neighbouring_lats <= lat_max)]
+    neighbouring_speeds = row.sel(lat=neighbouring_lats).data 
+    return (neighbouring_lats, neighbouring_speeds)
+
+
+def get_3_neighbouring_coord_values(coord_val, coord_resolution):
+    """
+        TODO: add to JetStreamOccurenceAndCentreAlgorithm and ...
+        
+        Used in Grise & Polvani 2017 and ...
+        
+        Parameters
+        --------------
+        coord_val (float, int):
+            
+        coord_resolution (float, int):
+            
+        Usage
+        --------------
+        get_3_neighbouring_coord_values(45.0, 1.25)
+        >>> [43.75, 45.0, 46.25]
+    """
+    if type(coord_val) != float or type(coord_resolution) != float:
+        coord_val = float(coord_val)
+        coord_resolution = float(coord_resolution)
+        
+    return np.array([coord_val-coord_resolution, coord_val, coord_val+coord_resolution])
+
+
+def quadratic_func(x, y):
+    """
+        Used in Grise & Polvani 2017
+    """
+    p = np.polyfit(x, y, deg=2)
+    return p
+
+
+def apply_quadratic_func(x, y, vals):
+    """
+        Used in Grise & Polvani 2017
+    """
+    a, b, c = quadratic_func(x, y)
+    return (a * vals**2) + (b * vals) + c
+
+
+def refine_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
+    """
+        Will downscale or upscale the resolution of latitude using a quadratic func
+        TODO: rename better pls
+        
+        Used by Grise & Polvani 2017 
+    """
+    refined_lat_vals = apply_quadratic_func(lats, speeds, lat_vals)
+    return refined_lat_vals
+
+
+def reduce_lat_resolution(lat, resolution):
+    """
+        Used by Grise & Polvani 2017 
+    """
+    return np.arange(min(lat), max(lat)+resolution, resolution)
+
+
+def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
+    """
+        Makes use of the quadratic func to refine latitude values
+        
+        Used by Grise & Polvani 2017 
+    """ 
+    lats, ws = lats_and_ws
+    lat_vals =  reduce_lat_resolution(lats, resolution)
+    refined_lat_vals = refine_lat_vals_with_quadratic_func(lats, ws, lat_vals)
+    decimal_places = get_num_of_decimal_places(resolution)
+    return round(lat_vals[np.argmax(refined_lat_vals)], decimal_places)
 
 def get_centroid_jet_lat(data, latitude_col='lat'):
     """

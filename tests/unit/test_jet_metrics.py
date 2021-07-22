@@ -249,8 +249,10 @@ class TestGrisePolvani2017(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.grise_polvani_2017(self.data)
-        pass
+        result = jetstream_metrics.grise_polvani_2017(self.data)
+        self.assertEqual(float(result['max_lat_0.01'].min()), 35.38)
+        self.assertEqual(float(result['max_lat_0.01'].max()), 36.41)
+        
 
 
 class TestCeppi2018(unittest.TestCase):

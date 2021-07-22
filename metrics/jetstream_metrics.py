@@ -8,9 +8,8 @@
 
 ### imports
 import numpy as np
-import xarray as xr
 from .import jetstream_metrics_utils
-# import jetstream_metrics.jetstream_metrics_utils
+from . import general_utils
 
 ### docs
 __author__ = "Thomas Keel"
@@ -29,7 +28,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     """
     print('Step 1: Calculate weighted sum...')
     # Step 1.1: get all pressure levels in data as list and make sure hPa TODO: what if mbar? 
-    all_plevs_hPa = jetstream_metrics_utils.get_all_plev_hPa(data)
+    all_plevs_hPa = general_utils.get_all_plev_hPa(data)
     # Step 1.2 get weighted sum windspeed
     sum_weighted_ws = jetstream_metrics_utils.get_sum_weighted_ws(data, all_plevs_hPa)
     ## Step 2: calculate average weighted
@@ -87,7 +86,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     zonal_mean_lat_ws = jetstream_metrics_utils.assign_lat_ws_to_data(zonal_mean, max_lat_ws)
     ## Step 4
     print('Step 4: Make climatology')
-    climatology = jetstream_metrics_utils.make_climatology(zonal_mean_lat_ws, 'month')
+    climatology = general_utils.make_climatology(zonal_mean_lat_ws, 'month')
     ## Step 5
     print('Step 5: Apply low-freq fourier filter to both max lats and max windspeed')
     fourier_filtered_lats = jetstream_metrics_utils.apply_low_freq_fourier_filter(climatology['max_lats'].values, highest_freq_to_keep=2)

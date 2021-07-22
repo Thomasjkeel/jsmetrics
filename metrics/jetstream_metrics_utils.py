@@ -13,7 +13,7 @@ from scipy import fftpack
 import collections
 import itertools
 from .windspeed_utils import PressureLevelWindSpeedSlice, LatitudeWindSpeedSlice
-from .general_utils import *
+from .general_utils import remove_duplicates, get_num_of_decimal_places
 
 ### docs
 __author__ = "Thomas Keel"
@@ -679,6 +679,7 @@ def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
     refined_lat_vals = refine_lat_vals_with_quadratic_func(lats, ws, lat_vals)
     decimal_places = get_num_of_decimal_places(resolution)
     return round(lat_vals[np.argmax(refined_lat_vals)], decimal_places)
+
 
 def get_centroid_jet_lat(data, latitude_col='lat'):
     """

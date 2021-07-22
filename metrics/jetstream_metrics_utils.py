@@ -13,6 +13,7 @@ from scipy import fftpack
 import collections
 import itertools
 from .windspeed_utils import PressureLevelWindSpeedSlice, LatitudeWindSpeedSlice
+from .general_utils import *
 
 ### docs
 __author__ = "Thomas Keel"
@@ -246,7 +247,7 @@ def get_zonal_mean(data):
         coords_for_mean = ['lon']
     zonal_mean = data.mean(coords_for_mean)
     return zonal_mean
-    
+
 
 def low_pass_weights(window, cutoff):
     """Calculate weights for a low pass Lanczos filter.

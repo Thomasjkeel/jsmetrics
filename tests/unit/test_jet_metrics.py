@@ -293,8 +293,8 @@ class TestBracegirdle2019(unittest.TestCase):
         # self.assertRaises(self.dat) ## TODO: mutliple plevs raise assertionerror
         self.assertEqual(float(result['seasonal_JPOS'].max()), 37.725)
         self.assertEqual(float(result['annual_JPOS'].max()), 37.725)
-        self.assertEqual(float(result['seasonal_JSTR'].max()), 8.588595695199576)
-        self.assertEqual(float(result['annual_JSTR'].max()), 8.588595695199576)
+        self.assertEqual(round(float(result['seasonal_JSTR'].max()), 3), 8.589)
+        self.assertEqual(round(float(result['annual_JSTR'].max()), 3), 8.589)
 
 
 class TestChemkeMing2020(unittest.TestCase):

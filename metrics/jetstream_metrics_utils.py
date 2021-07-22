@@ -71,6 +71,18 @@ def get_all_plev_hPa(data):
         plevs = plevs/100 
     return plevs
 
+
+def get_num_of_decimal_places(num):
+    """
+        func for getting number of decimal places in a float
+        FOR GENERAL UTILS
+    """
+    num = '{:f}'.format(num).rstrip('0')
+    decimal_places = num[::-1].find('.')
+    if decimal_places < 0:
+        decimal_places = 0
+    return decimal_places
+
 ## END OF GENERAL UTILS
 
 def get_sum_weighted_ws(data, all_plevs_hPa):

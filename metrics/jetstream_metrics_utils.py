@@ -666,7 +666,7 @@ def reduce_lat_resolution(lat, resolution):
         Used by Grise & Polvani 2017 & Bracegirdle et al. 2019
         TODO: ask chris to check
     """
-    return np.arange(min(lat), max(lat)+0.00001, resolution)
+    return np.arange(min(lat), max(lat)+resolution, resolution)
 
 
 def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):

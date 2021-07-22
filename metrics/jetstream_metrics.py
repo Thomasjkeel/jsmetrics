@@ -77,17 +77,17 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     """
     ## Step 1
     print('Step 1: calculating long and/or plev mean...')
-    mean_data = jetstream_metrics_utils.get_zonal_mean(data)
+    zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
     ## Step 2
     print('Step 2: Applying %s day lancoz filter...' % (filter_freq))
-    lancoz_filtered_mean_data = jetstream_metrics_utils.apply_lanczos_filter(mean_data, filter_freq, window_size)
+    lancoz_filtered_mean_data = jetstream_metrics_utils.apply_lanczos_filter(zonal_mean, filter_freq, window_size)
     ## Step 3
     print('Step 3: Calculating max windspeed and latitude where max windspeed found...')
     max_lat_ws = np.array(list(map(jetstream_metrics_utils.get_latitude_and_speed_where_max_ws, lancoz_filtered_mean_data[:])))
-    mean_data_lat_ws = jetstream_metrics_utils.assign_lat_ws_to_data(mean_data, max_lat_ws)
+    zonal_mean_lat_ws = jetstream_metrics_utils.assign_lat_ws_to_data(zonal_mean, max_lat_ws)
     ## Step 4
     print('Step 4: Make climatology')
-    climatology = jetstream_metrics_utils.make_climatology(mean_data_lat_ws, 'month')
+    climatology = jetstream_metrics_utils.make_climatology(zonal_mean_lat_ws, 'month')
     ## Step 5
     print('Step 5: Apply low-freq fourier filter to both max lats and max windspeed')
     fourier_filtered_lats = jetstream_metrics_utils.apply_low_freq_fourier_filter(climatology['max_lats'].values, highest_freq_to_keep=2)
@@ -95,7 +95,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     ## Step 6
     print('Step 6: Join filtered climatology back to the data')
     time_dim = climatology['max_ws'].dims[0]
-    fourier_filtered_data = jetstream_metrics_utils.assign_filtered_vals_to_data(mean_data_lat_ws, fourier_filtered_lats, fourier_filtered_ws, dim=time_dim)
+    fourier_filtered_data = jetstream_metrics_utils.assign_filtered_vals_to_data(zonal_mean_lat_ws, fourier_filtered_lats, fourier_filtered_ws, dim=time_dim)
     return fourier_filtered_data
         
 

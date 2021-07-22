@@ -98,6 +98,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     fourier_filtered_data = jetstream_metrics_utils.assign_filtered_vals_to_data(mean_data_lat_ws, fourier_filtered_lats, fourier_filtered_ws, dim=time_dim)
     return fourier_filtered_data
         
+        
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
         Write function description
@@ -175,7 +176,7 @@ def cattiaux_et_al_2016(data):
     return
 
 
-def grise_et_al_2017(data):
+def grise_polvani_2017(data):
     """
         Write function description
         See also Ceppi et al. 2012
@@ -224,8 +225,9 @@ def bracegirdle_et_al_2019(data):
     """
         Write function description
         TODO: work out if relevant
-=    """
+    """
     return
+
 
 def lee_et_al_2019(data):
     """

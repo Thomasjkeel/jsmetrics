@@ -244,6 +244,15 @@ class TestCattiaux2016(unittest.TestCase):
         pass
 
 
+class TestGrisePolvani2017(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        # result = jetstream_metrics.grise_polvani_2017(self.data)
+        pass
+
+
 class TestCeppi2018(unittest.TestCase):
     def setUp(self):
         self.data  = set_up_test_u_data()
@@ -253,6 +262,7 @@ class TestCeppi2018(unittest.TestCase):
         current = next(result)
         self.assertEqual(current, 37.96227342516621)
 
+
 class TestKern2018(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()
@@ -261,12 +271,22 @@ class TestKern2018(unittest.TestCase):
         # result = jetstream_metrics.kern_et_al_2018(self.data)
         pass
 
+
 class TestSimpson2018(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_zg_data()
 
     def test_metric(self):
         # result = jetstream_metrics.simpson_et_al_2018(self.data)
+        pass
+
+
+class TestBracegirdle2019(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        # result = jetstream_metrics.grise_polvani_2017(self.data)
         pass
 
 

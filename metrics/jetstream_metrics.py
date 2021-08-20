@@ -142,7 +142,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
 
 
-def francis_vavrus_2015(data, lat_min=20, lat_max=80):
+def francis_vavrus_2015(data):
     """
         Write function description
         TODO: maybe add seasonal anomaly calculation 

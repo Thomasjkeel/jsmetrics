@@ -1,3 +1,4 @@
+# requires configuration file: /home/[yourcomputer]/.cdsapirc
 import cdsapi
 
 c = cdsapi.Client()

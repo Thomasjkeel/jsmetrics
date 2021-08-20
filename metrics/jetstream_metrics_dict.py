@@ -33,7 +33,7 @@ JETSTREAM_METRIC_DICT = {
     "Kern2018":
         {"variables":["ua", "va"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.kern_et_al_2018, "description":"Kern 2018"},
     "Simpson2018":
-        {"variables":["zg"], "coords":{"plev": [70000, 70000]}, "metric": jetstream_metrics.simpson_et_al_2018, "description":"Simpson et al. 2018"},
+        {"variables":["ua"], "coords":{"plev": [70000, 70000]}, "metric": jetstream_metrics.simpson_et_al_2018, "description":"Simpson et al. 2018"},
     "Bracegirdle2019":
         {"variables":["ua"], "coords":{"plev": [85000, 85000], "lat": [-75, -10]}, "metric": jetstream_metrics.bracegirdle_et_al_2019, "description":"Bracegirdle et al. 2019"},
     "ChemkeMing2020":

@@ -204,7 +204,7 @@ def grise_polvani_2017(data):
     return data
 
 
-def molnos_et_al_2009(data):
+def molnos_et_al_2017(data):
     """
         Write function description
     """

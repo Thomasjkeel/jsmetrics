@@ -121,7 +121,14 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
         core_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm(data, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
         yield core_alg
         
-        
+
+def penaortiz_et_al_2013(data):
+    """
+        Write function description
+    """
+    return
+
+
 def screen_and_simmonds_2013(data):
     """
         Write function description

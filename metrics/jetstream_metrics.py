@@ -60,6 +60,13 @@ def archer_caldeira_2008(data):
     return data
 
 
+def schiemann_et_al_2009(data):
+    """
+        Write function description
+    """
+    return
+
+
 def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     """
         Follows an in-text description of 4-steps describing the algorithm mof jet-stream identification from Woolings et al. (2010). 

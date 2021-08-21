@@ -12,6 +12,8 @@ JETSTREAM_METRIC_DICT = {
         {"variables": ["ua","va"], "coords": {"plev": [10000, 40000]}, "metric": jetstream_metrics.koch_et_al_2006, "description":"Koch et al. 2006"},
     "ArcherCaldeira2008":
         {"variables": ["ua","va"], "coords": {"plev": [10000, 40000]}, "metric": jetstream_metrics.archer_caldeira_2008, "description":"Archer & Caldeira 2008"},
+    "Schiemann2009":
+        {"variables": ["ua", "va"], "coords": {"plev": [10000, 50000]}, "metric": jetstream_metrics.schiemann_et_al_2009, "description": "Schiemann et al 2009"},
     "Woolings2010":
          {"variables": ["ua"], "coords": {"plev": [70000, 92500], "lat": [15, 75], "lon": [120, 180]}, "metric": jetstream_metrics.woolings_et_al_2010, "description":"Woolings et al. 2010 TODO"}, # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
     "Manney2011":

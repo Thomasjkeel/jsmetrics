@@ -4,6 +4,7 @@ To-Do:
 - way of dealing with data from different sources (some sort of data translator module or maybe included in tests)
     - for example what if 'v' or 'v-wind' is passed to func instead of 'va'
     - for example what if 'mbar' or 'model levels' instead of 'plev'
+    - zg and z do not line up because of different units (geopotential_by_the_Earths_gravitational_acceleration = 9.80665, https://confluence.ecmwf.int/display/CKB/ERA5%3A+compute+pressure+and+geopotential+on+model+levels%2C+geopotential+height+and+geometric+height)
 - add raise exception statements to required 
 - Add way of subsetting longitude if it wraps around 0-360
 - Improve readme(s) and add links (DOI?)m (https://github.com/othneildrew/Best-README-Template/blob/master/README.md)

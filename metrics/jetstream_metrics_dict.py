@@ -32,6 +32,8 @@ JETSTREAM_METRIC_DICT = {
         {"variables":["ua"], "coords":{"plev": [85000, 85000], "lat": [30,60]}, "metric": jetstream_metrics.ceppi_et_al_2018, "description":"Ceppi et al. 2018"},
     "Kern2018":
         {"variables":["ua", "va"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.kern_et_al_2018, "description":"Kern 2018"},
+    "Rikus2018":
+        {"variables":["ua"], "coords":{"plev": [0, 100000]}, "metric": jetstream_metrics.rikus_2018, "description": "Rikus 2018"},
     "Simpson2018":
         {"variables":["ua"], "coords":{"plev": [70000, 70000]}, "metric": jetstream_metrics.simpson_et_al_2018, "description":"Simpson et al. 2018"},
     "Bracegirdle2019":

@@ -174,7 +174,7 @@ def cattiaux_et_al_2016(data):
         TODO: "insuring that the Earth sphericity is accounted for in the perimeter calculation."
     """
     return data
-    
+
 
 def grise_polvani_2017(data):
     """
@@ -216,6 +216,13 @@ def kern_et_al_2018(data):
     """
         Write function description
         TODO: ask about equation
+    """
+    return
+
+
+def rikus_2018(data):
+    """
+        Write function description
     """
     return
 

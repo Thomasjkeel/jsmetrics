@@ -203,6 +203,14 @@ def grise_polvani_2017(data):
     data = data.assign({'max_lat_0.01':(('time'), refined_max_lats)})
     return data
 
+
+def molnos_et_al_2009(data):
+    """
+        Write function description
+    """
+    return
+
+
 def ceppi_et_al_2018(data):
     """
         Write function description

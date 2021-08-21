@@ -118,7 +118,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 def screen_and_simmonds_2013(data):
     """
         Write function description
-        Also used in screen and simmonds 2014
+        Slightly adjusted in Screen and Simmonds 2014
         TODO: ask Chris about interpolation method
         TODO: insure that the Earth sphericity is accounted for in the perimeter calculation
     """
@@ -171,9 +171,10 @@ def cattiaux_et_al_2016(data):
     """
         Write function description
         TODO: waiting on Chris' help with the interpolation method from screen and simmonds
+        TODO: "insuring that the Earth sphericity is accounted for in the perimeter calculation."
     """
-    return
-
+    return data
+    
 
 def grise_polvani_2017(data):
     """

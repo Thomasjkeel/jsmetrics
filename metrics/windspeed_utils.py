@@ -15,11 +15,19 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-def get_resultant_wind(u_data, v_data):
+def get_resultant_wind(u, v):
     """
         Gets wind vector from u-wind and v-wind
     """
-    return np.sqrt(u_data**2 + v_data**2)
+    return np.sqrt(u**2 + v**2)
+
+
+def get_wind_direction_in_degrees(u, v):
+    """
+        Gets wind direction from u-wind and v-wind
+        In degrees (0-360)
+    """
+    return (180 + (180 / np.pi) * np.arctan2(u, v)) % 360
 
 
 class WindSpeedSlice():

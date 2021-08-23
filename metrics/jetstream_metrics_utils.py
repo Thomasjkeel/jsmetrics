@@ -92,7 +92,7 @@ def get_mass_weighted_average_ws(data, plev_flux=False):
     
         TODO: Refactor so neat
     """
-    sum_weighted_ws = None
+    sum_weighted_ws = None #TODO
     for plev_Pa in data['plev'].data:
         plev_hPa = plev_Pa / 100 ## TODO
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)

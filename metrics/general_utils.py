@@ -29,6 +29,7 @@ def get_local_maxima(arr):
     """
     return scipy.signal.argrelextrema(arr, np.greater)
 
+
 def make_climatology(data, freq):
     """
         Makes a climatology at given interval (i.e. days, months, season)

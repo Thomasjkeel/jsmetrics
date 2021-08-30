@@ -16,23 +16,23 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-def get_local_minima(arr):
+def get_local_minima(arr, axis=0):
     """
         from https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
-
+        
         TODO: add asserts/method for checking input
     """
-    return scipy.signal.argrelextrema(arr, np.less)
+    return scipy.signal.argrelextrema(arr, np.less, axis=axis)
 
     
-def get_local_maxima(arr):
+def get_local_maxima(arr, axis=0):
     """
         from https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
-
+        
         TODO: add asserts/method for checking input
     """
-    return scipy.signal.argrelextrema(arr, np.greater)
-
+    return scipy.signal.argrelextrema(arr, np.greater, axis=axis)
+    
 
 def make_climatology(data, freq):
     """

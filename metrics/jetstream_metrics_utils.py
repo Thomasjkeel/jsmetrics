@@ -192,6 +192,7 @@ def get_zonal_mean(data):
     """
         Will get the zonal mean either by pressure level (plev) or for one layer
         Used in Woolings et al. 2010 & Grise & Polvani 2017
+        TODO: add to Archer & Caldiera
     """
     if not 'lon' in data.coords:
         raise KeyError("data does not contain 'lon' coord")
@@ -267,12 +268,13 @@ def get_latitude_and_speed_where_max_ws(data_row):
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
         max_speed_loc = np.argmax(data_row.data)
-        max_speed = data_row[max_speed_loc]
+        max_speed = data_row.isel(lat=max_speed_loc)
         lat_at_max = float(max_speed['lat'].values)
         speed_at_max = float(max_speed.data)
         return lat_at_max, speed_at_max 
     else:
         return None, None
+
 
 
 def assign_lat_ws_to_data(data, max_lat_ws):

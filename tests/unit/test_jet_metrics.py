@@ -162,7 +162,7 @@ class TestWoolings2010(unittest.TestCase):
         tested_data = self.data['ua'].isel(plev=0, lon=0, time=0)
         self.assertEqual(tested_func(tested_data)[0], 70.0)
         self.assertEqual(tested_func(tested_data)[1], 3.105090856552124)
-        self.assertRaises(KeyError, lambda: tested_func(tested_data.rename({'lat':'lt'})))
+        self.assertRaises(ValueError, lambda: tested_func(tested_data.rename({'lat':'lt'})))
         nan_dataset = set_up_nan_dataset()
         self.assertEqual(tested_func(nan_dataset), (None, None))
 

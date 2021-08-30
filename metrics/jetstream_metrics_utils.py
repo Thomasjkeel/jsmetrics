@@ -13,7 +13,7 @@ import scipy.fftpack
 import scipy.interpolate
 import collections
 from .windspeed_utils import PressureLevelWindSpeedSlice, LatitudeWindSpeedSlice
-from .general_utils import remove_duplicates, get_num_of_decimal_places
+from .general_utils import remove_duplicates, get_num_of_decimal_places, get_local_maxima
 
 ### docs
 __author__ = "Thomas Keel"
@@ -167,7 +167,26 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
             sum_weighted_lat_flux += lat_sum_weighted_ws * lat
     mass_flux_weighted_latitude = sum_weighted_lat_flux / sum_weighted_ws_by_lat  
     return mass_flux_weighted_latitude
-    
+
+
+def get_local_jet_maximas_by_day_by_plev(row):
+    """
+        Used in Schiemann et al 2009
+        TODO: add checks
+        TODO: will only work is 1 day is the resolution
+        TODO: maybe combine with pena-ortiz method
+    """
+    row['jet_maxima'] = (('plev', 'lat', 'lon'), np.zeros((3, 73, 192))) #TODO
+    for lon in row['lon']:
+        for plev in row['plev']:
+            current = row.sel(lon=lon, plev=plev)
+            current = current.where((abs(current['ws']) >= 30) & (current['ua'] > 0))
+            local_maxima_lat_inds = get_local_maxima(current['ws'].data)[0]
+            if len(local_maxima_lat_inds) > 0:
+                for lat_ind in local_maxima_lat_inds:
+                    row['jet_maxima'].loc[dict(lat=current['lat'].data[lat_ind], lon=lon, plev=plev)] = 1.0
+    return row
+
 
 def get_zonal_mean(data):
     """

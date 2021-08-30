@@ -9,7 +9,7 @@
 ### imports
 import numpy as np
 from .import jetstream_metrics_utils
-from . import general_utils
+from . import general_utils, windspeed_utils
 
 ### docs
 __author__ = "Thomas Keel"
@@ -64,7 +64,11 @@ def schiemann_et_al_2009(data):
     """
         Write function description
     """
-    return
+    print('Step 1. Calculate wind vector')
+    data['ws'] = windspeed_utils.get_resultant_wind(data['ua'], data['va'])
+    print('Step 2. Calculate jet maximas')
+    data = data.groupby('time').map(jetstream_metrics_utils.get_local_jet_maximas_by_day_by_plev)
+    return data
 
 
 def woolings_et_al_2010(data, filter_freq=10, window_size=61):

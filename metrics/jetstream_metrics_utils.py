@@ -492,6 +492,61 @@ class JetStreamCoreIdentificationAlgorithm:
         return 
 
 
+def make_empty_local_wind_maxima_data_var(data):
+    """
+        Will add a new data var of zeros for local wind maxima
+        
+        Used in Pena-Ortiz et al. 2013
+        
+        TODO: add asserts
+    """
+    data['local_wind_maxima'] = (('time','plev', 'lat', 'lon'), np.zeros((len(data['time']),len(data['plev']),\
+                                                                           len(data['lat']),len(data['lon']))))
+    return data
+
+
+def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold):
+    """
+        Will return a 2-d array of potential local windspeed maximas
+        
+        Used in Pena-Ortiz et al. 2013
+        TODO: add checks
+    """
+    return ws_slice.where(lambda x: x > 30).fillna(0.0)
+
+    
+def get_local_wind_maxima_by_day(row):
+    """
+        Write function description
+        Used in Pena-Ortiz et al. 2013
+    """
+    
+    try:
+        assert 'local_wind_maxima' in row.data_vars    
+    except Exception as e:
+        return print('local_wind_maxima needs to be defined.', e)
+    
+    for lon in row['lon']:
+        current = row.sel(lon=lon)
+        pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(current['ws'], 30).data
+        ind_local_wind_maximas = get_local_maxima(pot_local_maximas, axis=1)
+        # Turn into 2-d numpy array 
+        ind_local_wind_maximas = np.array([[arr1, arr2] for arr1, arr2 in zip(ind_local_wind_maximas[0], ind_local_wind_maximas[1])])
+        for plev_ind, lat_ind in ind_local_wind_maximas:
+            row['local_wind_maxima'].loc[dict(lat=current['lat'].data[lat_ind], lon=lon, plev=current['plev'].data[plev_ind])] = 1.0
+    return row
+          
+          
+def get_number_of_days_per_monthyear_with_local_wind_maxima(data):
+    """
+    Will resample by each month and return number of days with local wind maxima
+    
+    Used in Pena-Ortiz et al. 2013
+    """
+    data = data['local_wind_maxima'].resample(time='MS').sum().rename({'time':'monthyear'})
+    return data
+
+
 class JetStreamOccurenceAndCentreAlgorithm:
     """
         Have this class inherit from some sort of WS slice of one plev and all Lats + Lons

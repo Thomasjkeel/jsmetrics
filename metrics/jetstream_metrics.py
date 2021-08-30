@@ -129,8 +129,19 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 def penaortiz_et_al_2013(data):
     """
         Write function description
+        
+        TODO: maybe class
     """
-    return
+    print('Step 1. Calculate wind vector')
+    data['ws'] = windspeed_utils.get_resultant_wind(data['ua'], data['va'])
+    print('Step 2. Make array of zeros for local wind maxima location algorithm') 
+    data = jetstream_metrics_utils.make_empty_local_wind_maxima_data_var(data)
+    print('Step 3. Find local wind maxima locations by day')
+    data = data.groupby('time').map(jetstream_metrics_utils.get_local_wind_maxima_by_day)
+    print('Step 4. Get number of days per month with local wind maxima')
+    data = jetstream_metrics_utils.get_number_of_days_per_monthyear_with_local_wind_maxima(data)
+    print('TODO: Sort into PJ and STJ')
+    return data
 
 
 def screen_and_simmonds_2013(data):

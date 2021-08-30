@@ -175,6 +175,7 @@ def francis_vavrus_2015(data):
     """
         Write function description
         TODO: maybe add seasonal anomaly calculation 
+        TODO: join back to data rather than returning data array
     """
     ## Step 1 calculate MCI index for data
     print('calculating Meridional Circulation Index from data')

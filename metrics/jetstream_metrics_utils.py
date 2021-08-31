@@ -365,7 +365,7 @@ class JetStreamCoreIdentificationAlgorithm:
             ws_slice -> one longitude for one day as slice of windspeed
         """
         try:
-            assert ws_core_threshold > ws_boundary_threshold and ws_core_threshold > 0
+            assert ws_core_threshold > ws_boundary_threshold and ws_core_threshold > 0 and ws_boundary_threshold > 0
         except:
             raise ValueError("Windspeed core threshold needs to be more than boundary threshold and both need to be more than 0")
         ## Step 1. make windspeed slice

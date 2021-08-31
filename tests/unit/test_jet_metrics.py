@@ -302,10 +302,10 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         tested_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm
         self.assertRaises(ValueError, lambda: tested_alg(self.data))
         test_data = self.data.isel(time=0, lon=0)
-        self.assertRaises(AssertionError, lambda: tested_alg(test_data,-10,10))
-        self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,-10))
-        self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,30))
-        self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,10))
+        self.assertRaises(ValueError, lambda: tested_alg(test_data,-10,10))
+        self.assertRaises(ValueError, lambda: tested_alg(test_data,10,-10))
+        self.assertRaises(ValueError, lambda: tested_alg(test_data,10,30))
+        self.assertRaises(ValueError, lambda: tested_alg(test_data,10,10))
 
     def test_inner_funcs(self):
         tested_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm

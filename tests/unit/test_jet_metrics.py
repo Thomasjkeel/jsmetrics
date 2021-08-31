@@ -182,13 +182,11 @@ class TestManney2011(unittest.TestCase):
         self.assertRaises(ValueError, lambda: next(result))
         lon_data = self.data.isel(time=0, lon=0)
         result = jetstream_metrics.manney_et_al_2011(lon_data)
-        current = next(result)
-        self.assertEqual(current._initial_core_ids.mean(), 30.07608695652174)
-        self.assertEqual(len(np.where(current._labelled_data['ws'] == 'Core')[1]), 46)
-        self.assertEqual(len(np.where(current._labelled_data['ws'] == 'Potential Boundary')[1]), 81)
-        current.run()
-        self.assertEqual(current.num_of_cores, 3)
-        self.assertListEqual(current.final_jet_cores[0]['index_of_area'][0], [5,15])
+        self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
+        self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Core')[1]), 46)
+        self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Potential Boundary')[1]), 81)
+        self.assertEqual(result.num_of_cores, 3)
+        self.assertListEqual(result.final_jet_cores[0]['index_of_area'][0], [5,15])
 
 
 class TestScreenSimmonds2013(unittest.TestCase):
@@ -258,8 +256,7 @@ class TestCeppi2018(unittest.TestCase):
     
     def test_metric(self):
         result = jetstream_metrics.ceppi_et_al_2018(self.data)
-        current = next(result)
-        self.assertEqual(current, 37.96227342516621)
+        self.assertEqual(result['jet_lat_centroid'][0], 37.96227342516621)
 
 
 class TestKern2018(unittest.TestCase):

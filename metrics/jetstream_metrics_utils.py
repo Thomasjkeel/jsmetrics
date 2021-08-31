@@ -757,13 +757,16 @@ def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
     return round(lat_vals[np.argmax(refined_lat_vals)], decimal_places)
 
 
-def get_centroid_jet_lat(data, latitude_col='lat'):
+def get_centroid_jet_lat(data):
     """
+        Will get the centroid latitude of the U-wind by day
+        
+        Only works on data that is 2-d (lat-lon) 
         Used in Ceppi et al. 2018
     """
     xs = []
     ys = []
-    for lat in data[latitude_col]:
+    for lat in data['lat']:
         xs.append(float(lat))
         ys.append(float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean()))
     return np.dot(xs, ys) / np.sum(ys)

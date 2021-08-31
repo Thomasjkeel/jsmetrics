@@ -242,12 +242,16 @@ def ceppi_et_al_2018(data):
 
         Returns: centroid latitude of u-wind for one day
     """
+    all_centroids = []
     if data['time'].count() > 1:
         for time_coord in data['time']:
             sub_data = data.sel(time=time_coord)
-            yield jetstream_metrics_utils.get_centroid_jet_lat(sub_data)
+            all_centroids.append(jetstream_metrics_utils.get_centroid_jet_lat(sub_data))
     else:
-        yield jetstream_metrics_utils.get_centroid_jet_lat(data)
+        all_centroids.append(jetstream_metrics_utils.get_centroid_jet_lat(data))
+    data = data.assign({'jet_lat_centroid': (('time'), all_centroids)})
+    return data
+        
 
 
 def kern_et_al_2018(data):

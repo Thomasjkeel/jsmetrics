@@ -206,13 +206,10 @@ class TestKuang2014(unittest.TestCase):
 
     def test_metric(self):
         result = jetstream_metrics.kuang_et_al_2014(self.data)
-        self.assertRaises(ValueError, lambda: next(result))
         lon_data = self.data.sel(plev=50000)
         result = jetstream_metrics.kuang_et_al_2014(lon_data)
-        current = next(result)
-        self.assertEqual(float(current.jet_occurence['ws'].max()), 50.63158416748047) 
-        current.run()
-        self.assertListEqual(current.jet_centres[0].tolist(), [28.75, 60.])
+        self.assertEqual(float(result[0]._jet_occurence['ws'].max()), 50.63158416748047) 
+        self.assertListEqual(result[0]._jet_centres[0].tolist(), [28.75, 60.])
 
 
 class TestFrancisVavrus2015(unittest.TestCase):

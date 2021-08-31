@@ -342,7 +342,6 @@ class JetStreamCoreIdentificationAlgorithm:
             from its user's point of view, as being executed in one single step, or as multiple steps. If the algorithm is better seen as a single step, 
             the object-oriented implementation can choose to hide all of the implementation details, leaving only the "inputs, process, outputs" visible to the user."
         
-        For Manney et al. 2011 etc.
     """
     def __init__(self, data, ws_core_threshold=40, ws_boundary_threshold=30):
         """
@@ -351,21 +350,19 @@ class JetStreamCoreIdentificationAlgorithm:
             ws_slice -> one longitude for one day as slice of windspeed
         """
         ## Step 1. make windspeed slice
-        self.data = LatitudeWindSpeedSlice(data)
+        self._lat_ws_slice = LatitudeWindSpeedSlice(data)
         
-        assert ws_core_threshold > ws_boundary_threshold, "core threshold needs to be higher than boundary threshold"
-        assert ws_core_threshold > 0, "core threshold needs to be more than 0"
-        assert ws_boundary_threshold > 0, "boundary threshold needs to be more than 0"
         ## Step 2. Get core and potential boundary points
-        self.output = self.data.label_slice(self.data['ws'] < ws_core_threshold, 'Core')
-        self.output = self.output.where((self.data['ws'] < ws_boundary_threshold) | (self.data['ws'] > ws_core_threshold), other='Potential Boundary')
+        self._labelled_data = self._lat_ws_slice.label_slice(self._lat_ws_slice['ws'] < ws_core_threshold, 'Core')
+        self._labelled_data = self._labelled_data.where((self._lat_ws_slice['ws'] < ws_boundary_threshold) | (self._lat_ws_slice['ws'] > ws_core_threshold), other='Potential Boundary')
         
         ## Step 3. Get indexes of jet-stream cores and potential boundaries
-        self.core_ids, self.pot_boundary_ids = self.get_indexes_of_core_and_boundaries()
+        self._initial_core_ids, self._pot_boundary_ids = self._get_indexes_of_core_and_boundaries()
         
         ## Step 4. Set variables needed to keep track of 
-        self.current_core_lat = -1
-        self.currently_a_core = None
+        self._current_core_lat = -1
+        self._currently_a_core = None
+        self.algorithm_has_run = False
 
     def __add__(self, other):
         print("TODO: need to implement behaviour for adding slices together")
@@ -376,15 +373,19 @@ class JetStreamCoreIdentificationAlgorithm:
         """
             Representation of the class. Have it return the labelled data
         """
-        print("A total of %d Jet-stream cores have been found in the wind-speed slice" % (len(np.where(self.output['ws'] == 'Core')[1])))
-        print("A total of %d potential Jet-stream boundaries have been found in the wind-speed slice" % (len(np.where(self.output['ws'] == 'Potential Boundary')[1])))
-
-        return repr(self.output)
+        if not self.algorithm_has_run:
+            print("A total of %d initial Jet-stream cores have been found in the wind-speed slice" % (self._labelled_data['ws'].where(lambda x: x=='Core').count()))
+            print("A total of %d potential Jet-stream boundaries have been found in the wind-speed slice" % (self._labelled_data['ws'].where(lambda x: x=='Potential Boundary').count()))
+            return repr(self._labelled_data)
+        else:
+            print('A total of %d cores have been discovered' % (self.num_of_cores))
+            return repr(self.output_data)
+        
     
     @classmethod
     def run_algorithm(cls, data, ws_core_threshold=40, ws_boundary_threshold=30):
         """
-            
+            Class method for running algorithm
         """
         js_algorithm = cls(data, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
 
@@ -393,21 +394,22 @@ class JetStreamCoreIdentificationAlgorithm:
     
     
     def run(self):
-        return self.get_jet_core_boundary()
+        self.final_jet_cores = self._get_jet_core_boundary()
+        self.output_data = self._attach_cores_to_data()
+        self.algorithm_has_run = True
     
-    
-    def get_indexes_of_core_and_boundaries(self):
+    def _get_indexes_of_core_and_boundaries(self):
         """
             Will return the indexes in the ws data that ARE jet-stream cores and COULD BE jet-stream core boundaries
         """
-        pot_boundary_ids = np.where(self.output['ws'] == 'Potential Boundary')
-        core_ids = np.where(self.output['ws'] == 'Core')
+        pot_boundary_ids = np.where(self._labelled_data['ws'] == 'Potential Boundary')
+        initial_core_ids = np.where(self._labelled_data['ws'] == 'Core')
         pot_boundary_ids = np.stack(pot_boundary_ids, axis=-1)
-        core_ids = np.stack(core_ids, axis=-1)
-        return core_ids, pot_boundary_ids
+        initial_core_ids = np.stack(initial_core_ids, axis=-1)
+        return initial_core_ids, pot_boundary_ids
 
     @staticmethod
-    def get_indexes_to_check(pot_boundary):
+    def _get_indexes_to_check(pot_boundary):
         """
             Will return an array of indexes to check for potential boundaries or jetstream cores
             Used in Manney et al. 2011
@@ -422,7 +424,7 @@ class JetStreamCoreIdentificationAlgorithm:
         return vals_to_check
 
 
-    def make_pot_jetcore_area(self, vals, area, core_found=False):
+    def _make_pot_jetcore_area(self, vals, area, core_found=False):
         """
         Recursive function that will return the IDs of a jet core boundary i.e. above 30 m/s surrounding a core of 40 m/s
         Will check one an area of potential boundaries contains a core and thus can be called boundaries.
@@ -433,35 +435,35 @@ class JetStreamCoreIdentificationAlgorithm:
         for val in vals:
             if val in area:
                 continue
-            if val in self.core_ids.tolist():
+            if val in self._initial_core_ids.tolist():
                 core_found = True
                 ## look for a new core if it is more than 15 degrees away
-                if val[1] - self.current_core_lat > 15 and val[1] > self.current_core_lat:
+                if val[1] - self._current_core_lat > 15 and val[1] > self._current_core_lat:
 #                     print('THIS IS A NEW CORE')
-                    self.current_core_lat = val[1]
+                    self._current_core_lat = val[1]
                 area.append(val)
-                new_vals = self.get_indexes_to_check(val)
+                new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
                 vals_copy = remove_duplicates(vals_copy)
-                return self.make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
+                return self._make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
 
-            elif val in self.pot_boundary_ids.tolist():
+            elif val in self._pot_boundary_ids.tolist():
                 area.append(val)
-                new_vals = self.get_indexes_to_check(val)
+                new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
                 vals_copy = remove_duplicates(vals_copy)
-                return self.make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
+                return self._make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
             else:
                 vals_copy.remove(val)
                 continue
         
         ## reset current core variables
-        self.current_core_lat = -1
-        self.currently_a_core = None
+        self._current_core_lat = -1
+        self._currently_a_core = None
         return area, core_found
 
 
-    def get_jet_core_boundary(self):
+    def _get_jet_core_boundary(self):
         """
             Recursive function that will return the IDs of all jet core boundaries i.e. above 30 m/s surrounding a core of 40 m/s
             Will check if an area of potential boundaries contains a core and thus can be called boundaries.
@@ -471,27 +473,29 @@ class JetStreamCoreIdentificationAlgorithm:
         already_covered = []
         js_core_indexes = []
         id_number = 0
-        for pot_boundary in self.pot_boundary_ids:
+        for pot_boundary in self._pot_boundary_ids:
             if pot_boundary.tolist() in already_covered:
                 continue
-            vals_to_check = self.get_indexes_to_check(pot_boundary)
-            area, core_found = self.make_pot_jetcore_area(vals_to_check, area=[])
+            vals_to_check = self._get_indexes_to_check(pot_boundary)
+            area, core_found = self._make_pot_jetcore_area(vals_to_check, area=[])
             already_covered.extend(area)
             already_covered = remove_duplicates(already_covered)
             ## attach area if part of core
             if core_found:
-                js_core_indexes.extend([{"id":id_number, "index_of_area":area, "num_of_cores":core_found}])
                 id_number += 1
-
-
+                js_core_indexes.extend([{"id":id_number, "index_of_area":area}])
+        self.num_of_cores = id_number
         return js_core_indexes
 
     
-    def work_out_if_two_seperate_cores(self):
-        """
-            After Manney et al. 2011, will work out if two or more jet cores found within one boundary are seperate or not
-        """
-        return 
+    def _attach_cores_to_data(self):
+        self._lat_ws_slice.values['core_id'] =  (('plev', 'lat'), np.zeros((self._lat_ws_slice.values['plev'].size,\
+                                                          self._lat_ws_slice.values['lat'].size)))
+        for jet_core in self.final_jet_cores:
+            for plev, lat in jet_core['index_of_area']:
+                self._lat_ws_slice.values['core_id'].loc[dict(lat=self._lat_ws_slice.values['lat'].data[lat],\
+                                                     plev=self._lat_ws_slice.values['plev'].data[plev])] = jet_core['id']
+        return self._lat_ws_slice.values
 
 
 def make_empty_local_wind_maxima_data_var(data):

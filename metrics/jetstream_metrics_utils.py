@@ -588,6 +588,11 @@ class JetStreamOccurenceAndCentreAlgorithm:
     """
     
     def __init__(self, data, occurence_ws_threshold=30):
+        try:
+            assert occurence_ws_threshold > 0
+        except:
+            raise ValueError("Occurence wind-speed threshold needs to be more than 0")
+        
         ## Load in data as a pressure level 2d wind-speed slice
         self.plev_ws_slice = PressureLevelWindSpeedSlice(data).values
         self.plev_ws_slice['jet_ocurrence1_jet_centre2'] = self.plev_ws_slice['ws'].copy()

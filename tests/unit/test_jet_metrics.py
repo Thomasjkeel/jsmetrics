@@ -180,6 +180,7 @@ class TestManney2011(unittest.TestCase):
         ## NOTE: this metric is a generator
         subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0,1))
         result = jetstream_metrics.manney_et_al_2011(subset_data)
+        self.assertEqual(result['jet_core_id'].max(), 2)
 
 
 
@@ -197,11 +198,10 @@ class TestKuang2014(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        result = jetstream_metrics.kuang_et_al_2014(self.data)
-        lon_data = self.data.sel(plev=50000)
+        lon_data = self.data.sel(plev=50000).isel(time=slice(0,3))
         result = jetstream_metrics.kuang_et_al_2014(lon_data)
-        self.assertEqual(float(result[0]._jet_occurence['ws'].max()), 50.63158416748047) 
-        self.assertListEqual(result[0]._jet_centres[0].tolist(), [28.75, 60.])
+        self.assertEqual(result['jet_ocurrence1_jet_centre2'].max(), 2)
+
 
 
 class TestFrancisVavrus2015(unittest.TestCase):
@@ -309,8 +309,10 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
     def test_inner_funcs(self):
         tested_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm
-        result = tested_alg(self.data)
+        test_data = self.data.isel(time=0, lon=0)
+        result = tested_alg(test_data)
         result.run()
+        print(result._initial_core_ids.mean())
         self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
         self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Core')[1]), 46)
         self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Potential Boundary')[1]), 81)
@@ -327,6 +329,13 @@ class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_alg(self.data, 40))
         test_data = self.data.isel(plev=0, time=0)
         self.assertRaises(AssertionError, lambda: tested_alg(test_data,-10))
+
+    def test_inner_functions(self):
+        tested_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm
+        test_data = self.data.isel(plev=0, time=0)
+        result = tested_alg(test_data)
+        self.assertEqual(float(result._jet_occurence['ws'].max()), 20.96497917175293) 
+        self.assertListEqual(result._jet_centres.tolist(), [28.75, 60.])
 
 
 

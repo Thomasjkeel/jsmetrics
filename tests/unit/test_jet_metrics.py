@@ -178,15 +178,9 @@ class TestManney2011(unittest.TestCase):
 
     def test_metric(self):
         ## NOTE: this metric is a generator
-        result = jetstream_metrics.manney_et_al_2011(self.data)
-        self.assertRaises(ValueError, lambda: next(result))
-        lon_data = self.data.isel(time=0, lon=0)
-        result = jetstream_metrics.manney_et_al_2011(lon_data)
-        self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
-        self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Core')[1]), 46)
-        self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Potential Boundary')[1]), 81)
-        self.assertEqual(result.num_of_cores, 3)
-        self.assertListEqual(result.final_jet_cores[0]['index_of_area'][0], [5,15])
+        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0,1))
+        result = jetstream_metrics.manney_et_al_2011(subset_data)
+
 
 
 class TestScreenSimmonds2013(unittest.TestCase):
@@ -306,13 +300,22 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
     def test_ws_thresholds(self):
         tested_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm
-        self.assertRaises(ValueError, lambda: tested_alg(self.data, 40, 30))
-        test_data = self.data.isel(lon=0, time=0)
+        self.assertRaises(ValueError, lambda: tested_alg(self.data))
+        test_data = self.data.isel(time=0, lon=0)
         self.assertRaises(AssertionError, lambda: tested_alg(test_data,-10,10))
         self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,-10))
         self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,30))
         self.assertRaises(AssertionError, lambda: tested_alg(test_data,10,10))
 
+    def test_inner_funcs(self):
+        tested_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm
+        result = tested_alg(self.data)
+        result.run()
+        self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
+        self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Core')[1]), 46)
+        self.assertEqual(len(np.where(result._labelled_data['ws'] == 'Potential Boundary')[1]), 81)
+        self.assertEqual(result.num_of_cores, 3)
+        self.assertListEqual(result.final_jet_cores[0]['index_of_area'][0], [5,15])
 
 
 class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):

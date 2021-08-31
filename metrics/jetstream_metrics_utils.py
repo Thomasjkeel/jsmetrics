@@ -568,6 +568,17 @@ def get_number_of_days_per_monthyear_with_local_wind_maxima(data):
     return data
 
 
+def calc_jet_occurence_and_centre_per_day(row, occurence_ws_threshold):
+    """
+        Runs JetStreamCoreIdentificationAlgorithm method on a single day 
+        
+        Used in Manney et al. 2011
+    """
+    occ_alg = JetStreamOccurenceAndCentreAlgorithm(row, occurence_ws_threshold)
+    occ_alg.run()
+    return occ_alg.output_data 
+
+
 class JetStreamOccurenceAndCentreAlgorithm:
     """
         Used in Kuang et al. 2014

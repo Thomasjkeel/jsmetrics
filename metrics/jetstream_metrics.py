@@ -154,15 +154,9 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
         May take a long time for a lot of data
         TODO: ask chris to check
     """ 
-    if data['time'].count() > 1:
-        for time_coord in data['time']:
-            sub_data = data.sel(time=time_coord)
-            occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(sub_data, occurence_ws_threshold=occurence_ws_threshold)
-            yield occurence_alg
-    else:
-        occurence_alg = jetstream_metrics_utils.JetStreamOccurenceAndCentreAlgorithm(data, occurence_ws_threshold=occurence_ws_threshold)
-        yield occurence_alg
-
+    print('Step 1. Run Jet-stream Occurence and Centre Algorithm (1 for occurence, 2 for core)')
+    data = data.groupby('time').map(jetstream_metrics_utils.calc_jet_occurence_and_centre_per_day, (occurence_ws_threshold,))
+    return data
 
 
 def francis_vavrus_2015(data):

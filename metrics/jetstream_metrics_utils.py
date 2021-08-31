@@ -570,101 +570,113 @@ def get_number_of_days_per_monthyear_with_local_wind_maxima(data):
 
 class JetStreamOccurenceAndCentreAlgorithm:
     """
-        Have this class inherit from some sort of WS slice of one plev and all Lats + Lons
-        
-        For Kuang et al. 2015
+        Used in Kuang et al. 2014
     """
     
     def __init__(self, data, occurence_ws_threshold=30):
         ## Load in data as a pressure level 2d wind-speed slice
-        self.data = PressureLevelWindSpeedSlice(data).values
-        assert occurence_ws_threshold > 0, "occurence threshold needs to be more than 0"
-        self.jet_occurence = self.data.where(self.data['ws'] >= occurence_ws_threshold)
-        self.lat_resolution = float(self.data['lat'][1] - self.data['lat'][0])
-        self.lon_resolution = float(self.data['lon'][1] - self.data['lon'][0])
+        self.plev_ws_slice = PressureLevelWindSpeedSlice(data).values
+        self.plev_ws_slice['jet_ocurrence1_jet_centre2'] = self.plev_ws_slice['ws'].copy()
+        self.plev_ws_slice['jet_ocurrence1_jet_centre2'] = self.plev_ws_slice['jet_ocurrence1_jet_centre2'].where(lambda x: x >= occurence_ws_threshold)
+        self._jet_occurence = self.plev_ws_slice
+        self._lat_resolution = float(self.plev_ws_slice['lat'][1] - self.plev_ws_slice['lat'][0])
+        self._lon_resolution = float(self.plev_ws_slice['lon'][1] - self.plev_ws_slice['lon'][0])
         
         ## make_duplicate data for output
-        self.output = self.jet_occurence.copy(deep=True)
-        self.output['ws'].loc[:] = np.nan
+        self.output_data = self._jet_occurence.copy(deep=True)
         
         ## Initialise lists needed for search algorithm
-        self.all_coords = []
-        self.lats_with_3 = []
-        self.lats_for_search = []
-        self.jet_centres = []
+        self._all_coords = []
+        self._lats_with_3 = []
+        self._lats_for_search = []
+        self._jet_centres = []
+        
+        ## Needed to keep track of algorithm
+        self.algorithm_has_run = False
+        
         
     @classmethod
-    def run_algorithm(cls, data):
-        return cls(data).run()
+    def run_algorithm(cls):
+        return cls().run()
     
     def run(self):
-        print('starting')
-        self.get_all_coords_of_jet_occurence()
-        self.all_coords_arr = np.array(self.all_coords)
+        self._get_all_coords_of_jet_occurence()
+        self._all_coords_arr = np.array(self._all_coords)
         ## Get a counter of all the latitude coordinates
-        self.count_lats = collections.Counter(self.all_coords_arr[:,0])
-        self.get_all_lats_of_jet_centre_for_search()
-        self.calculate_jet_centre_points()
-        self.get_jet_centre_data()
-        print('done!')
+        self._count_lats = collections.Counter(self._all_coords_arr[:,0])
+        self._get_all_lats_of_jet_centre_for_search()
+        self._calculate_jet_centre_points()
+        self._get_jet_centre_data()
+        self._label_jet_occurence()
+        
+        self.algorithm_has_run = True
     
-    def get_jet_centre_data(self):
+    def _get_jet_centre_data(self):
         """
             Calculates jet-stream centres based on if one jet-stream occurence grid is surrounded by 8 cells of jet-stream occurence (default is 30 m/s)
         """
         ## TODO: there's got to be a quicker way
-        for centre in self.jet_centres:
-            self.output['ws'].loc[dict(lat=centre[0], lon=centre[1])] = 1
+        for centre in self._jet_centres:
+            self.output_data['jet_ocurrence1_jet_centre2'].loc[dict(lat=centre[0], lon=centre[1])] = 2
     
     
-    def get_all_coords_of_jet_occurence(self):
-        for val in self.jet_occurence['ws'].notnull():
+    def _get_all_coords_of_jet_occurence(self):
+        for val in self._jet_occurence['jet_ocurrence1_jet_centre2'].notnull():
             if val.any():
                 for sub_val in val:
                     if sub_val:
-                        self.all_coords.append([float(sub_val['lat']), float(sub_val['lon'])])
+                        self._all_coords.append([float(sub_val['lat']), float(sub_val['lon'])])
 
-    def get_all_lats_of_jet_centre_for_search(self):
+    def _get_all_lats_of_jet_centre_for_search(self):
         """
             Will get all latitudes that 'may' be a jet-stream centre-point i.e. where latitude appears at least three times for 3*3 lat/lon grid.
             NOTE: speeds up calculation as less values are searched through
         """
         ## Step 1. look for all latitudes with at least 3 occurences i.e. X component 3*3 grid
-        self.get_all_latitudes_that_occur_at_least_three_times()
+        self._get_all_latitudes_that_occur_at_least_three_times()
         ## Step 2. Check if the latitudes above and below the lats with 3 values are present i.e. Y component of for 3*3
-        self.get_all_latitudes_available_in_3by3_grid()
+        self._get_all_latitudes_available_in_3by3_grid()
     
-    def get_all_latitudes_that_occur_at_least_three_times(self):
-        for lat in self.count_lats.items():
+    def _get_all_latitudes_that_occur_at_least_three_times(self):
+        for lat in self._count_lats.items():
             if lat[1] >= 3:
-                self.lats_with_3.append(lat[0])
+                self._lats_with_3.append(lat[0])
     
-    def get_all_latitudes_available_in_3by3_grid(self):
-        for lat in self.lats_with_3:
-            if lat-self.lat_resolution in self.lats_with_3 and lat+self.lat_resolution in self.lats_with_3:
-                self.lats_for_search.append(lat)
+    def _get_all_latitudes_available_in_3by3_grid(self):
+        for lat in self._lats_with_3:
+            if lat-self._lat_resolution in self._lats_with_3 and lat+self._lat_resolution in self._lats_with_3:
+                self._lats_for_search.append(lat)
 
-    def calculate_jet_centre_points(self):
+    def _calculate_jet_centre_points(self):
         """
             Will return a list of the coordinates for all jet-centre points
         """
-        for lat in self.lats_for_search:
-            coords_to_search = self.all_coords_arr[np.where(self.all_coords_arr[::,0] == lat)]
+        for lat in self._lats_for_search:
+            coords_to_search = self._all_coords_arr[np.where(self._all_coords_arr[::,0] == lat)]
             for coord in coords_to_search:
-                if coord[0] == 0 or coord[1] == 0 and 360 - self.lon_resolution not in coords_to_search[::, 1]:
+                if coord[0] == 0 or coord[1] == 0 and 360 - self._lon_resolution not in coords_to_search[::, 1]:
                     continue
                 ## check if coord is jet centre point i.e. 9*9 all above 30
-                lat_grid_vals = np.arange(coord[0]-self.lat_resolution, coord[0]+self.lat_resolution+0.1, self.lat_resolution)
-                lon_grid_vals = np.arange(coord[1]-self.lon_resolution, coord[1]+self.lon_resolution+0.1, self.lon_resolution)
+                lat_grid_vals = np.arange(coord[0]-self._lat_resolution, coord[0]+self._lat_resolution+0.1, self._lat_resolution)
+                lon_grid_vals = np.arange(coord[1]-self._lon_resolution, coord[1]+self._lon_resolution+0.1, self._lon_resolution)
                 matrix_vals_to_check = np.array(np.meshgrid(lat_grid_vals, lon_grid_vals)).T.reshape(-1,2)
                 matrix_vals_to_check = matrix_vals_to_check % 360 # loop around
                 add_coord = True
                 for val in matrix_vals_to_check:
-                    if not val.tolist() in self.all_coords:
+                    if not val.tolist() in self._all_coords:
                         add_coord = False
                         break
                 if add_coord:
-                    self.jet_centres.append(coord)
+                    self._jet_centres.append(coord)
+
+
+    def _label_jet_occurence(self):
+        """
+            Will label all non 2 values of windspeed for the occurence
+            Used in Kuang et al. 2014
+        """
+        self.output_data['jet_ocurrence1_jet_centre2'] = self.output_data['jet_ocurrence1_jet_centre2'].where(lambda x: np.isfinite(x), 0)
+        self.output_data['jet_ocurrence1_jet_centre2'] = self.output_data['jet_ocurrence1_jet_centre2'].where(lambda x: ((x == 0) | (x == 2)), 1)
 
 
 def meridional_circulation_index(data):

@@ -180,15 +180,15 @@ class TestManney2011(unittest.TestCase):
         ## NOTE: this metric is a generator
         result = jetstream_metrics.manney_et_al_2011(self.data)
         self.assertRaises(ValueError, lambda: next(result))
-        lon_data = self.data.isel(lon=0)
+        lon_data = self.data.isel(time=0, lon=0)
         result = jetstream_metrics.manney_et_al_2011(lon_data)
         current = next(result)
-        self.assertEqual(current.core_ids.mean(), 30.07608695652174)
-        self.assertEqual(len(np.where(current.output['ws'] == 'Core')[1]), 46)
-        self.assertEqual(len(np.where(current.output['ws'] == 'Potential Boundary')[1]), 81)
-        alg_results = current.run()
-        self.assertEqual(len(alg_results), 3)
-        self.assertListEqual(alg_results[0]['index_of_area'][0], [5,15])
+        self.assertEqual(current._initial_core_ids.mean(), 30.07608695652174)
+        self.assertEqual(len(np.where(current._labelled_data['ws'] == 'Core')[1]), 46)
+        self.assertEqual(len(np.where(current._labelled_data['ws'] == 'Potential Boundary')[1]), 81)
+        current.run()
+        self.assertEqual(current.num_of_cores, 3)
+        self.assertListEqual(current.final_jet_cores[0]['index_of_area'][0], [5,15])
 
 
 class TestScreenSimmonds2013(unittest.TestCase):

@@ -159,21 +159,17 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     return data
 
 
-def francis_vavrus_2015(data):
+def francis_vavrus_2015(data, lat_min=20, lat_max=80):
     """
         Write function description
-        TODO: maybe add seasonal anomaly calculation 
-        TODO: join back to data rather than returning data array
+        MCI
     """
-    ## Step 1 calculate MCI index for data
-    print('calculating Meridional Circulation Index from data')
-    mci_data = jetstream_metrics_utils.meridional_circulation_index(data) 
+    print('Step 1. calculating Meridional Circulation Index from data')
+    data['mci'] = jetstream_metrics_utils.meridional_circulation_index(data) 
     
+    print('Step 2. TODO Calculate anomaly from season')
     ## maybe TODO: Step ?? Calculate anomaly from season
-    mci_data = mci_data.rename('mci').to_dataset()
-
-    return mci_data
-
+    return data
 
 
 def local_wave_activity(data):

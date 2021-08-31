@@ -336,6 +336,21 @@ def assign_filtered_vals_to_data(data, filtered_max_lats, filtered_max_ws, dim):
     return filtered_data
 
 
+def calc_jet_core_per_day(row, ws_core_threshold, ws_boundary_threshold):
+    """
+        Runs JetStreamCoreIdentificationAlgorithm method on a single day 
+        
+        Used in Manney et al. 2011
+    """
+    row['jet_core_id'] = (('plev', 'lat', 'lon'), np.zeros((row['plev'].size, row['lat'].size, row['lon'].size))) #TODO
+    for lon in row['lon']:
+        current = row.sel(lon=lon)
+        core_alg = JetStreamCoreIdentificationAlgorithm(current, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
+        core_alg.run()
+        row['jet_core_id'].loc[dict(lon=lon)] = core_alg.output_data['core_id']
+    return row 
+
+    
 class JetStreamCoreIdentificationAlgorithm:
     """        
         "As far as object-oriented design is concerned, the breakdown of an algorithm into steps depends on whether the algorithm itself is better seen,

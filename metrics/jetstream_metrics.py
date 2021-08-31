@@ -113,17 +113,11 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
         Write function description
 
-        Used in Manney 2011, 2014, 2017 and 2018
+        Also see Manney et al. 2011, 2014, 2017 and 2018
     """
-        
-    if data['time'].count() > 1:
-        for time_coord in data['time']:
-            sub_data = data.sel(time=time_coord)
-            core_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm(sub_data, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
-            yield core_alg
-    else:
-        core_alg = jetstream_metrics_utils.JetStreamCoreIdentificationAlgorithm(data, ws_core_threshold=ws_core_threshold, ws_boundary_threshold=ws_boundary_threshold)
-        yield core_alg
+    print('Step 1. Run Jet-stream Core Idenfication Algorithm')
+    data = data.groupby('time').map(jetstream_metrics_utils.calc_jet_core_per_day, (ws_core_threshold, ws_boundary_threshold,))
+    return data
         
 
 def penaortiz_et_al_2013(data):

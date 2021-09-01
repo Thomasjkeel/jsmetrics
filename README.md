@@ -13,6 +13,7 @@ To-Do:
 - add benchmark speed tests for each metric based on standard sizes of the dataset
 - argparse to parse a list for additional arguments (do more user testing)
 - add doctests to classes?
+- Check that methods using just U account for negative values (maybe need for abs())
 
 
 #### Why class based algorithms:

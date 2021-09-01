@@ -250,7 +250,8 @@ class TestCeppi2018(unittest.TestCase):
     
     def test_metric(self):
         result = jetstream_metrics.ceppi_et_al_2018(self.data)
-        self.assertEqual(result['jet_lat_centroid'][0], 37.96227342516621)
+        print(result)
+        self.assertEqual(float(result['jet_lat_centroid'][0].data), 42.166801789276384)
 
 
 class TestKern2018(unittest.TestCase):

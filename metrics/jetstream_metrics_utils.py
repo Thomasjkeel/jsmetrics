@@ -709,7 +709,7 @@ def meridional_circulation_index(data):
            
     NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1   
     """
-    assert 'ua' and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
+    assert 'ua' in data.variables and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
     return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
 
     

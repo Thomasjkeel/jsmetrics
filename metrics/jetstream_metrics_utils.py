@@ -818,7 +818,7 @@ def get_centroid_jet_lat(data):
     ys = []
     for lat in data['lat']:
         xs.append(float(lat))
-        ys.append(float(data.sel(lat=lat)['ua'].mean()/data['ua'].mean()))
+        ys.append(float(abs(data.sel(lat=lat)['ua'].mean())/abs(data['ua'].mean())))
     return np.dot(xs, ys) / np.sum(ys)
 
 

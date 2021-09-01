@@ -230,12 +230,13 @@ def ceppi_et_al_2018(data):
     if data['time'].count() > 1:
         for time_coord in data['time']:
             sub_data = data.sel(time=time_coord)
-            all_centroids.append(jetstream_metrics_utils.get_centroid_jet_lat(sub_data))
+            centroid_lat = jetstream_metrics_utils.get_centroid_jet_lat(sub_data)
+            all_centroids.append(centroid_lat)
     else:
-        all_centroids.append(jetstream_metrics_utils.get_centroid_jet_lat(data))
+        centroid_lat = jetstream_metrics_utils.get_centroid_jet_lat(data)
+        all_centroids.append(centroid_lat)
     data = data.assign({'jet_lat_centroid': (('time'), all_centroids)})
     return data
-        
 
 
 def kern_et_al_2018(data):

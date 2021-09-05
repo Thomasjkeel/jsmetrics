@@ -3,7 +3,7 @@ import cdsapi
 
 c = cdsapi.Client()
 
-p_levels = [250, 300, 500, 700, 850, 925]
+p_levels = [100, 250, 300, 500, 700, 850]
 
 c.retrieve("reanalysis-era5-pressure-levels", 
     {

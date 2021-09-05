@@ -556,7 +556,7 @@ def get_local_wind_maxima_by_day(row):
         ind_local_wind_maximas = get_local_maxima(pot_local_maximas, axis=1)
         # Turn into 2-d numpy array 
         ind_local_wind_maximas = np.array([[arr1, arr2] for arr1, arr2 in zip(ind_local_wind_maximas[0], ind_local_wind_maximas[1])])
-        for plev_ind, lat_ind in ind_local_wind_maximas:
+        for lat_ind, plev_ind in ind_local_wind_maximas:
             row['local_wind_maxima'].loc[dict(lat=current['lat'].data[lat_ind], lon=lon, plev=current['plev'].data[plev_ind])] = 1.0
     return row
           

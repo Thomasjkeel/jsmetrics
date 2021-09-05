@@ -54,9 +54,9 @@ def archer_caldeira_2008(data):
     mass_weighted_average = jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
     mass_flux_weighted_pressure = jetstream_metrics_utils.calc_mass_flux_weighted_pressure(mon_mean)
     mass_flux_weighted_latitude = jetstream_metrics_utils.calc_mass_flux_weighted_latitude(mon_mean, lat_min=15, lat_max=75)
-    data = data.assign({'mass_weighted_average_ws':(('month', 'lat', 'lon'), mass_weighted_average),\
-                        'mass_flux_weighted_pressure':(('month', 'lat', 'lon'), mass_flux_weighted_pressure) ,\
-                        'mass_flux_weighted_latitude':(('month', 'lon'), mass_flux_weighted_latitude)})
+    data = data.assign({'mass_weighted_average_ws':(('month', 'lat', 'lon'), mass_weighted_average.data),\
+                        'mass_flux_weighted_pressure':(('month', 'lat', 'lon'), mass_flux_weighted_pressure.data) ,\
+                        'mass_flux_weighted_latitude':(('month', 'lon'), mass_flux_weighted_latitude.data)})
     return data
 
 

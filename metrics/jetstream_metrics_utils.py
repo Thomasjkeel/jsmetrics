@@ -176,7 +176,7 @@ def get_local_jet_maximas_by_day_by_plev(row):
         TODO: will only work is 1 day is the resolution
         TODO: maybe combine with pena-ortiz method
     """
-    row['jet_maxima'] = (('plev', 'lat', 'lon'), np.zeros((3, 73, 192))) #TODO
+    row['jet_maxima'] = (('plev', 'lat', 'lon'), np.zeros((row['plev'].size, row['lat'].size, row['lon'].size))) #TODO
     for lon in row['lon']:
         for plev in row['plev']:
             current = row.sel(lon=lon, plev=plev)
@@ -511,7 +511,7 @@ class JetStreamCoreIdentificationAlgorithm:
         self._lat_ws_slice.values['core_id'] =  (('plev', 'lat'), np.zeros((self._lat_ws_slice.values['plev'].size,\
                                                           self._lat_ws_slice.values['lat'].size)))
         for jet_core in self.final_jet_cores:
-            for plev, lat in jet_core['index_of_area']:
+            for lat, plev in jet_core['index_of_area']:
                 self._lat_ws_slice.values['core_id'].loc[dict(lat=self._lat_ws_slice.values['lat'].data[lat],\
                                                      plev=self._lat_ws_slice.values['plev'].data[plev])] = jet_core['id']
         return self._lat_ws_slice.values
@@ -622,7 +622,11 @@ class JetStreamOccurenceAndCentreAlgorithm:
         self._get_all_coords_of_jet_occurence()
         self._all_coords_arr = np.array(self._all_coords)
         ## Get a counter of all the latitude coordinates
-        self._count_lats = collections.Counter(self._all_coords_arr[:,0])
+        # TODO: add tests to see if this works 
+        try:
+            self._count_lats = collections.Counter(self._all_coords_arr[:,0])
+        except:
+            self._count_lats = {}
         self._get_all_lats_of_jet_centre_for_search()
         self._calculate_jet_centre_points()
         self._get_jet_centre_data()

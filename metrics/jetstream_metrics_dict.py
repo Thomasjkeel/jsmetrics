@@ -31,7 +31,7 @@ JETSTREAM_METRIC_DICT = {
     "Cattiaux2016":
         {"variables": ["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.cattiaux_et_al_2016, "description": "Cattiaux et al. 2016"},
     "GrisePolvani2017":
-        {"variables": ["ua"], "coords":{"plev":[85000, 85000]}, "metric": jetstream_metrics.grise_polvani_2017, "description": "Grise & Polvani 2017"},
+        {"variables": ["ua"], "coords":{"plev":[85000, 85000], "lat": [-65, -30]}, "metric": jetstream_metrics.grise_polvani_2017, "description": "Grise & Polvani 2017"},
     "Molnos2017":
         {"variables": ["ua", "va"], "coords":{"plev":[50000, 15000]}, "metric": jetstream_metrics.molnos_et_al_2017, "description": "Molnos et al 2017"},
     "Ceppi2018":

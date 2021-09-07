@@ -194,6 +194,7 @@ def grise_polvani_2017(data):
     """
         Write function description
         See also Ceppi et al. 2012
+        Works on Southern Hemisphere
         TODO: work out if relevant as this method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record 
     """
     ## Step 1.

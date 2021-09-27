@@ -367,9 +367,10 @@ class JetStreamCoreIdentificationAlgorithm:
             assert ws_core_threshold > ws_boundary_threshold and ws_core_threshold > 0 and ws_boundary_threshold > 0
         except:
             raise ValueError("Windspeed core threshold needs to be more than boundary threshold and both need to be more than 0")
+        ## standardise data
+        data = general_utils.standardise_dimension_order(data, dim_order=(...,'plev', 'lat'))
         ## Step 1. make windspeed slice
         self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)
-        
         ## Step 2. Get core and potential boundary points
         self._labelled_data = self._lat_ws_slice.label_slice(self._lat_ws_slice['ws'] < ws_core_threshold, 'Core')
         self._labelled_data = self._labelled_data.where((self._lat_ws_slice['ws'] < ws_boundary_threshold) | (self._lat_ws_slice['ws'] > ws_core_threshold), other='Potential Boundary')
@@ -510,10 +511,11 @@ class JetStreamCoreIdentificationAlgorithm:
         self._lat_ws_slice.values['core_id'] =  (('plev', 'lat'), np.zeros((self._lat_ws_slice.values['plev'].size,\
                                                           self._lat_ws_slice.values['lat'].size)))
         for jet_core in self.final_jet_cores:
-            for lat, plev in jet_core['index_of_area']:
+            for plev, lat in jet_core['index_of_area']:
                 self._lat_ws_slice.values['core_id'].loc[dict(lat=self._lat_ws_slice.values['lat'].data[lat],\
                                                      plev=self._lat_ws_slice.values['plev'].data[plev])] = jet_core['id']
         return self._lat_ws_slice.values
+
 
 def make_empty_local_wind_maxima_data_var(data):
     """

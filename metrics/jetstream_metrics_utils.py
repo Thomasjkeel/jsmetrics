@@ -12,7 +12,7 @@ import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
 import collections
-from .windspeed_utils import PressureLevelWindSpeedSlice, LatitudeWindSpeedSlice
+import windspeed_utils
 from .general_utils import remove_duplicates, get_num_of_decimal_places, get_local_maxima
 
 ### docs
@@ -369,7 +369,7 @@ class JetStreamCoreIdentificationAlgorithm:
         except:
             raise ValueError("Windspeed core threshold needs to be more than boundary threshold and both need to be more than 0")
         ## Step 1. make windspeed slice
-        self._lat_ws_slice = LatitudeWindSpeedSlice(data)
+        self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)
         
         ## Step 2. Get core and potential boundary points
         self._labelled_data = self._lat_ws_slice.label_slice(self._lat_ws_slice['ws'] < ws_core_threshold, 'Core')
@@ -594,7 +594,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
             raise ValueError("Occurence wind-speed threshold needs to be more than 0")
         
         ## Load in data as a pressure level 2d wind-speed slice
-        self.plev_ws_slice = PressureLevelWindSpeedSlice(data).values
+        self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(data).values
         self.plev_ws_slice['jet_ocurrence1_jet_centre2'] = self.plev_ws_slice['ws'].copy()
         self.plev_ws_slice['jet_ocurrence1_jet_centre2'] = self.plev_ws_slice['jet_ocurrence1_jet_centre2'].where(lambda x: x >= occurence_ws_threshold)
         self._jet_occurence = self.plev_ws_slice

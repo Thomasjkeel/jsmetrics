@@ -181,6 +181,8 @@ class TestManney2011(unittest.TestCase):
         subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0,1))
         result = jetstream_metrics.manney_et_al_2011(subset_data)
         self.assertEqual(result['jet_core_id'].max(), 2)
+        self.assertRaises(IndexError, lambda: jetstream_metrics.manney_et_al_2011(subset_data))
+
 
 
 

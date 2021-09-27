@@ -97,3 +97,10 @@ def get_num_of_decimal_places(num):
     if decimal_places < 0:
         decimal_places = 0
     return decimal_places
+
+
+def standardise_dimension_order(data, dim_order=('time', 'plev', 'lat', 'lon', ...)):
+    """
+        Used to make sure that the ordering of the dimensions for a particular dataset is the always the same
+    """
+    return data.transpose(*dim_order)

@@ -66,7 +66,7 @@ class TestMetricComputer(unittest.TestCase):
  
     def test_sel(self):
         metric_computer = compute_metrics.MetricComputer(self.data, all_metrics=JETSTREAM_METRIC_DICT)
-        self.assertRaises(ValueError, lambda: metric_computer.sel(fake=slice(0, 90)))
+        self.assertRaises(KeyError, lambda: metric_computer.sel(fake=slice(0, 90)))
         new1 = metric_computer.sel(lon=slice(0, 90))
         new2 = self.data.sel(lon=slice(0, 90))
         self.assertListEqual(list(new1.data.lon.values), list(new2.lon.values))
@@ -147,7 +147,7 @@ class TestComputeMetricFunctions(unittest.TestCase):
         tested_func = compute_metrics.get_available_metric_list
         self.assertRaises(AssertionError, lambda: tested_func("wrong", JETSTREAM_METRIC_DICT))
         result = tested_func(self.data, JETSTREAM_METRIC_DICT)
-        self.assertListEqual(result, [{'FrancisVavrus2015': 'usuable'}, {'GrisePolvani2017': 'usuable'}, {'Molnos2017': 'usuable'}, {'Ceppi2018': 'usuable'}, {'Simpson2018': 'usuable'}])
+        self.assertListEqual(result, [{'FrancisVavrus2015': 'usuable'}, {'Ceppi2018': 'usuable'}])
 
     def test_check_all_chords(self):
         ## TODO: need to write better test here
@@ -166,7 +166,6 @@ class TestComputeMetricFunctions(unittest.TestCase):
         self.assertFalse(tested_func(self.data, {'variables':['wrong']}))
         self.assertTrue(tested_func(self.data, {'variables':['ua']}))
         self.assertTrue(tested_func(self.data, JETSTREAM_METRIC_DICT[TEST_METRIC_NAME]))
-        self.assertFalse(tested_func(self.data, JETSTREAM_METRIC_DICT["LocalWaveActivity"]))
 
     def test_check_coords_meet_reqs(self):
         tested_func = compute_metrics.check_if_coord_vals_meet_reqs

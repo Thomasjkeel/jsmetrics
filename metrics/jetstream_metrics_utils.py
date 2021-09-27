@@ -12,8 +12,7 @@ import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
 import collections
-import windspeed_utils
-from .general_utils import remove_duplicates, get_num_of_decimal_places, get_local_maxima
+from . import windspeed_utils, general_utils
 
 ### docs
 __author__ = "Thomas Keel"
@@ -181,7 +180,7 @@ def get_local_jet_maximas_by_day_by_plev(row):
         for plev in row['plev']:
             current = row.sel(lon=lon, plev=plev)
             current = current.where((abs(current['ws']) >= 30) & (current['ua'] > 0))
-            local_maxima_lat_inds = get_local_maxima(current['ws'].data)[0]
+            local_maxima_lat_inds = general_utils.get_local_maxima(current['ws'].data)[0]
             if len(local_maxima_lat_inds) > 0:
                 for lat_ind in local_maxima_lat_inds:
                     row['jet_maxima'].loc[dict(lat=current['lat'].data[lat_ind], lon=lon, plev=plev)] = 1.0
@@ -463,14 +462,14 @@ class JetStreamCoreIdentificationAlgorithm:
                 area.append(val)
                 new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
-                vals_copy = remove_duplicates(vals_copy)
+                vals_copy = general_utils.remove_duplicates(vals_copy)
                 return self._make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
 
             elif val in self._pot_boundary_ids.tolist():
                 area.append(val)
                 new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
-                vals_copy = remove_duplicates(vals_copy)
+                vals_copy = general_utils.remove_duplicates(vals_copy)
                 return self._make_pot_jetcore_area(vals_copy, area=area, core_found=core_found)
             else:
                 vals_copy.remove(val)
@@ -498,7 +497,7 @@ class JetStreamCoreIdentificationAlgorithm:
             vals_to_check = self._get_indexes_to_check(pot_boundary)
             area, core_found = self._make_pot_jetcore_area(vals_to_check, area=[])
             already_covered.extend(area)
-            already_covered = remove_duplicates(already_covered)
+            already_covered = general_utils.remove_duplicates(already_covered)
             ## attach area if part of core
             if core_found:
                 id_number += 1
@@ -553,7 +552,7 @@ def get_local_wind_maxima_by_day(row):
     for lon in row['lon']:
         current = row.sel(lon=lon)
         pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(current['ws'], 30).data
-        ind_local_wind_maximas = get_local_maxima(pot_local_maximas, axis=1)
+        ind_local_wind_maximas = general_utils.get_local_maxima(pot_local_maximas, axis=1)
         # Turn into 2-d numpy array 
         ind_local_wind_maximas = np.array([[arr1, arr2] for arr1, arr2 in zip(ind_local_wind_maximas[0], ind_local_wind_maximas[1])])
         for lat_ind, plev_ind in ind_local_wind_maximas:
@@ -807,7 +806,7 @@ def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
     lats, ws = lats_and_ws
     lat_vals =  reduce_lat_resolution(lats, resolution)
     refined_lat_vals = refine_lat_vals_with_quadratic_func(lats, ws, lat_vals)
-    decimal_places = get_num_of_decimal_places(resolution)
+    decimal_places = general_utils.get_num_of_decimal_places(resolution)
     return round(lat_vals[np.argmax(refined_lat_vals)], decimal_places)
 
 

@@ -4,10 +4,14 @@ on:
     branches:
       - main
       - add_tests
+      - add_metrics
+      - add_plotting
   pull_request:
     branches:
       - main
       - add_tests
+      - add_metrics
+      - add_plotting
 jobs:
   build:
     runs-on: ubuntu-latest

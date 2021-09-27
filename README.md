@@ -15,6 +15,8 @@ To-Do:
 - add doctests to classes?
 - Check that methods using just U account for negative values (maybe need for abs())
 
+#### Lagragian unit versus Photo unit
+
 
 #### Why class based algorithms:
 - see https://softwareengineering.stackexchange.com/questions/294076/how-to-represent-an-algorithm-as-a-class

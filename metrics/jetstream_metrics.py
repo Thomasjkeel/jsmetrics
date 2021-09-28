@@ -178,7 +178,7 @@ def local_wave_activity(data):
         Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA with 500 hPa zg instead of pv
         TODO: Ask Chris about equation in Blackport 2020 and others
     """
-    return
+    return data
 
 
 def cattiaux_et_al_2016(data):

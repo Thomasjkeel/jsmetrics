@@ -28,8 +28,8 @@ JETSTREAM_METRIC_DICT = {
         {"variables": ["ua","va"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.francis_vavrus_2015, "description": "Francis & Vavrus 2015"},
     # "LocalWaveActivity":
     #     {"variables": ["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.local_wave_activity, "description": "First introduced by Huang & Nakamura 2015, then modified by Chen et al. 2015 and Martineau et al. 2017"},
-    # "Cattiaux2016":
-    #     {"variables": ["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.cattiaux_et_al_2016, "description": "Cattiaux et al. 2016"},
+    "Cattiaux2016":
+        {"variables": ["zg"], "coords":{"plev": [50000, 50000]}, "metric": jetstream_metrics.cattiaux_et_al_2016, "description": "Cattiaux et al. 2016"},
     "GrisePolvani2017":
         {"variables": ["ua"], "coords":{"plev":[85000, 85000], "lat": [-65, -30]}, "metric": jetstream_metrics.grise_polvani_2017, "description": "Grise & Polvani 2017"},
     # "Molnos2017":

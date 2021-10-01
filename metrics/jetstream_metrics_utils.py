@@ -8,9 +8,11 @@
 
 ### imports
 import numpy as np
+import matplotlib.pyplot
 import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
+import shapely
 import collections
 from . import windspeed_utils, general_utils
 
@@ -712,11 +714,69 @@ def meridional_circulation_index(data):
     MCI =  ――――――――――
            u**2 * v**2
            
-    NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1   
+    NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1 
+
+    Used in Francis & Vavrus 2015  
     """
     assert 'ua' in data.variables and 'va' in data.variables, "Cannot compute metric. 'ua' and/or 'va' not found in data" 
     return  data['va']*abs(data['va'])/(data['ua']**2 + data['va']**2)
 
+
+def get_latitude_circle_linestring(latitude, lon_min, lon_max):
+    """
+        Will return a linestring of a latitude circle
+        Used in Cattiaux et al. 2016
+    """
+    vals = np.column_stack((np.arange(lon_min,lon_max+.1, 0.5), np.array([latitude] *len(np.arange(lon_min,lon_max+.1, 0.5)))))
+    circle = shapely.geometry.LineString(vals)
+    return circle
+
+    
+def get_sinousity_of_zonal_mean_zg(row, latitude_circle):
+    """
+        Works on a grouped data set and will calculate sinuosity of zonal mean geopotential (ZG) contour compared to a latitude circle
+        Used in Cattiaux et al. 2016
+    """
+    row['sinousity'] = calculate_great_circle_sinousity(get_one_contour_linestring(row['zg'], row['zonal_mean_zg_30Nto70N'].data), latitude_circle)
+    return row
+
+def get_one_contour_linestring(dataarray, contour_level):
+    """
+        Returns a linestring or multi-linestring of a given contour
+        Used in Cattiaux et al. 2016
+    """
+    assert type(dataarray) == xr.DataArray, "Data needs to be type xr.DataArray"
+    assert 'lat' in dataarray.coords and 'lon' in dataarray.coords, "Data array needs to have latitude and longitude coords"
+    one_contour = dataarray.plot.contour(levels=[contour_level])
+    matplotlib.pyplot.close()
+    if len(one_contour.allsegs[0]) > 1:
+        line = shapely.geometry.MultiLineString((one_contour.allsegs[0]))
+    else:
+        line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
+    return line
+
+
+def calc_total_great_circle_distance_along_line(line):
+    """
+        Returns the total great circle (haversine) distance along a linestring or multilinestring
+        Used in Cattiaux et al. 2016
+    """
+    total_distance = 0
+    if type(line) == shapely.geometry.multilinestring.MultiLineString:
+        for i in range(len(line)):
+            total_distance += general_utils.get_great_circle_distance_along_linestring(shapely.geometry.LineString((line[i])))
+    else:
+        total_distance += general_utils.get_great_circle_distance_along_linestring(line)
+    return total_distance
+
+
+def calculate_great_circle_sinousity(line1, line2):
+    """
+        Calculates sinousity by comparing the great circle distance between two (multi-)linestrings
+        Used in Cattiaux et al. 2016
+    """
+    return calc_total_great_circle_distance_along_line(line1) / calc_total_great_circle_distance_along_line(line2)
+     
     
 def get_3_latitudes_and_speed_around_max_ws(row):
     """

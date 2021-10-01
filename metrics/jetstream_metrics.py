@@ -184,9 +184,13 @@ def local_wave_activity(data):
 def cattiaux_et_al_2016(data):
     """
         Write function description
-        TODO: waiting on Chris' help with the interpolation method from screen and simmonds
-        TODO: "insuring that the Earth sphericity is accounted for in the perimeter calculation."
     """
+    print('Step 1. get zonal average for each timestep')
+    data['zonal_mean_zg_30Nto70N'] = data['zg'].sel(lat=slice(30, 70)).groupby('time').mean(...)
+    print('Step 2. Get latitude circle of 50 N')
+    circle_50N = jetstream_metrics_utils.get_latitude_circle(50, 0, 360)
+    print('Step 3. Loop over each time step and calculate sinousity')
+    data = data.groupby('time').map(lambda row: jetstream_metrics_utils.get_sinousity_of_zonal_mean_zg(row, circle_50N))
     return data
 
 

@@ -10,6 +10,7 @@
 ### imports
 import xarray as xr
 import numpy as np
+import shapely
 from metrics import general_utils, jetstream_metrics, jetstream_metrics_utils, jetstream_metrics_dict
 from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset, make_fake_seasonal_data, make_fake_data
 import unittest

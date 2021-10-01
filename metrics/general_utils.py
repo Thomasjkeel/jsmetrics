@@ -7,6 +7,7 @@
 
 ### imports
 import numpy as np
+import math
 import itertools
 import scipy.signal
 
@@ -104,3 +105,30 @@ def standardise_dimension_order(data, dim_order=('time', 'plev', 'lat', 'lon', .
         Used to make sure that the ordering of the dimensions for a particular dataset is the always the same
     """
     return data.transpose(*dim_order)
+
+    # Calculates distance between 2 GPS coordinates
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points 
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians 
+    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+    c = 2 * math.asin(math.sqrt(a)) 
+    r = 6371 # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
+
+
+def get_great_circle_distance_along_linestring(line):
+    numCoords = len(line.coords) - 1
+    distance = 0
+    for i in range(0, numCoords):
+        point1 = line.coords[i]
+        point2 = line.coords[i + 1]
+        distance += haversine(point1[0], point1[1], point2[0], point2[1])
+    return distance

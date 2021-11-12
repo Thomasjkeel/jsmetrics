@@ -1,7 +1,6 @@
+import xarray as xr
 from metrics import compute_metrics
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
-import xarray as xr
-
 
 def load_uv_data(data_path):
     """
@@ -19,11 +18,11 @@ def load_uv_data(data_path):
 def main(data_path, metrics=None, subset=False, subset_kwargs={}, **kwargs):
     print("Starting!")
     ukesm1_ssp585 = load_uv_data(data_path)
-    
+
     if metrics is None:
         print('Warning: No metric given. Aborting process. Please use \'-m\' tag to declare metric name and see jetstream_metric_dict.py for a list of all metrics')
         return
-    
+
     for metric in metrics:
         print("calculating metric: %s" % (metric))
         try:
@@ -38,4 +37,3 @@ def main(data_path, metrics=None, subset=False, subset_kwargs={}, **kwargs):
         except Exception as e:
             print("Unable to perform experiment. Error is:",e)
     print("done!")
-

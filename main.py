@@ -1,8 +1,12 @@
 import argparse
 from experiments import get_available_metrics, calculate_metrics_from_data
 
-ALL_EXPERIMENTS = {'get-available-metrics':{"description": "Will print out all metrics available for this dataset","script":get_available_metrics.main},
-                   'calc-metrics':{"description":"will calcualte any number of metrics. Use -m tag to state which one", "script":calculate_metrics_from_data.main}}
+ALL_EXPERIMENTS = {'get-available-metrics':\
+                    {"description": "Will print out all metrics available for this dataset",\
+                     "script":get_available_metrics.main},
+                   'calc-metrics':\
+                    {"description":"will calcualte any metric(s). Use -m tag to state which one",\
+                     "script":calculate_metrics_from_data.main}}
 
 
 
@@ -13,8 +17,8 @@ def list_all_experiments():
     """
     print("\nAll experiments:\n")
     print("-"*20)
-    for exp in ALL_EXPERIMENTS.keys():
-        print(exp, "—", ALL_EXPERIMENTS[exp]["description"])
+    for name, exp in ALL_EXPERIMENTS.items():
+        print(name, "—", exp["description"])
     print("-"*20)
     print("\n")
     return
@@ -26,9 +30,11 @@ def run_experiments(args):
         TODO: make error handling smarter
     """
     if not args['experiment']:
-        print('Error: No experiment declared. Use: \'-e experiment_name\' or \'-l to list all experiments\'')
+        print('Error: No experiment declared. Use: \'-e experiment_name\'\
+             or \'-l to list all experiments\'')
     elif args['experiment'] not in ALL_EXPERIMENTS.keys():
-        print('Error: \'%s\' is not a known experiment. Run \'-l\' for list of experiments' % (args['experiment']))
+        print('Error: \'%s\' is not a known experiment.\
+             Run \'-l\' for list of experiments' % (args['experiment']))
     else:
         print("Running script: ", args['experiment'])
         if args['metrics']:
@@ -37,7 +43,7 @@ def run_experiments(args):
             ALL_EXPERIMENTS[args['experiment']]["script"](**args)
         else:
             ALL_EXPERIMENTS[args['experiment']]["script"](**args)
-        
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run an experiment.')
@@ -48,12 +54,10 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--ls', help='list all experiments', action='store_true')
     args = parser.parse_args()
     args = vars(args)
-    
+
     # list all experiements
     if args['ls']:
         list_all_experiments()
 
     # run experiment
     run_experiments(args)
-
-

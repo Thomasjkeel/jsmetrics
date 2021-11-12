@@ -1,7 +1,6 @@
-from numpy.lib.npyio import load
+import xarray as xr
 from metrics import compute_metrics
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
-import xarray as xr
 
 
 def load_uv_data(data_path):
@@ -21,5 +20,4 @@ def main(data_path, **kwargs):
     print("Starting!")
     ukesm1_ssp585 = load_uv_data(data_path)
     ukesm1_ssp585.get_available_metrics(return_coord_error=True)
-    return 
-
+    return

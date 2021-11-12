@@ -301,7 +301,7 @@ def check_all_coords_available(data, metric, return_coord_error=False):
     try: # TODO
         assert len(metric['coords']) >= 1, "Metric dictionary has less than 1 coordinate"
     except Exception as e:
-        raise ValueError(metric_usable, "Metric has no coordinates to subset") from e
+        raise ValueError("Metric has no coordinates to subset. Usable: %s" % (metric_usable)) from e
 
     ## Loop over each coordinate in all metric dictionary and
     ## check if the coords exist in data and can be used for the metric calculation

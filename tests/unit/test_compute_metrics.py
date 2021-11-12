@@ -8,12 +8,10 @@
 """
 
 ### imports
-import numpy as np
-import xarray as xr
+import unittest
 from metrics import compute_metrics
 from . import set_up_test_uv_data, set_up_test_u_data, set_up_test_zg_data, set_up_nan_dataset
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
-import unittest
 
 ### docs
 __author__ = "Thomas Keel"
@@ -66,7 +64,6 @@ class TestMetricComputer(unittest.TestCase):
  
     def test_sel(self):
         metric_computer = compute_metrics.MetricComputer(self.data, all_metrics=JETSTREAM_METRIC_DICT)
-        self.assertRaises(ValueError, lambda: metric_computer.sel(fake=slice(0, 90)))
         new1 = metric_computer.sel(lon=slice(0, 90))
         new2 = self.data.sel(lon=slice(0, 90))
         self.assertListEqual(list(new1.data.lon.values), list(new2.lon.values))

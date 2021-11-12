@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-    Contains the MetricComputer class and functions that run inside that class for subsetting and compute metrics from standardised netcdf data
+    Contains the MetricComputer class and functions that run inside that class for subsetting
+    and computing metrics from standardised netcdf data
 """
 
 import xarray as xr
-from xarray.core import dataarray
 from .jetstream_metrics_dict import JETSTREAM_METRIC_DICT
+from .general_utils import check_kwargs
 
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
@@ -15,7 +16,8 @@ __status__ = "Development"
 
 class MetricComputer:
     """
-    Metric Computer class for interacting, subsetting and calculating metrics from climate model outputs.
+    Metric Computer class for interacting, subsetting and calculating metrics
+    from climate model outputs.
 
     Q: Why make a data formatter class and not just use functions to handle and format the data?
     A: When the data is in an object form, it can ... . Also, allows for information hiding.
@@ -24,7 +26,8 @@ class MetricComputer:
     """
     def __init__(self, data, all_metrics):
         assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
-        assert isinstance(all_metrics, dict) and len(all_metrics) > 0, "all metrics needs to be a dict with at least one value"
+        assert isinstance(all_metrics, dict) and len(all_metrics) > 0,\
+                     "all metrics needs to be a dict with at least one value"
         self.data = data
         self.get_variable_list()
         self.swap_all_coords()
@@ -76,18 +79,21 @@ class MetricComputer:
         else:
             return MetricComputer(new_data, self.all_metrics)
 
-    def compute_metric_from_data(self, metric_name, calc_kwargs={}, subset_kwargs={}):
+    def compute_metric_from_data(self, metric_name, calc_kwargs=None, subset_kwargs=None):
         """
             TODO: maybe add catch. Will print which metrics are available
         """
+        calc_kwargs = check_kwargs(calc_kwargs)
+        subset_kwargs = check_kwargs(subset_kwargs)
         if not hasattr(self, 'available_metrics'):
             try:
                 self.get_available_metrics()
             except Exception as e:
-                raise KeyError('A dictionary of all metrics is required. Error is: %s ' % (e))  
-        result = compute_metric(self.data, metric_name, all_metrics=self.all_metrics, subset_kwargs=subset_kwargs, calc_kwargs=calc_kwargs)
-        return result 
-    
+                raise KeyError('A dictionary of all metrics is required') from e
+        result = compute_metric(self.data, metric_name, all_metrics=self.all_metrics,\
+                     subset_kwargs=subset_kwargs, calc_kwargs=calc_kwargs)
+        return result
+
     def compute_all_metrics(self):
         """
             will go through and compute all metric which are available
@@ -96,11 +102,7 @@ class MetricComputer:
             try:
                 self.get_available_metrics()
             except Exception as e:
-                raise KeyError('A dictionary of all metrics is required. Error is: %s ' % (e))  
-        
-"""
-    Functions that run inside of the MetricComputer class...
-"""
+                raise KeyError('A dictionary of all metrics is required.') from e
 
 
 def subset_data(data, metric, ignore_coords=None):
@@ -133,15 +135,15 @@ def subset_data(data, metric, ignore_coords=None):
                 selection = {coord:slice(min_val, max_val)}
                 subset = subset.sel(selection)
         subset = flatten_dims(subset)
-        return subset 
+        return subset
     else:
         return data
 
 
 def get_coords_to_subset(ignore_coords, metric):
     if ignore_coords:
-        coords_to_subset = set(metric['coords'].keys()) 
-        for removed_coord in coords_to_subset.intersection(ignore_coords): 
+        coords_to_subset = set(metric['coords'].keys())
+        for removed_coord in coords_to_subset.intersection(ignore_coords):
             print('Note:', removed_coord, 'has not been subset for the experiment')
         coords_to_subset = coords_to_subset.difference(set(ignore_coords))
         coords_to_subset = list(coords_to_subset)
@@ -152,7 +154,8 @@ def get_coords_to_subset(ignore_coords, metric):
 
 def flatten_dims(data):
     """
-        Supports subset and will flatten coordinates of an Xarray DataSet/DataArray with one value (so they are standardised)
+        Supports subset and will flatten coordinates of an Xarray DataSet/DataArray
+        with one value (so they are standardised)
     """
     for dim in data.dims:
         if data.dims[dim] == 1:
@@ -164,7 +167,7 @@ def flatten_dims(data):
 def swap_coord_order(data, coord, ascending=True):
     """
         Will reverse the dimension if a higher number is first
-        
+
         Parameters
         ----------
         data : xarray.Dataset
@@ -186,10 +189,11 @@ def swap_coord_order(data, coord, ascending=True):
     return data
 
 
-def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False, subset_kwargs={}, calc_kwargs={}):
+def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False,\
+                 subset_kwargs=None, calc_kwargs=None):
     """
         Write function description
-        
+
         Parameters
         ----------
         data : xarray.Dataset
@@ -198,21 +202,25 @@ def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False
             name from jetstream metric file
     """
     assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
+    calc_kwargs = check_kwargs(calc_kwargs)
+    subset_kwargs = check_kwargs(subset_kwargs)
     if not all_metrics:
         print('No metrics provided, defaulting to local JETSTREAM_METRICS file')
         all_metrics = JETSTREAM_METRIC_DICT
     assert isinstance(all_metrics, dict), "all metrics needs to be a dict with at least one value"
     ## check that you can actually compute metrics
-    if check_all_coords_available(data, all_metrics[metric_name], return_coord_error)[0] and check_all_variables_available(data, all_metrics[metric_name]):
+    if check_all_coords_available(data, all_metrics[metric_name], return_coord_error)[0]\
+                                 and check_all_variables_available(data, all_metrics[metric_name]):
         # print('all checks passed')
         pass
     else:
-        print('cannot calculate %s metric from data provided' % (metric_name)) # TODO have this return a useful message
-        return 
+        print('cannot calculate %s metric from data provided' % (metric_name))
+        # TODO have this return a useful message
+        return
 
     ## subset data for metric
     subset = subset_data(data, all_metrics[metric_name], **subset_kwargs)
-    
+
     ## calculate metric
     if subset:
         result = all_metrics[metric_name]['metric'](subset, **calc_kwargs)
@@ -225,28 +233,28 @@ def compute_metric(data, metric_name, all_metrics=None, return_coord_error=False
 def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
     """
     Checks which variables can be used by the data
-        
+
         Parameters
         ----------
         data : xr.Dataset or similar
-            Xarray dataset 
-        
+            Xarray dataset
+
         all_metrics : dict (default: None)
             dictionary of jet-stream metrics
 
         return_coord_error : bool
             whether a message about where the correct coords but wrong
             coord values should be returned in available metrics list
-            e.g. wrong pressure level (plev) 
+            e.g. wrong pressure level (plev)
 
         Returns
         -------
         metric_available_list : list
-        
+
         Usage
         -----
         m_list = get_available_metric_list(vwind_data, js_metrics)
-        
+
     """
     assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
     if not all_metrics:
@@ -255,10 +263,11 @@ def get_available_metric_list(data, all_metrics=None, return_coord_error=False):
 
     available_metrics = []
     for metric_name in all_metrics:
-        metric_is_usuable = {metric_name: 'usuable'} 
+        metric_is_usuable = {metric_name: 'usuable'}
         if check_all_variables_available(data, metric=all_metrics[metric_name]):
             # check that all coords exists in xarray data i.e. plev, lat, etc.
-            metric_usable, coord_error_message = check_all_coords_available(data, all_metrics[metric_name], return_coord_error)
+            metric_usable, coord_error_message = check_all_coords_available(data,\
+                                                 all_metrics[metric_name], return_coord_error)
             ## will make return error message
             if return_coord_error and len(coord_error_message) > 0:
                 metric_is_usuable =  {metric_name: "To use this metric" + coord_error_message}
@@ -290,18 +299,20 @@ def check_all_coords_available(data, metric, return_coord_error=False):
     coord_error_message = ""
     metric_usable = True
     try: # TODO
-        assert len(metric['coords']) >= 1, "Metric dictionary has less than 1 coordinate" 
-    except:
-        return metric_usable, "Metric has no coordinates to subset"
+        assert len(metric['coords']) >= 1, "Metric dictionary has less than 1 coordinate"
+    except Exception as e:
+        raise ValueError(metric_usable, "Metric has no coordinates to subset") from e
 
-    ## Loop over each coordinate in all metric dictionary and check if the coords exist in data and can be used for the metric calculation
+    ## Loop over each coordinate in all metric dictionary and
+    ## check if the coords exist in data and can be used for the metric calculation
     for coord in metric['coords'].keys():
         if coord in data.coords:
             coord_vals = metric['coords'][coord]
             coord_available = check_if_coord_vals_meet_reqs(data, coord, coord_vals)
             # if coord fails check, provide user information why
             if return_coord_error and not coord_available:
-                    coord_error_message += " '%s' needs to be between %s and %s." % (str(coord), str(coord_vals[0]), str(coord_vals[1]))
+                coord_error_message += " '%s' needs to be between %s and %s." %\
+                                     (str(coord), str(coord_vals[0]), str(coord_vals[1]))
             elif not coord_available:
                 metric_usable = False
                 break

@@ -268,8 +268,8 @@ def get_latitude_and_speed_where_max_ws(data_row):
     """
     try:
         assert hasattr(data_row, 'isnull')
-    except:
-        raise AttributeError("input needs to have isnull method")
+    except Exception as e:
+        raise AttributeError("input needs to have isnull method") from e
 
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
@@ -379,9 +379,9 @@ class JetStreamCoreIdentificationAlgorithm:
         try:
             assert ws_core_threshold > ws_boundary_threshold and ws_core_threshold > 0\
                                                              and ws_boundary_threshold > 0
-        except:
+        except Exception as e:
             raise ValueError("Windspeed core threshold needs to be more than boundary\
-                              threshold and both need to be more than 0")
+                              threshold and both need to be more than 0") from e
         ## standardise data
         data = general_utils.standardise_dimension_order(data, dim_order=(...,'plev', 'lat'))
         ## Step 1. make windspeed slice
@@ -404,7 +404,6 @@ class JetStreamCoreIdentificationAlgorithm:
 
     def __add__(self, other):
         print("TODO: need to implement behaviour for adding slices together")
-        pass
 
     def __repr__(self):
         """
@@ -557,14 +556,14 @@ def make_empty_local_wind_maxima_data_var(data):
     return data
 
 
-def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold):
+def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold=30):
     """
         Will return a 2-d array of potential local windspeed maximas
 
         Used in Pena-Ortiz et al. 2013
         TODO: add checks
     """
-    return ws_slice.where(lambda x: x > 30).fillna(0.0)
+    return ws_slice.where(lambda x: x > ws_threshold).fillna(0.0)
 
 
 def get_local_wind_maxima_by_day(row):
@@ -576,7 +575,7 @@ def get_local_wind_maxima_by_day(row):
     try:
         assert 'local_wind_maxima' in row.data_vars
     except Exception as e:
-        return print('local_wind_maxima needs to be defined.', e)
+        raise ValueError('local_wind_maxima needs to be defined.') from e
 
     for lon in row['lon']:
         current = row.sel(lon=lon)
@@ -620,8 +619,8 @@ class JetStreamOccurenceAndCentreAlgorithm:
     def __init__(self, data, occurence_ws_threshold=30):
         try:
             assert occurence_ws_threshold > 0
-        except:
-            raise ValueError("Occurence wind-speed threshold needs to be more than 0")
+        except Exception as e:
+            raise ValueError("Occurence wind-speed threshold needs to be more than 0") from e
 
         ## Load in data as a pressure level 2d wind-speed slice
         self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(data).values
@@ -962,7 +961,8 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(data, resolution, ws_co
     return max_lat, max_ws
 
 
-def run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(data, resolution, time_col):
+def run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(data,\
+                                                                         resolution, time_col):
     """
         Used in  Bracegirdle et al. 2019
 

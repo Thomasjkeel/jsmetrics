@@ -8,13 +8,13 @@
 """
 
 ### imports
+import collections
 import numpy as np
 import matplotlib.pyplot
 import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
 import shapely
-import collections
 from . import windspeed_utils, general_utils
 
 ### docs
@@ -246,12 +246,12 @@ def apply_lanczos_filter(data, filter_freq, window_size):
 
         Used in Woolings et al. 2010
     """
-    assert filter_freq <= data['time'].count() and filter_freq > 0, "Filter frequency needs to be less\
-                                                                     than the number of days in the data\
-                                                                    and more than 0 "
-    assert window_size <= data['time'].count() and window_size > 0, "Window size needs to be less\
-                                                                     than the number of days in the data\
-                                                                     and more than 0 "
+    assert filter_freq <= data['time'].count() and filter_freq > 0,\
+                         "Filter frequency needs to be less than the number of days\
+                          in the data and more than 0 "
+    assert window_size <= data['time'].count() and window_size > 0,\
+                         "Window size needs to be less than the number of days\
+                          in the data and more than 0 "
     assert filter_freq <= window_size, "Filter freq cannot be bigger than window size"
 
     lanczos_weights = low_pass_weights(window_size, 1/filter_freq)
@@ -792,7 +792,7 @@ def get_one_contour_linestring(dataarray, contour_level):
         Returns a linestring or multi-linestring of a given contour
         Used in Cattiaux et al. 2016
     """
-    assert type(dataarray) == xr.DataArray, "Data needs to be type xr.DataArray"
+    assert isinstance(dataarray, xr.DataArray), "Data needs to be type xr.DataArray"
     assert 'lat' in dataarray.coords and 'lon' in dataarray.coords,\
                  "Data array needs to have latitude and longitude coords"
     one_contour = dataarray.plot.contour(levels=[contour_level])
@@ -810,7 +810,7 @@ def calc_total_great_circle_distance_along_line(line):
         Used in Cattiaux et al. 2016
     """
     total_distance = 0
-    if type(line) == shapely.geometry.multilinestring.MultiLineString:
+    if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
         for i, _ in enumerate(line):
             total_distance += general_utils.get_great_circle_distance_along_linestring(\
                     shapely.geometry.LineString((line[i])))
@@ -869,7 +869,7 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
         get_3_neighbouring_coord_values(45.0, 1.25)
         >>> [43.75, 45.0, 46.25]
     """
-    if type(coord_val) != float or type(coord_resolution) != float:
+    if not isinstance(coord_val, float) or not isinstance(coord_resolution, float):
         coord_val = float(coord_val)
         coord_resolution = float(coord_resolution)
 

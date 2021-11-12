@@ -739,10 +739,12 @@ class JetStreamOccurenceAndCentreAlgorithm:
             Will label all non 2 values of windspeed for the occurence
             Used in Kuang et al. 2014
         """
-        self.output_data['jet_ocurrence1_jet_centre2'] = self.output_data['jet_ocurrence1_jet_centre2']\
-                                                            .where(lambda x: np.isfinite(x), 0)
-        self.output_data['jet_ocurrence1_jet_centre2'] = self.output_data['jet_ocurrence1_jet_centre2']\
-                                                            .where(lambda x: ((x == 0) | (x == 2)), 1)
+        self.output_data['jet_ocurrence1_jet_centre2'] = self.output_data\
+                                                        ['jet_ocurrence1_jet_centre2']\
+                                                        .where(lambda x: np.isfinite(x), 0)
+        self.output_data['jet_ocurrence1_jet_centre2'] = self.output_data\
+                                                        ['jet_ocurrence1_jet_centre2']\
+                                                        .where(lambda x: ((x == 0) | (x == 2)), 1)
 
 
 def meridional_circulation_index(data):
@@ -769,8 +771,8 @@ def get_latitude_circle_linestring(latitude, lon_min, lon_max):
         Will return a linestring of a latitude circle
         Used in Cattiaux et al. 2016
     """
-    vals = np.column_stack((np.arange(lon_min,lon_max+.1, 0.5), np.array(\
-                                                [latitude] *len(np.arange(lon_min,lon_max+.1, 0.5)))))
+    vals = np.column_stack((np.arange(lon_min,lon_max+.1, 0.5),\
+                    np.array([latitude] *len(np.arange(lon_min,lon_max+.1, 0.5)))))
     circle = shapely.geometry.LineString(vals)
     return circle
 
@@ -809,7 +811,7 @@ def calc_total_great_circle_distance_along_line(line):
     """
     total_distance = 0
     if type(line) == shapely.geometry.multilinestring.MultiLineString:
-        for i in range(len(line)):
+        for i, _ in enumerate(line):
             total_distance += general_utils.get_great_circle_distance_along_linestring(\
                     shapely.geometry.LineString((line[i])))
     else:
@@ -861,7 +863,7 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
         coord_val (float, int):
 
         coord_resolution (float, int):
-   
+
         Usage
         --------------
         get_3_neighbouring_coord_values(45.0, 1.25)
@@ -961,6 +963,15 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(data, resolution, ws_co
 
 
 def run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(data, resolution, time_col):
+    """
+        Used in  Bracegirdle et al. 2019
+
+        Parameters
+        --------------
+        data (xr.Dataset):
+            must contain coords lat
+            TODO
+    """
     max_lats = []
     max_ws = []
     for period in data[time_col].data:

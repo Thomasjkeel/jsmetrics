@@ -66,7 +66,7 @@ class TestMetricComputer(unittest.TestCase):
  
     def test_sel(self):
         metric_computer = compute_metrics.MetricComputer(self.data, all_metrics=JETSTREAM_METRIC_DICT)
-        self.assertRaises(KeyError, lambda: metric_computer.sel(fake=slice(0, 90)))
+        self.assertRaises(ValueError, lambda: metric_computer.sel(fake=slice(0, 90)))
         new1 = metric_computer.sel(lon=slice(0, 90))
         new2 = self.data.sel(lon=slice(0, 90))
         self.assertListEqual(list(new1.data.lon.values), list(new2.lon.values))

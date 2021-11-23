@@ -798,8 +798,8 @@ class JetStreamOccurenceAndCentreAlgorithm:
         self.algorithm_has_run = False
 
     @classmethod
-    def run_algorithm(cls):
-        return cls().run()
+    def run_algorithm(cls, data):
+        return cls(data).run()
 
     def run(self):
         self._get_all_coords_of_jet_occurence()

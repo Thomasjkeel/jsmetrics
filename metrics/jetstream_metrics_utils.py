@@ -997,7 +997,7 @@ def calc_total_great_circle_distance_along_line(line):
     """
     total_distance = 0
     if type(line) == shapely.geometry.multilinestring.MultiLineString:
-        for i in range(len(line)):
+        for i, _ in enumerate(line):
             total_distance += (
                 general_utils.get_great_circle_distance_along_linestring(
                     shapely.geometry.LineString((line[i]))

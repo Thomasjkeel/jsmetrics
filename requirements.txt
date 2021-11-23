@@ -7,7 +7,12 @@ bottleneck
 scipy==1.5.3
 xarray==0.19.0
 Cartopy==0.18.0
-pytest
-parameterized
 Shapely
-pre-commit
+# Testing and development dependencies
+black
+coverage
+flake8
+parameterized
+pre_commit
+pylint
+pytest

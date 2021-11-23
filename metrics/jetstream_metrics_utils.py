@@ -974,8 +974,8 @@ def get_one_contour_linestring(dataarray, contour_level):
     Returns a linestring or multi-linestring of a given contour
     Used in Cattiaux et al. 2016
     """
-    assert (
-        type(dataarray) == xr.DataArray
+    assert isinstance(
+        dataarray, xr.DataArray
     ), "Data needs to be type xr.DataArray"
     assert (
         "lat" in dataarray.coords and "lon" in dataarray.coords
@@ -996,7 +996,7 @@ def calc_total_great_circle_distance_along_line(line):
     Used in Cattiaux et al. 2016
     """
     total_distance = 0
-    if type(line) == shapely.geometry.multilinestring.MultiLineString:
+    if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
         for i, _ in enumerate(line):
             total_distance += (
                 general_utils.get_great_circle_distance_along_linestring(
@@ -1065,7 +1065,9 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
     get_3_neighbouring_coord_values(45.0, 1.25)
     >>> [43.75, 45.0, 46.25]
     """
-    if type(coord_val) != float or type(coord_resolution) != float:
+    if not isinstance(coord_val, float) or not isinstance(
+        coord_resolution, float
+    ):
         coord_val = float(coord_val)
         coord_resolution = float(coord_resolution)
 

@@ -100,7 +100,9 @@ def get_num_of_decimal_places(num):
     return decimal_places
 
 
-def standardise_dimension_order(data, dim_order=("time", "plev", "lat", "lon")):
+def standardise_dimension_order(
+    data, dim_order=("time", "plev", "lat", "lon")
+):
     """
     Used to make sure that the ordering of the dimensions for a particular
     dataset is the always the same

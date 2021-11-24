@@ -13,14 +13,13 @@ dependencies:
   - Cartopy==0.18.0
   - pip==21.1
   # Testing and development dependencies
- - black
- - coverage
- - flake8
- - parameterized
- - pre_commit
- - pylint
- - pytest
+  - black
+  - coverage
+  - flake8
+  - parameterized
+  - pre_commit
+  - pylint
+  - pytest
   - pip:
       - xarray==0.19.0
       - Shapely
-

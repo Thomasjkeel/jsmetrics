@@ -19,8 +19,8 @@ class Plotter:
     """
 
     def __init__(self, data):
-        assert (
-            type(data) == xr.DataArray
+        assert isinstance(
+            data, xr.DataArray
         ), "input data to Plotter() class needs be xarray.DataArray type"
         self.data = data
         self._check_required_coords_are_in_data()
@@ -71,7 +71,7 @@ class TimePlotter(Plotter, req_coords=("time",)):
         time_plotter.time_period_mean(starttime=0,\
             endtime=2, mean_dims=('time'), inplace=True)
         """
-        if type(starttime) == int or type(starttime) == float:
+        if isinstance(starttime, int) or isinstance(starttime, float):
             starttime = self.data["time"].data[starttime]
             endtime = self.data["time"].data[endtime]
 
@@ -110,7 +110,7 @@ class TimePlotter(Plotter, req_coords=("time",)):
 
 
 class TimeLatLonPlotter(TimePlotter, req_coords=("lat", "lon")):
-    def map_data(self, data=None, **kwargs):
+    def map_data(self, **kwargs):
         """
         tll_plotter.time_period_mean(0,1000, mean_dims='time', inplace=True)
         tll_plotter.map()
@@ -119,7 +119,7 @@ class TimeLatLonPlotter(TimePlotter, req_coords=("lat", "lon")):
             assert (
                 self.data["time"].size == 1
             ), "Data has too many dimensions.\
-                Data needs to be lat and lon only (2D)"
+                Data needs to be lat and lon only"
         assert (
             "lat" in self.data.dims and "lon" in self.data.dims
         ), "Lat and Lon need to be in data"

@@ -21,8 +21,8 @@ def list_all_experiments():
     """
     print("\nAll experiments:\n")
     print("-" * 20)
-    for exp in ALL_EXPERIMENTS.keys():
-        print(exp, "—", ALL_EXPERIMENTS[exp]["description"])
+    for name, exp in ALL_EXPERIMENTS.items():
+        print(name, "—", exp["description"])
     print("-" * 20)
     print("\n")
     return

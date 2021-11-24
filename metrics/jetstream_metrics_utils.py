@@ -307,7 +307,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
     try:
         assert hasattr(data_row, "isnull")
     except Exception as e:
-        raise AttributeError("input needs to have isnull method. %s" % (e))
+        raise AttributeError("input needs to have isnull method.") from e
 
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
@@ -441,10 +441,9 @@ class JetStreamCoreIdentificationAlgorithm:
             )
         except Exception as e:
             raise ValueError(
-                "%s Windspeed core threshold needs to be more than boundary\
+                "Windspeed core threshold needs to be more than boundary\
                     threshold and both need to be more than 0"
-                % (e)
-            )
+            ) from e
         # standardise data
         data = general_utils.standardise_dimension_order(
             data, dim_order=(..., "plev", "lat")
@@ -684,7 +683,7 @@ def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold):
     Used in Pena-Ortiz et al. 2013
     TODO: add checks
     """
-    return ws_slice.where(lambda x: x > 30).fillna(0.0)
+    return ws_slice.where(lambda x: x > ws_threshold).fillna(0.0)
 
 
 def get_local_wind_maxima_by_day(row):
@@ -696,7 +695,7 @@ def get_local_wind_maxima_by_day(row):
     try:
         assert "local_wind_maxima" in row.data_vars
     except Exception as e:
-        return print("local_wind_maxima needs to be defined.", e)
+        raise ValueError("local_wind_maxima needs to be defined.") from e
 
     for lon in row["lon"]:
         current = row.sel(lon=lon)
@@ -763,9 +762,8 @@ class JetStreamOccurenceAndCentreAlgorithm:
             assert occurence_ws_threshold > 0
         except Exception as e:
             raise ValueError(
-                "%s Occurence wind-speed threshold needs to be more than 0"
-                % (e)
-            )
+                "Occurence wind-speed threshold needs to be more than 0"
+            ) from e
 
         # Load in data as a pressure level 2d wind-speed slice
         self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(

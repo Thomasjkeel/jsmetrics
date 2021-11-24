@@ -240,7 +240,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     return data
 
 
-def francis_vavrus_2015(data, lat_min=20, lat_max=80):
+def francis_vavrus_2015(data):
     """
     Write function description
     MCI

@@ -6,9 +6,9 @@
 """
 
 # imports
-import numpy as np
 import math
 import itertools
+import numpy as np
 import scipy.signal
 
 # docs
@@ -17,9 +17,17 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+def check_kwargs(kwargs):
+    if not kwargs:
+        return {}
+    else:
+        return kwargs
+
+
 def get_local_minima(arr, axis=0):
     """
-    from https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
+    from
+    https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
 
     TODO: add asserts/method for checking input
     TODO: add doc example of using axis
@@ -29,7 +37,8 @@ def get_local_minima(arr, axis=0):
 
 def get_local_maxima(arr, axis=0):
     """
-    from https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
+    from
+    https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
 
     TODO: add asserts/method for checking input
     TODO: add doc example of using axis
@@ -65,7 +74,8 @@ def is_djf(month):
 
 def remove_duplicates(vals):
     """
-    removes duplicates see: https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
+    removes duplicates see:
+    https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
 
     Used in a few metrics
     """
@@ -133,6 +143,9 @@ def haversine(lon1, lat1, lon2, lat2):
 
 
 def get_great_circle_distance_along_linestring(line):
+    """
+    Calcualte great circle distance along the length of linestring
+    """
     numCoords = len(line.coords) - 1
     distance = 0
     for i in range(0, numCoords):

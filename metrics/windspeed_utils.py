@@ -37,7 +37,7 @@ class WindSpeedSlice:
     """
 
     def __init__(self, data, req_variables=("ua", "va")):
-        # these will check that the correct data variables and coords
+        # these will check that the correct data variables/coords
         # are available in the xarray data input
         self.req_variables = req_variables
         self._check_input_data_can_be_used_for_windspeed_slice(data)

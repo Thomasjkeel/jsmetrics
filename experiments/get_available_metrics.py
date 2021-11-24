@@ -1,6 +1,6 @@
+import xarray as xr
 from metrics import compute_metrics
 from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
-import xarray as xr
 
 
 def load_uv_data(data_path):

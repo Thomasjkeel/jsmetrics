@@ -7,6 +7,7 @@
 
 import xarray as xr
 from .jetstream_metrics_dict import JETSTREAM_METRIC_DICT
+from .general_utils import check_kwargs
 
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
@@ -91,11 +92,13 @@ class MetricComputer:
             return MetricComputer(new_data, self.all_metrics)
 
     def compute_metric_from_data(
-        self, metric_name, calc_kwargs={}, subset_kwargs={}
+        self, metric_name, calc_kwargs=None, subset_kwargs=None
     ):
         """
         TODO: maybe add catch. Will print which metrics are available
         """
+        calc_kwargs = check_kwargs(calc_kwargs)
+        subset_kwargs = check_kwargs(subset_kwargs)
         if not hasattr(self, "available_metrics"):
             try:
                 self.get_available_metrics()
@@ -227,8 +230,8 @@ def compute_metric(
     metric_name,
     all_metrics=None,
     return_coord_error=False,
-    subset_kwargs={},
-    calc_kwargs={},
+    subset_kwargs=None,
+    calc_kwargs=None,
 ):
     """
     Write function description
@@ -241,6 +244,8 @@ def compute_metric(
         name from jetstream metric file
     """
     assert isinstance(data, xr.Dataset), "data needs to be xarray.dataset"
+    calc_kwargs = check_kwargs(calc_kwargs)
+    subset_kwargs = check_kwargs(subset_kwargs)
     if not all_metrics:
         print(
             "No metrics provided, defaulting to local JETSTREAM_METRICS file"

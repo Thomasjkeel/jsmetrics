@@ -1,12 +1,13 @@
-matplotlib==3.3.2
-cdsapi==0.5.1
-numpy==1.19.2
+matplotlib>=3.3.2
+cdsapi>=0.5.1
+numpy>=1.21.2
 dask
-netCDF4==1.5.5.1
+netCDF4>=1.5.5.1
 bottleneck
-scipy==1.5.3
-xarray==0.19.0
-Cartopy==0.18.0
+scipy>=1.5.3
+xarray>=0.19.0
+cf_xarray
+Cartopy>=0.18.0
 Shapely
 # Testing and development dependencies
 black

@@ -46,7 +46,7 @@ def get_local_maxima(arr, axis=0):
     return scipy.signal.argrelextrema(arr, np.greater, axis=axis)
 
 
-def make_climatology(data, freq):
+def get_climatology(data, freq):
     """
     Makes a climatology at given interval (i.e. days, months, season)
 
@@ -57,8 +57,7 @@ def make_climatology(data, freq):
 
     Usage
     ----------
-    climatology = make_climatology(data, 'month')
-
+    climatology = get_climatology(data, 'month')
 
     """
     climatology = data.groupby("time.%s" % (freq)).mean("time")
@@ -118,8 +117,6 @@ def standardise_dimension_order(
     dataset is the always the same
     """
     return data.transpose(*dim_order)
-
-    # Calculates distance between 2 GPS coordinates
 
 
 def haversine(lon1, lat1, lon2, lat2):

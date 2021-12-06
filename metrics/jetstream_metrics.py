@@ -145,7 +145,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     )
     # Step 4
     print("Step 4: Make climatology")
-    climatology = general_utils.make_climatology(zonal_mean_lat_ws, "month")
+    climatology = general_utils.get_climatology(zonal_mean_lat_ws, "month")
     # Step 5
     print("Step 5: Apply low-freq fourier filter to both max lats and max ws")
     fourier_filtered_lats = (
@@ -392,8 +392,8 @@ def bracegirdle_et_al_2019(data):
     assert data["plev"].count() == 1, "data needs to have one 'plev' value"
     # Step 1
     print("Step 1. Make seasonal & annual climatologies")
-    seasonal_climatology = general_utils.make_climatology(data, "season")
-    annual_climatology = general_utils.make_climatology(data, "year")
+    seasonal_climatology = general_utils.get_climatology(data, "season")
+    annual_climatology = general_utils.get_climatology(data, "year")
     # Step 2
     print("Step 2. Get zonal mean from climatologies")
     seasonal_zonal_mean = seasonal_climatology.mean("lon")

@@ -16,6 +16,7 @@ import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
 import shapely
+import shapely.geometry
 from . import windspeed_utils, general_utils
 
 # docs

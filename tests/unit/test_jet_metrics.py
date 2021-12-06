@@ -138,8 +138,27 @@ class TestArcherCaldeira2008(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.archer_caldeira_2008(self.data)
-        pass
+        result = jetstream_metrics.archer_caldeira_2008(self.data)
+        for col in [
+            "mass_weighted_average_ws",
+            "mass_flux_weighted_pressure",
+            "mass_flux_weighted_latitude",
+        ]:
+            self.assertIn(col, result)
+            # self.assertEqual(10, result[col].max())
+
+        # self.assertEqual(
+        #     float(result["mass_weighted_average_ws"].max()), 8.7751588821411
+        # )
+
+
+class TestSchiemann2009(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_uv_data()
+
+    def test_metric(self):
+        result = jetstream_metrics.schiemann_et_al_2009(self.data)
+        self.assertTrue(result)
 
 
 class TestWoolings2010(unittest.TestCase):
@@ -230,6 +249,26 @@ class TestManney2011(unittest.TestCase):
         jetstream_metrics.manney_et_al_2011(subset_data.transpose("lat", ...))
 
 
+class TestPenaOrtiz2013(unittest.TestCase):
+    def setUp(self):
+        # TODO
+        self.data = set_up_test_uv_data()
+
+    def test_metric(self):
+        # result = jetstream_metrics.penaortiz_et_al_2013(self.data)
+        # self.assertIn("ws", result)
+        pass
+
+    def test_get_resultant_wind(self):
+        pass
+
+    def test_get_empty_local_wind_maxima(self):
+        pass
+
+    def test_num_days_per_monthyear_with_local_wind_maxima(self):
+        pass
+
+
 class TestScreenSimmonds2013(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_zg_data()
@@ -265,8 +304,8 @@ class TestLocalWaveActivity(unittest.TestCase):
         self.data = set_up_test_zg_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.local_wave_activity(self.data)
-        pass
+        result = jetstream_metrics.local_wave_activity(self.data)
+        self.assertTrue(result)
 
 
 class TestCattiaux2016(unittest.TestCase):
@@ -275,6 +314,7 @@ class TestCattiaux2016(unittest.TestCase):
 
     def test_metric(self):
         # result = jetstream_metrics.cattiaux_et_al_2016(self.data)
+        # self.assertTrue(result)
         pass
 
 
@@ -305,8 +345,8 @@ class TestKern2018(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.kern_et_al_2018(self.data)
-        pass
+        result = jetstream_metrics.kern_et_al_2018(self.data)
+        self.assertTrue(result)
 
 
 class TestSimpson2018(unittest.TestCase):
@@ -314,8 +354,8 @@ class TestSimpson2018(unittest.TestCase):
         self.data = set_up_test_zg_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.simpson_et_al_2018(self.data)
-        pass
+        result = jetstream_metrics.simpson_et_al_2018(self.data)
+        self.assertTrue(result)
 
 
 class TestBracegirdle2019(unittest.TestCase):
@@ -338,8 +378,8 @@ class TestChemkeMing2020(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.chemke_and_ming_2020(self.data)
-        pass
+        result = jetstream_metrics.chemke_and_ming_2020(self.data)
+        self.assertTrue(result)
 
 
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):

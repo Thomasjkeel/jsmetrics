@@ -316,10 +316,10 @@ def grise_polvani_2017(data):
     )
     scaled_max_lats = []
     for max_lat_and_ws in all_max_lats_and_ws:
-        scaled_max_lats = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(
+        scaled_max_lat = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(
             max_lat_and_ws, resolution=0.01
         )
-        scaled_max_lats.append(scaled_max_lats)
+        scaled_max_lats.append(scaled_max_lat)
     print("Step 4. Assign scaled max lats back to data")
     data = data.assign({"max_lat_0.01": (("time"), scaled_max_lats)})
     return data

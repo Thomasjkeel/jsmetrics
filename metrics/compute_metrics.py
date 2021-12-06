@@ -60,10 +60,10 @@ class MetricComputer:
             if "_bnds" not in var:
                 self.variable_list.append(var)
 
-    def swap_all_coords(self):
+    def order_all_coords(self):
         for coord in self.data.coords:
             if not self.data[coord].count() == 1:
-                self.data = swap_coord_order(self.data, coord)
+                self.data = order_coords(self.data, coord)
 
     def sel(self, **kwargs):
         """
@@ -116,7 +116,7 @@ class MetricComputer:
         )
         return result
 
-    def compute_all_metrics(self):
+    def compute_all_available_metrics(self):
         """
         will go through and compute all metric which are available
         """
@@ -138,7 +138,6 @@ class MetricComputer:
 def subset_data(data, metric, ignore_coords=None):
     """
     Will subset the data based on the metric chosen
-    TODO add way of only subsetting some coords data partially
 
     Parameters
     ----------
@@ -200,9 +199,10 @@ def flatten_dims(data):
     return data
 
 
-def swap_coord_order(data, coord, ascending=True):
+def order_coords(data, coord, ascending=True):
     """
-    Will reverse the dimension if a higher number is first
+    Orders the given coord. By default, will reverse
+    the coord order if a higher value first
 
     Parameters
     ----------
@@ -213,7 +213,7 @@ def swap_coord_order(data, coord, ascending=True):
 
     Useage
     ----------
-    new_data = swap_coord_order(data, "lat")
+    new_data = order_coords(data, "lat")
     """
     first_val = 0
     last_val = -1

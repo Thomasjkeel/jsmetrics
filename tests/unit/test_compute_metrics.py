@@ -74,7 +74,7 @@ class TestMetricComputer(unittest.TestCase):
         )
         self.assertListEqual(metric_computer.variable_list, ["ua", "va"])
 
-    def test_swap_coords(self):
+    def test_order_coords(self):
         pass
 
     def test_sel(self):
@@ -164,8 +164,8 @@ class TestComputeMetricFunctions(unittest.TestCase):
         tested_func = compute_metrics.flatten_dims
         self.assertRaises(AttributeError, lambda: tested_func([1, 2]))
 
-    def test_swap_coords(self):
-        tested_func = compute_metrics.swap_coord_order
+    def test_order_coords(self):
+        tested_func = compute_metrics.order_coords
         first_val, last_val = float(self.data["plev"][0]), float(
             self.data["plev"][-1]
         )

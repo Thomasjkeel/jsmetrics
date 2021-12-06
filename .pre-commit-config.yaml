@@ -11,4 +11,4 @@ repos:
     rev: 3.9.2
     hooks:
       - id: flake8
-        args: ["--ignore=E203 E501 W503"]
+        args: ["--ignore=E203 E203 E501 W503"]

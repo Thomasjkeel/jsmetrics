@@ -35,7 +35,7 @@ class MetricComputer:
         ), "all metrics needs to be a dict with at least one value"
         self.data = data
         self.get_variable_list()
-        self.swap_all_coords()
+        self.order_all_coords()
         self.all_metrics = all_metrics
 
     @classmethod

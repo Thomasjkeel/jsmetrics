@@ -104,7 +104,6 @@ def get_mass_weighted_average_ws(data, plev_flux=False):
     """
     Used in Archer & Caldeira 2008
 
-    TODO: Refactor so neat
     """
     sum_weighted_ws = None  # TODO
     for plev_Pa in data["plev"].data:
@@ -237,7 +236,7 @@ def get_zonal_mean(data):
     return zonal_mean
 
 
-def low_pass_weights(window, cutoff):
+def calc_low_pass_weights(window, cutoff):
     """Calculate weights for a low pass Lanczos filter.
 
     A low-pass filter removes short-term random fluctations in a time series
@@ -287,7 +286,7 @@ def apply_lanczos_filter(data, filter_freq, window_size):
         filter_freq <= window_size
     ), "Filter freq cannot be bigger than window size"
 
-    lanczos_weights = low_pass_weights(window_size, 1 / filter_freq)
+    lanczos_weights = calc_low_pass_weights(window_size, 1 / filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=["window"])
     window_cons = (
         data["ua"]
@@ -320,7 +319,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
         return None, None
 
 
-def assign_lat_ws_to_data(data, max_lat_ws):
+def assign_lat_and_ws_to_data(data, max_lat_ws):
     """
     Will return a data array with the maximum windspeed and latitude of that
     maximum wind speed
@@ -374,7 +373,7 @@ def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
     return filtered_sig
 
 
-def assign_filtered_vals_to_data(
+def assign_filtered_lats_and_ws_to_data(
     data, filtered_max_lats, filtered_max_ws, dim
 ):
     """
@@ -393,7 +392,9 @@ def assign_filtered_vals_to_data(
     return filtered_data
 
 
-def calc_jet_core_per_day(row, ws_core_threshold, ws_boundary_threshold):
+def run_jet_core_algorithm_on_one_day(
+    row, ws_core_threshold, ws_boundary_threshold
+):
     """
     Runs JetStreamCoreIdentificationAlgorithm method on a single day
 
@@ -524,7 +525,7 @@ class JetStreamCoreIdentificationAlgorithm:
 
     def run(self):
         self.final_jet_cores = self._get_jet_core_boundary()
-        self.output_data = self._attach_cores_to_data()
+        self.output_data = self._add_cores_to_data()
         self.algorithm_has_run = True
 
     def _get_indexes_of_core_and_boundaries(self):
@@ -556,7 +557,7 @@ class JetStreamCoreIdentificationAlgorithm:
         vals_to_check.append([pot_boundary[0], pot_boundary[1] + 1])
         return vals_to_check
 
-    def _make_pot_jetcore_area(self, vals, area, core_found=False):
+    def _get_pot_jetcore_area(self, vals, area, core_found=False):
         """
         Recursive function that will return the IDs of a jet core boundary
         i.e. above 30 m/s surrounding a core of 40 m/s
@@ -582,7 +583,7 @@ class JetStreamCoreIdentificationAlgorithm:
                 new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
                 vals_copy = general_utils.remove_duplicates(vals_copy)
-                return self._make_pot_jetcore_area(
+                return self._get_pot_jetcore_area(
                     vals_copy, area=area, core_found=core_found
                 )
 
@@ -591,7 +592,7 @@ class JetStreamCoreIdentificationAlgorithm:
                 new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
                 vals_copy = general_utils.remove_duplicates(vals_copy)
-                return self._make_pot_jetcore_area(
+                return self._get_pot_jetcore_area(
                     vals_copy, area=area, core_found=core_found
                 )
             else:
@@ -619,12 +620,12 @@ class JetStreamCoreIdentificationAlgorithm:
             if pot_boundary.tolist() in already_covered:
                 continue
             vals_to_check = self._get_indexes_to_check(pot_boundary)
-            area, core_found = self._make_pot_jetcore_area(
+            area, core_found = self._get_pot_jetcore_area(
                 vals_to_check, area=[]
             )
             already_covered.extend(area)
             already_covered = general_utils.remove_duplicates(already_covered)
-            # attach area if part of core
+            # add area to js_core_indexes if part of core
             if core_found:
                 id_number += 1
                 js_core_indexes.extend(
@@ -633,7 +634,7 @@ class JetStreamCoreIdentificationAlgorithm:
         self.num_of_cores = id_number
         return js_core_indexes
 
-    def _attach_cores_to_data(self):
+    def _add_cores_to_data(self):
         self._lat_ws_slice.values["core_id"] = (
             ("plev", "lat"),
             np.zeros(
@@ -654,7 +655,7 @@ class JetStreamCoreIdentificationAlgorithm:
         return self._lat_ws_slice.values
 
 
-def make_empty_local_wind_maxima_data_var(data):
+def get_empty_local_wind_maxima_data(data):
     """
     Will add a new data var of zeros for local wind maxima
 
@@ -743,7 +744,7 @@ def get_number_of_days_per_monthyear_with_local_wind_maxima(data):
     return data
 
 
-def calc_jet_occurence_and_centre_per_day(row, occurence_ws_threshold):
+def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
     """
     Runs JetStreamCoreIdentificationAlgorithm method on a single day
 
@@ -812,7 +813,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
             print(e)
             self._count_lats = {}
         self._get_all_lats_of_jet_centre_for_search()
-        self._calculate_jet_centre_points()
+        self._calc_jet_centre_points()
         self._get_jet_centre_data()
         self._label_jet_occurence()
 
@@ -863,7 +864,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ):
                 self._lats_for_search.append(lat)
 
-    def _calculate_jet_centre_points(self):
+    def _calc_jet_centre_points(self):
         """
         Will return a list of the coordinates for all jet-centre points
         """
@@ -917,7 +918,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
         ].where(lambda x: ((x == 0) | (x == 2)), 1)
 
 
-def meridional_circulation_index(data):
+def calc_meridional_circulation_index(data):
     """
     Calculates the Meridional Circulation Index (MCI)
     proposed by Francis and Vavrus 2015.
@@ -960,7 +961,7 @@ def get_sinousity_of_zonal_mean_zg(row, latitude_circle):
     geopotential (ZG) contour compared to a latitude circle
     Used in Cattiaux et al. 2016
     """
-    row["sinousity"] = calculate_great_circle_sinousity(
+    row["sinousity"] = calc_great_circle_sinousity(
         get_one_contour_linestring(
             row["zg"], row["zonal_mean_zg_30Nto70N"].data
         ),
@@ -1010,7 +1011,7 @@ def calc_total_great_circle_distance_along_line(line):
     return total_distance
 
 
-def calculate_great_circle_sinousity(line1, line2):
+def calc_great_circle_sinousity(line1, line2):
     """
     Calculates sinousity by comparing the great circle distance between
     two (multi-)linestrings
@@ -1092,15 +1093,15 @@ def apply_quadratic_func(x, y, vals):
     return (a * vals ** 2) + (b * vals) + c
 
 
-def refine_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
+def scale_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
     """
     Will downscale or upscale the resolution of latitude using a quadratic func
     TODO: rename better pls
 
     Used by Grise & Polvani 2017
     """
-    refined_lat_vals = apply_quadratic_func(lats, speeds, lat_vals)
-    return refined_lat_vals
+    scaled_lat_vals = apply_quadratic_func(lats, speeds, lat_vals)
+    return scaled_lat_vals
 
 
 def reduce_lat_resolution(lat, resolution):
@@ -1112,15 +1113,15 @@ def reduce_lat_resolution(lat, resolution):
 
 def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
     """
-    Makes use of the quadratic func to refine latitude values
+    Makes use of the quadratic func to scale latitude values
 
     Used by Grise & Polvani 2017
     """
     lats, ws = lats_and_ws
     lat_vals = reduce_lat_resolution(lats, resolution)
-    refined_lat_vals = refine_lat_vals_with_quadratic_func(lats, ws, lat_vals)
+    scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, lat_vals)
     decimal_places = general_utils.get_num_of_decimal_places(resolution)
-    return round(lat_vals[np.argmax(refined_lat_vals)], decimal_places)
+    return round(lat_vals[np.argmax(scaled_lat_vals)], decimal_places)
 
 
 def get_centroid_jet_lat(data):
@@ -1160,10 +1161,10 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
     data (xr.Dataset):
         must contain coords lat
     """
-    refined_lats = reduce_lat_resolution(data["lat"], resolution)
+    scaled_lats = reduce_lat_resolution(data["lat"], resolution)
     csi = cubic_spline_interpolation(data["lat"], data[ws_col])
-    interpolated_ws = csi(refined_lats)
-    max_lat = refined_lats[np.argmax(interpolated_ws)]
+    interpolated_ws = csi(scaled_lats)
+    max_lat = scaled_lats[np.argmax(interpolated_ws)]
     max_ws = max(interpolated_ws)
     return max_lat, max_ws
 

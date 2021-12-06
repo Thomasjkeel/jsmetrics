@@ -140,7 +140,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
             )
         )
     )
-    zonal_mean_lat_ws = jetstream_metrics_utils.assign_lat_ws_to_data(
+    zonal_mean_lat_ws = jetstream_metrics_utils.assign_lat_and_ws_to_data(
         zonal_mean, max_lat_ws
     )
     # Step 4
@@ -162,7 +162,7 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     print("Step 6: Join filtered climatology back to the data")
     time_dim = climatology["max_ws"].dims[0]
     fourier_filtered_data = (
-        jetstream_metrics_utils.assign_filtered_vals_to_data(
+        jetstream_metrics_utils.assign_filtered_lats_and_ws_to_data(
             zonal_mean_lat_ws,
             fourier_filtered_lats,
             fourier_filtered_ws,
@@ -180,7 +180,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
     print("Step 1. Run Jet-stream Core Idenfication Algorithm")
     data = data.groupby("time").map(
-        jetstream_metrics_utils.calc_jet_core_per_day,
+        jetstream_metrics_utils.run_jet_core_algorithm_on_one_day,
         (
             ws_core_threshold,
             ws_boundary_threshold,
@@ -200,7 +200,7 @@ def penaortiz_et_al_2013(data):
     print(
         "Step 2. Make array of zeros for local wind maxima location algorithm"
     )
-    data = jetstream_metrics_utils.make_empty_local_wind_maxima_data_var(data)
+    data = jetstream_metrics_utils.get_empty_local_wind_maxima_data(data)
     print("Step 3. Find local wind maxima locations by day")
     data = data.groupby("time").map(
         jetstream_metrics_utils.get_local_wind_maxima_by_day
@@ -234,7 +234,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
                 (1 for occurence, 2 for core)"
     )
     data = data.groupby("time").map(
-        jetstream_metrics_utils.calc_jet_occurence_and_centre_per_day,
+        jetstream_metrics_utils.run_jet_occurence_and_centre_alg_on_one_day,
         (occurence_ws_threshold,),
     )
     return data
@@ -246,7 +246,9 @@ def francis_vavrus_2015(data):
     MCI
     """
     print("Step 1. calculating Meridional Circulation Index from data")
-    data["mci"] = jetstream_metrics_utils.meridional_circulation_index(data)
+    data["mci"] = jetstream_metrics_utils.calc_meridional_circulation_index(
+        data
+    )
 
     print("Step 2. TODO Calculate anomaly from season")
     # maybe TODO: Step ?? Calculate anomaly from season
@@ -312,14 +314,14 @@ def grise_polvani_2017(data):
         "Step 3. Apply quadratic function to get max latitude\
                  at 0.01 degree resolution"
     )
-    refined_max_lats = []
+    scaled_max_lats = []
     for max_lat_and_ws in all_max_lats_and_ws:
-        refined_max_lat = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(
+        scaled_max_lats = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(
             max_lat_and_ws, resolution=0.01
         )
-        refined_max_lats.append(refined_max_lat)
-    print("Step 4. Assign refined max lats back to data")
-    data = data.assign({"max_lat_0.01": (("time"), refined_max_lats)})
+        scaled_max_lats.append(scaled_max_lats)
+    print("Step 4. Assign scaled max lats back to data")
+    data = data.assign({"max_lat_0.01": (("time"), scaled_max_lats)})
     return data
 
 
@@ -327,7 +329,7 @@ def molnos_et_al_2017(data):
     """
     Write function description
     """
-    return
+    return data
 
 
 def ceppi_et_al_2018(data):
@@ -358,14 +360,14 @@ def kern_et_al_2018(data):
     Write function description
     TODO: ask about equation
     """
-    return
+    return data
 
 
 def rikus_2018(data):
     """
     Write function description
     """
-    return
+    return data
 
 
 def simpson_et_al_2018(data):
@@ -379,7 +381,7 @@ def simpson_et_al_2018(data):
     wavenumber 42 according to
     Sardeshmukh and Hoskins [1984, their Eq. (9) with n0=42 and r=1].
     """
-    return
+    return data
 
 
 def bracegirdle_et_al_2019(data):
@@ -439,7 +441,7 @@ def lee_et_al_2019(data):
     the Coriolis parameter, pressure, northward distance.
     TODO: and add to dict if relevant
     """
-    return
+    return data
 
 
 def chemke_and_ming_2020(data):
@@ -447,4 +449,4 @@ def chemke_and_ming_2020(data):
     Write function description
     TODO: ask about equation
     """
-    return
+    return data

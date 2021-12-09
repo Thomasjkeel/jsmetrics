@@ -269,29 +269,29 @@ def calc_low_pass_weights(window, cutoff):
     return w[0 + (window % 2) : -1]  # edited from w[1:-1]
 
 
-def apply_lanczos_filter(data, filter_freq, window_size):
+def apply_lanczos_filter(dataarray, filter_freq, window_size):
     """
     Will carry out Lanczos low-pass filter
 
     Used in Woolings et al. 2010
     """
-    assert (
-        filter_freq <= data["time"].count() and filter_freq > 0
-    ), "Filter frequency needs to be less than the number\
-         of days in the data and more than 0 "
-    assert (
-        window_size <= data["time"].count() and window_size > 0
-    ), "Window size needs to be less than the number\
-        of days in the data and more than 0 "
-    assert (
-        filter_freq <= window_size
-    ), "Filter freq cannot be bigger than window size"
+    if (
+        dataarray["time"].count() <= filter_freq
+        or dataarray["time"].count() <= window_size
+    ):
+        print(
+            "Time series is too short to apply %s window for Lanczos filter"
+            % (window_size)
+        )
+        return
 
+    assert isinstance(
+        dataarray, xr.DataArray
+    ), "Input data needs to be a data array"
     lanczos_weights = calc_low_pass_weights(window_size, 1 / filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=["window"])
     window_cons = (
-        data["ua"]
-        .rolling(time=len(lanczos_weights_arr), center=True)
+        dataarray.rolling(time=len(lanczos_weights_arr), center=True)
         .construct("window")
         .dot(lanczos_weights_arr)
     )

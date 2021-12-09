@@ -128,8 +128,8 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     # Step 2
     print("Step 2: Applying %s day lancoz filter..." % (filter_freq))
     lancoz_filtered_mean_data = jetstream_metrics_utils.apply_lanczos_filter(
-        zonal_mean, filter_freq, window_size
-    )
+        zonal_mean["ua"], filter_freq, window_size
+    )  # TODO make way of assuring that a dataarray is passed
     # Step 3
     print("Step 3: Calculating max windspeed and lat where max ws found...")
     max_lat_ws = np.array(

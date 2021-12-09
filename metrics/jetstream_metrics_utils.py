@@ -278,16 +278,20 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
     if (
         dataarray["time"].count() <= filter_freq
         or dataarray["time"].count() <= window_size
+        or window_size <= filter_freq
     ):
-        print(
+        raise ValueError(
             "Time series is too short to apply %s window for Lanczos filter"
             % (window_size)
         )
-        return
 
+    assert (
+        filter_freq >= 0 and window_size >= 0
+    ), "both filter_freq and window need to be more than 0"
     assert isinstance(
         dataarray, xr.DataArray
     ), "Input data needs to be a data array"
+
     lanczos_weights = calc_low_pass_weights(window_size, 1 / filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=["window"])
     window_cons = (
@@ -923,7 +927,7 @@ def calc_meridional_circulation_index(data):
     """
     Calculates the Meridional Circulation Index (MCI)
     proposed by Francis and Vavrus 2015.
-    When MCI = 0, the wind is purely zonal, and when MCI= 1 (−1), the flow is
+    When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
 
            v * abs(v)

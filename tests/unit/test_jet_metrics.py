@@ -196,23 +196,21 @@ class TestWoolings2010(unittest.TestCase):
 
     def test_apply_lancoz_filter(self):
         tested_func = jetstream_metrics_utils.apply_lanczos_filter
+        test_ua = self.data["ua"]
+        self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 4))
+        self.assertRaises(AssertionError, lambda: tested_func(test_ua, -2, 1))
+        self.assertRaises(ValueError, lambda: tested_func(test_ua, 2, -1))
+        self.assertRaises(ValueError, lambda: tested_func(test_ua, 2, 1))
         self.assertRaises(
-            AssertionError, lambda: tested_func(self.data, -2, 1)
+            ValueError,
+            lambda: tested_func(test_ua, test_ua["time"].count() + 2, 1),
         )
         self.assertRaises(
-            AssertionError, lambda: tested_func(self.data, 2, -1)
-        )
-        self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 1))
-        self.assertRaises(
-            AssertionError,
-            lambda: tested_func(self.data, self.data["time"].count() + 2, 1),
-        )
-        self.assertRaises(
-            AssertionError,
-            lambda: tested_func(self.data, 2, self.data["time"].count() + 1),
+            ValueError,
+            lambda: tested_func(test_ua, 2, test_ua["time"].count() + 1),
         )
         self.assertEqual(
-            float(tested_func(self.data, 2, 4).max()), 99.514892578125
+            float(tested_func(test_ua, 2, 4).max()), 99.514892578125
         )
 
     def test_get_latitude_and_speed_where_max_ws(self):

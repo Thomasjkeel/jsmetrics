@@ -1,0 +1,8 @@
+# Testing and development dependencies
+black
+coverage
+flake8
+parameterized
+pre_commit
+pylint
+pytest

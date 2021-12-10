@@ -29,7 +29,7 @@ requirements = [
     "scipy>=1.5.3",
     "dask[array]>=2.6",
     "netCDF4>=1.5.5.1",
-    "bottleneck==1.3.2",
+    "bottleneck",
     "cf_xarray",
     "Shapely",
 ]

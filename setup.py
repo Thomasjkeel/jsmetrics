@@ -25,6 +25,7 @@ with open("requirements_dev.txt") as dev:
 requirements = [
     "numpy>=1.21.2",
     "pandas>=0.23",
+    "matplotlib>=3.3.2",
     "xarray>=0.19.0",
     "scipy>=1.5.3",
     "dask[array]>=2.6",
@@ -45,9 +46,9 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Atmospheric Science",
     ],
     description=DESCRIPTION,
@@ -63,10 +64,6 @@ setup(
     tests_require=["pytest", "parameterized"],
     extras_require={
         "dev": dev_requirements,
-        "plotting": [
-            "matplotlib>=3.3.2",
-            # "Cartopy>=0.18.0",
-        ],
         "data_install": [
             "cdsapi>=0.5.1",
         ],

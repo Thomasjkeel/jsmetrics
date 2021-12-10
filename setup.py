@@ -17,15 +17,10 @@ KEYWORDS = "jet-stream metrics climate xarray"
 with open("README.md") as file:
     long_description = file.read()
 
-dev_requirements = [
-    "black",
-    "coverage",
-    "flake8",
-    "parameterized",
-    "pre_commit",
-    "pylint",
-    "pytest",
-]
+dev_requirements = []
+with open("requirements_dev.txt") as dev:
+    for dependency in dev.readlines():
+        dev_requirements.append(dependency)
 
 requirements = [
     "numpy>=1.21.2",

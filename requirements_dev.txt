@@ -1,4 +1,6 @@
 # Testing and development dependencies
+pip==19.2.3
+bump2version==0.5.11
 black
 coverage
 flake8

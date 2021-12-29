@@ -1,6 +1,6 @@
-============
+==================
 jet-stream-metrics
-============
+==================
 To-Do:
 
 - ADD cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)

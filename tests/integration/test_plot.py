@@ -9,8 +9,8 @@ import unittest
 import numpy as np
 import xarray as xr
 import matplotlib.pyplot as plt
-from metrics import compute_metrics
-from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
+from jsmetrics import compute_metrics
+from jsmetrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 
 
 class TestPlot(unittest.TestCase):

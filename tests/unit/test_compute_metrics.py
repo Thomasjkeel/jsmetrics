@@ -9,9 +9,9 @@
 
 # imports
 import unittest
-from metrics import compute_metrics
+from jsmetrics import compute_metrics
 from . import set_up_test_uv_data
-from metrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
+from jsmetrics.jetstream_metrics_dict import JETSTREAM_METRIC_DICT
 
 # docs
 __author__ = "Thomas Keel"

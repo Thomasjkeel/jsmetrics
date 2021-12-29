@@ -13,7 +13,7 @@ import unittest
 from parameterized import parameterized
 import xarray as xr
 import numpy as np
-from metrics import (
+from jsmetrics import (
     general_utils,
     jetstream_metrics,
     jetstream_metrics_utils,

@@ -8,7 +8,7 @@
 
 # imports
 import unittest
-from metrics import windspeed_utils
+from jsmetrics import windspeed_utils
 
 
 class TestWindSpeedSlice(unittest.TestCase):

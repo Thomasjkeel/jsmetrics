@@ -1,6 +1,6 @@
 # Testing and development dependencies
-pip==19.2.3
-bump2version==0.5.11
+pip
+bump2version
 black
 coverage
 flake8
@@ -8,3 +8,7 @@ parameterized
 pre_commit
 pylint
 pytest
+# Documentation and examples
+matplotlib
+nc-time-axis
+sphinx

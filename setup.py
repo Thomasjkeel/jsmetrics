@@ -14,8 +14,11 @@ LICENSE = "MIT License"
 
 KEYWORDS = "jet-stream metrics climate xarray"
 
-with open("README.md") as file:
-    long_description = file.read()
+with open("README.rst") as file:
+    readme = file.read()
+
+with open("HISTORY.rst") as history_file:
+    history = history_file.read()
 
 dev_requirements = []
 with open("requirements_dev.txt") as dev:
@@ -55,8 +58,8 @@ setup(
     python_requires=REQUIRES_PYTHON,
     install_requires=requirements,
     license=LICENSE,
-    long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description=readme + "\n\n" + history,
+    long_description_content_type="text/x-rst",
     include_package_data=True,
     keywords=KEYWORDS,
     name=NAME,

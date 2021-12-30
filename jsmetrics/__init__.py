@@ -2,7 +2,7 @@
 
 __author__ = """Tom Keel"""
 __email__ = "thomas.keel.18@ucl.ac.uk"
-__version__ = "0.0.0-alpha"
+__version__ = "0.0.1-alpha"
 
 # from . import (
 #     compute_metrics,

@@ -4,13 +4,11 @@ __author__ = """Tom Keel"""
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __version__ = "0.0.1-beta"
 
-# from . import (
-#     compute_metrics,
-#     general_utils,
-#     jetstream_metrics,
-#     jetstream_metrics_utils,
-#     jetstream_metrics_dict,
-#     windspeed_utils,
-# )
+from . import (
+    general_utils,
+    jetstream_metrics,
+    jetstream_metrics_utils,
+    windspeed_utils,
+)
 
 # this is where the metrics.[something] objects can go i.e. errors

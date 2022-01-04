@@ -4,6 +4,7 @@ jet-stream-metrics
 To-Do:
 
 - ADD cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
+- THINK ABOUT way of seperating main.py/experiments with jsmetrics
 - way of dealing with data from different sources (some sort of data translator module or maybe included in tests)
   - for example what if 'v' or 'v-wind' is passed to func instead of 'va'
   - for example what if 'mbar' or 'model levels' instead of 'plev'

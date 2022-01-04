@@ -2,7 +2,7 @@
 History
 =======
 
-0.0.1-gamma (2022-01-04)
+0.0.1 (2022-01-04)
 ------------------
 
 * Allow jsmetric to call jetstream_metrics and utils
@@ -11,3 +11,4 @@ History
 ------------------
 
 * First release.
+* Add currently existing metrics

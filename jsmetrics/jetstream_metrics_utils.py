@@ -69,7 +69,7 @@ def calc_atmospheric_mass_at_kPa(
     Radius of earth (R) = 6.372E3 km;
     Surface area of earth = 4 Pi R^2 = 5.1E8 km^2
 
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
 
     Returns
 
@@ -85,7 +85,7 @@ def calc_atmospheric_mass_at_kPa(
 
 def get_atm_mass_at_one_hPa(hPa):
     """
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     """
     kPa = hPa / 10
     atm_mass = calc_atmospheric_mass_at_kPa(kPa)
@@ -94,7 +94,7 @@ def get_atm_mass_at_one_hPa(hPa):
 
 def get_weighted_average_at_one_Pa(data, Pa, atm_mass):
     """
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     """
     return atm_mass * (
         np.sqrt(data["ua"].sel(plev=Pa) ** 2 + data["va"].sel(plev=Pa) ** 2)
@@ -144,7 +144,7 @@ def get_mass_weighted_average_ws(data, plev_flux=False):
 
 def get_sum_atm_mass(data):
     """
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     """
     sum_atm_mass = 0
     for plev_Pa in data["plev"].data:
@@ -156,7 +156,7 @@ def get_sum_atm_mass(data):
 
 def calc_mass_weighted_average(data):
     """
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
     TODO: write func desc
     """
@@ -168,7 +168,7 @@ def calc_mass_weighted_average(data):
 
 def calc_mass_flux_weighted_pressure(data):
     """
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
     """
     sum_weighted_ws = get_mass_weighted_average_ws(data)
@@ -181,7 +181,7 @@ def calc_mass_flux_weighted_pressure(data):
 
 def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
     """
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
     """
     assert "lat" in data.coords, "'lat' needs to be in data.coords"

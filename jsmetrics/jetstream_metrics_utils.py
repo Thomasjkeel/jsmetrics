@@ -103,8 +103,24 @@ def get_weighted_average_at_one_Pa(data, Pa, atm_mass):
 
 def get_mass_weighted_average_ws(data, plev_flux=False):
     """
-    Used in Archer & Caldeira 2008
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
 
+    Get mass-weighted average wind-speed.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset TODO: check
+        Data containing mass weighted average ws
+
+    Usage
+    ----------
+        mon_mean = data.groupby("time.month").mean()
+        mass_weighted_average = jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
     """
     sum_weighted_ws = None  # TODO
     for plev_Pa in data["plev"].data:

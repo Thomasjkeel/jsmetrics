@@ -226,6 +226,11 @@ def get_zonal_mean(data):
     Will get the zonal mean either by pressure level (plev) or for one layer
     Used in Woolings et al. 2010 & Grise & Polvani 2017
     TODO: add to Archer & Caldiera
+
+    Raises
+    ----------
+    KeyError
+        when 'lon' not discovered as coord
     """
     if "lon" not in data.coords:
         raise KeyError("data does not contain 'lon' coord")

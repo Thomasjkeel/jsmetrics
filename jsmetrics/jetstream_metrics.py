@@ -274,16 +274,16 @@ def francis_vavrus_2015(data):
 
     Returns
     ----------
-    output : xarray.Dataset
+    data : xarray.Dataset
         Data containing MCI
     """
-    print("Step 1. calculating Meridional Circulation Index from data")
+    #  Step 1. calculating Meridional Circulation Index from data
     data["mci"] = jetstream_metrics_utils.calc_meridional_circulation_index(
         data
     )
 
-    print("Step 2. TODO Calculate anomaly from season")
-    # maybe TODO: Step ?? Calculate anomaly from season
+    #  Step 2. TODO Calculate anomaly from season
+    # maybe TODO: Step 3 Calculate anomaly from season
     return data
 
 

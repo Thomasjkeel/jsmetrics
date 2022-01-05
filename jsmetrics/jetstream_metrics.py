@@ -253,8 +253,29 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
 def francis_vavrus_2015(data):
     """
-    Write function description
-    MCI
+    Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
+
+    Calculates the Meridional Circulation Index (MCI):
+
+           v * abs(v)
+    MCI =  ――――――――――
+           u**2 * v**2
+
+    When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
+    from the South (North).
+
+    NOTE: The paper is not clear about whether the absolute value for MCI
+    is taken instead thus 0-1
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing MCI
     """
     print("Step 1. calculating Meridional Circulation Index from data")
     data["mci"] = jetstream_metrics_utils.calc_meridional_circulation_index(

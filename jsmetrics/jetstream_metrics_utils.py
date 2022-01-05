@@ -122,6 +122,10 @@ def get_mass_weighted_average_ws(data, plev_flux=False):
         mon_mean = data.groupby("time.month").mean()
         mass_weighted_average = jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
     """
+    if data["plev"].count() < 2:
+        raise ValueError(
+            "Need at least 2 pressure levels (plevs) for mass weighted average wind-speed calculation"
+        )
     sum_weighted_ws = None  # TODO
     for plev_Pa in data["plev"].data:
         plev_hPa = plev_Pa / 100  # TODO

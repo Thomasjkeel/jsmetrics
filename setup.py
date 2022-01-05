@@ -9,7 +9,7 @@ URL = "https://github.com/Thomasjkeel/jet-stream-metrics"
 AUTHOR = "Thomas Keel"
 AUTHOR_EMAIL = "thomas.keel.18@ucl.ac.uk"
 REQUIRES_PYTHON = ">=3.8.0"
-VERSION = "0.0.2-alpha"
+VERSION = "0.0.3-alpha"
 LICENSE = "MIT License"
 
 KEYWORDS = "jet-stream metrics climate xarray"

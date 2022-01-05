@@ -183,6 +183,7 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
+    TODO: not sure this is working properly
     """
     assert "lat" in data.coords, "'lat' needs to be in data.coords"
 

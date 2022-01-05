@@ -54,15 +54,26 @@ def koch_et_al_2006(data, ws_threshold=30):
 
 def archer_caldeira_2008(data):
     """
-    Will calculate only the mass-weighted wind speed
-    Similar to Koch et al. 2006 -> "To overcome this problem,
-        we define jet stream properties via integrated quantities,
-        which are more numerically stable and less grid-dependent
-        than are simple maxima and minima."
+    Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+
+    Calculates the mass-weighted average wind speed, mass flux weighted pressure
+    and mass flux weighted latitude. This method has some similarities to method
+    used in Koch et al. 2006.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing mass weighted average ws, mass flux weighted pressure and latitude
     """
-    print("Step 1. Get monthly means")
+    #  Step 1. Get monthly means
     mon_mean = data.groupby("time.month").mean()
-    print("Step 2. Calculate mass weighted average")
+
+    #  Step 2. Calculate mass weighted average
     mass_weighted_average = (
         jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
     )
@@ -74,7 +85,7 @@ def archer_caldeira_2008(data):
             mon_mean, lat_min=15, lat_max=75
         )
     )
-    data = data.assign(
+    output = data.assign(
         {
             "mass_weighted_average_ws": (
                 ("month", "lat", "lon"),
@@ -90,7 +101,7 @@ def archer_caldeira_2008(data):
             ),
         }
     )
-    return data
+    return output
 
 
 def schiemann_et_al_2009(data):

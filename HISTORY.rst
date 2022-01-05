@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.2-alpha (2022-01-04)
+------------------
+
+* Add docstrings to Archer & Calidera metric
+
 0.0.1 (2022-01-04)
 ------------------
 

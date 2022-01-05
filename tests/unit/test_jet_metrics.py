@@ -151,6 +151,11 @@ class TestArcherCaldeira2008(unittest.TestCase):
         #     float(result["mass_weighted_average_ws"].max()), 8.7751588821411
         # )
 
+    def test_get_mass_weighted_average_windspeed(self):
+        tested_func = jetstream_metrics.archer_caldeira_2008
+        test_data = self.data.isel(plev=1)
+        self.assertRaises(ValueError, lambda: tested_func(test_data))
+
 
 class TestSchiemann2009(unittest.TestCase):
     def setUp(self):

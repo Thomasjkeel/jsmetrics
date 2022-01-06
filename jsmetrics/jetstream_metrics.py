@@ -395,6 +395,15 @@ def cattiaux_et_al_2016(data):
     """
     Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing geopotential height (zg)
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        Data containing sinousity of zonal mean by each time unit
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -407,12 +416,12 @@ def cattiaux_et_al_2016(data):
         50, 0, 360
     )
     #  Step 3. Loop over each time step and calculate sinousity
-    data = data.groupby("time").map(
+    output = data.groupby("time").map(
         lambda row: jetstream_metrics_utils.get_sinousity_of_zonal_mean_zg(
             row, circle_50N
         )
     )
-    return data
+    return output
 
 
 def grise_polvani_2017(data):
@@ -420,20 +429,27 @@ def grise_polvani_2017(data):
     Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
     See also Ceppi et al. 2012
-    Works on Southern Hemisphere
-    TODO: work out if relevant as this method also uses poleward edge of
-    sub-tropical dry zone and poleward edge of Hadley cell
-    derived from precip. record
+    Methodology is for Southern Hemisphere
+    TODO: work out if relevant as this method also uses poleward edge of sub-tropical dry zone
+    and poleward edge of Hadley cell derived from precip. record
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component wind
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        Data containing max latitudes per time unit scaled to 0.01 resolution
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
-    # Step 1.
-    print("Step 1. Calculate zonal-mean")
+
+    # Step 1. Calculate zonal-mean
     zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
-    print(
-        "Step 2. Get the 3 latitudes and speeds around max zonal wind-speed\
-                (e.g. lat-1, lat, lat+1)"
-    )
+
+    # Step 2. Get the 3 latitudes and speeds around max zonal wind-speed (e.g. lat-1, lat, lat+1)
     all_max_lats_and_ws = np.array(
         list(
             map(
@@ -442,17 +458,16 @@ def grise_polvani_2017(data):
             )
         )
     )
-    print(
-        "Step 3. Apply quadratic function to get max latitude\
-                 at 0.01 degree resolution"
-    )
+
+    #  Step 3. Apply quadratic function to get max latitude at 0.01 degree resolution
     scaled_max_lats = []
     for max_lat_and_ws in all_max_lats_and_ws:
         scaled_max_lat = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(
             max_lat_and_ws, resolution=0.01
         )
         scaled_max_lats.append(scaled_max_lat)
-    print("Step 4. Assign scaled max lats back to data")
+
+    #  Step 4. Assign scaled max lats back to data
     data = data.assign({"max_lat_0.01": (("time"), scaled_max_lats)})
     return data
 

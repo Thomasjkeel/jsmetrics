@@ -8,6 +8,7 @@
 
 # imports
 import numpy as np
+import xarray
 from . import jetstream_metrics_utils
 from . import general_utils, windspeed_utils
 
@@ -19,7 +20,7 @@ __status__ = "Development"
 
 def koch_et_al_2006(data, ws_threshold=30):
     """
-    Method from Koch et al (2006) https://doi.org/10.1002/joc.1255
+    Method from Koch et al (2006) hlatitudettps://doi.org/10.1002/joc.1255
 
     Calculates the weighted average windspeed and applies a threshold to identify the jet.
     The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
@@ -170,6 +171,8 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     fourier_filtered_data : xarray.Dataset
         Data containing maximum latitudes and maximum windspeed at those lats and fourier-filtered versions of those two variables
     """
+    if isinstance(data, xarray.DataArray):
+        data = data.to_dataset()
     # Step 1: Calculate long and/or plev mean
     zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
 

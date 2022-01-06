@@ -376,12 +376,12 @@ class TestSimpson2018(unittest.TestCase):
 class TestBracegirdle2019(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()
-        self.data = self.data.sel(plev=85000)
 
     def test_metric(self):
-        result = jetstream_metrics.bracegirdle_et_al_2019(self.data)
-        # self.assertRaises(self.dat)
-        # TODO: mutliple plevs raise assertionerror
+        tested_func = jetstream_metrics.bracegirdle_et_al_2019
+        test_data = self.data.sel(plev=85000)
+        result = tested_func(test_data)
+        self.assertRaises(ValueError, lambda: tested_func(self.data))
         self.assertEqual(float(result["seasonal_JPOS"].max()), 37.725)
         self.assertEqual(float(result["annual_JPOS"].max()), 37.725)
         self.assertEqual(round(float(result["seasonal_JSTR"].max()), 3), 8.589)

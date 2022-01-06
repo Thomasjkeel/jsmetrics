@@ -393,7 +393,8 @@ def local_wave_activity(data):
 
 def cattiaux_et_al_2016(data):
     """
-    Write function description
+    Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -416,7 +417,8 @@ def cattiaux_et_al_2016(data):
 
 def grise_polvani_2017(data):
     """
-    Write function description
+    Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
     See also Ceppi et al. 2012
     Works on Southern Hemisphere
     TODO: work out if relevant as this method also uses poleward edge of
@@ -464,7 +466,8 @@ def molnos_et_al_2017(data):
 
 def ceppi_et_al_2018(data):
     """
-    Write function description
+    Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+
     TODO: what is meant by the centroid??
     "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
 
@@ -518,7 +521,7 @@ def simpson_et_al_2018(data):
 
 def bracegirdle_et_al_2019(data):
     """
-    Write function description
+    Method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
     TODO: work out if relevant
     TODO: check southern hemisphere works
     NOTE: for Southern Hemisphere
@@ -568,17 +571,6 @@ def bracegirdle_et_al_2019(data):
             "annual_JSTR": (("year"), annual_max_ws),
         }
     )
-    return data
-
-
-def lee_et_al_2019(data):
-    """
-    Write function description
-    TODO: work out if relevant as wind shear of jet-stream rather than location
-    variable used: temperature, u-wind, specific gas constant for dry air,
-    the Coriolis parameter, pressure, northward distance.
-    TODO: and add to dict if relevant
-    """
     return data
 
 

@@ -47,10 +47,12 @@ JETSTREAM_METRIC_DICT = {
         "metric": jetstream_metrics.penaortiz_et_al_2013,
         "description": "Pena-Ortiz et al. 2013",
     },
-    # "ScreenSimmonds2013":
-    #     {"variables": ["zg"], "coords":{"plev": [50000, 50000]},
-    #      "metric": jetstream_metrics.screen_and_simmonds_2013,
-    #      "description": "Screen & Simmonds 2013 TODO"},
+    "ScreenSimmonds2013": {
+        "variables": ["zg"],
+        "coords": {"plev": [50000, 50000]},
+        "metric": jetstream_metrics.screen_and_simmonds_2013,
+        "description": "Screen & Simmonds 2013",
+    },
     "Kuang2014": {
         "variables": ["ua", "va"],
         "coords": {"plev": [20000, 25000]},

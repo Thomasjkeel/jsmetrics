@@ -19,33 +19,50 @@ __status__ = "Development"
 
 def koch_et_al_2006(data, ws_threshold=30):
     """
+    Method from Koch et al (2006) https://doi.org/10.1002/joc.1255
+
+    Calculates the weighted average windspeed and applies a threshold to identify the jet.
+    The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
+
+    weighted average windspeed = 1/(p2-p1) integral(p2, p1)(u^2+v^2)^(1/2)dp
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+    ws_threshold : int or float
+        Windspeed threshold for jet-stream (default: 30 ms-1)
+
+    Returns
+    ----------
+    weighted_average_ws : xarray.Dataset
+        weighted_average_ws
+
+
     TODO: check with chris
     TODO: add equation to this doc
+    TODO: what if mbar?
 
     Returns
     ----------
     weighted_average_ws : DataArray
     """
-    print("Step 1: Calculate weighted sum...")
-    # Step 1.1: get all pressure levels in data as list and make sure hPa
-    # TODO: what if mbar?
+    # Step 1: get all pressure levels in data as list and make sure hPa
     all_plevs_hPa = general_utils.get_all_plev_hPa(data)
-    # Step 1.2 get weighted sum windspeed
+    # Step 2: get weighted sum windspeed
     sum_weighted_ws = jetstream_metrics_utils.get_sum_weighted_ws(
         data, all_plevs_hPa
     )
-    # Step 2: calculate average weighted
-    print("Step 2: Calculate weighted average...")
+    # Step 3: calculate average weighted
     weighted_average_ws = jetstream_metrics_utils.get_weighted_average_ws(
         sum_weighted_ws, all_plevs_hPa
     )
-    # Step 3: apply threshold
-    print("Step 3: Apply windspeed threshold of %s m/s..." % (ws_threshold))
+    # Step 4: Apply windspeed threshold
     weighted_average_ws = weighted_average_ws.where(
         weighted_average_ws >= ws_threshold
     )
     weighted_average_ws = weighted_average_ws.fillna(0.0)
-    # turn into dataset
+    # Step 5: turn into dataset
     weighted_average_ws = weighted_average_ws.rename(
         "weighted_average_ws"
     ).to_dataset()

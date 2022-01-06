@@ -810,9 +810,21 @@ def get_number_of_days_per_monthyear_with_local_wind_maxima(data):
 
 def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
     """
+    Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
+
     Runs JetStreamCoreIdentificationAlgorithm method on a single day
 
-    Used in Manney et al. 2011
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Single time-unit of dataset containing u- and v-component wind
+    occurence_ws_threshold : int or float
+        Threshold used to identify a jet-stream occurence point
+
+    Returns
+    ----------
+    occ_alg.output_data : xarray.Dataset
+        Data with jet occurence and centre points (1 for occurence, 2 for centre)
     """
     occ_alg = JetStreamOccurenceAndCentreAlgorithm(row, occurence_ws_threshold)
     occ_alg.run()
@@ -821,10 +833,18 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
 
 class JetStreamOccurenceAndCentreAlgorithm:
     """
-    Used in Kuang et al. 2014
+    Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
     """
 
     def __init__(self, data, occurence_ws_threshold=30):
+        """
+        Parameters
+        ----------
+        data : xarray.Dataset
+            Single time-unit of dataset containing u- and v-component wind. Needs to be 2-dimensions (lat, lon)
+        occurence_ws_threshold : int or float
+            Threshold used to identify a jet-stream occurence point
+        """
         try:
             assert occurence_ws_threshold > 0
         except Exception as e:

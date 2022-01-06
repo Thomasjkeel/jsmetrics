@@ -36,16 +36,11 @@ def koch_et_al_2006(data, ws_threshold=30):
     Returns
     ----------
     weighted_average_ws : xarray.Dataset
-        weighted_average_ws
-
+        data containing weighted average ws above windspeed threshold
 
     TODO: check with chris
     TODO: add equation to this doc
     TODO: what if mbar?
-
-    Returns
-    ----------
-    weighted_average_ws : DataArray
     """
     # Step 1: get all pressure levels in data as list and make sure hPa
     all_plevs_hPa = general_utils.get_all_plev_hPa(data)

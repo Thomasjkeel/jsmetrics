@@ -293,9 +293,14 @@ class TestKuang2014(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        lon_data = self.data.sel(plev=50000).isel(time=slice(0, 3))
-        result = jetstream_metrics.kuang_et_al_2014(lon_data)
+        tested_func = jetstream_metrics.kuang_et_al_2014
+        lon_data = self.data.sel(plev=50000).isel(time=slice(0, 2))
+        result = tested_func(lon_data)
         self.assertEqual(result["jet_ocurrence1_jet_centre2"].max(), 2)
+        lon_data = self.data.sel(plev=slice(50000, 25000)).isel(
+            time=slice(0, 2)
+        )
+        self.assertRaises(ValueError, lambda: tested_func(lon_data))
 
 
 class TestFrancisVavrus2015(unittest.TestCase):

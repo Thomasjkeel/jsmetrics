@@ -258,8 +258,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
     Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
     Best at 100-500 hPa
-    NOTE: May take a long time when there is a lot of data
-    TODO: ask chris to check
+    NOTE: Currently takes a long time i.e. 2 seconds per time unit (i.e. 2 seconds per day)
 
     Parameters
     ----------
@@ -273,6 +272,8 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     output : xarray.Dataset
         Data containing jet-occurence and jet-centres (1 is occurence, 2 is core)
     """
+    if data["plev"].count() == 1:
+        data = data.isel(plev=0)
     # Step 1. Run Jet-stream Occurence and Centre Algorithm
     output = data.groupby("time").map(
         jetstream_metrics_utils.run_jet_occurence_and_centre_alg_on_one_day,

@@ -221,7 +221,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
     Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
     Paper uses 100-400 hPa.
-    NOTE: Currently takes a long time i.e. 2.3 seconds per time unit with 8 plevs (i.e. 2.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    NOTE: Currently takes a long time i.e. 7.6 seconds per time unit with 8 plevs (i.e. 7.6 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------

@@ -1004,8 +1004,8 @@ class JetStreamOccurenceAndCentreAlgorithm:
 
 def calc_meridional_circulation_index(data):
     """
+    Component of method from Francis and Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
     Calculates the Meridional Circulation Index (MCI)
-    proposed by Francis and Vavrus 2015.
     When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
 

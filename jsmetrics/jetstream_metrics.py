@@ -51,18 +51,22 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     # Step 1: get all pressure levels (hPa) as list
     all_plevs_hPa = general_utils.get_all_hPa_list(data)
+
     # Step 2: get weighted sum windspeed
     sum_weighted_ws = jetstream_metrics_utils.get_sum_weighted_ws(
         data, all_plevs_hPa
     )
+
     # Step 3: calculate average weighted
     weighted_average_ws = jetstream_metrics_utils.get_weighted_average_ws(
         sum_weighted_ws, all_plevs_hPa
     )
+
     # Step 4: Apply windspeed threshold
     weighted_average_ws = weighted_average_ws.where(
         weighted_average_ws >= ws_threshold
     )
+
     weighted_average_ws = weighted_average_ws.fillna(0.0)
     # Step 5: turn into dataset
     weighted_average_ws = weighted_average_ws.rename(
@@ -143,6 +147,7 @@ def schiemann_et_al_2009(data):
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
+
     #  Step 2. Calculate jet maximas
     output = data.groupby("time").map(
         jetstream_metrics_utils.get_local_jet_maximas_by_timeunit_by_plev
@@ -309,6 +314,16 @@ def screen_and_simmonds_2013(data):
 
     Slightly adjusted in Screen and Simmonds 2014
     TODO: insure that Earth sphericity is accounted for in the perimeter calc
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing geopotential height (zg)
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        Data containing ... TODO
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -340,6 +355,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
             data = data.isel(plev=0)
         else:
             raise ValueError("Please subset to one plev value for algorithm")
+
     # Step 1. Run Jet-stream Occurence and Centre Algorithm
     output = data.groupby("time").map(
         jetstream_metrics_utils.run_jet_occurence_and_centre_alg_on_one_day,
@@ -390,6 +406,11 @@ def local_wave_activity(data):
     Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA
     with 500 hPa zg instead of pv
     TODO: Ask Chris about equation in Blackport 2020 and others
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing geopotential height (zg)
     """
     return data
 
@@ -410,14 +431,17 @@ def cattiaux_et_al_2016(data):
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
+
     #  Step 1. get zonal average for each timestep
     data["zonal_mean_zg_30Nto70N"] = (
         data["zg"].sel(lat=slice(30, 70)).groupby("time").mean(...)
     )
+
     #  Step 2. Get latitude circle of 50 N
     circle_50N = jetstream_metrics_utils.get_latitude_circle_linestring(
         50, 0, 360
     )
+
     #  Step 3. Loop over each time step and calculate sinousity
     output = data.groupby("time").map(
         lambda row: jetstream_metrics_utils.get_sinousity_of_zonal_mean_zg(
@@ -489,10 +513,19 @@ def ceppi_et_al_2018(data):
     TODO: what is meant by the centroid??
     "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
 
-    Returns: centroid latitude of u-wind for one day
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component windspeed
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing centroid latitude of u-wind for each time unit (e.g. each day)
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
+    #  Step 1: Get centroid latitudes of wind speed
     all_centroids = []
     if data["time"].count() > 1:
         for time_coord in data["time"]:
@@ -504,8 +537,10 @@ def ceppi_et_al_2018(data):
     else:
         centroid_lat = jetstream_metrics_utils.get_centroid_jet_lat(data)
         all_centroids.append(centroid_lat)
-    data = data.assign({"jet_lat_centroid": (("time"), all_centroids)})
-    return data
+
+    # Step 2: Assign laitude of jet-stream centroids to main data
+    output = data.assign({"jet_lat_centroid": (("time"), all_centroids)})
+    return output
 
 
 def kern_et_al_2018(data):
@@ -543,6 +578,16 @@ def bracegirdle_et_al_2019(data):
     TODO: work out if relevant
     TODO: check southern hemisphere works
     NOTE: for Southern Hemisphere
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component windspeed
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing seasonal and annual jet-stream position and strength (ms-1)
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -551,19 +596,16 @@ def bracegirdle_et_al_2019(data):
             data = data.isel(plev=0)
         else:
             raise ValueError("Please subset to one plev value for this metric")
-    # Step 1
-    print("Step 1. Make seasonal & annual climatologies")
+
+    #  Step 1. Make seasonal & annual climatologies
     seasonal_climatology = general_utils.get_climatology(data, "season")
     annual_climatology = general_utils.get_climatology(data, "year")
-    # Step 2
-    print("Step 2. Get zonal mean from climatologies")
+
+    #  Step 2. Get zonal mean from climatologies
     seasonal_zonal_mean = seasonal_climatology.mean("lon")
     annual_zonal_mean = annual_climatology.mean("lon")
-    # Step 3
-    print(
-        "Step 3. Cubic spline interpolation to each climatology\
-         at latitude resolution of 0.075 degrees"
-    )
+
+    #  Step 3. Cubic spline interpolation to each climatology at latitude resolution of 0.075 degrees
     (
         seasonal_max_lats,
         seasonal_max_ws,
@@ -576,12 +618,9 @@ def bracegirdle_et_al_2019(data):
     ) = jetstream_metrics_utils.run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(
         annual_zonal_mean, resolution=0.075, time_col="year"
     )
-    # Step 4
-    print(
-        "Step 4. Assign jet-stream position (JPOS) and\
-                 jet-stream strength (JSTR) back to data"
-    )
-    data = data.assign(
+
+    # Step 4. Assign jet-stream position (JPOS) and jet-stream strength (JSTR) back to data
+    output = data.assign(
         {
             "seasonal_JPOS": (("season"), seasonal_max_lats),
             "annual_JPOS": (("year"), annual_max_lats),
@@ -589,7 +628,7 @@ def bracegirdle_et_al_2019(data):
             "annual_JSTR": (("year"), annual_max_ws),
         }
     )
-    return data
+    return output
 
 
 def chemke_and_ming_2020(data):

@@ -42,8 +42,8 @@ def koch_et_al_2006(data, ws_threshold=30):
     TODO: add equation to this doc
     TODO: what if mbar?
     """
-    # Step 1: get all pressure levels in data as list and make sure hPa
-    all_plevs_hPa = general_utils.get_all_plev_hPa(data)
+    # Step 1: get all pressure levels (hPa) as list
+    all_plevs_hPa = general_utils.get_all_hPa_list(data)
     # Step 2: get weighted sum windspeed
     sum_weighted_ws = jetstream_metrics_utils.get_sum_weighted_ws(
         data, all_plevs_hPa

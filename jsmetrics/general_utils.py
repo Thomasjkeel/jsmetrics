@@ -84,12 +84,16 @@ def remove_duplicates(vals):
     return vals
 
 
-def get_all_plev_hPa(data):
+def get_all_hPa_list(data):
     """
     Will get a list of all the pressure levels in the data in hPa
     """
     if "plev" not in data.coords:
         raise KeyError("Data does not contain coord: 'plev'")
+
+    if data["plev"].units != "Pa" and data["plev"].units != "hPa":
+        raise ValueError("Plev units need to be Pa or hPa")
+    #  TODO: what if mbar?
 
     plevs = np.array([plev for plev in data["plev"]])
     if data["plev"].units == "Pa":

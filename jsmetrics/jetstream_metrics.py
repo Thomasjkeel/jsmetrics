@@ -307,6 +307,8 @@ def screen_and_simmonds_2013(data):
     TODO: ask Chris about interpolation method
     TODO: insure that Earth sphericity is accounted for in the perimeter calc
     """
+    if isinstance(data, xarray.DataArray):
+        data = data.to_dataset()
     return
 
 

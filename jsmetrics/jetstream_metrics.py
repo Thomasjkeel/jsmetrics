@@ -43,6 +43,11 @@ def koch_et_al_2006(data, ws_threshold=30):
     TODO: add equation to this doc
     TODO: what if mbar?
     """
+    if data["plev"].count() < 2:
+        raise ValueError(
+            "Need at least two plevs to calculate weighted average windspeed"
+        )
+
     # Step 1: get all pressure levels (hPa) as list
     all_plevs_hPa = general_utils.get_all_hPa_list(data)
     # Step 2: get weighted sum windspeed

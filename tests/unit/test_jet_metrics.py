@@ -91,12 +91,15 @@ class TestKoch2006(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        result = jetstream_metrics.koch_et_al_2006(self.data, ws_threshold=8)
+        tested_func = jetstream_metrics.koch_et_al_2006
+        result = tested_func(self.data, ws_threshold=8)
         # check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
         self.assertEqual(
             float(result["weighted_average_ws"].max()), 8.775158882141113
         )
+        new_data = self.data.isel(plev=0)
+        self.assertRaises(ValueError, lambda: tested_func(new_data))
 
     def test_get_all_hPa_list(self):
         tested_func = general_utils.get_all_hPa_list

@@ -419,6 +419,8 @@ def grise_polvani_2017(data):
     sub-tropical dry zone and poleward edge of Hadley cell
     derived from precip. record
     """
+    if isinstance(data, xarray.DataArray):
+        data = data.to_dataset()
     # Step 1.
     print("Step 1. Calculate zonal-mean")
     zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
@@ -464,6 +466,8 @@ def ceppi_et_al_2018(data):
 
     Returns: centroid latitude of u-wind for one day
     """
+    if isinstance(data, xarray.DataArray):
+        data = data.to_dataset()
     all_centroids = []
     if data["time"].count() > 1:
         for time_coord in data["time"]:
@@ -515,7 +519,13 @@ def bracegirdle_et_al_2019(data):
     TODO: check southern hemisphere works
     NOTE: for Southern Hemisphere
     """
-    assert data["plev"].count() == 1, "data needs to have one 'plev' value"
+    if isinstance(data, xarray.DataArray):
+        data = data.to_dataset()
+    if "plev" in data.dims:
+        if data["plev"].count() == 1:
+            data = data.isel(plev=0)
+        else:
+            raise ValueError("Please subset to one plev value for this metric")
     # Step 1
     print("Step 1. Make seasonal & annual climatologies")
     seasonal_climatology = general_utils.get_climatology(data, "season")

@@ -277,18 +277,20 @@ def penaortiz_et_al_2013(data):
     ----------
     local_wind_maxima_days_by_monthyear : xarray.Dataset
         Data containing number of days per month with local wind maxima
-
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
+
     #  Step 2. Make array of zeros for local wind maxima location algorithm
     local_wind_maxima = (
         jetstream_metrics_utils.get_empty_local_wind_maxima_data(data)
     )
+
     #  Step 3. Find local wind maxima locations by day
     local_wind_maxima_by_timeunit = local_wind_maxima.groupby("time").map(
         jetstream_metrics_utils.get_local_wind_maxima_by_timeunit
     )
+
     #  Step 4. Get number of days per month with local wind maxima
     local_wind_maxima_timeunits_by_monthyear = jetstream_metrics_utils.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(
         local_wind_maxima_by_timeunit
@@ -296,20 +298,21 @@ def penaortiz_et_al_2013(data):
     local_wind_maxima_timeunits_by_monthyear = (
         local_wind_maxima_timeunits_by_monthyear.to_dataset()
     )
+
     #  TODO: Sort into PJ and STJ
     return local_wind_maxima_timeunits_by_monthyear
 
 
 def screen_and_simmonds_2013(data):
     """
-    Write function description
+    Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
+
     Slightly adjusted in Screen and Simmonds 2014
-    TODO: ask Chris about interpolation method
     TODO: insure that Earth sphericity is accounted for in the perimeter calc
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
-    return
+    return data
 
 
 def kuang_et_al_2014(data, occurence_ws_threshold=30):

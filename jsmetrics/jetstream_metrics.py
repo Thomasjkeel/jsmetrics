@@ -76,7 +76,7 @@ def archer_caldeira_2008(data):
 
     Calculates the mass-weighted average wind speed, mass flux weighted pressure
     and mass flux weighted latitude. This method has some similarities to method
-    used in Koch et al. 2006.
+    used in Koch et al. 2006. In paper, 100-400 hPa is used.
 
     Parameters
     ----------
@@ -257,6 +257,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     Method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
 
     Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
+    Best at 100-500 hPa
     NOTE: May take a long time when there is a lot of data
     TODO: ask chris to check
 

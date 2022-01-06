@@ -25,6 +25,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
 
     weighted average windspeed = 1/(p2-p1) integral(p2, p1)(u^2+v^2)^(1/2)dp
+    where p1, p2 is min, max pressure level
 
     Parameters
     ----------

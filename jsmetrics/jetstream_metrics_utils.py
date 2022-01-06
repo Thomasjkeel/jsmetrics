@@ -27,7 +27,23 @@ __status__ = "Development"
 
 def get_sum_weighted_ws(data, all_plevs_hPa):
     """
-    Used in Koch et al. 2006
+    Get sum of weighted windspeed.
+    Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
+
+    sum weighted windspeed = integral(p2, p1)(u^2+v^2)^(1/2)dp
+    where p1, p2 is min, max pressure level
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+    all_plevs_hPa : array-like
+        list of hPa unit pressure levels
+
+    Returns
+    ----------
+    sum_weighted_ws : xarray.Dataset
+        Data containing sum weighted windspeed values
     """
     if "plev" not in data.coords:
         raise KeyError("Data does not contain coord: 'plev'")
@@ -50,14 +66,31 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
 
 def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
     """
-    Used in Koch et al. 2006
+    Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
+
+    weighted average windspeed = 1/(p2-p1) * sum average windspeed
+    where p1, p2 is min, max pressure level
+
+    Parameters
+    ----------
+    sum_weighted_ws : xarray.Dataset
+        Data containing sum weighted windspeed values
+    all_plevs_hPa : array-like
+        list of hPa unit pressure levels
+
+    Returns
+    ----------
+    weighted_average_ws : xarray.Dataset
+        Data containing weighted average windspeed values
     """
     if not isinstance(all_plevs_hPa, (list, np.ndarray)):
         raise TypeError(
             "array of pressure level needs to be a list or numpy.array"
         )
-
-    return sum_weighted_ws * (1 / (all_plevs_hPa.max() - all_plevs_hPa.min()))
+    weighted_average_ws = sum_weighted_ws * (
+        1 / (all_plevs_hPa.max() - all_plevs_hPa.min())
+    )
+    return weighted_average_ws
 
 
 def calc_atmospheric_mass_at_kPa(

@@ -124,15 +124,28 @@ def archer_caldeira_2008(data):
 
 def schiemann_et_al_2009(data):
     """
-    Write function description
+    Method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
+
+    NOTE: Currently takes a very long time i.e. 8 seconds per time unit (i.e. 8 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    TODO: speed this metric up
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xr.Dataset
+        Data with local jet_maximas
     """
-    print("Step 1. Calculate wind vector")
+    #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
-    print("Step 2. Calculate jet maximas")
-    data = data.groupby("time").map(
-        jetstream_metrics_utils.get_local_jet_maximas_by_day_by_plev
+    #  Step 2. Calculate jet maximas
+    output = data.groupby("time").map(
+        jetstream_metrics_utils.get_local_jet_maximas_by_timeunit_by_plev
     )
-    return data
+    return output
 
 
 def woolings_et_al_2010(data, filter_freq=10, window_size=61):
@@ -208,7 +221,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
     Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
     Paper uses 100-400 hPa.
-    NOTE: Currently takes a long time i.e. 2.3 seconds per time unit (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    NOTE: Currently takes a long time i.e. 2.3 seconds per time unit (i.e. 2.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------
@@ -245,7 +258,7 @@ def penaortiz_et_al_2013(data):
     Will calculate local wind maxima days per monthyear
     Actual methodology uses 100-400 hPa
 
-    NOTE: Currently takes a long time i.e. 1.3 seconds per time unit (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    NOTE: Currently takes a long time i.e. 1.3 seconds per time unit (i.e. 1.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------

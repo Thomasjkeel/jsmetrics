@@ -306,13 +306,22 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
     return mass_flux_weighted_latitude
 
 
-def get_local_jet_maximas_by_day_by_plev(row):
+def get_local_jet_maximas_by_timeunit_by_plev(row):
     """
     Component of method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
     TODO: add checks
     TODO: will only work is 1 day is the resolution
     TODO: maybe combine with pena-ortiz method
 
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Data of a sinlge time unit containing windspeed (ws), plev, lat, lon
+
+    Returns
+    ----------
+    row : xr.Dataset
+        Data of a sinlge time unit with value for jet-maxima (1 == maxima, 0 == none)
 
     """
     row["jet_maxima"] = (

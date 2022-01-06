@@ -257,7 +257,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     Method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
 
     Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
-    NOTE: May take a long time for a lot of data
+    NOTE: May take a long time when there is a lot of data
     TODO: ask chris to check
 
     Parameters

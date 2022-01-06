@@ -52,8 +52,10 @@ def get_climatology(data, freq):
 
     Parameters
     ----------
-    data (xarray.Dataset): data with regular time stamp
-    freq (str): 'day', 'month' or 'season'
+    data : xarray.Dataset
+        data with regular time stamp
+    freq : str
+        'day', 'month' or 'season'
 
     Usage
     ----------

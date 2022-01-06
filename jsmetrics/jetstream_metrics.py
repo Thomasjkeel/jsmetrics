@@ -575,7 +575,6 @@ def simpson_et_al_2018(data):
 def bracegirdle_et_al_2019(data):
     """
     Method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
-    TODO: work out if relevant
     TODO: check southern hemisphere works
     NOTE: for Southern Hemisphere
 

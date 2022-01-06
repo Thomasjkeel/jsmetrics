@@ -320,7 +320,7 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
 
     Returns
     ----------
-    row : xr.Dataset
+    row : xarray.Dataset
         Data of a sinlge time unit with value for jet-maxima (1 == maxima, 0 == none)
 
     """
@@ -371,22 +371,20 @@ def get_zonal_mean(data):
 
 
 def calc_low_pass_weights(window, cutoff):
-    """Calculate weights for a low pass Lanczos filter.
-
+    """
+    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Calculate weights for a low pass Lanczos filter.
     A low-pass filter removes short-term random fluctations in a time series
-
-    Used in Woolings et al. 2010
-
-    Args:
-
-    window: int
-        The length of the filter window.
-
-    cutoff: float
-        The cutoff frequency in inverse time steps.
 
     TAKEN FROM:
     https://scitools.org.uk/iris/docs/v1.2/examples/graphics/SOI_filtering.html
+
+    Parameters
+    ----------
+    window : int
+        The length of the filter window.
+    cutoff : float
+        The cutoff frequency in inverse time steps.
 
     """
     order = ((window - 1) // 2) + 1
@@ -404,9 +402,22 @@ def calc_low_pass_weights(window, cutoff):
 
 def apply_lanczos_filter(dataarray, filter_freq, window_size):
     """
+    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+
     Will carry out Lanczos low-pass filter
 
-    Used in Woolings et al. 2010
+    Parameters
+    ----------
+    datarray : xarray.DataArray
+        Data to apply filter to containing zonal mean (u-component) wind
+    filter_freq : int
+        number of days in filter
+    window_size : int
+        number of days in window for Lancoz filter
+    Returns
+    ----------
+    window_cons : xarray.DataArray
+        Filtered zonal mean data
     """
     if (
         dataarray["time"].count() <= filter_freq
@@ -437,9 +448,23 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
 
 def get_latitude_and_speed_where_max_ws(data_row):
     """
+    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Grise & Polvani 2017
+
     Will return the latitude and windspeed at the index of maximum wind speed
     from a row of data
-    Used in Woolings et al. 2010 & Grise & Polvani 2017
+
+    Parameters
+    ----------
+    datarow : xarray.DataArray
+        Data of single time unit containing u-component wind
+
+    Returns
+    ----------
+    lat_at_max : int or float
+        Latitude of maximum windspeed
+    speed_at_max : int or float
+        Speed at latitude of maximum windspeed
     """
     try:
         assert hasattr(data_row, "isnull")
@@ -459,9 +484,21 @@ def get_latitude_and_speed_where_max_ws(data_row):
 
 def assign_lat_and_ws_to_data(data, max_lat_ws):
     """
-    Will return a data array with the maximum windspeed and latitude of that
-    maximum wind speed
-    Used in Woolings et al. 2010
+    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+
+    Will return a data array with the maximum windspeed and latitude of that maximum wind speed
+
+    Parameters
+    ----------
+    data : xarray.DataArray
+        Data of single time unit containing u-component wind
+    max_lat_ws : np.array
+        Array of maximum latitude and windspeed at those maximums for each timeunit
+
+    Returns
+    ----------
+    data_with_max_lats_ws : xarray.Dataset
+        Data with maximum latitude and windspeed attached
     """
     max_lats = max_lat_ws[:, 0]
     max_ws = max_lat_ws[:, 1]
@@ -479,26 +516,30 @@ def assign_lat_and_ws_to_data(data, max_lat_ws):
 
 def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
     """
+    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+
     Carries out a Fourier transform for filtering keeping only low frequencies
     ADAPTED FROM:
     https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
 
-    Used in Woolings et al. 2010
     Parameters
     ----------
-    data : (np.array - 1-d)
+    data : np.array - 1-d
         time series data at regular intervals
-    highest_freq_to_keep : (int)
+    highest_freq_to_keep : int
         highest frequency to keep in the fourier transform expression
         NOTE: starts at 0, so highest_freq_to_keep=1
               will only keep the constant and first expresion
 
+    Returns
+    ----------
+    filtered_sig : np.array
+        Fourier-filtered signal
 
     Usage
     ----------
     # Apply filter of the two lowest frequencies
     apply_low_freq_fourier_filter(data, highest_freq_to_keep=2)
-
     """
     # Fast Fourier Transform on the time series data
     fourier_transform = scipy.fftpack.fft(data)
@@ -515,9 +556,22 @@ def assign_filtered_lats_and_ws_to_data(
     data, filtered_max_lats, filtered_max_ws, dim
 ):
     """
+    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
     Assigns the filtered data back to the returned dataset
-    Used in Woolings et al. 2010
 
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data to have fourier filtered data assigned to
+    filtered_max_lats : numpy.array
+        Fourier-filtered maximum latitude by given timeunit
+    filtered_max_lats : numpy.array
+        Fourier-filtered maximum speed at maximum latitude by given timeunit
+
+    Returns
+    ----------
+    filtered_data : xarray.Dataset
+        Data with fourier-filtered maximum lat and windspeed attached to it
     """
     filtered_data = data.assign(
         {

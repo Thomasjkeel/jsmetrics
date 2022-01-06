@@ -159,11 +159,11 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data containing u- component wind
     filter_freq : int
-        number of days in filter
+        number of days in filter (default=10 timeunits)
     window_size : int
-        number of days in window for Lancoz filter
+        number of days in window for Lancoz filter (default=61 timeunits)
 
     Returns
     ----------

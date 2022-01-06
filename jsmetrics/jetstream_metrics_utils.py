@@ -147,7 +147,7 @@ def get_mass_weighted_average_ws(data, plev_flux=False):
 
     Returns
     ----------
-    output : xarray.Dataset TODO: check
+    output : xarray.Dataset
         Data containing mass weighted average ws
 
     Usage

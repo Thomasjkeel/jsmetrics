@@ -642,8 +642,6 @@ class JetStreamCoreIdentificationAlgorithm:
         i.e. above 30 m/s surrounding a core of 40 m/s
         Will check one an area of potential boundaries contains a core
         and thus can be called boundaries.
-
-        Used for Manney et al. 2011
         """
         vals_copy = vals.copy()
         for val in vals:
@@ -689,8 +687,6 @@ class JetStreamCoreIdentificationAlgorithm:
         i.e. above 30 m/s surrounding a core of 40 m/s
         Will check if an area of potential boundaries contains a core
         and thus can be called boundaries.
-
-        Used for Manney et al. 2011
         """
         already_covered = []
         js_core_indexes = []
@@ -736,9 +732,8 @@ class JetStreamCoreIdentificationAlgorithm:
 
 def get_empty_local_wind_maxima_data(data):
     """
+    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
     Will add a new data var of zeros for local wind maxima
-
-    Used in Pena-Ortiz et al. 2013
 
     TODO: add asserts
     """
@@ -760,9 +755,10 @@ def get_potential_local_wind_maximas_by_ws_threshold(
     ws_slice, ws_threshold=30
 ):
     """
+    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
     Will return a 2-d array of potential local windspeed maximas
 
-    Used in Pena-Ortiz et al. 2013
     TODO: add checks
     """
     return ws_slice.where(lambda x: x > ws_threshold).fillna(0.0)
@@ -770,8 +766,9 @@ def get_potential_local_wind_maximas_by_ws_threshold(
 
 def get_local_wind_maxima_by_day(row):
     """
+    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
     Write function description
-    Used in Pena-Ortiz et al. 2013
     """
 
     try:
@@ -809,10 +806,10 @@ def get_local_wind_maxima_by_day(row):
 
 def get_number_of_days_per_monthyear_with_local_wind_maxima(data):
     """
+    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
     Will resample by each month and return number of days with
     local wind maxima
-
-    Used in Pena-Ortiz et al. 2013
     """
     data = (
         data["local_wind_maxima"]

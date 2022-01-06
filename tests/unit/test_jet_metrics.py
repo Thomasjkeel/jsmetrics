@@ -275,7 +275,7 @@ class TestPenaOrtiz2013(unittest.TestCase):
     def test_get_empty_local_wind_maxima(self):
         pass
 
-    def test_num_days_per_monthyear_with_local_wind_maxima(self):
+    def test_num_timeunits_per_monthyear_with_local_wind_maxima(self):
         pass
 
 

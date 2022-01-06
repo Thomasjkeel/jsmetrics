@@ -765,7 +765,6 @@ def get_potential_local_wind_maximas_by_ws_threshold(
 ):
     """
     Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
-
     Will return a 2-d array of potential local windspeed maximas
 
     Parameters
@@ -784,11 +783,10 @@ def get_potential_local_wind_maximas_by_ws_threshold(
     return ws_slice.where(lambda x: x > ws_threshold).fillna(0.0)
 
 
-def get_local_wind_maxima_by_day(row):
+def get_local_wind_maxima_by_timeunit(row):
     """
     Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
-
-    Get local wind maxima by day
+    Get local wind maxima by timeunit (i.e. day)
 
     Parameters
     ----------
@@ -832,11 +830,21 @@ def get_local_wind_maxima_by_day(row):
     return row
 
 
-def get_number_of_days_per_monthyear_with_local_wind_maxima(data):
+def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
     """
     Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+    Will resample by each month and return number of timeunits (i.e. day) with local wind maxima
 
-    Will resample by each month and return number of days with local wind maxima
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Input data with local wind maxima values by time unit (i.e. day)
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        Data containing zeros array of (time, plev, lat, lon) dimensions
+
     """
     data = (
         data["local_wind_maxima"]

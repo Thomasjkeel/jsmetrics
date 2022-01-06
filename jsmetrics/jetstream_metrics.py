@@ -265,18 +265,18 @@ def penaortiz_et_al_2013(data):
         jetstream_metrics_utils.get_empty_local_wind_maxima_data(data)
     )
     #  Step 3. Find local wind maxima locations by day
-    local_wind_maxima_by_day = local_wind_maxima.groupby("time").map(
-        jetstream_metrics_utils.get_local_wind_maxima_by_day
+    local_wind_maxima_by_timeunit = local_wind_maxima.groupby("time").map(
+        jetstream_metrics_utils.get_local_wind_maxima_by_timeunit
     )
     #  Step 4. Get number of days per month with local wind maxima
-    local_wind_maxima_days_by_monthyear = jetstream_metrics_utils.get_number_of_days_per_monthyear_with_local_wind_maxima(
-        local_wind_maxima_by_day
+    local_wind_maxima_timeunits_by_monthyear = jetstream_metrics_utils.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(
+        local_wind_maxima_by_timeunit
     )
-    local_wind_maxima_days_by_monthyear = (
-        local_wind_maxima_days_by_monthyear.to_dataset()
+    local_wind_maxima_timeunits_by_monthyear = (
+        local_wind_maxima_timeunits_by_monthyear.to_dataset()
     )
     #  TODO: Sort into PJ and STJ
-    return local_wind_maxima_days_by_monthyear
+    return local_wind_maxima_timeunits_by_monthyear
 
 
 def screen_and_simmonds_2013(data):

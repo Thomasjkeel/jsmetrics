@@ -393,15 +393,17 @@ def cattiaux_et_al_2016(data):
     """
     Write function description
     """
-    print("Step 1. get zonal average for each timestep")
+    if isinstance(data, xarray.DataArray):
+        data = data.to_dataset()
+    #  Step 1. get zonal average for each timestep
     data["zonal_mean_zg_30Nto70N"] = (
         data["zg"].sel(lat=slice(30, 70)).groupby("time").mean(...)
     )
-    print("Step 2. Get latitude circle of 50 N")
+    #  Step 2. Get latitude circle of 50 N
     circle_50N = jetstream_metrics_utils.get_latitude_circle_linestring(
         50, 0, 360
     )
-    print("Step 3. Loop over each time step and calculate sinousity")
+    #  Step 3. Loop over each time step and calculate sinousity
     data = data.groupby("time").map(
         lambda row: jetstream_metrics_utils.get_sinousity_of_zonal_mean_zg(
             row, circle_50N

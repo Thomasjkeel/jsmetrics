@@ -108,9 +108,9 @@ def calc_atmospheric_mass_at_kPa(
 
     Parameters
     ---------------
-    pressure (float):
+    pressure : float
         in kPa
-    gravity (float):
+    gravity : float
         m/s^2
     """
     return (pressure / gravity) * atmospheric_area
@@ -119,6 +119,16 @@ def calc_atmospheric_mass_at_kPa(
 def get_atm_mass_at_one_hPa(hPa):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+
+    Parameters
+    ----------
+    hPa : int or float
+        One pressure level in hPa
+
+    Returns
+    ----------
+    atm_mass : int or float
+        Atmospheric mass at given hPa pressure level
     """
     kPa = hPa / 10
     atm_mass = calc_atmospheric_mass_at_kPa(kPa)
@@ -128,6 +138,16 @@ def get_atm_mass_at_one_hPa(hPa):
 def get_weighted_average_at_one_Pa(data, Pa, atm_mass):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data with weighted average at a single pressure level
     """
     return atm_mass * (
         np.sqrt(data["ua"].sel(plev=Pa) ** 2 + data["va"].sel(plev=Pa) ** 2)
@@ -182,6 +202,16 @@ def get_mass_weighted_average_ws(data, plev_flux=False):
 def get_sum_atm_mass(data):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing plev
+
+    Returns
+    ----------
+    sum_atm_mass : int or float
+        Sum of atmospheric mass
     """
     sum_atm_mass = 0
     for plev_Pa in data["plev"].data:
@@ -195,7 +225,16 @@ def calc_mass_weighted_average(data):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
-    TODO: write func desc
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing plev
+
+    Returns
+    ----------
+    weighted_average : xr.DataArray
+        Data with weighted average windspeed based on sum atmospheric mass
     """
     sum_atm_mass = get_sum_atm_mass(data)
     sum_weighted_ws = get_mass_weighted_average_ws(data)
@@ -207,6 +246,16 @@ def calc_mass_flux_weighted_pressure(data):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing ws and plev
+
+    Returns
+    ----------
+    mass_flux_weighted_pressure : xr.DataArray
+        Data with mass flux weighted pressure
     """
     sum_weighted_ws = get_mass_weighted_average_ws(data)
     sum_weighted_ws_plev_flux = get_mass_weighted_average_ws(
@@ -221,6 +270,20 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
     WARNING: Problem with including 1000 hPa
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing windspeed and lat
+    lat_min : int or float
+        Minimum latitude to consider for weighted latitude
+    lat_max : int or float
+        Maximum latitude to consider for weighted latitude
+
+    Returns
+    ----------
+    mass_flux_weighted_latitude : xr.DataArray
+        Data with mass flux weighted latitude
     """
     assert "lat" in data.coords, "'lat' needs to be in data.coords"
 
@@ -245,10 +308,12 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
 
 def get_local_jet_maximas_by_day_by_plev(row):
     """
-    Used in Schiemann et al 2009
+    Component of method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
     TODO: add checks
     TODO: will only work is 1 day is the resolution
     TODO: maybe combine with pena-ortiz method
+
+
     """
     row["jet_maxima"] = (
         ("plev", "lat", "lon"),

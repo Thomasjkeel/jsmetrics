@@ -126,6 +126,7 @@ def schiemann_et_al_2009(data):
     """
     Method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
 
+    Actual methodology uses 100-500 hPa
     NOTE: Currently takes a very long time i.e. 8 seconds per time unit (i.e. 8 seconds per day) on AMD Ryzen 5 3600 6-core processor
     TODO: speed this metric up
 
@@ -150,30 +151,35 @@ def schiemann_et_al_2009(data):
 
 def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     """
-    Follows an in-text description of 4-steps describing the algorithm of
-    jet-stream identification from Woolings et al. (2010).
-    Will calculate this metric based on data
-    (regardless of pressure level of time span etc.).
+    Method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+
+    Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woolings et al. (2010).
+    Will calculate this metric based on data (regardless of pressure level of time span etc.).
 
     Parameters
     ----------
-    data (xarray.Dataset): input data containing u and v wind
-    filter_freq (int): number of days in filter
-    window_size (int): number of days in window for Lancoz filter
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+    filter_freq : int
+        number of days in filter
+    window_size : int
+        number of days in window for Lancoz filter
 
-    returns:
-        max_lat_ws (numpy.ndarray):
+    Returns
+    ----------
+    fourier_filtered_data : xarray.Dataset
+        Data containing maximum latitudes and maximum windspeed at those lats and fourier-filtered versions of those two variables
     """
-    # Step 1
-    print("Step 1: calculating long and/or plev mean...")
+    # Step 1: Calculate long and/or plev mean
     zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
-    # Step 2
-    print("Step 2: Applying %s day lancoz filter..." % (filter_freq))
+
+    # Step 2: Apply n-day lancoz filter
     lancoz_filtered_mean_data = jetstream_metrics_utils.apply_lanczos_filter(
         zonal_mean["ua"], filter_freq, window_size
-    )  # TODO make way of assuring that a dataarray is passed
-    # Step 3
-    print("Step 3: Calculating max windspeed and lat where max ws found...")
+    )
+    # TODO make way of assuring that a dataarray is passed
+
+    # Step 3: Calculate max windspeed and lat where max ws found
     max_lat_ws = np.array(
         list(
             map(
@@ -185,11 +191,10 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     zonal_mean_lat_ws = jetstream_metrics_utils.assign_lat_and_ws_to_data(
         zonal_mean, max_lat_ws
     )
-    # Step 4
-    print("Step 4: Make climatology")
+    # Step 4: Make climatology
     climatology = general_utils.get_climatology(zonal_mean_lat_ws, "month")
-    # Step 5
-    print("Step 5: Apply low-freq fourier filter to both max lats and max ws")
+
+    # Step 5: Apply low-freq fourier filter to both max lats and max ws
     fourier_filtered_lats = (
         jetstream_metrics_utils.apply_low_freq_fourier_filter(
             climatology["max_lats"].values, highest_freq_to_keep=2
@@ -200,8 +205,8 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
             climatology["max_ws"].values, highest_freq_to_keep=2
         )
     )
-    # Step 6
-    print("Step 6: Join filtered climatology back to the data")
+
+    # Step 6: Join filtered climatology back to the data
     time_dim = climatology["max_ws"].dims[0]
     fourier_filtered_data = (
         jetstream_metrics_utils.assign_filtered_lats_and_ws_to_data(

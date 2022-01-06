@@ -1402,7 +1402,17 @@ def get_centroid_jet_lat(data):
 
 def cubic_spline_interpolation(x, y):
     """
-    Used in  Bracegirdle et al. 2019
+    Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+
+    Parameters
+    ----------
+    x :
+    y :
+
+    Returns
+    ----------
+    cubic_interpolation : np.array
+        Cubic spline interpolation
     """
     return scipy.interpolate.interp1d(
         x, y, kind="cubic", fill_value="extrapolate"
@@ -1410,18 +1420,22 @@ def cubic_spline_interpolation(x, y):
 
 
 def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
-    data, resolution, ws_col="ua"
+    data, resolution, ua_col="ua"
 ):
     """
-    Used in  Bracegirdle et al. 2019
+    Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
 
     Parameters
     --------------
-    data (xr.Dataset):
+    data : xr.Dataset
         must contain coords lat
+    resolution : int or float
+        Latitude resolution in degrees
+    ua_col : str
+        u-component windspeed column (default='ua')
     """
     scaled_lats = reduce_lat_resolution(data["lat"], resolution)
-    csi = cubic_spline_interpolation(data["lat"], data[ws_col])
+    csi = cubic_spline_interpolation(data["lat"], data[ua_col])
     interpolated_ws = csi(scaled_lats)
     max_lat = scaled_lats[np.argmax(interpolated_ws)]
     max_ws = max(interpolated_ws)
@@ -1431,6 +1445,13 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
 def run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(
     data, resolution, time_col
 ):
+    """
+    Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+    """
     max_lats = []
     max_ws = []
     for period in data[time_col].data:

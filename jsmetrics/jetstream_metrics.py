@@ -377,8 +377,7 @@ def francis_vavrus_2015(data):
     When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
 
-    NOTE: The paper is not clear about whether the absolute value for MCI
-    is taken instead thus 0-1
+    NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1
 
     Parameters
     ----------
@@ -511,6 +510,8 @@ def ceppi_et_al_2018(data):
     Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
 
     "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
+
+    NOTE: Currently takes a moderate amount of time i.e. 12 seconds per 100 time unit with 8 plev on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------

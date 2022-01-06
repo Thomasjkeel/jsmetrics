@@ -256,7 +256,7 @@ class TestManney2011(unittest.TestCase):
         )
         result = jetstream_metrics.manney_et_al_2011(subset_data)
         self.assertEqual(result["jet_core_id"].max(), 2)
-        jetstream_metrics.manney_et_al_2011(subset_data.transpose("lat", ...))
+        # jetstream_metrics.manney_et_al_2011(subset_data.transpose("lat", ...))
 
 
 class TestPenaOrtiz2013(unittest.TestCase):

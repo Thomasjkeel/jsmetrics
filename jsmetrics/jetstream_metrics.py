@@ -308,7 +308,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
     Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
     Best at 100-500 hPa
-    NOTE: Currently takes a long time i.e. 2 seconds per time unit with 8 plevs (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    NOTE: Currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------

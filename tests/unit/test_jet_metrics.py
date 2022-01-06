@@ -98,8 +98,8 @@ class TestKoch2006(unittest.TestCase):
             float(result["weighted_average_ws"].max()), 8.775158882141113
         )
 
-    def test_get_all_plevs(self):
-        tested_func = general_utils.get_all_plev_hPa
+    def test_convert_hPa_to_Pa(self):
+        tested_func = general_utils.convert_hPa_to_Pa
         # make sure it returns an array
         self.assertIsInstance(tested_func(self.data), (np.ndarray))
         # make sure it takes errors wrong types
@@ -107,6 +107,9 @@ class TestKoch2006(unittest.TestCase):
         # lambda: jetstream_metrics_utils.get_all_plev_hPa(['plev']))
         new_data = self.data.rename({"plev": "pl"})
         self.assertRaises(KeyError, lambda: tested_func(new_data))
+        new_data2 = self.data.copy()
+        new_data2["plev"] = self.data.plev.assign_attrs(units="mbar")
+        self.assertRaises(ValueError, lambda: tested_func(new_data2))
 
     def test_sum_weighted_ws(self):
         tested_func = jetstream_metrics_utils.get_sum_weighted_ws

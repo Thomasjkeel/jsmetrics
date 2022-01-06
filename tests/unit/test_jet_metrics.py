@@ -98,8 +98,8 @@ class TestKoch2006(unittest.TestCase):
             float(result["weighted_average_ws"].max()), 8.775158882141113
         )
 
-    def test_convert_hPa_to_Pa(self):
-        tested_func = general_utils.convert_hPa_to_Pa
+    def test_convert_Pa_to_hPa(self):
+        tested_func = general_utils.convert_Pa_to_hPa
         # make sure it returns an array
         self.assertIsInstance(tested_func(self.data), (np.ndarray))
         # make sure it takes errors wrong types

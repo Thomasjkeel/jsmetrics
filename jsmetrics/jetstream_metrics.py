@@ -309,8 +309,11 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     output : xarray.Dataset
         Data containing jet-occurence and jet-centres (1 is occurence, 2 is core)
     """
-    if data["plev"].count() == 1:
-        data = data.isel(plev=0)
+    if "plev" in data.dims:
+        if data["plev"].count() == 1:
+            data = data.isel(plev=0)
+        else:
+            raise (ValueError, "Please subset to one plev value for algorithm")
     # Step 1. Run Jet-stream Occurence and Centre Algorithm
     output = data.groupby("time").map(
         jetstream_metrics_utils.run_jet_occurence_and_centre_alg_on_one_day,

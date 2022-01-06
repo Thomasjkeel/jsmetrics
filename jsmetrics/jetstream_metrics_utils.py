@@ -460,9 +460,22 @@ def run_jet_core_algorithm_on_one_day(
     row, ws_core_threshold, ws_boundary_threshold
 ):
     """
-    Runs JetStreamCoreIdentificationAlgorithm method on a single day
+    Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+    Runs JetStreamCoreIdentificationAlgorithm method on a single time unit
 
-    Used in Manney et al. 2011
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Data of single time unit containing u- and v-component wind
+    ws_core_threshold : int or float
+        Threshold used for jet-stream core point
+    ws_boundary_threshold : int or float
+        Threshold for jet-stream boundary point
+
+    Returns
+    ----------
+    row : xarray.Dataset
+        Data for one time unit containing jet-cores (ID number relates to each unique core)
     """
     row["jet_core_id"] = (
         ("plev", "lat", "lon"),
@@ -482,21 +495,23 @@ def run_jet_core_algorithm_on_one_day(
 
 class JetStreamCoreIdentificationAlgorithm:
     """
-    "As far as object-oriented design is concerned, the breakdown of an
-     algorithm into steps depends on whether the algorithm itself is better
-     seen, from its user's point of view, as being executed in one single step,
-     or as multiple steps. If the algorithm is better seen as a single step,
-     the object-oriented implementation can choose to hide all of the
-     implementation details, leaving only the "inputs, process, outputs"
-     visible to the user."
-
+    Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
     """
 
     def __init__(self, data, ws_core_threshold=40, ws_boundary_threshold=30):
         """
+        Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
         input will need to be longitudinal slice of windspeed values
 
-        ws_slice -> one longitude for one day as slice of windspeed
+
+        Parameters
+        ----------
+        data : xarray.Dataset
+            Data of single time unit containing u- and v-component wind
+        ws_core_threshold : int or float
+            Threshold used for jet-stream core point (default=40)
+        ws_boundary_threshold : int or float
+            Threshold for jet-stream boundary point (default=30)
         """
         try:
             assert (

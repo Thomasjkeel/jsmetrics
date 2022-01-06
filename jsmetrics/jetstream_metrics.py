@@ -203,19 +203,36 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
 
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
-    Write function description
-
+    Method from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
     Also see Manney et al. 2011, 2014, 2017 and 2018
+
+    Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
+    Paper uses 100-400 hPa.
+    NOTE: Currently takes a long time i.e. 2.3 seconds per time unit (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+    ws_core_threshold : int or float
+        Threshold used for jet-stream core point (default=40)
+    ws_boundary_threshold : int or float
+        Threshold for jet-stream boundary point (default=30)
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing jet-cores (ID number relates to each unique core)
     """
-    print("Step 1. Run Jet-stream Core Idenfication Algorithm")
-    data = data.groupby("time").map(
+    # Step 1. Run Jet-stream Core Idenfication Algorithm
+    output = data.groupby("time").map(
         jetstream_metrics_utils.run_jet_core_algorithm_on_one_day,
         (
             ws_core_threshold,
             ws_boundary_threshold,
         ),
     )
-    return data
+    return output
 
 
 def penaortiz_et_al_2013(data):

@@ -282,7 +282,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     data : xarray.Dataset
         Data containing u- and v-component wind
     occurence_ws_threshold : int or float
-        Threshold used to identify a jet-stream occurence point
+        Threshold used to identify a jet-stream occurence point (default=30)
 
     Returns
     ----------

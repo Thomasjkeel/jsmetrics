@@ -221,7 +221,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
     Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
     Paper uses 100-400 hPa.
-    NOTE: Currently takes a long time i.e. 2.3 seconds per time unit (i.e. 2.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    NOTE: Currently takes a long time i.e. 2.3 seconds per time unit with 8 plevs (i.e. 2.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------
@@ -258,7 +258,7 @@ def penaortiz_et_al_2013(data):
     Will calculate local wind maxima days per monthyear
     Actual methodology uses 100-400 hPa
 
-    NOTE: Currently takes a long time i.e. 1.3 seconds per time unit (i.e. 1.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    NOTE: Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------
@@ -308,7 +308,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
     Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
     Best at 100-500 hPa
-    NOTE: Currently takes a long time i.e. 2 seconds per time unit (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    NOTE: Currently takes a long time i.e. 2 seconds per time unit with 8 plevs (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------

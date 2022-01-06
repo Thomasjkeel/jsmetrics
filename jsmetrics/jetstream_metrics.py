@@ -254,19 +254,30 @@ def screen_and_simmonds_2013(data):
 
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
     """
-    Looks to get event-based jet occurrence percentage and jet center
-    occurrence of (UT)JS. May take a long time for a lot of data
+    Method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
+
+    Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
+    NOTE: May take a long time for a lot of data
     TODO: ask chris to check
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+    occurence_ws_threshold : int or float
+        Threshold used to identify a jet-stream occurence point
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing jet-occurence and jet-centres (1 is occurence, 2 is core)
     """
-    print(
-        "Step 1. Run Jet-stream Occurence and Centre Algorithm \
-                (1 for occurence, 2 for core)"
-    )
-    data = data.groupby("time").map(
+    # Step 1. Run Jet-stream Occurence and Centre Algorithm
+    output = data.groupby("time").map(
         jetstream_metrics_utils.run_jet_occurence_and_centre_alg_on_one_day,
         (occurence_ws_threshold,),
     )
-    return data
+    return output
 
 
 def francis_vavrus_2015(data):

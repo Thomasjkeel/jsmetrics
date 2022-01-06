@@ -768,14 +768,14 @@ def get_local_wind_maxima_by_day(row):
     """
     Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
-    Write function description
+    Get local wind maxima by day
     """
 
     try:
         assert "local_wind_maxima" in row.data_vars
     except Exception as e:
         raise ValueError("local_wind_maxima needs to be defined.") from e
-
+    row = row.transpose("plev", "lat", ...)
     for lon in row["lon"]:
         current = row.sel(lon=lon)
         pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(
@@ -793,12 +793,12 @@ def get_local_wind_maxima_by_day(row):
                 )
             ]
         )
-        for lat_ind, plev_ind in ind_local_wind_maximas:
+        for plev_ind, lat_ind in ind_local_wind_maximas:
             row["local_wind_maxima"].loc[
                 dict(
-                    lat=current["lat"].data[lat_ind],
-                    lon=lon,
                     plev=current["plev"].data[plev_ind],
+                    lon=lon,
+                    lat=current["lat"].data[lat_ind],
                 )
             ] = 1.0
     return row

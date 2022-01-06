@@ -224,6 +224,9 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     output : xarray.Dataset
         Data containing jet-cores (ID number relates to each unique core)
     """
+    if "plev" not in data.dims:
+        data = data.expand_dims("plev")
+
     # Step 1. Run Jet-stream Core Idenfication Algorithm
     output = data.groupby("time").map(
         jetstream_metrics_utils.run_jet_core_algorithm_on_one_day,
@@ -237,26 +240,43 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
 def penaortiz_et_al_2013(data):
     """
-    Write function description
+    Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
-    TODO: maybe class
+    Will calculate local wind maxima days per monthyear
+    Actual methodology uses 100-400 hPa
+
+    NOTE: Currently takes a long time i.e. 1.3 seconds per time unit (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    local_wind_maxima_days_by_monthyear : xarray.Dataset
+        Data containing number of days per month with local wind maxima
+
     """
-    print("Step 1. Calculate wind vector")
+    #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
-    print(
-        "Step 2. Make array of zeros for local wind maxima location algorithm"
+    #  Step 2. Make array of zeros for local wind maxima location algorithm
+    local_wind_maxima = (
+        jetstream_metrics_utils.get_empty_local_wind_maxima_data(data)
     )
-    data = jetstream_metrics_utils.get_empty_local_wind_maxima_data(data)
-    print("Step 3. Find local wind maxima locations by day")
-    data = data.groupby("time").map(
+    #  Step 3. Find local wind maxima locations by day
+    local_wind_maxima_by_day = local_wind_maxima.groupby("time").map(
         jetstream_metrics_utils.get_local_wind_maxima_by_day
     )
-    print("Step 4. Get number of days per month with local wind maxima")
-    data = jetstream_metrics_utils.get_number_of_days_per_monthyear_with_local_wind_maxima(
-        data
+    #  Step 4. Get number of days per month with local wind maxima
+    local_wind_maxima_days_by_monthyear = jetstream_metrics_utils.get_number_of_days_per_monthyear_with_local_wind_maxima(
+        local_wind_maxima_by_day
     )
-    print("TODO: Sort into PJ and STJ")
-    return data
+    local_wind_maxima_days_by_monthyear = (
+        local_wind_maxima_days_by_monthyear.to_dataset()
+    )
+    #  TODO: Sort into PJ and STJ
+    return local_wind_maxima_days_by_monthyear
 
 
 def screen_and_simmonds_2013(data):

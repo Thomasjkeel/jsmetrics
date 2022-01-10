@@ -1399,10 +1399,14 @@ def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
 
 def get_centroid_jet_lat(data):
     """
-    Will get the centroid latitude of the U-wind by day
+    Component of method from Ceppi et al (2019) https://doi.org/10.1175/JCLI-D-17-0323.1
 
-    Only works on data that is 2-d (lat-lon)
-    Used in Ceppi et al. 2018
+    Will get the centroid latitude of the u-component wind by given time unit
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        data containing u-component wind data and only latitude and longitude dimensions (only one plev)
     """
     xs = []
     ys = []

@@ -1288,7 +1288,6 @@ def get_one_contour_linestring(dataarray, contour_level):
 
     Returns a linestring or multi-linestring of a given contour
 
-
     Parameters
     ----------
     dataarray : xarray.DataArray
@@ -1322,7 +1321,17 @@ def calc_total_great_circle_distance_along_line(line):
     """
     Returns the total great circle (haversine) distance along a linestring
     or multilinestring
-    Used in Cattiaux et al. 2016
+
+    Parameters
+    ----------
+    line : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Line to calculate great circle distance from
+
+    Returns
+    ----------
+    total_distance : int or float
+        Total distance in degrees or m? TODO
+
     """
     total_distance = 0
     if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
@@ -1343,7 +1352,19 @@ def calc_great_circle_sinousity(line1, line2):
     """
     Calculates sinousity by comparing the great circle distance between
     two (multi-)linestrings
-    Used in Cattiaux et al. 2016
+
+    Parameters
+    ----------
+    line1 : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Line to calculate great circle sinuosity from
+
+    line2 : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Line to calculate great circle distance from
+
+    Returns
+    ----------
+    sinuosity : int or float
+        Sinuosity value between length of two lines
     """
     return calc_total_great_circle_distance_along_line(
         line1

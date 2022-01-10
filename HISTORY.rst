@@ -2,6 +2,10 @@
 History
 =======
 
+0.0.3 (2022-01-10)
+------------------
+* First release on github
+
 0.0.2-beta (2022-01-10)
 ------------------
 
@@ -20,5 +24,4 @@ History
 0.0.1-beta (2021-12-30)
 ------------------
 
-* First release.
 * Add currently existing metrics

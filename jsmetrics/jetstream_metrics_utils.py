@@ -1350,13 +1350,26 @@ def apply_quadratic_func(x, y, vals):
     return (a * vals ** 2) + (b * vals) + c
 
 
-def scale_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
+def scale_lat_vals_with_quadratic_func(lats, speeds, scaled_lats):
     """
     Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     Will downscale or upscale the resolution of latitude using a quadratic func
-    TODO: rename better pls
+
+    Parameters
+    ----------
+    lats : xr.DataArray or array-like
+        Array of latitude values
+    speeds :  xr.DataArray or array-like
+        Array of wind-speeds
+    scaled_lats : array-like
+        Array of scaled latitude values of a given resolution (see rescale_lat_resolution function)
+
+    Returns
+    ----------
+    scaled_lat_vals : xr.DataArray or array-like
+        Array of rescaled latitude values based scaled_lats
     """
-    scaled_lat_vals = apply_quadratic_func(lats, speeds, lat_vals)
+    scaled_lat_vals = apply_quadratic_func(lats, speeds, scaled_lats)
     return scaled_lat_vals
 
 
@@ -1366,8 +1379,9 @@ def rescale_lat_resolution(lats, lat_resolution):
     & Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
 
     TODO: what if larger resolution
+
     Parameters
-    --------------
+    ----------
     lats : xr.DataArray or array-like
         Array of latitude values
     lat_resolution : int or float
@@ -1381,16 +1395,30 @@ def rescale_lat_resolution(lats, lat_resolution):
     return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
 
 
-def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
+def get_latitude_where_max_ws_at_reduced_resolution(
+    lats_and_ws, lat_resolution
+):
     """
     Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     Makes use of the quadratic func to scale latitude values
+
+    Parameters
+    ----------
+    lats_and_ws : xr.DataArray or array-like
+        Array of latitudes and windspeeds
+    lat_resolution : int or float
+        Latitude resolution in degrees
+
+    Returns
+    ----------
+    output : numpy.array
+        latitdue values scaled by quadratic func
     """
     lats, ws = lats_and_ws
-    lat_vals = rescale_lat_resolution(lats, resolution)
-    scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, lat_vals)
-    decimal_places = general_utils.get_num_of_decimal_places(resolution)
-    return round(lat_vals[np.argmax(scaled_lat_vals)], decimal_places)
+    scaled_lats = rescale_lat_resolution(lats, lat_resolution)
+    scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, scaled_lats)
+    decimal_places = general_utils.get_num_of_decimal_places(lat_resolution)
+    return round(scaled_lats[np.argmax(scaled_lat_vals)], decimal_places)
 
 
 def get_centroid_jet_lat(data):

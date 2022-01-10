@@ -351,6 +351,9 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
 
 def get_zonal_mean(data):
     """
+    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
     Will get the zonal mean either by pressure level (plev) or for one layer
     Used in Woolings et al. 2010 & Grise & Polvani 2017
     TODO: add to Archer & Caldiera

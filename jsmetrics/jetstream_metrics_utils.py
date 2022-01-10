@@ -1209,6 +1209,16 @@ def calc_meridional_circulation_index(data):
 
     NOTE: The paper is not clear about whether the absolute value for MCI
     is taken instead thus 0-1
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component and v-component wind-speed values
+
+    Returns
+    ----------
+    output : xarray.DataArray
+        Array of Meridional Circulation Index (MCI) values
     """
     assert (
         "ua" in data.variables and "va" in data.variables
@@ -1220,6 +1230,20 @@ def get_latitude_circle_linestring(latitude, lon_min, lon_max):
     """
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
     Will return a linestring of a latitude circle
+
+    Parameters
+    ----------
+    latitude : int or float
+        given latitude to calculate circle from
+    lon_min : int or float
+        Minimum longitude for circle to extend to
+    lon_max : int or float
+        Maximum longitude for circle to extend to
+
+    Returns
+    ----------
+    circle : shapely.geometry.LineString
+        Linestring of latitude circle around a hemisphere
     """
     vals = np.column_stack(
         (
@@ -1236,6 +1260,18 @@ def get_sinousity_of_zonal_mean_zg(row, latitude_circle):
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
     Works on a grouped data set and will calculate sinuosity of zonal mean
     geopotential (ZG) contour compared to a latitude circle
+
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Data containing geopotential height (zg) and zonal_mean_zg_30Nto70N values
+    latitude_circle : shapely.geometry.LineString
+        Linestring of latitude circle around a hemisphere
+
+    Returns
+    ----------
+    row : xarray.Dataset
+        Data containing sinuousity value (determined by calc_great_circle_sinousity function)
     """
     row["sinousity"] = calc_great_circle_sinousity(
         get_one_contour_linestring(
@@ -1251,6 +1287,19 @@ def get_one_contour_linestring(dataarray, contour_level):
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
     Returns a linestring or multi-linestring of a given contour
+
+
+    Parameters
+    ----------
+    dataarray : xarray.DataArray
+        Array of Geopotential height (zg) values to calculate contour from
+    contour_level :
+        Value with which to calculate a contour from geopotential height
+
+    Returns
+    ----------
+    contour_line : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Contour line of geopotential height (zg) a given contour
     """
     assert isinstance(
         dataarray, xr.DataArray
@@ -1261,10 +1310,12 @@ def get_one_contour_linestring(dataarray, contour_level):
     one_contour = dataarray.plot.contour(levels=[contour_level])
     matplotlib.pyplot.close()
     if len(one_contour.allsegs[0]) > 1:
-        line = shapely.geometry.MultiLineString((one_contour.allsegs[0]))
+        contour_line = shapely.geometry.MultiLineString(
+            (one_contour.allsegs[0])
+        )
     else:
-        line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
-    return line
+        contour_line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
+    return contour_line
 
 
 def calc_total_great_circle_distance_along_line(line):

@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.2-beta (2022-01-10)
+------------------
+
+* Add docstrings to all metrics and sub-components
+
 0.0.2-alpha (2022-01-04)
 ------------------
 

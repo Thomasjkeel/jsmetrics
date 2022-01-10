@@ -489,7 +489,7 @@ def grise_polvani_2017(data):
     scaled_max_lats = []
     for max_lat_and_ws in all_max_lats_and_ws:
         scaled_max_lat = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(
-            max_lat_and_ws, resolution=0.01
+            max_lat_and_ws, lat_resolution=0.01
         )
         scaled_max_lats.append(scaled_max_lat)
 

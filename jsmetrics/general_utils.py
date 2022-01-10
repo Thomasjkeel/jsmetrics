@@ -106,7 +106,6 @@ def get_all_hPa_list(data):
 def get_num_of_decimal_places(num):
     """
     func for getting number of decimal places in a float
-    FOR GENERAL UTILS
     """
     num = "{:f}".format(num).rstrip("0")
     decimal_places = num[::-1].find(".")

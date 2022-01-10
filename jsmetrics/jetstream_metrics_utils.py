@@ -1290,7 +1290,15 @@ def get_3_latitudes_and_speed_around_max_ws(row):
 
     Parameters
     --------------
-    row (xr.DataArray):
+    row : xr.DataArray or array-like
+        Array containing latitude and wind-speed values
+
+    Returns
+    ----------
+    neighbouring_lats : array-like
+        array of 3 neighbouring latitude coordinates around where maximum windspeed is found in input (row)
+    neighbouring_speeds : array-like
+        array of 3 neighbouring winspeeds values around where maximum windspeed is found in input (row)
     """
     assert "lat" in row.coords, "'lat' needs to be in data.coords"
 
@@ -1313,15 +1321,21 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
     TODO: add to JetStreamOccurenceAndCentreAlgorithm and ...
 
     Parameters
-    --------------
-    coord_val (float, int):
+    ----------
+    coord_val : int or float
+        Central coord value to get neighbours from
+    coord_resolution : int or float
+        in degrees
 
-    coord_resolution (float, int):
+    Returns
+    ----------
+    output : array-like
+        array of 3 neighbouring latitude coordinates
 
     Usage
-    --------------
+    ----------
     get_3_neighbouring_coord_values(45.0, 1.25)
-    >>> [43.75, 45.0, 46.25]
+    >>> np.array([43.75, 45.0, 46.25])
     """
     if not isinstance(coord_val, float) or not isinstance(
         coord_resolution, float
@@ -1337,6 +1351,13 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
 def quadratic_func(x, y):
     """
     Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    Parameters
+    ----------
+    x : xr.DataArray or array-like
+        Array 1
+    y : xr.DataArray or array-like
+        Array 2
     """
     p = np.polyfit(x, y, deg=2)
     return p
@@ -1345,6 +1366,20 @@ def quadratic_func(x, y):
 def apply_quadratic_func(x, y, vals):
     """
     Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    Parameters
+    ----------
+    x : xr.DataArray or array-like
+        Array 1
+    y : xr.DataArray or array-like
+        Array 2
+    vals : array-like
+        Values to apply function to
+
+    Returns
+    ----------
+    output : array-like
+        quadratic function output
     """
     a, b, c = quadratic_func(x, y)
     return (a * vals ** 2) + (b * vals) + c
@@ -1472,7 +1507,7 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
     Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude
 
     Parameters
-    --------------
+    ----------
     data : xr.Dataset
         must contain coords lat
     lat_resolution : int or float

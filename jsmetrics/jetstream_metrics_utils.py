@@ -1363,11 +1363,25 @@ def scale_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
     return scaled_lat_vals
 
 
-def reduce_lat_resolution(lat, resolution):
+def rescale_lat_resolution(lats, lat_resolution):
     """
-    Used by Grise & Polvani 2017 & Bracegirdle et al. 2019
+    Component of method from Grise & Polvani 2017 &
+    Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+
+    TODO: what if larger resolution
+    Parameters
+    --------------
+    lats : xr.DataArray or array-like
+        Array of latitude values
+    lat_resolution : int or float
+        Latitude resolution in degrees
+
+    Returns
+    ----------
+    output : numpy.array
+        Rescaled array of latitude values
     """
-    return np.arange(min(lat), max(lat) + resolution, resolution)
+    return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
 
 
 def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
@@ -1377,7 +1391,7 @@ def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
     Used by Grise & Polvani 2017
     """
     lats, ws = lats_and_ws
-    lat_vals = reduce_lat_resolution(lats, resolution)
+    lat_vals = rescale_lat_resolution(lats, resolution)
     scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, lat_vals)
     decimal_places = general_utils.get_num_of_decimal_places(resolution)
     return round(lat_vals[np.argmax(scaled_lat_vals)], decimal_places)
@@ -1403,11 +1417,14 @@ def get_centroid_jet_lat(data):
 def cubic_spline_interpolation(x, y):
     """
     Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Runs a cubic spline interpolation using 2 equal-length arrays
 
     Parameters
     ----------
-    x :
-    y :
+    x : xarray.DataArray or array-like
+        array 1 to run cubic spline interpolation
+    y : xarray.DataArray or array-like
+        array 2 to run cubic spline interpolation
 
     Returns
     ----------
@@ -1420,21 +1437,29 @@ def cubic_spline_interpolation(x, y):
 
 
 def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
-    data, resolution, ua_col="ua"
+    data, lat_resolution, ua_col="ua"
 ):
     """
     Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude
 
     Parameters
     --------------
     data : xr.Dataset
         must contain coords lat
-    resolution : int or float
-        Latitude resolution in degrees
+    lat_resolution : int or float
+        Latitude resolution in degrees for cubic spline interpolation
     ua_col : str
         u-component windspeed column (default='ua')
+
+    Returns
+    ----------
+    max_lat : float
+        latitude with the maximum wind-speed for time period as deterimined by cubic spline interpolation to a given lat resolution
+    max_ws : float
+        maximum wind-speed at the given latitude for time period
     """
-    scaled_lats = reduce_lat_resolution(data["lat"], resolution)
+    scaled_lats = rescale_lat_resolution(data["lat"], lat_resolution)
     csi = cubic_spline_interpolation(data["lat"], data[ua_col])
     interpolated_ws = csi(scaled_lats)
     max_lat = scaled_lats[np.argmax(interpolated_ws)]
@@ -1442,22 +1467,46 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
     return max_lat, max_ws
 
 
-def run_cubic_spline_interpolation_for_each_climatology_to_get_max_lat_and_ws(
-    data, resolution, time_col
+def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
+    data, lat_resolution, time_col
 ):
     """
     Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude for each
 
     Parameters
     ----------
     data : xarray.Dataset
+        Data containing u-component wind-speed. In the case of Bracegirdle et al. 2019, uses a seasonal and annual mean/climatology
+    resolution : int or float
+        Latitude resolution in degrees for cubic spline interpolation
+    time_col : str
+        Column name containing period (i.e. season, year, month, etc.)
+
+    Returns
+    ----------
+    max_lats : list
+        list of latitudes with the maximum wind-speed
+    max_ws : list
+        list of maximum wind-speed at the given latitudes
+
+    Usage
+    ----------
+    seasonal_climatology = general_utils.get_climatology(data, "season")
+    seasonal_zonal_mean = seasonal_climatology.mean("lon")
+    (
+        seasonal_max_lats,
+        seasonal_max_ws,
+    ) = jetstream_metrics_utils.run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
+        seasonal_zonal_mean, resolution=0.075, time_col="season"
+    )
     """
     max_lats = []
     max_ws = []
     for period in data[time_col].data:
         period_data = data.sel({time_col: period})
         lat, ws = run_cubic_spline_interpolation_to_get_max_lat_and_ws(
-            period_data, resolution=resolution
+            period_data, resolution=lat_resolution
         )
         max_lats.append(lat)
         max_ws.append(ws)

@@ -610,13 +610,13 @@ def bracegirdle_et_al_2019(data):
         seasonal_max_lats,
         seasonal_max_ws,
     ) = jetstream_metrics_utils.run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
-        seasonal_zonal_mean, resolution=0.075, time_col="season"
+        seasonal_zonal_mean, lat_resolution=0.075, time_col="season"
     )
     (
         annual_max_lats,
         annual_max_ws,
     ) = jetstream_metrics_utils.run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
-        annual_zonal_mean, resolution=0.075, time_col="year"
+        annual_zonal_mean, lat_resolution=0.075, time_col="year"
     )
 
     # Step 4. Assign jet-stream position (JPOS) and jet-stream strength (JSTR) back to data

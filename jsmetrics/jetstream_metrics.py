@@ -418,6 +418,8 @@ def cattiaux_et_al_2016(data):
     """
     Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
+    NOTE: Currently takes a moderate amount of time i.e. 2 seconds per 100 time unit with 1 plev on AMD Ryzen 5 3600 6-core processor
+
     Parameters
     ----------
     data : xarray.Dataset

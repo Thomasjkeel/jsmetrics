@@ -453,6 +453,7 @@ def cattiaux_et_al_2016(data):
 def grise_polvani_2017(data):
     """
     Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    Calculates maximum latitude of jet-stream to 0.01 degree resolution each time unit
 
     See also Ceppi et al. 2012
     Methodology is for Southern Hemisphere

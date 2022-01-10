@@ -1193,8 +1193,6 @@ def calc_meridional_circulation_index(data):
 
     NOTE: The paper is not clear about whether the absolute value for MCI
     is taken instead thus 0-1
-
-    Used in Francis & Vavrus 2015
     """
     assert (
         "ua" in data.variables and "va" in data.variables
@@ -1204,8 +1202,8 @@ def calc_meridional_circulation_index(data):
 
 def get_latitude_circle_linestring(latitude, lon_min, lon_max):
     """
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
     Will return a linestring of a latitude circle
-    Used in Cattiaux et al. 2016
     """
     vals = np.column_stack(
         (
@@ -1219,9 +1217,9 @@ def get_latitude_circle_linestring(latitude, lon_min, lon_max):
 
 def get_sinousity_of_zonal_mean_zg(row, latitude_circle):
     """
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
     Works on a grouped data set and will calculate sinuosity of zonal mean
     geopotential (ZG) contour compared to a latitude circle
-    Used in Cattiaux et al. 2016
     """
     row["sinousity"] = calc_great_circle_sinousity(
         get_one_contour_linestring(
@@ -1234,8 +1232,9 @@ def get_sinousity_of_zonal_mean_zg(row, latitude_circle):
 
 def get_one_contour_linestring(dataarray, contour_level):
     """
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
     Returns a linestring or multi-linestring of a given contour
-    Used in Cattiaux et al. 2016
     """
     assert isinstance(
         dataarray, xr.DataArray
@@ -1286,11 +1285,8 @@ def calc_great_circle_sinousity(line1, line2):
 
 def get_3_latitudes_and_speed_around_max_ws(row):
     """
-    Will get the latitude before, on and after where the max windspeed is found
-    TODO: think of better name
-    TODO: finish func descr
-
-    Used in Grise & Polvani 2017
+    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    Will get the latitudes neighbouring to east, at and to west where the max windspeed is found
 
     Parameters
     --------------
@@ -1313,9 +1309,8 @@ def get_3_latitudes_and_speed_around_max_ws(row):
 
 def get_3_neighbouring_coord_values(coord_val, coord_resolution):
     """
+    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     TODO: add to JetStreamOccurenceAndCentreAlgorithm and ...
-
-    Used in Grise & Polvani 2017 and ...
 
     Parameters
     --------------
@@ -1341,7 +1336,7 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
 
 def quadratic_func(x, y):
     """
-    Used in Grise & Polvani 2017
+    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     """
     p = np.polyfit(x, y, deg=2)
     return p
@@ -1349,7 +1344,7 @@ def quadratic_func(x, y):
 
 def apply_quadratic_func(x, y, vals):
     """
-    Used in Grise & Polvani 2017
+    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     """
     a, b, c = quadratic_func(x, y)
     return (a * vals ** 2) + (b * vals) + c
@@ -1357,10 +1352,9 @@ def apply_quadratic_func(x, y, vals):
 
 def scale_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
     """
+    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     Will downscale or upscale the resolution of latitude using a quadratic func
     TODO: rename better pls
-
-    Used by Grise & Polvani 2017
     """
     scaled_lat_vals = apply_quadratic_func(lats, speeds, lat_vals)
     return scaled_lat_vals
@@ -1368,8 +1362,8 @@ def scale_lat_vals_with_quadratic_func(lats, speeds, lat_vals):
 
 def rescale_lat_resolution(lats, lat_resolution):
     """
-    Component of method from Grise & Polvani 2017 &
-    Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Component of method from Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
 
     TODO: what if larger resolution
     Parameters
@@ -1389,9 +1383,8 @@ def rescale_lat_resolution(lats, lat_resolution):
 
 def get_latitude_where_max_ws_at_reduced_resolution(lats_and_ws, resolution):
     """
+    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     Makes use of the quadratic func to scale latitude values
-
-    Used by Grise & Polvani 2017
     """
     lats, ws = lats_and_ws
     lat_vals = rescale_lat_resolution(lats, resolution)

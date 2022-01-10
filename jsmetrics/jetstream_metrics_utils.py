@@ -358,6 +358,16 @@ def get_zonal_mean(data):
     Used in Woolings et al. 2010 & Grise & Polvani 2017
     TODO: add to Archer & Caldiera
 
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing lon and plev coords
+
+    Returns
+    ----------
+    zonal_mean : xarray.DataSet
+        zonal mean data
+
     Raises
     ----------
     KeyError
@@ -389,6 +399,10 @@ def calc_low_pass_weights(window, cutoff):
     cutoff : float
         The cutoff frequency in inverse time steps.
 
+    Returns
+    ----------
+    output : numpy.array
+        filtered weights
     """
     order = ((window - 1) // 2) + 1
     nwts = 2 * order + 1
@@ -417,6 +431,7 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
         number of days in filter
     window_size : int
         number of days in window for Lancoz filter
+
     Returns
     ----------
     window_cons : xarray.DataArray
@@ -626,6 +641,7 @@ def run_jet_core_algorithm_on_one_day(
 
 class JetStreamCoreIdentificationAlgorithm:
     """
+    Jet-stream core identification algorithm
     Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
     """
 

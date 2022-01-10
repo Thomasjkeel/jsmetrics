@@ -168,7 +168,9 @@ class TestSchiemann2009(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        result = jetstream_metrics.schiemann_et_al_2009(self.data)
+        tested_func = jetstream_metrics.schiemann_et_al_2009
+        sub_data = self.data.isel(time=slice(0, 1), lon=slice(0, 30))
+        result = tested_func(sub_data)
         self.assertTrue(result)
 
 

@@ -1506,7 +1506,7 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
     for period in data[time_col].data:
         period_data = data.sel({time_col: period})
         lat, ws = run_cubic_spline_interpolation_to_get_max_lat_and_ws(
-            period_data, resolution=lat_resolution
+            period_data, lat_resolution=lat_resolution
         )
         max_lats.append(lat)
         max_ws.append(ws)

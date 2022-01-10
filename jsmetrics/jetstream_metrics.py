@@ -466,7 +466,7 @@ def grise_polvani_2017(data):
 
     Returns
     ----------
-    data : xarray.Dataset
+    output : xarray.Dataset
         Data containing max latitudes per time unit scaled to 0.01 resolution
     """
     if isinstance(data, xarray.DataArray):
@@ -494,8 +494,8 @@ def grise_polvani_2017(data):
         scaled_max_lats.append(scaled_max_lat)
 
     #  Step 4. Assign scaled max lats back to data
-    data = data.assign({"max_lat_0.01": (("time"), scaled_max_lats)})
-    return data
+    output = data.assign({"max_lat_0.01": (("time"), scaled_max_lats)})
+    return output
 
 
 def molnos_et_al_2017(data):

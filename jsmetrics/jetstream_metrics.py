@@ -219,8 +219,8 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     fourier_filtered_data = (
         jetstream_metrics_utils.assign_filtered_lats_and_ws_to_data(
             zonal_mean_lat_ws,
-            fourier_filtered_lats,
-            fourier_filtered_ws,
+            fourier_filtered_lats.real,
+            fourier_filtered_ws.real,
             dim=time_dim,
         )
     )

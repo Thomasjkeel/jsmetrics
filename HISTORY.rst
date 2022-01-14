@@ -2,6 +2,10 @@
 History
 =======
 
+0.0.3 (2022-01-14)
+------------------
+* Remove main and experiment related files (moved to another directory so this one is cleaner)
+
 0.0.2 (2022-01-10)
 ------------------
 * First release on github

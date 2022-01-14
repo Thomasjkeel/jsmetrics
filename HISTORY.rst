@@ -2,6 +2,10 @@
 History
 =======
 
+0.0.3-beta (2022-01-14)
+------------------
+* Use real part from fourier filter to woolings and its tests
+
 0.0.3-alpha (2022-01-14)
 ------------------
 * Remove main and experiment related files (moved to another directory so this one is cleaner)

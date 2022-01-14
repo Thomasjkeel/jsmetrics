@@ -3,7 +3,7 @@ History
 =======
 
 0.0.3-gamma (2022-01-14)
-* remove python 3.7 compatibility
+* remove python 3.6 compatibility
 * update environment yml (still broken)
 
 0.0.3-beta (2022-01-14)

@@ -1,8 +1,13 @@
 =======
 History
 =======
+0.0.4-alpha (2022-01-26)
+------------------
+* remove Docker
+* remove get data scripts
 
 0.0.3-gamma (2022-01-14)
+------------------
 * remove python 3.6 compatibility
 * update environment yml (still broken)
 

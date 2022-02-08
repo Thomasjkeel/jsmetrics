@@ -20,7 +20,7 @@ __status__ = "Development"
 
 def koch_et_al_2006(data, ws_threshold=30):
     """
-    Method from Koch et al (2006) hlatitudettps://doi.org/10.1002/joc.1255
+    Method from Koch et al (2006) https://doi.org/10.1002/joc.1255
 
     Calculates the weighted average windspeed and applies a threshold to identify the jet.
     The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.

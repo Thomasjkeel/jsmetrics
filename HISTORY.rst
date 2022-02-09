@@ -1,6 +1,10 @@
 =======
 History
 =======
+0.0.4-beta (2022-02-09)
+------------------
+* add description, name and DOI to metric dict
+
 0.0.4-alpha (2022-01-26)
 ------------------
 * remove Docker

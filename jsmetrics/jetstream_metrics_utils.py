@@ -1499,7 +1499,7 @@ def scale_lat_vals_with_quadratic_func(lats, speeds, scaled_lats):
 def rescale_lat_resolution(lats, lat_resolution):
     """
     Component of method from Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
-    & Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    & Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
 
     TODO: what if larger resolution
 
@@ -1567,7 +1567,7 @@ def get_centroid_jet_lat(data):
 
 def cubic_spline_interpolation(x, y):
     """
-    Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Component of method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
     Runs a cubic spline interpolation using 2 equal-length arrays
 
     Parameters
@@ -1591,7 +1591,7 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
     data, lat_resolution, ua_col="ua"
 ):
     """
-    Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Component of method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
     Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude
 
     Parameters
@@ -1622,13 +1622,13 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
     data, lat_resolution, time_col
 ):
     """
-    Component of method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Component of method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
     Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude for each
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component wind-speed. In the case of Bracegirdle et al. 2019, uses a seasonal and annual mean/climatology
+        Data containing u-component wind-speed. In the case of Bracegirdle et al. 2018, uses a seasonal and annual mean/climatology
     resolution : int or float
         Latitude resolution in degrees for cubic spline interpolation
     time_col : str

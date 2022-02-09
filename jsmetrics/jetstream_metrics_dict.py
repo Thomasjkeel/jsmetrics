@@ -43,6 +43,7 @@ JETSTREAM_METRIC_DICT = {
         "coords": {"plev": [70000, 92500], "lat": [15, 75], "lon": [120, 180]},
         "metric": jetstream_metrics.woolings_et_al_2010,
         "name": "Woolings et al. 2010",
+        "description": "",
         "doi": "https://onlinelibrary.wiley.com/doi/10.1002/qj.625",
     },  # , "exact_coords": {"plev": [92500, 85000, 77500, 70000]}
     "Manney2011": {
@@ -50,7 +51,7 @@ JETSTREAM_METRIC_DICT = {
         "coords": {"plev": [10000, 40000]},
         "metric": jetstream_metrics.manney_et_al_2011,
         "name": "Manney et al. 2011",
-        "description:": "surface to 0.1 hPa",
+        "description": "surface to 0.1 hPa",
         "doi": "https://doi.org/10.5194/acp-11-6115-2011",
     },
     "PenaOrtiz2013": {

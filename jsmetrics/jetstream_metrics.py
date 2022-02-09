@@ -576,9 +576,9 @@ def simpson_et_al_2018(data):
     return data
 
 
-def bracegirdle_et_al_2019(data):
+def bracegirdle_et_al_2018(data):
     """
-    Method from Bracegirdle et al (2019) https://doi.org/10.1175/JCLI-D-17-0320.1
+    Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
     Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal mean climatology
 
     NOTE: Originally for Southern Hemisphere

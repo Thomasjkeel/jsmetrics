@@ -33,7 +33,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-MAX_VARIABLES = 4
+MAX_VARIABLES = 6
 
 
 class TestJetStreamMetricDict(unittest.TestCase):
@@ -47,10 +47,17 @@ class TestJetStreamMetricDict(unittest.TestCase):
     def test_metric_dict_values(self):
         for metric in self.metric_dict.values():
             self.assertIsInstance(metric, dict)
-            self.assertEqual(len(metric.keys()), 4)
+            self.assertEqual(len(metric.keys()), MAX_VARIABLES)
             self.assertListEqual(
                 list(metric.keys()),
-                ["variables", "coords", "metric", "description"],
+                [
+                    "variables",
+                    "coords",
+                    "metric",
+                    "name",
+                    "description",
+                    "doi",
+                ],
             )
 
     def test_variables(self):
@@ -373,12 +380,12 @@ class TestSimpson2018(unittest.TestCase):
         self.assertTrue(result)
 
 
-class TestBracegirdle2019(unittest.TestCase):
+class TestBracegirdle2018(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        tested_func = jetstream_metrics.bracegirdle_et_al_2019
+        tested_func = jetstream_metrics.bracegirdle_et_al_2018
         test_data = self.data.sel(plev=85000)
         result = tested_func(test_data)
         self.assertRaises(ValueError, lambda: tested_func(self.data))

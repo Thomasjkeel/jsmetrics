@@ -8,6 +8,7 @@ parameterized
 pre_commit
 pylint
 pytest
+pytest-cov
 # Documentation and examples
 matplotlib
 nc-time-axis

@@ -93,7 +93,11 @@ def get_all_hPa_list(data):
     if "plev" not in data.coords:
         raise KeyError("Data does not contain coord: 'plev'")
 
-    if data["plev"].units != "Pa" and data["plev"].units != "hPa":
+    if (
+        data["plev"].units != "Pa"
+        and data["plev"].units != "hPa"
+        and data["plev"].units != "millibars"
+    ):
         raise ValueError("Plev units need to be Pa or hPa")
     #  TODO: what if mbar?
 

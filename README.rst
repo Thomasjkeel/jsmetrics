@@ -2,7 +2,7 @@
 jet-stream-metrics
 ==================
 To-Do:
-
+- PROBLEM: need for time coordinate in some metrics (what if not one!)
 - ADD cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
 - THINK ABOUT way of highlighting jetstream-dict (Also rename this file)
 - ADD check to see if data has been loaded into memory (versus dask)

@@ -132,3 +132,4 @@ dmypy.json
 # Data files
 /data/*
 /.vscode/
+/tests/metric_verification/data

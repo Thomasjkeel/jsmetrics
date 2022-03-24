@@ -1,7 +1,7 @@
 =======
 History
 =======
-0.0.4-gamma (2022-04-24)
+0.0.5-alpha (2022-04-24)
 ------------------
 * add metric verification notebooks 
 

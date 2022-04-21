@@ -30,6 +30,14 @@ JETSTREAM_METRIC_DICT = {
         "description": "",
         "doi": "https://doi.org/10.1029/2008GL033614",
     },
+    "BartonEllis2009": {
+        "variables": ["ua", "va"],
+        "coords": {"plev": [30000, 30000]},
+        "metric": jetstream_metrics.barton_ellis_2009,
+        "name": "Barton & Ellis 2009",
+        "description": "",
+        "doi": "https://doi.org/10.1002/joc.1750",
+    },
     "Schiemann2009": {
         "variables": ["ua", "va"],
         "coords": {"plev": [10000, 50000]},

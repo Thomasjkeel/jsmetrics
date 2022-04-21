@@ -170,6 +170,17 @@ class TestArcherCaldeira2008(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(test_data))
 
 
+class TestBartonEllis2009(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_uv_data()
+
+    def test_metric(self):
+        tested_func = jetstream_metrics.barton_ellis_2009
+        sub_data = self.data.isel(time=slice(0, 1), lon=slice(0, 30))
+        result = tested_func(sub_data)
+        self.assertTrue(result)
+
+
 class TestSchiemann2009(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()

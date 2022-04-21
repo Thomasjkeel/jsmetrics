@@ -127,6 +127,24 @@ def archer_caldeira_2008(data):
     return output
 
 
+def barton_ellis_2009(data):
+    """
+    Method from Barton & Ellis 2009 https://doi.org/10.1002/joc.1750
+
+    Actual methodology uses 300 hPa
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xr.Dataset
+        Data with seasonal jet-stream position by longitude
+    """
+    return data
+
+
 def schiemann_et_al_2009(data):
     """
     Method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
@@ -143,7 +161,7 @@ def schiemann_et_al_2009(data):
     Returns
     ----------
     output : xr.Dataset
-        Data with local jet_maximas
+        Data with local jet maximas
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])

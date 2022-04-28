@@ -33,7 +33,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-MAX_VARIABLES = 6
+MAX_VARIABLES = 7
 
 
 class TestJetStreamMetricDict(unittest.TestCase):
@@ -53,6 +53,7 @@ class TestJetStreamMetricDict(unittest.TestCase):
                 [
                     "variables",
                     "coords",
+                    "plev_units",
                     "metric",
                     "name",
                     "description",

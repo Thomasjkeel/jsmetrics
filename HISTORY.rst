@@ -1,6 +1,11 @@
 =======
 History
 =======
+0.0.5-beta (2022-05-03)
+------------------
+* add Barton & Ellis 2009
+* update jsmetric dict with 'plev_units' argument 
+
 0.0.5-alpha (2022-04-24)
 ------------------
 * add metric verification notebooks 

@@ -5,6 +5,7 @@ History
 ------------------
 * add Barton & Ellis 2009
 * update jsmetric dict with 'plev_units' argument 
+* fix archer and caldiera call to mass weighted ws (STILL TODO: better plev understanding)
 
 0.0.5-alpha (2022-04-24)
 ------------------

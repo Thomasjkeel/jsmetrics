@@ -161,13 +161,14 @@ class TestArcherCaldeira2008(unittest.TestCase):
             self.assertIn(col, result)
             # self.assertEqual(10, result[col].max())
 
-        # self.assertEqual(
-        #     float(result["mass_weighted_average_ws"].max()), 8.7751588821411
-        # )
+        self.assertEqual(
+            float(result["mass_weighted_average_ws"].max()), 23.904821395874023
+        )
 
     def test_get_mass_weighted_average_windspeed(self):
         tested_func = jetstream_metrics.archer_caldeira_2008
         test_data = self.data.isel(plev=1)
+        # should fail because needs two plevs
         self.assertRaises(ValueError, lambda: tested_func(test_data))
 
 

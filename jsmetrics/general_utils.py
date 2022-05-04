@@ -24,6 +24,26 @@ def check_kwargs(kwargs):
         return kwargs
 
 
+def check_at_least_two_plevs_in_data(data):
+    """
+    Checks there are two pressure-levels (plevs) in xarray dataset
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data to check
+
+    Raises
+    ----------
+    ValueError :
+        If not two pressure levels
+    """
+    if data["plev"].count() < 2:
+        raise ValueError(
+            "Need at least 2 pressure levels (plevs) for calculation"
+        )
+
+
 def get_local_minima(arr, axis=0):
     """
     from

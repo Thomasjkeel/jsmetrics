@@ -97,8 +97,8 @@ def archer_caldeira_2008(data):
     mon_mean = data.groupby("time.month").mean()
 
     #  Step 2. Calculate mass weighted average
-    mass_weighted_average = (
-        jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
+    mass_weighted_average = jetstream_metrics_utils.calc_mass_weighted_average(
+        mon_mean
     )
     mass_flux_weighted_pressure = (
         jetstream_metrics_utils.calc_mass_flux_weighted_pressure(mon_mean)

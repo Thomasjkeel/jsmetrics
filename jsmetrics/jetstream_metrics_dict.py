@@ -186,10 +186,6 @@ JETSTREAM_METRIC_DICT = {
     #     {"variables": ["ua"], "coords":{"plev": [0, 100000]}, "plev_units": "Pa",
     #      "metric": jetstream_metrics.rikus_2018,
     #      "description": "Rikus 2018"},
-    # "ChemkeMing2020":
-    #     {"variables": ["ua","va"], "coords":{"plev": [0, 100000]}, "plev_units": "Pa",
-    #      "metric": jetstream_metrics.chemke_and_ming_2020,
-    #      "description": "Chemke & Ming 2020"}
     "Kerr2020": {
         "variables": ["ua"],
         "coords": {"plev": [50000, 50000], "lat": [20, 70]},

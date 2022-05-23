@@ -697,14 +697,6 @@ def bracegirdle_et_al_2018(data):
     return output
 
 
-def chemke_and_ming_2020(data):
-    """
-    Write function description
-    TODO: ask about equation
-    """
-    return data
-
-
 def kerr_et_al_2020(data):
     """
     Method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735

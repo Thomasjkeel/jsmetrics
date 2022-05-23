@@ -3,7 +3,6 @@ History
 =======
 0.0.5-beta (2022-05-03)
 ------------------
-* add Barton & Ellis 2009
 * update Woollings et al. 2010 with seasonal cycle
 * update jsmetric dict with 'plev_units' argument 
 * fix archer and caldiera call to mass weighted ws (STILL TODO: better plev understanding)

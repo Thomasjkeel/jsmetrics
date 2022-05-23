@@ -70,6 +70,15 @@ JETSTREAM_METRIC_DICT = {
         "description": "surface to 0.1 hPa",
         "doi": "https://doi.org/10.5194/acp-11-6115-2011",
     },
+    "BarnesPolvani2013": {
+        "variables": ["ua"],
+        "coords": {"plev": [70000, 85000]},
+        "plev_units": "Pa",
+        "metric": jetstream_metrics.barnes_polvani_2013,
+        "name": "Barnes & Polvani 2013",
+        "description": "",
+        "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
+    },
     "PenaOrtiz2013": {
         "variables": ["ua", "va"],
         "coords": {"plev": [10000, 40000]},
@@ -96,6 +105,15 @@ JETSTREAM_METRIC_DICT = {
         "name": "Kuang et al. 2014.",
         "description": "NOTE: Should be 200hPa only",
         "doi": "https://doi.org/10.1007/s00704-013-0994-x",
+    },
+    "BarnesPolvani2015": {
+        "variables": ["ua"],
+        "coords": {"plev": [70000, 92500], "lat": [30, 70], "lon": [230, 350]},
+        "plev_units": "Pa",
+        "metric": jetstream_metrics.barnes_polvani_2015,
+        "name": "Barnes & Polvani 2015",
+        "description": "",
+        "doi": "https://doi.org/10.1175/JCLI-D-14-00589.1",
     },
     "FrancisVavrus2015": {
         "variables": ["ua", "va"],

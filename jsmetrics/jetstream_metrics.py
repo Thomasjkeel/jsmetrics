@@ -264,6 +264,18 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     return output
 
 
+def barnes_polvani_2013(data):
+    """
+    Method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component wind
+    """
+    return data
+
+
 def penaortiz_et_al_2013(data):
     """
     Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
@@ -362,6 +374,18 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
         (occurence_ws_threshold,),
     )
     return output
+
+
+def barnes_polvani_2015(data):
+    """
+    Method from Barnes & Polvani (2015) https://doi.org/10.1175/JCLI-D-14-00589.1
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component wind
+    """
+    return data
 
 
 def francis_vavrus_2015(data):

@@ -1,7 +1,7 @@
 =======
 History
 =======
-0.0.5-gamma (2022-05-23)
+0.0.5 (2022-05-23)
 ------------------
 * add Barnes & Simpson 2017
 * Update 'get_latitude_and_speed_where_max_ws' function 

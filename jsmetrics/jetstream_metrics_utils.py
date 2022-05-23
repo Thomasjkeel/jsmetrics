@@ -465,7 +465,8 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
 def get_latitude_and_speed_where_max_ws(data_row):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
-    & Grise & Polvani 2017
+    Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
 
     Will return the latitude and windspeed at the index of maximum wind speed
     from a row of data

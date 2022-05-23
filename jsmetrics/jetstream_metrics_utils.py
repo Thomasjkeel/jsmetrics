@@ -1329,6 +1329,8 @@ def calc_total_great_circle_distance_along_line(line):
     Returns the total great circle (haversine) distance along a linestring
     or multilinestring
 
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
     Parameters
     ----------
     line : shapely.geometry.LineString or shapely.geometry.MultiLineString
@@ -1360,6 +1362,8 @@ def calc_great_circle_sinousity(line1, line2):
     Calculates sinousity by comparing the great circle distance between
     two (multi-)linestrings
 
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
     Parameters
     ----------
     line1 : shapely.geometry.LineString or shapely.geometry.MultiLineString
@@ -1376,6 +1380,102 @@ def calc_great_circle_sinousity(line1, line2):
     return calc_total_great_circle_distance_along_line(
         line1
     ) / calc_total_great_circle_distance_along_line(line2)
+
+
+def assign_lat_ws_by_sector_to_ten_day_mean_data(
+    ten_day_mean, sector, sector_name
+):
+    """
+    Joins the values for latitude and windspeed of the point of maximum windspeed for a given sector to the ten_day_mean data
+
+    Component of method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+
+    Parameters
+    ----------
+    ten_day_mean : xarray.Dataset
+        Data containing u-component wind and resampled by 10 days
+    sector : xarray.DataArray
+        Data array of u-component wind for one sector (i.e. either North Atlantic (280.E to 350. E) or North Pacific (120.E to 230. E))
+    sector_name : str
+        Name of sector (i.e. either North Atlantic or North Pacific)
+
+    Returns
+    ----------
+    ten_day_mean : xarray.Dataset
+        Data with max latitude and max windspeed for the sector
+    """
+    sector_max_lats_ws = get_max_lats_and_ws_by_sector(sector)
+    max_lats_col = "%s_max_lats" % (sector_name)
+    max_ws_col = "%s_max_ws" % (sector_name)
+    ten_day_mean = assign_lat_and_ws_to_data(
+        ten_day_mean,
+        sector_max_lats_ws,
+        max_lats_col=max_lats_col,
+        max_ws_col=max_ws_col,
+    )
+    return ten_day_mean
+
+
+def get_max_lats_and_ws_by_sector(sector):
+    """
+    Gets values for windspeed and latitude for the place with highest windspeed for a given sector/region
+
+    Component of method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+
+    Parameters
+    ----------
+    sector : xarray.DataArray
+        Data array of u-component wind for one sector (i.e. either North Atlantic (280.E to 350. E) or North Pacific (120.E to 230. E))
+
+    Returns
+    ----------
+    outputs : numpy.array
+        Array with max latitude and max windspeed for the sector
+    """
+    return np.array(list(map(get_latitude_and_speed_where_max_ws, sector)))
+
+
+def assign_ten_day_average_lat_ws_by_sector_to_data(data, ten_day_mean):
+    """
+    Joins the values for latitude and windspeed of the point of maximum windspeed for two sectors
+    (i.e. either North Atlantic (280.E to 350. E) or North Pacific (120.E to 230. E)) to the main data
+
+    Component of method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
+    """
+    return data.assign(
+        {
+            "10_day_average_start_date": (
+                ("10_day_average"),
+                ten_day_mean["10_day_average"]["time"].data,
+            ),
+            "north_atlantic_max_lats": (
+                ("10_day_average"),
+                ten_day_mean["north_atlantic_max_lats"].data,
+            ),
+            "north_atlantic_max_ws": (
+                ("10_day_average"),
+                ten_day_mean["north_atlantic_max_ws"].data,
+            ),
+            "north_pacific_max_lats": (
+                ("10_day_average"),
+                ten_day_mean["north_pacific_max_lats"].data,
+            ),
+            "north_pacific_max_ws": (
+                ("10_day_average"),
+                ten_day_mean["north_pacific_max_ws"].data,
+            ),
+        }
+    )
 
 
 def get_3_latitudes_and_speed_around_max_ws(row):

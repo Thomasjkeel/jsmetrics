@@ -459,13 +459,38 @@ def barnes_simpson_2017(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data containing u-component wind
 
     Returns
     ----------
-    output : xr.Dataset
-        Data with ...
+    output : xarray.Dataset
+        Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
     """
+    ten_day_mean = data.resample(time="10D").mean()
+    north_pacific_sector = ten_day_mean.sel(lon=slice(120, 230))["ua"]
+    north_atlantic_sector = ten_day_mean.sel(lon=slice(280, 350))["ua"]
+
+    if (
+        not north_atlantic_sector["lon"].size > 1
+        or not north_pacific_sector["lon"].size > 1
+    ):
+        raise ValueError(
+            "Data needs to have values for between 120.E and 350.E to calculate North Pacific and North Atlantic sectors"
+        )
+    ten_day_mean = (
+        jetstream_metrics_utils.assign_lat_ws_by_sector_to_ten_day_mean_data(
+            ten_day_mean, north_atlantic_sector, "north_atlantic"
+        )
+    )
+    ten_day_mean = (
+        jetstream_metrics_utils.assign_lat_ws_by_sector_to_ten_day_mean_data(
+            ten_day_mean, north_pacific_sector, "north_pacific"
+        )
+    )
+    ten_day_mean = ten_day_mean.rename_dims({"time": "10_day_average"})
+    data = jetstream_metrics_utils.assign_ten_day_average_lat_ws_by_sector_to_data(
+        data, ten_day_mean
+    )
     return data
 
 

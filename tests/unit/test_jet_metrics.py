@@ -342,6 +342,23 @@ class TestCattiaux2016(unittest.TestCase):
         pass
 
 
+class TestBarnesSimpson2017(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        test_func = jetstream_metrics.barnes_simpson_2017
+        result = test_func(self.data)
+        self.assertEqual(float(result["north_atlantic_max_lats"].max()), 36.25)
+        self.assertEqual(float(result["north_pacific_max_lats"].max()), 32.5)
+        one_lon_data = self.data.isel(lon=slice(0, 1))
+        only_north_atlantic_data = self.data.sel(lon=slice(280, 350))
+        self.assertRaises(ValueError, lambda: test_func(one_lon_data))
+        self.assertRaises(
+            ValueError, lambda: test_func(only_north_atlantic_data)
+        )
+
+
 class TestGrisePolvani2017(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()

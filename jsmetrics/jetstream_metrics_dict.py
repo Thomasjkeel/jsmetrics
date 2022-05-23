@@ -122,7 +122,7 @@ JETSTREAM_METRIC_DICT = {
     },
     "BarnesSimpson2017": {
         "variables": ["ua"],
-        "coords": {"plev": [70000, 70000]},
+        "coords": {"plev": [70000, 70000], "lat": [0, 90], "lon": [110, 350]},
         "plev_units": "Pa",
         "metric": jetstream_metrics.barnes_simpson_2017,
         "name": "Barnes & Simpson 2017",

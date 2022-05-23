@@ -243,7 +243,7 @@ class TestWoolings2010(unittest.TestCase):
         self.assertEqual(tested_func(tested_data)[0], 70.0)
         self.assertEqual(tested_func(tested_data)[1], 3.105090856552124)
         self.assertRaises(
-            ValueError, lambda: tested_func(tested_data.rename({"lat": "lt"}))
+            KeyError, lambda: tested_func(tested_data.rename({"lat": "lt"}))
         )
         nan_dataset = set_up_nan_dataset()
         self.assertEqual(tested_func(nan_dataset), (None, None))
@@ -370,15 +370,6 @@ class TestKern2018(unittest.TestCase):
 
     def test_metric(self):
         result = jetstream_metrics.kern_et_al_2018(self.data)
-        self.assertTrue(result)
-
-
-class TestSimpson2018(unittest.TestCase):
-    def setUp(self):
-        self.data = set_up_test_zg_data()
-
-    def test_metric(self):
-        result = jetstream_metrics.simpson_et_al_2018(self.data)
         self.assertTrue(result)
 
 

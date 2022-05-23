@@ -469,6 +469,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
 
     Will return the latitude and windspeed at the index of maximum wind speed
     from a row of data
+    TODO: expects only one cell to be max
 
     Parameters
     ----------
@@ -489,10 +490,14 @@ def get_latitude_and_speed_where_max_ws(data_row):
 
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
-        max_speed_loc = np.argmax(data_row.data)
-        max_speed = data_row.isel(lat=max_speed_loc)
-        lat_at_max = float(max_speed["lat"].values)
-        speed_at_max = float(max_speed.data)
+        max_ws = data_row.where(
+            data_row == data_row.max(), drop=True
+        ).squeeze()
+        if max_ws.size > 1:
+            print("Warning: more than one max value found, picking the first!")
+            max_ws = max_ws[0]
+        lat_at_max = float(max_ws["lat"])
+        speed_at_max = float(max_ws.data)
         return lat_at_max, speed_at_max
     else:
         return None, None

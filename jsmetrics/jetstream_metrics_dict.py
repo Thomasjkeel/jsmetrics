@@ -120,6 +120,15 @@ JETSTREAM_METRIC_DICT = {
         "description": "",
         "doi": "https://doi.org/10.1002/2016GL070309",
     },
+    "BarnesSimpson2017": {
+        "variables": ["ua"],
+        "coords": {"plev": [70000, 70000]},
+        "plev_units": "Pa",
+        "metric": jetstream_metrics.barnes_simpson_2017,
+        "name": "Barnes & Simpson 2017",
+        "description": "",
+        "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
+    },
     "GrisePolvani2017": {
         "variables": ["ua"],
         "coords": {"plev": [85000, 85000], "lat": [-65, -30]},
@@ -159,10 +168,6 @@ JETSTREAM_METRIC_DICT = {
     #     {"variables": ["ua"], "coords":{"plev": [0, 100000]}, "plev_units": "Pa",
     #      "metric": jetstream_metrics.rikus_2018,
     #      "description": "Rikus 2018"},
-    # "Simpson2018":
-    #     {"variables": ["ua"], "coords":{"plev": [70000, 70000]}, "plev_units": "Pa",
-    #      "metric": jetstream_metrics.simpson_et_al_2018,
-    #      "description": "Simpson et al. 2018"},
     # "ChemkeMing2020":
     #     {"variables": ["ua","va"], "coords":{"plev": [0, 100000]}, "plev_units": "Pa",
     #      "metric": jetstream_metrics.chemke_and_ming_2020,

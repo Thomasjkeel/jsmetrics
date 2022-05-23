@@ -452,6 +452,23 @@ def cattiaux_et_al_2016(data):
     return output
 
 
+def barnes_simpson_2017(data):
+    """
+    Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xr.Dataset
+        Data with ...
+    """
+    return data
+
+
 def grise_polvani_2017(data):
     """
     Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
@@ -558,20 +575,6 @@ def kern_et_al_2018(data):
 def rikus_2018(data):
     """
     Write function description
-    """
-    return data
-
-
-def simpson_et_al_2018(data):
-    """
-    Write function description
-    TODO: ask about interpolation
-    Before comparing the variability between the reanalyses and the models,
-    each dataset is first interpolated onto a 2*2 longitude–latitude grid
-    using a cubic spline interpolation and then isotropically smoothed
-    in the spectral domain retaining only scales larger than total
-    wavenumber 42 according to
-    Sardeshmukh and Hoskins [1984, their Eq. (9) with n0=42 and r=1].
     """
     return data
 

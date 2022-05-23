@@ -504,9 +504,12 @@ def get_latitude_and_speed_where_max_ws(data_row):
         return None, None
 
 
-def assign_lat_and_ws_to_data(data, max_lat_ws):
+def assign_lat_and_ws_to_data(
+    data, max_lat_ws, max_lats_col="max_lats", max_ws_col="max_ws"
+):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
 
     Will return a data array with the maximum windspeed and latitude of that maximum wind speed
 
@@ -525,14 +528,14 @@ def assign_lat_and_ws_to_data(data, max_lat_ws):
     max_lats = max_lat_ws[:, 0]
     max_ws = max_lat_ws[:, 1]
     data_with_max_lats_ws = data.assign(
-        {"max_lats": (("time"), max_lats), "max_ws": (("time"), max_ws)}
+        {max_lats_col: (("time"), max_lats), max_ws_col: (("time"), max_ws)}
     )
-    data_with_max_lats_ws["max_lats"] = data_with_max_lats_ws[
-        "max_lats"
+    data_with_max_lats_ws[max_lats_col] = data_with_max_lats_ws[
+        max_lats_col
     ].astype(float)
-    data_with_max_lats_ws["max_ws"] = data_with_max_lats_ws["max_ws"].astype(
-        float
-    )
+    data_with_max_lats_ws[max_ws_col] = data_with_max_lats_ws[
+        max_ws_col
+    ].astype(float)
     return data_with_max_lats_ws
 
 

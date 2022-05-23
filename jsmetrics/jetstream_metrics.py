@@ -272,6 +272,11 @@ def barnes_polvani_2013(data):
     ----------
     data : xarray.Dataset
         Data containing u-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing jet-stream position
     """
     return data
 
@@ -384,6 +389,11 @@ def barnes_polvani_2015(data):
     ----------
     data : xarray.Dataset
         Data containing u-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing jet-stream position
     """
     return data
 
@@ -691,5 +701,22 @@ def chemke_and_ming_2020(data):
     """
     Write function description
     TODO: ask about equation
+    """
+    return data
+
+
+def kerr_et_al_2020(data):
+    """
+    Method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component windspeed
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing jet-stream position
     """
     return data

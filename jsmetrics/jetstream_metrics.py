@@ -217,8 +217,8 @@ def woolings_et_al_2010(data, filter_freq=10, window_size=61):
     zonal_mean_lat_ws = jetstream_metrics_utils.assign_lat_and_ws_to_data(
         zonal_mean, max_lat_ws
     )
-    # Step 4: Make climatology
-    climatology = general_utils.get_climatology(zonal_mean_lat_ws, "month")
+    # Step 4: Make seasonal climatology
+    climatology = general_utils.get_climatology(zonal_mean_lat_ws, "season")
 
     # Step 5: Apply low-freq fourier filter to both max lats and max ws
     fourier_filtered_lats = (

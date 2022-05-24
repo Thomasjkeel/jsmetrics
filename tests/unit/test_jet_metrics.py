@@ -382,7 +382,7 @@ class TestGrisePolvani2017(unittest.TestCase):
         self.assertEqual(float(result["max_lat_0.01"].min()), 35.38)
         self.assertEqual(float(result["max_lat_0.01"].max()), 36.41)
         self.assertEqual(
-            float(result["max_speed_0.01"].max()), 22.926441912353482
+            float(result["max_speed_0.01"].max()), 22.92644191235354
         )
 
 

@@ -1186,6 +1186,15 @@ def get_3_latitudes_and_speed_around_max_ws(row):
         (neighbouring_lats >= lat_min) & (neighbouring_lats <= lat_max)
     ]
     neighbouring_speeds = row.sel(lat=neighbouring_lats).data
+
+    #  TODO: move work around to func
+    if len(neighbouring_lats) == 2:
+        if neighbouring_lats[-1] == 90:
+            neighbouring_lats = np.insert(neighbouring_lats, 0, np.nan)
+            neighbouring_speeds = np.insert(neighbouring_speeds, 0, np.nan)
+        if neighbouring_lats[0] == 0:
+            neighbouring_lats = np.append(neighbouring_lats, np.nan)
+            neighbouring_speeds = np.append(neighbouring_speeds, np.nan)
     return (neighbouring_lats, neighbouring_speeds)
 
 

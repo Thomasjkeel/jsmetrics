@@ -340,7 +340,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
             scaled_max_ws.append(np.nan)
 
     #  Step 6. Get jet-widths using scaled windspeed and usual jet-lat
-    max_lats = [lats[1] for lats in all_max_lats_and_ws[::, 0]]
+    max_lats = all_max_lats_and_ws[::, 0, 1]
     jet_widths = list(
         map(
             lambda zm, la, wa: jetstream_metrics_utils.calc_jet_width_for_one_day(

@@ -135,35 +135,40 @@ def get_atm_mass_at_one_hPa(hPa):
     return atm_mass
 
 
-def get_weighted_average_at_one_Pa(data, Pa, atm_mass):
+def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data containing windspeed ('ws') or u-, v-component wind
+    Pa : int or float
+        Pressure level in Pascals
+    atm_mass : int or float
+        Atmospheric mass at given hPa pressure level
+    ws_col : string
+        Name of column to calculate weighted average from (e.g. 'ws', 'ua', 'va')
 
     Returns
     ----------
     output : xarray.Dataset
         Data with weighted average at a single pressure level
     """
-    return atm_mass * (
-        np.sqrt(data["ua"].sel(plev=Pa) ** 2 + data["va"].sel(plev=Pa) ** 2)
-    )
+    return atm_mass * (data[ws_col].sel(plev=Pa))
 
 
-def get_mass_weighted_average_ws(data, plev_flux=False):
+def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
-
-    Get mass-weighted average wind-speed.
+    Get mass-weighted average wind-speed from 'u', 'v' component wind or 'wind vector'.
 
     Parameters
     ----------
     data : xarray.Dataset
         Data containing u- and v-component wind
+    ws_col : string
+        Name of column to calculate weighted average from (e.g. 'ws', 'ua', 'va')
 
     Returns
     ----------
@@ -181,7 +186,7 @@ def get_mass_weighted_average_ws(data, plev_flux=False):
         plev_hPa = plev_Pa / 100  # TODO
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
         weighted_average = get_weighted_average_at_one_Pa(
-            data, plev_Pa, atm_mass
+            data, plev_Pa, atm_mass, ws_col
         )
         if sum_weighted_ws is None:
             if plev_flux:
@@ -219,7 +224,7 @@ def get_sum_atm_mass(data):
     return sum_atm_mass
 
 
-def calc_mass_weighted_average(data):
+def calc_mass_weighted_average(data, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
@@ -228,6 +233,8 @@ def calc_mass_weighted_average(data):
     ----------
     data : xarray.Dataset
         Data containing plev
+    ws_col : string
+        Name of column to calculate weighted average from (e.g. 'ws', 'ua', 'va')
 
     Returns
     ----------
@@ -235,12 +242,12 @@ def calc_mass_weighted_average(data):
         Data with weighted average windspeed based on sum atmospheric mass
     """
     sum_atm_mass = get_sum_atm_mass(data)
-    sum_weighted_ws = get_mass_weighted_average_ws(data)
+    sum_weighted_ws = get_mass_weighted_average_wind(data, ws_col)
     weighted_average = sum_weighted_ws / sum_atm_mass
     return weighted_average
 
 
-def calc_mass_flux_weighted_pressure(data):
+def calc_mass_flux_weighted_pressure(data, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
@@ -248,22 +255,24 @@ def calc_mass_flux_weighted_pressure(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing ws and plev
+        Data containing windspeed and plev
+    ws_col : string
+        Name of column to calculate weighted average from (e.g. 'ws', 'ua', 'va')
 
     Returns
     ----------
     mass_flux_weighted_pressure : xr.DataArray
         Data with mass flux weighted pressure
     """
-    sum_weighted_ws = get_mass_weighted_average_ws(data)
-    sum_weighted_ws_plev_flux = get_mass_weighted_average_ws(
-        data, plev_flux=True
+    sum_weighted_ws = get_mass_weighted_average_wind(data, ws_col=ws_col)
+    sum_weighted_ws_plev_flux = get_mass_weighted_average_wind(
+        data, ws_col=ws_col, plev_flux=True
     )
     mass_flux_weighted_pressure = sum_weighted_ws_plev_flux / sum_weighted_ws
     return mass_flux_weighted_pressure
 
 
-def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
+def calc_mass_flux_weighted_latitude(data, lat_min, lat_max, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     TODO: add equation
@@ -277,6 +286,8 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
         Minimum latitude to consider for weighted latitude
     lat_max : int or float
         Maximum latitude to consider for weighted latitude
+    ws_col : string
+        Name of column to calculate weighted average from (e.g. 'ws', 'ua', 'va')
 
     Returns
     ----------
@@ -291,7 +302,7 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max):
     sum_weighted_ws_by_lat = None
     for lat in sub_data["lat"].data:
         lat_data = sub_data.sel(lat=lat)
-        lat_sum_weighted_ws = get_mass_weighted_average_ws(lat_data)
+        lat_sum_weighted_ws = get_mass_weighted_average_wind(lat_data, ws_col)
         if sum_weighted_lat_flux is None:
             sum_weighted_ws_by_lat = lat_sum_weighted_ws
             sum_weighted_lat_flux = lat_sum_weighted_ws * lat

@@ -96,16 +96,23 @@ def archer_caldeira_2008(data):
     #  Step 1. Get monthly means
     mon_mean = data.groupby("time.month").mean()
 
-    #  Step 2. Calculate mass weighted average
+    #  Step 2. Calculate wind-speed from u and v-component wind
+    mon_mean["ws"] = windspeed_utils.get_resultant_wind(
+        mon_mean["ua"], mon_mean["va"]
+    )
+
+    #  Step 3. Calculate mass weighted average
     mass_weighted_average = jetstream_metrics_utils.calc_mass_weighted_average(
-        mon_mean
+        mon_mean, ws_col="ws"
     )
     mass_flux_weighted_pressure = (
-        jetstream_metrics_utils.calc_mass_flux_weighted_pressure(mon_mean)
+        jetstream_metrics_utils.calc_mass_flux_weighted_pressure(
+            mon_mean, ws_col="ws"
+        )
     )
     mass_flux_weighted_latitude = (
         jetstream_metrics_utils.calc_mass_flux_weighted_latitude(
-            mon_mean, lat_min=15, lat_max=75
+            mon_mean, lat_min=15, lat_max=75, ws_col="ws"
         )
     )
     output = data.assign(

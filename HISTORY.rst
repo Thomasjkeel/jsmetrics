@@ -5,6 +5,7 @@ History
 ------------------
 * add Barnes & Polvani 2013, 2015 & Barnes & Simpson 2017 & Kerr et al. 2020
 * Update 'get_latitude_and_speed_where_max_ws' function 
+* Update calc mass_weighted wind 
 
 0.0.5-beta (2022-05-03)
 ------------------

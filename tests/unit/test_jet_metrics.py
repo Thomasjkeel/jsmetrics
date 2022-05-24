@@ -405,15 +405,6 @@ class TestBracegirdle2018(unittest.TestCase):
         self.assertEqual(round(float(result["annual_JSTR"].max()), 3), 8.589)
 
 
-class TestChemkeMing2020(unittest.TestCase):
-    def setUp(self):
-        self.data = set_up_test_uv_data()
-
-    def test_metric(self):
-        result = jetstream_metrics.chemke_and_ming_2020(self.data)
-        self.assertTrue(result)
-
-
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()

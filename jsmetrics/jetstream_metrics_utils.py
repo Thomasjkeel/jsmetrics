@@ -103,6 +103,7 @@ def calc_atmospheric_mass_at_kPa(
     Surface area of earth = 4 Pi R^2 = 5.1E8 km^2
 
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Returns
 
@@ -119,6 +120,7 @@ def calc_atmospheric_mass_at_kPa(
 def get_atm_mass_at_one_hPa(hPa):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -138,6 +140,7 @@ def get_atm_mass_at_one_hPa(hPa):
 def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -161,6 +164,8 @@ def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
 def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
     Get mass-weighted average wind-speed from 'u', 'v' component wind or 'wind vector'.
 
     Parameters
@@ -204,6 +209,7 @@ def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
 def get_sum_atm_mass(data):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -227,6 +233,7 @@ def get_sum_atm_mass(data):
 def calc_mass_weighted_average(data, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     TODO: add equation
 
     Parameters
@@ -361,6 +368,7 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
 def get_zonal_mean(data):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
     Will get the zonal mean either by pressure level (plev) or for one layer
@@ -395,6 +403,8 @@ def get_zonal_mean(data):
 def calc_low_pass_weights(window, cutoff):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
     Calculate weights for a low pass Lanczos filter.
     A low-pass filter removes short-term random fluctations in a time series
 
@@ -429,6 +439,7 @@ def calc_low_pass_weights(window, cutoff):
 def apply_lanczos_filter(dataarray, filter_freq, window_size):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Will carry out Lanczos low-pass filter
 
@@ -476,6 +487,7 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
 def get_latitude_and_speed_where_max_ws(data_row):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
     & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
 
@@ -485,7 +497,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
 
     Parameters
     ----------
-    datarow : xarray.DataArray
+    data_row : xarray.DataArray
         Data of single time unit containing u-component wind
 
     Returns
@@ -503,7 +515,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
     if not data_row.isnull().all():
         data_row = data_row.fillna(0.0)
         max_ws = data_row.where(
-            data_row == data_row.max(), drop=True
+            np.abs(data_row) == np.abs(data_row).max(), drop=True
         ).squeeze()
         if max_ws.size > 1:
             print("Warning: more than one max value found, picking the first!")
@@ -512,7 +524,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
         speed_at_max = float(max_ws.data)
         return lat_at_max, speed_at_max
     else:
-        return None, None
+        return np.nan, np.nan
 
 
 def assign_lat_and_ws_to_data(
@@ -893,6 +905,364 @@ class JetStreamCoreIdentificationAlgorithm:
                     )
                 ] = jet_core["id"]
         return self._lat_ws_slice.values
+
+
+def calc_jet_width_for_one_day(data_row, jet_lat, jet_speed):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Calculates jet width on a given data array using the calculated jet lat and speed at that lat
+
+    Parameters
+    ----------
+    data_row : xarray.DataArray
+        Data of single time unit containing u-component wind
+    jet_lat : int or float
+        Latitude of jet
+    jet_speed : int or float
+        Speed of jet at jet_lat
+
+    Returns
+    ----------
+    jet_widths : array-like
+        Width of jet-stream in latitude. Units for latitude are the same as the input units i.e. likely to be 'degrees_north'
+    """
+    lat_resolution = float(data_row["lat"][1] - data_row["lat"][0])
+    if not jet_speed:
+        return np.nan
+    possible_surrounding_jet_vals = (
+        get_possible_surrounding_jet_lat_vals_for_one_day(data_row, jet_speed)
+    )
+    if possible_surrounding_jet_vals.size == data_row["lat"].size:
+        print("No jet-width determined")
+        return np.nan
+    possible_surrounding_jet_lat_vals = possible_surrounding_jet_vals["lat"]
+    jet_width = get_width_of_jet_from_surrounding_lat_vals(
+        jet_lat, possible_surrounding_jet_lat_vals, lat_resolution
+    )
+    return jet_width
+
+
+def get_possible_surrounding_jet_lat_vals_for_one_day(
+    one_day_wind_data, jet_speed
+):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Returns array of windspeed values that are within half speed of the jet_speed given
+
+    Parameters
+    ----------
+    one_day_wind_data : xarray.DataArray
+        Data of single time unit containing u-component wind
+    jet_speed : int or float
+        Speed of jet at jet_lat
+
+    Returns
+    ----------
+    possible_surrounding_jet_vals : array-like
+        DataArray of True or False as to whether the windspeed value is within half speed of the jet_speed
+    """
+    half_jet_speed = jet_speed / 2
+    possible_surrounding_jet_vals = one_day_wind_data[
+        one_day_wind_data > half_jet_speed
+    ]
+    return possible_surrounding_jet_vals
+
+
+def get_width_of_jet_from_surrounding_lat_vals(
+    jet_lat, possible_surrounding_jet_lat_vals, lat_resolution
+):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Get latitude width of jet around the given jet latitude value. Width given in units of latitude
+
+    Parameters
+    ----------
+    jet_lat : int or float
+        Latitude of jet
+    possible_surrounding_jet_lat_vals : array-like
+        DataArray of lats where the windspeed value is within half speed of the jet_speed
+    lat_resolution : int or float
+        Latitude resolution in degrees
+
+    Returns
+    ----------
+    jet_width : array-like
+        Width of jet-stream in latitude. Unit for latitude are the same as the input units i.e. likely to be 'degrees_north'
+    """
+    lats_within_jet = get_all_surrounding_jet_lats_around_max_lat(
+        jet_lat, possible_surrounding_jet_lat_vals, lat_resolution
+    )
+    if not lats_within_jet:
+        return np.nan
+    jet_width = max(lats_within_jet) - min(lats_within_jet)
+    return jet_width
+
+
+def get_all_surrounding_jet_lats_around_max_lat(
+    jet_lat, possible_surrounding_jet_lat_vals, lat_resolution
+):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Returns all the latitudes in a continuous group (i.e. within one unit of lat resolution) around jet lat
+
+    Parameters
+    ----------
+    jet_lat : int or float
+        Latitude of jet
+    possible_surrounding_jet_lat_vals : array-like
+        DataArray of lats where the windspeed value is within half speed of the jet_speed
+    lat_resolution : int or float
+        Latitude resolution in degrees
+
+    Returns
+    ----------
+    lats_within_jet : list
+        All latitudes in continous group (i.e. within lat_resolution) around jet_lat
+    """
+    lats_within_jet = []
+    lats_at_higher_lats = check_lats_within_jet_in_one_direction(
+        jet_lat, possible_surrounding_jet_lat_vals, lat_resolution
+    )
+    lats_at_lower_lats = check_lats_within_jet_in_one_direction(
+        jet_lat, possible_surrounding_jet_lat_vals, -lat_resolution
+    )
+    lats_within_jet.extend(lats_at_higher_lats)
+    lats_within_jet.extend(lats_at_lower_lats)
+    return lats_within_jet
+
+
+def check_lats_within_jet_in_one_direction(
+    jet_lat, possible_surrounding_jet_lat_vals, amount_to_add_to_lat_val
+):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Creates a list of latitudes that are within a given distance from the jet_lat and only in one direction i.e. increasing or decreasing
+
+    Parameters
+    ----------
+    jet_lat : int or float
+        Latitude of jet
+    possible_surrounding_jet_lat_vals : array-like
+        DataArray of lats where the windspeed value is within half speed of the jet_speed
+    amount_to_add_to_lat_val : int or float
+        Check if lat within this amount
+
+    Returns
+    ----------
+    lats_within_jet : list
+        All latitudes in continous group (i.e. within lat_resolution) around jet_lat
+    """
+    lats_within_jet = []
+    current_lat = jet_lat
+    current_lat_is_within_range = True
+    while current_lat_is_within_range:
+        if current_lat in possible_surrounding_jet_lat_vals:
+            lats_within_jet.append(current_lat)
+        else:
+            current_lat_is_within_range = False
+        current_lat += amount_to_add_to_lat_val
+    return lats_within_jet
+
+
+def scale_lat_vals_with_quadratic_func(lats, speeds, scaled_lats):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    Will downscale or upscale the resolution of latitude using a quadratic func
+
+    Parameters
+    ----------
+    lats : xr.DataArray or array-like
+        Array of latitude values
+    speeds :  xr.DataArray or array-like
+        Array of wind-speeds
+    scaled_lats : array-like
+        Array of scaled latitude values of a given resolution (see rescale_lat_resolution function)
+
+    Returns
+    ----------
+    scaled_lat_vals : xr.DataArray or array-like
+        Array of rescaled latitude values based scaled_lats
+    """
+    scaled_lat_vals = apply_quadratic_func(lats, speeds, scaled_lats)
+    return scaled_lat_vals
+
+
+def rescale_lat_resolution(lats, lat_resolution):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
+
+    TODO: what if larger resolution
+
+    Parameters
+    ----------
+    lats : xr.DataArray or array-like
+        Array of latitude values
+    lat_resolution : int or float
+        Latitude resolution in degrees
+
+    Returns
+    ----------
+    output : numpy.array
+        Rescaled array of latitude values
+    """
+    return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
+
+
+def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
+    lats_and_ws, lat_resolution
+):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    Makes use of the quadratic func to scale latitude values
+
+    Parameters
+    ----------
+    lats_and_ws : xr.DataArray or array-like
+        Array of latitudes and windspeeds
+    lat_resolution : int or float
+        Latitude resolution in degrees
+
+    Returns
+    ----------
+    output : numpy.array
+        latitude and wind-speed value scaled by quadratic func
+    """
+    lats, ws = lats_and_ws
+    scaled_lats = rescale_lat_resolution(lats, lat_resolution)
+    scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, scaled_lats)
+    decimal_places = general_utils.get_num_of_decimal_places(lat_resolution)
+    max_speed_at_scaled_lat = np.max(scaled_lat_vals)
+    return (
+        round(scaled_lats[np.argmax(scaled_lat_vals)], decimal_places),
+        max_speed_at_scaled_lat,
+    )
+
+
+def get_3_latitudes_and_speed_around_max_ws(row):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    Will get the latitudes neighbouring to east, at and to west where the max windspeed is found
+
+    Parameters
+    --------------
+    row : xr.DataArray or array-like
+        Array containing latitude and wind-speed values
+
+    Returns
+    ----------
+    neighbouring_lats : array-like
+        array of 3 neighbouring latitude coordinates around where maximum windspeed is found in input (row)
+    neighbouring_speeds : array-like
+        array of 3 neighbouring winspeeds values around where maximum windspeed is found in input (row)
+    """
+    assert "lat" in row.coords, "'lat' needs to be in data.coords"
+
+    lat_resolution = float(row["lat"][1] - row["lat"][0])
+    lat_min, lat_max = float(row["lat"].min()), float(row["lat"].max())
+    max_lat, _ = get_latitude_and_speed_where_max_ws(row)
+    if np.isnan(max_lat):
+        # occurs when no data in slice
+        return (
+            np.array([np.nan, np.nan, np.nan], dtype="float64"),
+            np.array([np.nan, np.nan, np.nan], dtype="float64"),
+        )
+    neighbouring_lats = get_3_neighbouring_coord_values(
+        max_lat, lat_resolution
+    )
+    neighbouring_lats = neighbouring_lats[
+        (neighbouring_lats >= lat_min) & (neighbouring_lats <= lat_max)
+    ]
+    neighbouring_speeds = row.sel(lat=neighbouring_lats).data
+    return (neighbouring_lats, neighbouring_speeds)
+
+
+def get_3_neighbouring_coord_values(coord_val, coord_resolution):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    TODO: add to JetStreamOccurenceAndCentreAlgorithm and ...
+
+    Parameters
+    ----------
+    coord_val : int or float
+        Central coord value to get neighbours from
+    coord_resolution : int or float
+        in degrees
+
+    Returns
+    ----------
+    output : array-like
+        array of 3 neighbouring latitude coordinates
+
+    Usage
+    ----------
+    get_3_neighbouring_coord_values(45.0, 1.25)
+    >>> np.array([43.75, 45.0, 46.25])
+    """
+    if not isinstance(coord_val, float) or not isinstance(
+        coord_resolution, float
+    ):
+        coord_val = float(coord_val)
+        coord_resolution = float(coord_resolution)
+
+    return np.array(
+        [coord_val - coord_resolution, coord_val, coord_val + coord_resolution]
+    )
+
+
+def quadratic_func(x, y):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+
+    Parameters
+    ----------
+    x : xr.DataArray or array-like
+        Array 1
+    y : xr.DataArray or array-like
+        Array 2
+    """
+    p = np.polyfit(x, y, deg=2)
+    return p
+
+
+def apply_quadratic_func(x, y, vals):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+
+    Parameters
+    ----------
+    x : xr.DataArray or array-like
+        Array 1
+    y : xr.DataArray or array-like
+        Array 2
+    vals : array-like
+        Values to apply function to
+
+    Returns
+    ----------
+    output : array-like
+        quadratic function output
+    """
+    a, b, c = quadratic_func(x, y)
+    return (a * vals**2) + (b * vals) + c
 
 
 def get_empty_local_wind_maxima_data(data):
@@ -1487,179 +1857,6 @@ def assign_ten_day_average_lat_ws_by_sector_to_data(data, ten_day_mean):
             ),
         }
     )
-
-
-def get_3_latitudes_and_speed_around_max_ws(row):
-    """
-    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-    Will get the latitudes neighbouring to east, at and to west where the max windspeed is found
-
-    Parameters
-    --------------
-    row : xr.DataArray or array-like
-        Array containing latitude and wind-speed values
-
-    Returns
-    ----------
-    neighbouring_lats : array-like
-        array of 3 neighbouring latitude coordinates around where maximum windspeed is found in input (row)
-    neighbouring_speeds : array-like
-        array of 3 neighbouring winspeeds values around where maximum windspeed is found in input (row)
-    """
-    assert "lat" in row.coords, "'lat' needs to be in data.coords"
-
-    lat_resolution = float(row["lat"][1] - row["lat"][0])
-    lat_min, lat_max = float(row["lat"].min()), float(row["lat"].max())
-    max_lat, _ = get_latitude_and_speed_where_max_ws(row)
-    neighbouring_lats = get_3_neighbouring_coord_values(
-        max_lat, lat_resolution
-    )
-    neighbouring_lats = neighbouring_lats[
-        (neighbouring_lats >= lat_min) & (neighbouring_lats <= lat_max)
-    ]
-    neighbouring_speeds = row.sel(lat=neighbouring_lats).data
-    return (neighbouring_lats, neighbouring_speeds)
-
-
-def get_3_neighbouring_coord_values(coord_val, coord_resolution):
-    """
-    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-    TODO: add to JetStreamOccurenceAndCentreAlgorithm and ...
-
-    Parameters
-    ----------
-    coord_val : int or float
-        Central coord value to get neighbours from
-    coord_resolution : int or float
-        in degrees
-
-    Returns
-    ----------
-    output : array-like
-        array of 3 neighbouring latitude coordinates
-
-    Usage
-    ----------
-    get_3_neighbouring_coord_values(45.0, 1.25)
-    >>> np.array([43.75, 45.0, 46.25])
-    """
-    if not isinstance(coord_val, float) or not isinstance(
-        coord_resolution, float
-    ):
-        coord_val = float(coord_val)
-        coord_resolution = float(coord_resolution)
-
-    return np.array(
-        [coord_val - coord_resolution, coord_val, coord_val + coord_resolution]
-    )
-
-
-def quadratic_func(x, y):
-    """
-    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-
-    Parameters
-    ----------
-    x : xr.DataArray or array-like
-        Array 1
-    y : xr.DataArray or array-like
-        Array 2
-    """
-    p = np.polyfit(x, y, deg=2)
-    return p
-
-
-def apply_quadratic_func(x, y, vals):
-    """
-    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-
-    Parameters
-    ----------
-    x : xr.DataArray or array-like
-        Array 1
-    y : xr.DataArray or array-like
-        Array 2
-    vals : array-like
-        Values to apply function to
-
-    Returns
-    ----------
-    output : array-like
-        quadratic function output
-    """
-    a, b, c = quadratic_func(x, y)
-    return (a * vals**2) + (b * vals) + c
-
-
-def scale_lat_vals_with_quadratic_func(lats, speeds, scaled_lats):
-    """
-    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-    Will downscale or upscale the resolution of latitude using a quadratic func
-
-    Parameters
-    ----------
-    lats : xr.DataArray or array-like
-        Array of latitude values
-    speeds :  xr.DataArray or array-like
-        Array of wind-speeds
-    scaled_lats : array-like
-        Array of scaled latitude values of a given resolution (see rescale_lat_resolution function)
-
-    Returns
-    ----------
-    scaled_lat_vals : xr.DataArray or array-like
-        Array of rescaled latitude values based scaled_lats
-    """
-    scaled_lat_vals = apply_quadratic_func(lats, speeds, scaled_lats)
-    return scaled_lat_vals
-
-
-def rescale_lat_resolution(lats, lat_resolution):
-    """
-    Component of method from Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
-    & Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-
-    TODO: what if larger resolution
-
-    Parameters
-    ----------
-    lats : xr.DataArray or array-like
-        Array of latitude values
-    lat_resolution : int or float
-        Latitude resolution in degrees
-
-    Returns
-    ----------
-    output : numpy.array
-        Rescaled array of latitude values
-    """
-    return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
-
-
-def get_latitude_where_max_ws_at_reduced_resolution(
-    lats_and_ws, lat_resolution
-):
-    """
-    Component of method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-    Makes use of the quadratic func to scale latitude values
-
-    Parameters
-    ----------
-    lats_and_ws : xr.DataArray or array-like
-        Array of latitudes and windspeeds
-    lat_resolution : int or float
-        Latitude resolution in degrees
-
-    Returns
-    ----------
-    output : numpy.array
-        latitdue values scaled by quadratic func
-    """
-    lats, ws = lats_and_ws
-    scaled_lats = rescale_lat_resolution(lats, lat_resolution)
-    scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, scaled_lats)
-    decimal_places = general_utils.get_num_of_decimal_places(lat_resolution)
-    return round(scaled_lats[np.argmax(scaled_lat_vals)], decimal_places)
 
 
 def get_centroid_jet_lat(data):

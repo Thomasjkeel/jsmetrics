@@ -271,21 +271,95 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     return output
 
 
-def barnes_polvani_2013(data):
+def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     """
     Method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Pressure weighted u-component wind then gets low-pass lanczos filtered (10-day, 41 weights) and 0.01 quadratic function applied
+    for jet-lat and speed. "We define the jet width as the full width at half of the maximum jet speed".
 
     Parameters
     ----------
     data : xarray.Dataset
         Data containing u-component wind
+    filter_freq : int
+        number of days in filter (default=10 timeunits)
+    window_size : int
+        number of days in window for low-pass Lancoz filter (default=41 timeunits)
 
     Returns
     ----------
     output : xarray.Dataset
-        Data containing jet-stream position
+        Data containing values for z_lat, z_spd, z_width for jet-stream latitude, speed and width
     """
-    return data
+    #  Step 1. Get pressure-weighted u-component wind
+    pressure_weighted_ua = jetstream_metrics_utils.calc_mass_weighted_average(
+        data, ws_col="ua"
+    )
+    #  Step 2. Filter pressure-weighted u-component wind with low-pass Lanczos filter
+    filtered_pressure_weighted_ua = (
+        jetstream_metrics_utils.apply_lanczos_filter(
+            pressure_weighted_ua,
+            filter_freq=filter_freq,
+            window_size=window_size,
+        )
+    )
+    #  Step 3. Turn dataarray into dataset for next part
+    filtered_pressure_weighted_ua = filtered_pressure_weighted_ua.to_dataset(
+        name="ua"
+    )
+
+    #  Step 4.  Get max latitude and wind speed at max
+    zonal_mean = jetstream_metrics_utils.get_zonal_mean(
+        filtered_pressure_weighted_ua
+    )
+    all_max_lats_and_ws = np.array(
+        list(
+            map(
+                jetstream_metrics_utils.get_3_latitudes_and_speed_around_max_ws,
+                zonal_mean["ua"],
+            )
+        )
+    )
+
+    #  Step 5. Scale max latitude to 0.01 degree using quadratic function
+    scaled_max_lats = []
+    scaled_max_ws = []
+    for max_lat_and_ws in all_max_lats_and_ws:
+        if not np.isnan(np.min(max_lat_and_ws)):
+            (
+                scaled_max_lat,
+                scaled_ws,
+            ) = jetstream_metrics_utils.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
+                max_lat_and_ws, lat_resolution=0.01
+            )
+            scaled_max_lats.append(scaled_max_lat)
+            scaled_max_ws.append(scaled_ws)
+        else:
+            scaled_max_lats.append(np.nan)
+            scaled_max_ws.append(np.nan)
+
+    #  Step 6. Get jet-widths using scaled windspeed and usual jet-lat
+    max_lats = all_max_lats_and_ws[::, 0, 1]
+    jet_widths = list(
+        map(
+            lambda zm, la, wa: jetstream_metrics_utils.calc_jet_width_for_one_day(
+                zm, la, wa
+            ),
+            zonal_mean["ua"],
+            max_lats,
+            scaled_max_ws,
+        )
+    )
+
+    output = data.assign(
+        {
+            "jet_lat_0.01": (("time"), scaled_max_lats),
+            "jet_speed_0.01": (("time"), scaled_max_ws),
+            "jet_width": (("time"), jet_widths),
+        }
+    )
+    return output
 
 
 def penaortiz_et_al_2013(data):
@@ -573,14 +647,24 @@ def grise_polvani_2017(data):
 
     #  Step 3. Apply quadratic function to get max latitude at 0.01 degree resolution
     scaled_max_lats = []
+    scaled_max_ws = []
     for max_lat_and_ws in all_max_lats_and_ws:
-        scaled_max_lat = jetstream_metrics_utils.get_latitude_where_max_ws_at_reduced_resolution(
+        (
+            scaled_max_lat,
+            scaled_ws,
+        ) = jetstream_metrics_utils.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
             max_lat_and_ws, lat_resolution=0.01
         )
         scaled_max_lats.append(scaled_max_lat)
+        scaled_max_ws.append(scaled_ws)
 
     #  Step 4. Assign scaled max lats back to data
-    output = data.assign({"max_lat_0.01": (("time"), scaled_max_lats)})
+    output = data.assign(
+        {
+            "max_lat_0.01": (("time"), scaled_max_lats),
+            "max_speed_0.01": (("time"), scaled_max_ws),
+        }
+    )
     return output
 
 

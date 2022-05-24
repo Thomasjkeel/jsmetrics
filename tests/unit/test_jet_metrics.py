@@ -240,13 +240,13 @@ class TestWoolings2010(unittest.TestCase):
         )
         self.assertRaises(AttributeError, lambda: tested_func(["lol"]))
         tested_data = self.data["ua"].isel(plev=0, lon=0, time=0)
-        self.assertEqual(tested_func(tested_data)[0], 70.0)
-        self.assertEqual(tested_func(tested_data)[1], 3.105090856552124)
+        self.assertEqual(tested_func(tested_data)[0], 81.25)
+        self.assertEqual(tested_func(tested_data)[1], -9.87109375)
         self.assertRaises(
             KeyError, lambda: tested_func(tested_data.rename({"lat": "lt"}))
         )
         nan_dataset = set_up_nan_dataset()
-        self.assertEqual(tested_func(nan_dataset), (None, None))
+        self.assertEqual(tested_func(nan_dataset), (np.nan, np.nan))
 
     def test_apply_fourier_filter(self):
         tested_func = jetstream_metrics_utils.apply_low_freq_fourier_filter
@@ -367,6 +367,9 @@ class TestGrisePolvani2017(unittest.TestCase):
         result = jetstream_metrics.grise_polvani_2017(self.data)
         self.assertEqual(float(result["max_lat_0.01"].min()), 35.38)
         self.assertEqual(float(result["max_lat_0.01"].max()), 36.41)
+        self.assertEqual(
+            float(result["max_speed_0.01"].max()), 22.926441912353482
+        )
 
 
 class TestCeppi2018(unittest.TestCase):
@@ -381,13 +384,13 @@ class TestCeppi2018(unittest.TestCase):
         )
 
 
-class TestKern2018(unittest.TestCase):
-    def setUp(self):
-        self.data = set_up_test_uv_data()
+# class TestKern2018(unittest.TestCase):
+#     def setUp(self):
+#         self.data = set_up_test_uv_data()
 
-    def test_metric(self):
-        result = jetstream_metrics.kern_et_al_2018(self.data)
-        self.assertTrue(result)
+#     def test_metric(self):
+#         result = jetstream_metrics.kern_et_al_2018(self.data)
+#         self.assertTrue(result)
 
 
 class TestBracegirdle2018(unittest.TestCase):

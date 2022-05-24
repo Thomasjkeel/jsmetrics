@@ -278,7 +278,7 @@ class TestBarnesPolvani2013(unittest.TestCase):
         )
         self.assertIsInstance(result, xr.Dataset)
         self.assertEqual(result["jet_lat_0.01"][1], 35.85)
-        self.assertEqual(float(result["jet_speed_0.01"][2]), 33.11340089981684)
+        self.assertEqual(round(float(result["jet_speed_0.01"][2]), 5), 33.1134)
         self.assertEqual(float(result["jet_width"][1]), 17.5)
 
 
@@ -382,7 +382,7 @@ class TestGrisePolvani2017(unittest.TestCase):
         self.assertEqual(float(result["max_lat_0.01"].min()), 35.38)
         self.assertEqual(float(result["max_lat_0.01"].max()), 36.41)
         self.assertEqual(
-            float(result["max_speed_0.01"].max()), 22.92644191235354
+            round(float(result["max_speed_0.01"].max()), 5), 22.92644
         )
 
 

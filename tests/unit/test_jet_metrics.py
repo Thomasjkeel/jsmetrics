@@ -183,7 +183,7 @@ class TestSchiemann2009(unittest.TestCase):
         self.assertTrue(result)
 
 
-class TestWoolings2010(unittest.TestCase):
+class TestWoollings2010(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()
         # self.data = make_fake_seasonal_data(self.data)
@@ -202,7 +202,7 @@ class TestWoolings2010(unittest.TestCase):
         return test_sig
 
     def test_metric(self):
-        result = jetstream_metrics.woolings_et_al_2010(
+        result = jetstream_metrics.woollings_et_al_2010(
             self.data, filter_freq=1, window_size=2
         )
         self.assertIsInstance(result, xr.Dataset)

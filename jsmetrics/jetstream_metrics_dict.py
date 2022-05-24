@@ -52,11 +52,11 @@ JETSTREAM_METRIC_DICT = {
         "description": "",
         "doi": "https://doi.org/10.1175/2008JCLI2625.1",
     },
-    "Woolings2010": {
+    "Woollings2010": {
         "variables": ["ua"],
         "coords": {"plev": [70000, 92500], "lat": [15, 75], "lon": [120, 180]},
         "plev_units": "Pa",
-        "metric": jetstream_metrics.woolings_et_al_2010,
+        "metric": jetstream_metrics.woollings_et_al_2010,
         "name": "Woolings et al. 2010",
         "description": "",
         "doi": "https://onlinelibrary.wiley.com/doi/10.1002/qj.625",

@@ -162,9 +162,9 @@ def schiemann_et_al_2009(data):
     return output
 
 
-def woolings_et_al_2010(data, filter_freq=10, window_size=61):
+def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     """
-    Method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
     Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woolings et al. (2010).
     Will calculate this metric based on data (regardless of pressure level of time span etc.).

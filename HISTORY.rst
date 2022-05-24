@@ -1,9 +1,13 @@
 =======
 History
 =======
-0.0.5 (2022-05-24)
+0.0.6-alpha (2022-05-24)
 ------------------
-* add Barnes & Polvani 2013, 2015 & Barnes & Simpson 2017 & Kerr et al. 2020
+* add Barnes & Polvani 2015 & Barnes & Simpson 2017 & Kerr et al. 2020
+
+0.0.5 (2022-05-23)
+------------------
+* add Barnes & Polvani 2013
 * Update 'get_latitude_and_speed_where_max_ws' function 
 * Update calc_mass_weighted wind 
 BIG CHANGES:

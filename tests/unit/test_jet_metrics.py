@@ -268,6 +268,20 @@ class TestManney2011(unittest.TestCase):
         # jetstream_metrics.manney_et_al_2011(subset_data.transpose("lat", ...))
 
 
+class TestBarnesPolvani2013(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        result = jetstream_metrics.barnes_polvani_2013(
+            self.data, filter_freq=1, window_size=2
+        )
+        self.assertIsInstance(result, xr.Dataset)
+        self.assertEqual(result["jet_lat_0.01"][1], 35.85)
+        self.assertEqual(float(result["jet_speed_0.01"][2]), 33.11340089981684)
+        self.assertEqual(float(result["jet_width"][1]), 17.5)
+
+
 class TestPenaOrtiz2013(unittest.TestCase):
     def setUp(self):
         # TODO

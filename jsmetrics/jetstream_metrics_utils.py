@@ -1113,6 +1113,7 @@ def rescale_lat_resolution(lats, lat_resolution):
     output : numpy.array
         Rescaled array of latitude values
     """
+    print(min(lats), max(lats) + lat_resolution, lat_resolution)
     return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
 
 

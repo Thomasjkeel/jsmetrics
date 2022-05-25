@@ -372,7 +372,6 @@ def get_zonal_mean(data):
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
     Will get the zonal mean either by pressure level (plev) or for one layer
-    Used in Woolings et al. 2010 & Grise & Polvani 2017
     TODO: add to Archer & Caldiera
 
     Parameters

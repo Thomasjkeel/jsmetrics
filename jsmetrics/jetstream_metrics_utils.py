@@ -518,7 +518,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
             np.abs(data_row) == np.abs(data_row).max(), drop=True
         ).squeeze()
         if max_ws.size > 1:
-            print("Warning: more than one max value found, picking the first!")
+            print("Warning: more than one max value found, picking the max!")
             max_ws = max_ws[0].max()
         lat_at_max = float(max_ws["lat"])
         speed_at_max = float(max_ws.data)

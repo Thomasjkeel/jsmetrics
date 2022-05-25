@@ -1113,8 +1113,6 @@ def rescale_lat_resolution(lats, lat_resolution):
     output : numpy.array
         Rescaled array of latitude values
     """
-    #  Remove numpy.nan from list
-    lats = [lat for lat in lats if not np.isnan(lat)]
     return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
 
 
@@ -1140,6 +1138,10 @@ def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
         latitude and wind-speed value scaled by quadratic func
     """
     lats, ws = lats_and_ws
+    #  Remove numpy.nan from list
+    lats = [lat for lat in lats if not np.isnan(lat)]
+    ws = [s for s in ws if not np.isnan(s)]
+    #  Scale lats
     scaled_lats = rescale_lat_resolution(lats, lat_resolution)
     scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, scaled_lats)
     decimal_places = general_utils.get_num_of_decimal_places(lat_resolution)

@@ -1,10 +1,11 @@
 =======
 History
 =======
-0.0.6-alpha (2022-05-24)
+0.0.6-alpha (2022-05-25)
 ------------------
 * add Barnes & Polvani 2015 & Barnes & Simpson 2017 & Kerr et al. 2020
 * Fix 'get_latitude_and_speed_where_max_ws' so it can take one value 
+* Fix Barnes & Simpson 2017 and Woollings et al. 2010 and change name of col
 
 0.0.5 (2022-05-23)
 ------------------

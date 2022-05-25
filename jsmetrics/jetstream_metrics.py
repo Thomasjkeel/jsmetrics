@@ -203,8 +203,10 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
             )
         )
     )
-    zonal_mean_lat_ws = jetstream_metrics_utils.assign_lat_and_ws_to_data(
-        zonal_mean, max_lat_ws
+    zonal_mean_lat_ws = (
+        jetstream_metrics_utils.assign_jet_lat_and_speed_to_data(
+            zonal_mean, max_lat_ws
+        )
     )
     # Step 4: Make seasonal climatology
     climatology = general_utils.get_climatology(zonal_mean_lat_ws, "season")
@@ -212,17 +214,17 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     # Step 5: Apply low-freq fourier filter to both max lats and max ws
     fourier_filtered_lats = (
         jetstream_metrics_utils.apply_low_freq_fourier_filter(
-            climatology["max_lats"].values, highest_freq_to_keep=2
+            climatology["jet_lat"].values, highest_freq_to_keep=2
         )
     )
     fourier_filtered_ws = (
         jetstream_metrics_utils.apply_low_freq_fourier_filter(
-            climatology["max_ws"].values, highest_freq_to_keep=2
+            climatology["jet_speed"].values, highest_freq_to_keep=2
         )
     )
 
     # Step 6: Join filtered climatology back to the data
-    time_dim = climatology["max_ws"].dims[0]
+    time_dim = climatology["jet_speed"].dims[0]
     fourier_filtered_data = (
         jetstream_metrics_utils.assign_filtered_lats_and_ws_to_data(
             zonal_mean_lat_ws,
@@ -582,29 +584,16 @@ def barnes_simpson_2017(data):
         Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
     """
     ten_day_mean = data.resample(time="10D").mean()
-    north_pacific_sector = ten_day_mean.sel(lon=slice(120, 230))["ua"]
-    north_atlantic_sector = ten_day_mean.sel(lon=slice(280, 350))["ua"]
-
-    if (
-        not north_atlantic_sector["lon"].size > 1
-        or not north_pacific_sector["lon"].size > 1
-    ):
-        raise ValueError(
-            "Data needs to have values for between 120.E and 350.E to calculate North Pacific and North Atlantic sectors"
-        )
     ten_day_mean = (
-        jetstream_metrics_utils.assign_lat_ws_by_sector_to_ten_day_mean_data(
-            ten_day_mean, north_atlantic_sector, "north_atlantic"
-        )
-    )
-    ten_day_mean = (
-        jetstream_metrics_utils.assign_lat_ws_by_sector_to_ten_day_mean_data(
-            ten_day_mean, north_pacific_sector, "north_pacific"
+        jetstream_metrics_utils.assign_jet_lat_speed_to_ten_day_mean_data(
+            ten_day_mean
         )
     )
     ten_day_mean = ten_day_mean.rename_dims({"time": "10_day_average"})
-    data = jetstream_metrics_utils.assign_ten_day_average_lat_ws_by_sector_to_data(
-        data, ten_day_mean
+    data = (
+        jetstream_metrics_utils.assign_ten_day_average_jet_lat_speed_to_data(
+            data, ten_day_mean
+        )
     )
     return data
 

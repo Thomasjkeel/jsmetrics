@@ -527,8 +527,8 @@ def get_latitude_and_speed_where_max_ws(data_row):
         return np.nan, np.nan
 
 
-def assign_lat_and_ws_to_data(
-    data, max_lat_ws, max_lats_col="max_lats", max_ws_col="max_ws"
+def assign_jet_lat_and_speed_to_data(
+    data, max_lat_ws, max_lats_col="jet_lat", max_ws_col="jet_speed"
 ):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
@@ -623,12 +623,12 @@ def assign_filtered_lats_and_ws_to_data(
     """
     filtered_data = data.assign(
         {
-            "ff_max_lats": ((dim), filtered_max_lats),
-            "ff_max_ws": ((dim), filtered_max_ws),
+            "ff_jet_lat": ((dim), filtered_max_lats),
+            "ff_jet_speed": ((dim), filtered_max_ws),
         }
     )
-    filtered_data["ff_max_lats"] = filtered_data["ff_max_lats"].astype(float)
-    filtered_data["ff_max_ws"] = filtered_data["ff_max_ws"].astype(float)
+    filtered_data["ff_jet_lat"] = filtered_data["ff_jet_lat"].astype(float)
+    filtered_data["ff_jet_speed"] = filtered_data["ff_jet_speed"].astype(float)
     return filtered_data
 
 
@@ -1772,9 +1772,7 @@ def calc_great_circle_sinousity(line1, line2):
     ) / calc_total_great_circle_distance_along_line(line2)
 
 
-def assign_lat_ws_by_sector_to_ten_day_mean_data(
-    ten_day_mean, sector, sector_name
-):
+def assign_jet_lat_speed_to_ten_day_mean_data(ten_day_mean):
     """
     Joins the values for latitude and windspeed of the point of maximum windspeed for a given sector to the ten_day_mean data
 
@@ -1784,51 +1782,22 @@ def assign_lat_ws_by_sector_to_ten_day_mean_data(
     ----------
     ten_day_mean : xarray.Dataset
         Data containing u-component wind and resampled by 10 days
-    sector : xarray.DataArray
-        Data array of u-component wind for one sector (i.e. either North Atlantic (280.E to 350. E) or North Pacific (120.E to 230. E))
-    sector_name : str
-        Name of sector (i.e. either North Atlantic or North Pacific)
 
     Returns
     ----------
     ten_day_mean : xarray.Dataset
-        Data with max latitude and max windspeed for the sector
+        Data with jet latitude and windspeed
     """
-    sector_max_lats_ws = get_max_lats_and_ws_by_sector(sector)
-    max_lats_col = "%s_max_lats" % (sector_name)
-    max_ws_col = "%s_max_ws" % (sector_name)
-    ten_day_mean = assign_lat_and_ws_to_data(
-        ten_day_mean,
-        sector_max_lats_ws,
-        max_lats_col=max_lats_col,
-        max_ws_col=max_ws_col,
+    max_lats_ws = np.array(
+        list(map(get_latitude_and_speed_where_max_ws, ten_day_mean["ua"]))
     )
+    ten_day_mean = assign_jet_lat_and_speed_to_data(ten_day_mean, max_lats_ws)
     return ten_day_mean
 
 
-def get_max_lats_and_ws_by_sector(sector):
+def assign_ten_day_average_jet_lat_speed_to_data(data, ten_day_mean):
     """
-    Gets values for windspeed and latitude for the place with highest windspeed for a given sector/region
-
-    Component of method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
-
-    Parameters
-    ----------
-    sector : xarray.DataArray
-        Data array of u-component wind for one sector (i.e. either North Atlantic (280.E to 350. E) or North Pacific (120.E to 230. E))
-
-    Returns
-    ----------
-    outputs : numpy.array
-        Array with max latitude and max windspeed for the sector
-    """
-    return np.array(list(map(get_latitude_and_speed_where_max_ws, sector)))
-
-
-def assign_ten_day_average_lat_ws_by_sector_to_data(data, ten_day_mean):
-    """
-    Joins the values for latitude and windspeed of the point of maximum windspeed for two sectors
-    (i.e. either North Atlantic (280.E to 350. E) or North Pacific (120.E to 230. E)) to the main data
+    Joins the values for latitude and windspeed of the point of maximum windspeed to the main data
 
     Component of method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
 
@@ -1840,30 +1809,12 @@ def assign_ten_day_average_lat_ws_by_sector_to_data(data, ten_day_mean):
     Returns
     ----------
     output : xarray.Dataset
-        Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
+        Data with jet latitude and windspeed
     """
     return data.assign(
         {
-            "10_day_average_start_date": (
-                ("10_day_average"),
-                ten_day_mean["10_day_average"]["time"].data,
-            ),
-            "north_atlantic_max_lats": (
-                ("10_day_average"),
-                ten_day_mean["north_atlantic_max_lats"].data,
-            ),
-            "north_atlantic_max_ws": (
-                ("10_day_average"),
-                ten_day_mean["north_atlantic_max_ws"].data,
-            ),
-            "north_pacific_max_lats": (
-                ("10_day_average"),
-                ten_day_mean["north_pacific_max_lats"].data,
-            ),
-            "north_pacific_max_ws": (
-                ("10_day_average"),
-                ten_day_mean["north_pacific_max_ws"].data,
-            ),
+            "jet_lat": (("10_day_average"), ten_day_mean["jet_lat"].data),
+            "jet_speed": (("10_day_average"), ten_day_mean["jet_speed"].data),
         }
     )
 

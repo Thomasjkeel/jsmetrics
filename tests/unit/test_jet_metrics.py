@@ -206,8 +206,8 @@ class TestWoollings2010(unittest.TestCase):
             self.data, filter_freq=1, window_size=2
         )
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(result["ff_max_lats"][0], 36.25)
-        self.assertEqual(result["ff_max_ws"][0], 43.365413665771484)
+        self.assertEqual(result["ff_jet_lat"][0], 36.25)
+        self.assertEqual(result["ff_jet_speed"][0], 43.365413665771484)
 
     def test_get_zonal_mean(self):
         tested_func = jetstream_metrics_utils.get_zonal_mean
@@ -363,14 +363,8 @@ class TestBarnesSimpson2017(unittest.TestCase):
     def test_metric(self):
         test_func = jetstream_metrics.barnes_simpson_2017
         result = test_func(self.data)
-        self.assertEqual(float(result["north_atlantic_max_lats"].max()), 36.25)
-        self.assertEqual(float(result["north_pacific_max_lats"].max()), 32.5)
-        one_lon_data = self.data.isel(lon=slice(0, 1))
-        only_north_atlantic_data = self.data.sel(lon=slice(280, 350))
-        self.assertRaises(ValueError, lambda: test_func(one_lon_data))
-        self.assertRaises(
-            ValueError, lambda: test_func(only_north_atlantic_data)
-        )
+        self.assertEqual(float(result["jet_lat"].max()), 51.25)
+        self.assertEqual(round(float(result["jet_speed"].max()), 5), 86.99976)
 
 
 class TestGrisePolvani2017(unittest.TestCase):

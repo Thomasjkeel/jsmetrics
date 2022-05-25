@@ -5,6 +5,7 @@ History
 0.0.6-beta (2022-05-25)
 ------------------
 * add Barnes & Polvani 2015 & Barnes & Simpson 2017 & Kerr et al. 2020
+* Fix 'get_latitude_and_speed_where_max_ws_at_reduced_resolution' with check for np.nans
 
 0.0.6-alpha (2022-05-25)
 ------------------

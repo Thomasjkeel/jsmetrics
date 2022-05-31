@@ -1708,12 +1708,10 @@ def get_one_contour_linestring(dataarray, contour_level):
     ), "Data array needs to have latitude and longitude coords"
     one_contour = dataarray.plot.contour(levels=[contour_level])
     matplotlib.pyplot.close()
-    if len(one_contour.allsegs[0]) > 1:
-        contour_line = shapely.geometry.MultiLineString(
-            (one_contour.allsegs[0])
-        )
+    if len(one_contour.geoms[0]) > 1:
+        contour_line = shapely.geometry.MultiLineString((one_contour.geoms[0]))
     else:
-        contour_line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
+        contour_line = shapely.geometry.LineString((one_contour.geoms[0][0]))
     return contour_line
 
 

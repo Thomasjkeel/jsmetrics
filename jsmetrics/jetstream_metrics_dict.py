@@ -99,7 +99,7 @@ JETSTREAM_METRIC_DICT = {
     },
     "Kuang2014": {
         "variables": ["ua", "va"],
-        "coords": {"plev": [20000, 25000]},
+        "coords": {"plev": [20000, 20000]},
         "plev_units": "Pa",
         "metric": jetstream_metrics.kuang_et_al_2014,
         "name": "Kuang et al. 2014.",

@@ -1709,9 +1709,13 @@ def get_one_contour_linestring(dataarray, contour_level):
     one_contour = dataarray.plot.contour(levels=[contour_level])
     matplotlib.pyplot.close()
     if len(one_contour.allsegs[0]) > 1:
-        contour_line = shapely.geometry.MultiLineString(
-            (one_contour.allsegs[0])
-        )
+        try:
+            contour_line = shapely.geometry.MultiLineString(
+                (one_contour.allsegs[0])
+            )
+        except ValueError as ve:
+            print(ve)
+            return np.nan
     else:
         contour_line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
     return contour_line
@@ -1743,10 +1747,12 @@ def calc_total_great_circle_distance_along_line(line):
                     shapely.geometry.LineString((line[i]))
                 )
             )
-    else:
+    elif isinstance(line, shapely.geometry.LineString):
         total_distance += (
             general_utils.get_great_circle_distance_along_linestring(line)
         )
+    else:
+        return np.nan
     return total_distance
 
 

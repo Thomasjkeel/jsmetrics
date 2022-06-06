@@ -326,6 +326,19 @@ class TestKuang2014(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(lon_data))
 
 
+class TestBarnesPolvani2015(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        result = jetstream_metrics.barnes_polvani_2015(self.data)
+        self.assertEqual(float(result["jet_lat"].mean()), 42.5)
+        self.assertEqual(result["jet_lat"].max(), 42.5)
+        self.assertEqual(result["jet_lat"].min(), 42.5)
+        self.assertEqual(round(float(result["jet_speed"].max()), 5), 14.76429)
+        self.assertEqual(round(float(result["jet_speed"].min()), 5), 14.06167)
+
+
 class TestFrancisVavrus2015(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()

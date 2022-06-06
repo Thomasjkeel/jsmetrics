@@ -1990,3 +1990,70 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
         max_lats.append(lat)
         max_ws.append(ws)
     return max_lats, max_ws
+
+
+def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row):
+    """
+    Component of method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+    Parameters
+    ----------
+    data_row : xarray.DataArray
+        Data containing u-component windspeed of one time unit
+
+    Returns
+    ----------
+    smoothed_jet_lat : xarray.Dataset
+        Data containing jet-stream position
+    """
+    data_row["jet_lat_by_lon"] = get_jet_lat_by_lon(data_row["ua"])
+    data_row[
+        "smoothed_jet_lats"
+    ] = smooth_jet_lat_across_lon_with_rectangular_pulse(
+        data_row["jet_lat_by_lon"], width_of_pulse=10
+    )
+    return data_row
+
+
+def smooth_jet_lat_across_lon_with_rectangular_pulse(
+    jet_lat_data, width_of_pulse
+):
+    """
+    Smooth jet position (jet latitude) by carrying out a convolution with a rectangular pulse
+
+    Component of method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+
+    Parameters
+    ----------
+    jet_lat_data : xarray.DataArray
+        Data detailing the latitude of jet-stream at each longitude of one time unit
+    width_of_pulse : float or int
+        Width to make rectangular pulse (likely to be in  'degrees_east')
+
+    Returns
+    ----------
+    filtered_data : xarray.DataArray
+        Data detailing the latitude of jet-stream that has been smoothed using rectangular pulse
+
+    """
+    sig = jet_lat_data["lon"] % jet_lat_data < width_of_pulse
+    filtered_data = jet_lat_data[sig]
+    return filtered_data
+
+
+def get_jet_lat_by_lon(data_row):
+    """
+    Gets all the latitudes of maximum wind-speeds by longitude
+
+    Component of method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+
+    Parameters
+    ----------
+    data_row : xarray.DataArray
+        Data containing u-component windspeed of one time unit
+
+    Returns
+    ----------
+    output : xarray.DataArray
+        Data detailing the latitude of jet-stream at each longitude of one time unit
+    """
+    return data_row["lat"][data_row.argmax("lat")]

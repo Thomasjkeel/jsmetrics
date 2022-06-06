@@ -796,6 +796,9 @@ def kerr_et_al_2020(data):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing jet-stream position
+        Data containing jet-stream latitude by longitude and smoothed jet_latitude
     """
-    return data
+    output = data.groupby("time").map(
+        jetstream_metrics_utils.get_moving_averaged_smoothed_jet_lats_for_one_day
+    )
+    return output

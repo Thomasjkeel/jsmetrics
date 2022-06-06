@@ -369,6 +369,7 @@ def get_zonal_mean(data):
     """
     Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
     Will get the zonal mean either by pressure level (plev) or for one layer
@@ -1594,6 +1595,49 @@ class JetStreamOccurenceAndCentreAlgorithm:
         self.output_data["jet_ocurrence1_jet_centre2"] = self.output_data[
             "jet_ocurrence1_jet_centre2"
         ].where(lambda x: ((x == 0) | (x == 2)), 1)
+
+
+def get_jet_lat_and_speed_using_parabola_by_day(data_row):
+    """
+    Will get jet latitude and speed by fitting a parabola and taking maximum
+
+    Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
+
+    Parameters
+    ----------
+    data_row : xarray.DataArray
+        Data of single time unit containing u-component wind
+
+    Returns
+    ----------
+    data_row : xarray.DataArray
+        Data of single time unit containing jet_lat and jet_speed variables
+    """
+    fitted_parabola = fit_parabola(data_row["lat"].data, data_row["ua"].data)
+    ind_of_max = fitted_parabola.argmax()
+    data_row["jet_lat"] = float(data_row.lat[ind_of_max])
+    data_row["jet_speed"] = fitted_parabola.max()
+    return data_row
+
+
+def fit_parabola(x, y):
+    """
+    Fits a parabola
+    TODO: check if correct
+
+    Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
+    """
+    coeff, cov = scipy.optimize.curve_fit(parabola, x, y)
+    fitted_parabola = parabola(x, coeff[0], coeff[1], coeff[2])
+    return fitted_parabola
+
+
+def parabola(x, a, b, c):
+    """
+    Parabola
+    Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
+    """
+    return a * x**2 + b * x + c
 
 
 def calc_meridional_circulation_index(data):

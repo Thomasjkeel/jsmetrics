@@ -476,9 +476,16 @@ def barnes_polvani_2015(data):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing jet-stream position
+        Data containing jet-stream position and jet-speed
     """
-    return data
+    # Step 1. Get zonal mean
+    zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
+
+    # Step 2. Get jet lat and jet speed values
+    output = zonal_mean.groupby("time").map(
+        jetstream_metrics_utils.get_jet_lat_and_speed_using_parabola_by_day
+    )
+    return output
 
 
 def francis_vavrus_2015(data):

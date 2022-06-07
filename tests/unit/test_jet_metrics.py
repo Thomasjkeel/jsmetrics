@@ -405,15 +405,6 @@ class TestCeppi2018(unittest.TestCase):
         )
 
 
-# class TestKern2018(unittest.TestCase):
-#     def setUp(self):
-#         self.data = set_up_test_uv_data()
-
-#     def test_metric(self):
-#         result = jetstream_metrics.kern_et_al_2018(self.data)
-#         self.assertTrue(result)
-
-
 class TestBracegirdle2018(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()
@@ -427,6 +418,26 @@ class TestBracegirdle2018(unittest.TestCase):
         self.assertEqual(float(result["annual_JPOS"].max()), 37.725)
         self.assertEqual(round(float(result["seasonal_JSTR"].max()), 3), 8.589)
         self.assertEqual(round(float(result["annual_JSTR"].max()), 3), 8.589)
+
+
+class TestKerr2020(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_uv_data()
+
+    def test_metric(self):
+        tested_func = jetstream_metrics.kerr_et_al_2020
+        # Should raise index error as takes only one plev
+        self.assertRaises(IndexError, lambda: tested_func(self.data))
+        test_data = self.data.sel(plev=50000)
+        result = tested_func(test_data)
+        self.assertEqual(
+            result["jet_lat_by_lon"].isel(time=0).dropna("lon").size, 192
+        )
+        self.assertEqual(float(result["jet_lat_by_lon"].max()), 72.5)
+        self.assertEqual(float(result["smoothed_jet_lats"].max()), 65.0)
+        self.assertEqual(
+            result["smoothed_jet_lats"].isel(time=0).dropna("lon").size, 61
+        )
 
 
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):

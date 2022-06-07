@@ -791,13 +791,17 @@ def kerr_et_al_2020(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component windspeed
+        Data containing u-component windspeed at one plev
 
     Returns
     ----------
     output : xarray.Dataset
         Data containing jet-stream latitude by longitude and smoothed jet_latitude
     """
+    if data["plev"].size != 1:
+        raise IndexError(
+            "Please subset your data to have one pressure level (plev)"
+        )
     output = data.groupby("time").map(
         jetstream_metrics_utils.get_moving_averaged_smoothed_jet_lats_for_one_day
     )

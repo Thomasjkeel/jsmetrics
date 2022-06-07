@@ -4,7 +4,8 @@ History
 
 0.0.6 (2022-06-06)
 ------------------
-* add Barnes & Polvani 2015 & Kerr et al. 2020
+* add Barnes & Polvani 2015 
+* add Kerr et al. 2020
 
 0.0.6-beta (2022-05-31)
 ------------------

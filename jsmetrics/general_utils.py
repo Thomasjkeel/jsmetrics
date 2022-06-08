@@ -24,6 +24,21 @@ def check_kwargs(kwargs):
         return kwargs
 
 
+def find_nearest_value(array, value):
+    """
+    Taken from https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array
+    """
+    idx = np.searchsorted(array, value, side="left")
+    if idx > 0 and (
+        idx == len(array)
+        or np.math.fabs(value - array[idx - 1])
+        < np.math.fabs(value - array[idx])
+    ):
+        return array[idx - 1]
+    else:
+        return array[idx]
+
+
 def check_at_least_two_plevs_in_data(data):
     """
     Checks there are two pressure-levels (plevs) in xarray dataset

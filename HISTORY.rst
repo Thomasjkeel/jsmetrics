@@ -6,6 +6,7 @@ History
 ------------------
 * add Barnes & Polvani 2015 
 * add Kerr et al. 2020
+* add nearest method function to general utils
 
 0.0.6-beta (2022-05-31)
 ------------------

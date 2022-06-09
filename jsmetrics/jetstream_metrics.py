@@ -737,8 +737,6 @@ def ceppi_et_al_2018(data):
 
     "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
 
-    NOTE: Currently takes a moderate amount of time i.e. 12 seconds per 100 time unit with 8 plev on AMD Ryzen 5 3600 6-core processor
-
     Parameters
     ----------
     data : xarray.Dataset

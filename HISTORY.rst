@@ -7,6 +7,8 @@ History
 * add Barnes & Polvani 2015 
 * add Kerr et al. 2020
 * add nearest method function to general utils
+* Speed up Ceppi and fix integration method within (still need to verify)
+* Add xgrid utils for grid cell m2 method
 
 0.0.6-beta (2022-05-31)
 ------------------

@@ -371,6 +371,7 @@ def get_zonal_mean(data):
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
 
     Will get the zonal mean either by pressure level (plev) or for one layer
     TODO: add to Archer & Caldiera
@@ -1872,27 +1873,6 @@ def assign_ten_day_average_jet_lat_speed_to_data(data, ten_day_mean):
     )
 
 
-def get_centroid_jet_lat(data):
-    """
-    Component of method from Ceppi et al (2019) https://doi.org/10.1175/JCLI-D-17-0323.1
-
-    Will get the centroid latitude of the u-component wind by given time unit
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        data containing u-component wind data and only latitude and longitude dimensions (only one plev)
-    """
-    xs = []
-    ys = []
-    for lat in data["lat"]:
-        xs.append(float(lat))
-        ys.append(
-            float(abs(data.sel(lat=lat)["ua"].mean()) / abs(data["ua"].mean()))
-        )
-    return np.dot(xs, ys) / np.sum(ys)
-
-
 def cubic_spline_interpolation(x, y):
     """
     Component of method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
@@ -1990,6 +1970,28 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
         max_lats.append(lat)
         max_ws.append(ws)
     return max_lats, max_ws
+
+
+def calc_centroid_jet_lat_from_zonal_mean(zonal_mean, area_by_lat):
+    """
+    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+
+    Will get the centroid latitude of the u-component wind using:
+
+                integral(60deg, 30deg)(zonal_u**2*lat) dlat
+    jet_lat =   ------------------------------
+                integral(60deg, 30deg)(zonal_u**2) dlat
+
+    Parameters
+    ----------
+    zonal_mean : xarray.Dataset
+        zonally-average data containing u-component wind data
+    area_by_lat : xarray.DataArray
+        Information on area in each latitude (i.e. m2 per latitude)
+    """
+    u_hat_by_lat = zonal_mean["ua"] ** 2 * zonal_mean["lat"] * area_by_lat
+    u_hat = zonal_mean["ua"] ** 2 * area_by_lat
+    return u_hat_by_lat.sum("lat") / u_hat.sum("lat")
 
 
 def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row):

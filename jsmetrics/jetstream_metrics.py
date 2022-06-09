@@ -10,7 +10,7 @@
 import numpy as np
 import xarray
 from . import jetstream_metrics_utils
-from . import general_utils, windspeed_utils
+from . import general_utils, windspeed_utils, xgrid_utils
 
 # docs
 __author__ = "Thomas Keel"
@@ -671,60 +671,6 @@ def molnos_et_al_2017(data):
     return data
 
 
-def ceppi_et_al_2018(data):
-    """
-    Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
-    Calculates the jet-centroid  from u-component wind data each time unit
-
-    "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
-
-    NOTE: Currently takes a moderate amount of time i.e. 12 seconds per 100 time unit with 8 plev on AMD Ryzen 5 3600 6-core processor
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing u-component windspeed
-
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data containing centroid latitude of u-wind for each time unit (e.g. each day)
-    """
-    if isinstance(data, xarray.DataArray):
-        data = data.to_dataset()
-    #  Step 1: Get centroid latitudes of wind speed
-    all_centroids = []
-    if data["time"].count() > 1:
-        for time_coord in data["time"]:
-            sub_data = data.sel(time=time_coord)
-            centroid_lat = jetstream_metrics_utils.get_centroid_jet_lat(
-                sub_data
-            )
-            all_centroids.append(centroid_lat)
-    else:
-        centroid_lat = jetstream_metrics_utils.get_centroid_jet_lat(data)
-        all_centroids.append(centroid_lat)
-
-    # Step 2: Assign laitude of jet-stream centroids to main data
-    output = data.assign({"jet_lat": (("time"), all_centroids)})
-    return output
-
-
-def kern_et_al_2018(data):
-    """
-    Write function description
-    TODO: ask about equation
-    """
-    return data
-
-
-def rikus_2018(data):
-    """
-    Write function description
-    """
-    return data
-
-
 def bracegirdle_et_al_2018(data):
     """
     Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
@@ -782,6 +728,56 @@ def bracegirdle_et_al_2018(data):
         }
     )
     return output
+
+
+def ceppi_et_al_2018(data):
+    """
+    Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+    Calculates the jet-centroid  from u-component wind data each time unit
+
+    "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
+
+    NOTE: Currently takes a moderate amount of time i.e. 12 seconds per 100 time unit with 8 plev on AMD Ryzen 5 3600 6-core processor
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component windspeed
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing centroid latitude of u-wind for each time unit (e.g. each day)
+    """
+    #  Step 1. Get area in m2 by latitude/longitude grid cells
+    total_area_m2 = xgrid_utils.grid_cell_areas(data["lon"], data["lat"])
+    data["total_area_m2"] = (("lat", "lon"), total_area_m2)
+
+    #  Step 2. calculate zonal mean
+    zonal_mean = jetstream_metrics_utils.get_zonal_mean(data)
+
+    # Step 3: Assign laitude of jet-stream centroids to main data
+    data[
+        "jet_lat"
+    ] = jetstream_metrics_utils.calc_centroid_jet_lat_from_zonal_mean(
+        zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
+    )
+    return data
+
+
+def kern_et_al_2018(data):
+    """
+    Write function description
+    TODO: ask about equation
+    """
+    return data
+
+
+def rikus_2018(data):
+    """
+    Write function description
+    """
+    return data
 
 
 def kerr_et_al_2020(data):

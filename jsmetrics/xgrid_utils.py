@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """Operations on cartesian geographical grid.
-   Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150"""
+   Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
+   Adapted by Thomas Keel (https://github.com/Thomasjkeel)
+   """
 import numpy as np
+import collections
+
 
 EARTH_RADIUS = 6371000.0  # m
 
@@ -27,10 +31,28 @@ def _guess_bounds(points, bound_position=0.5):
     diffs = np.insert(diffs, 0, diffs[0])
     diffs = np.append(diffs, diffs[-1])
 
+    diffs = _standardise_diffs_by_making_all_most_common_diff(diffs)
+
     min_bounds = points - diffs[:-1] * bound_position
     max_bounds = points + diffs[1:] * (1 - bound_position)
 
     return np.array([min_bounds, max_bounds]).transpose()
+
+
+def _standardise_diffs_by_making_all_most_common_diff(diffs):
+    """
+    Lazy method to fill in gaps for bounds to make sure it is on a regular grid
+    Adapted by githubuser:Thomasjkeel
+    """
+    counter_of_diffs = collections.Counter(diffs)
+    if len(counter_of_diffs) > 1:
+        #  more than one difference found, so standardising to the most common
+        print(
+            "Warning: Standardising the guessed bounds of lat and lon to the most common bound width i.e. assumes regular grid (e.g. 1*1) and a gap in data"
+        )
+        most_common_key = list(collections.Counter(diffs).keys())[0]
+        diffs = np.array([most_common_key] * len(diffs))
+    return diffs
 
 
 def _quadrant_area(radian_lat_bounds, radian_lon_bounds, radius_of_earth):

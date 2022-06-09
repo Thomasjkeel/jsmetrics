@@ -2,7 +2,11 @@
 History
 =======
 
-0.0.6 (2022-06-06)
+0.0.7-alpha (2022-06-09)
+------------------
+* update xgrid_utils with lazy method for guessing bounds and assuming a regular grid (func is "_standardise_diffs_by_making_all_most_common_diff")
+
+0.0.6 (2022-06-09)
 ------------------
 * add Barnes & Polvani 2015 
 * add Kerr et al. 2020

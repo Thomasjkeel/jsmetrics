@@ -706,7 +706,7 @@ def ceppi_et_al_2018(data):
         all_centroids.append(centroid_lat)
 
     # Step 2: Assign laitude of jet-stream centroids to main data
-    output = data.assign({"jet_lat_centroid": (("time"), all_centroids)})
+    output = data.assign({"jet_lat": (("time"), all_centroids)})
     return output
 
 

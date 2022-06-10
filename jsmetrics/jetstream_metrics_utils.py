@@ -1279,10 +1279,33 @@ def apply_quadratic_func(x, y, vals):
     return (a * vals**2) + (b * vals) + c
 
 
+def make_empty_local_wind_maxima_data_var(data):
+    """
+    Will add a new data var of zeros for local wind maxima
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    TODO: add asserts
+    """
+    data["local_wind_maxima"] = (
+        ("time", "plev", "lat", "lon"),
+        np.zeros(
+            (
+                len(data["time"]),
+                len(data["plev"]),
+                len(data["lat"]),
+                len(data["lon"]),
+            )
+        ),
+    )
+    return data
+
+
 def get_empty_local_wind_maxima_data(data):
     """
-    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
     Will add a new data var of zeros for local wind maxima
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
     Parameters
     ----------
@@ -1313,8 +1336,9 @@ def get_potential_local_wind_maximas_by_ws_threshold(
     ws_slice, ws_threshold=30
 ):
     """
-    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
     Will return a 2-d array of potential local windspeed maximas
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
     Parameters
     ----------
@@ -1334,8 +1358,9 @@ def get_potential_local_wind_maximas_by_ws_threshold(
 
 def get_local_wind_maxima_by_timeunit(row):
     """
-    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
     Get local wind maxima by timeunit (i.e. day)
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
     Parameters
     ----------
@@ -1381,8 +1406,9 @@ def get_local_wind_maxima_by_timeunit(row):
 
 def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
     """
-    Component of method  from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
     Will resample by each month and return number of timeunits (i.e. day) with local wind maxima
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
     Parameters
     ----------
@@ -1401,6 +1427,41 @@ def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
         .sum()
         .rename({"time": "monthyear"})
     )
+    return data
+
+
+def subdivide_local_wind_maxima_into_stj_pfj(data):
+    """
+    Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on pg. 2709
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Input data with local wind maxima values
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        data with polar_front_jet and subtropical_jet subdivisions
+    """
+    DJF_STJ = data.sel(
+        monthyear=data.monthyear.dt.month.isin([1, 2, 12]), lat=slice(15, 40)
+    )["local_wind_maxima"]
+    MAM_SON_PFJ = data.sel(
+        monthyear=data.monthyear.dt.month.isin([3, 4, 5, 9, 10, 11]),
+        lat=slice(10, 70),
+    )["local_wind_maxima"]
+    JJA_PFJ = data.sel(
+        monthyear=data.monthyear.dt.month.isin([6, 7, 8]), lat=slice(30, 60)
+    )["local_wind_maxima"]
+    SH_STJ = data.sel(lat=slice(-40, -15))["local_wind_maxima"]
+    SH_PFJ = data.sel(lat=slice(-70, -41))["local_wind_maxima"]
+    data["polar_front_jet"] = xr.merge([MAM_SON_PFJ, JJA_PFJ, SH_PFJ])[
+        "local_wind_maxima"
+    ]
+    data["subtropical_jet"] = xr.merge([DJF_STJ, SH_STJ])["local_wind_maxima"]
     return data
 
 

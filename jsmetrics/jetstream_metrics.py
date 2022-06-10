@@ -380,7 +380,7 @@ def penaortiz_et_al_2013(data):
 
     Returns
     ----------
-    local_wind_maxima_days_by_monthyear : xarray.Dataset
+    output : xarray.Dataset
         Data containing number of days per month with local wind maxima
     """
     #  Step 1. Calculate wind vector
@@ -404,8 +404,11 @@ def penaortiz_et_al_2013(data):
         local_wind_maxima_timeunits_by_monthyear.to_dataset()
     )
 
-    #  TODO: Sort into PJ and STJ
-    return local_wind_maxima_timeunits_by_monthyear
+    #  Step 5. Sort into PJ and STJ
+    output = jetstream_metrics_utils.subdivide_local_wind_maxima_into_stj_pfj(
+        local_wind_maxima_timeunits_by_monthyear
+    )
+    return output
 
 
 def screen_and_simmonds_2013(data):

@@ -356,8 +356,8 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
     output = data.assign(
         {
-            "jet_lat_0.01": (("time"), scaled_max_lats),
-            "jet_speed_0.01": (("time"), scaled_max_ws),
+            "jet_lat": (("time"), scaled_max_lats),
+            "jet_speed": (("time"), scaled_max_ws),
             "jet_width": (("time"), jet_widths),
         }
     )

@@ -20,7 +20,7 @@ def get_resultant_wind(u, v):
     """
     Gets wind vector from u-wind and v-wind
     """
-    return np.sqrt(u ** 2 + v ** 2)
+    return np.sqrt(u**2 + v**2)
 
 
 def get_wind_direction_in_degrees(u, v):
@@ -123,7 +123,8 @@ def check_only_required_coords_are_in_data(data, req_coords, to_remove=()):
         try:
             dims.remove(rem)
         except Exception as e:
-            print(e)
+            e
+            pass
             # print('cannot remove %s from dims' % (rem))
 
     req_coords = set(req_coords)

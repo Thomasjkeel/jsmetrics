@@ -277,8 +277,8 @@ class TestBarnesPolvani2013(unittest.TestCase):
             self.data, filter_freq=1, window_size=2
         )
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(result["jet_lat_0.01"][1], 35.85)
-        self.assertEqual(round(float(result["jet_speed_0.01"][2]), 5), 33.1134)
+        self.assertEqual(result["jet_lat"][1], 35.85)
+        self.assertEqual(round(float(result["jet_speed"][2]), 5), 33.1134)
         self.assertEqual(float(result["jet_width"][1]), 17.5)
 
 

@@ -239,7 +239,7 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
     Method from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
-    Also see Manney et al. 2011, 2014, 2017 and 2018
+    Also see Manney et al. 2011, 2014, 2017 and Manney & Hegglin 2018
 
     Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
     Paper uses 100-400 hPa.

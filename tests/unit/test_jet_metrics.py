@@ -475,7 +475,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         )
         self.assertEqual(result.num_of_cores, 3)
         self.assertListEqual(
-            result.final_jet_cores[0]["index_of_area"][0], [5, 15]
+            result.final_jet_cores[0]["index_of_area"][0], [16, 4]
         )
 
 

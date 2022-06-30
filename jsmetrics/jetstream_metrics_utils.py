@@ -704,7 +704,7 @@ class JetStreamCoreIdentificationAlgorithm:
             ) from e
         # standardise data
         data = general_utils.standardise_dimension_order(
-            data, dim_order=(..., "plev", "lat")
+            data, dim_order=(..., "lat", "plev")
         )
         # Step 1. make windspeed slice
         self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)
@@ -832,7 +832,7 @@ class JetStreamCoreIdentificationAlgorithm:
                     val[1] - self._current_core_lat > 15
                     and val[1] > self._current_core_lat
                 ):
-                    #                     print('THIS IS A NEW CORE')
+                    #  print('THIS IS A NEW CORE')
                     self._current_core_lat = val[1]
                 area.append(val)
                 new_vals = self._get_indexes_to_check(val)
@@ -898,7 +898,7 @@ class JetStreamCoreIdentificationAlgorithm:
             ),
         )
         for jet_core in self.final_jet_cores:
-            for plev, lat in jet_core["index_of_area"]:
+            for lat, plev in jet_core["index_of_area"]:
                 self._lat_ws_slice.values["core_id"].loc[
                     dict(
                         lat=self._lat_ws_slice.values["lat"].data[lat],

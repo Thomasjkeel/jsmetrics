@@ -555,7 +555,7 @@ def cattiaux_et_al_2016(data):
     Returns
     ----------
     data : xarray.Dataset
-        Data containing sinousity of zonal mean by each time unit
+        Data containing sinuosity of zonal mean by each time unit
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -570,9 +570,9 @@ def cattiaux_et_al_2016(data):
         50, 0, 360
     )
 
-    #  Step 3. Loop over each time step and calculate sinousity
+    #  Step 3. Loop over each time step and calculate sinuosity
     output = data.groupby("time").map(
-        lambda row: jetstream_metrics_utils.get_sinousity_of_zonal_mean_zg(
+        lambda row: jetstream_metrics_utils.get_sinuosity_of_zonal_mean_zg(
             row, circle_50N
         )
     )

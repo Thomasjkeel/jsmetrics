@@ -1761,7 +1761,7 @@ def get_latitude_circle_linestring(latitude, lon_min, lon_max):
     return circle
 
 
-def get_sinousity_of_zonal_mean_zg(row, latitude_circle):
+def get_sinuosity_of_zonal_mean_zg(row, latitude_circle):
     """
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
     Works on a grouped data set and will calculate sinuosity of zonal mean
@@ -1777,9 +1777,9 @@ def get_sinousity_of_zonal_mean_zg(row, latitude_circle):
     Returns
     ----------
     row : xarray.Dataset
-        Data containing sinuousity value (determined by calc_great_circle_sinousity function)
+        Data containing sinuousity value (determined by calc_great_circle_sinuosity function)
     """
-    row["sinousity"] = calc_great_circle_sinousity(
+    row["sinuosity"] = calc_great_circle_sinuosity(
         get_one_contour_linestring(
             row["zg"], row["zonal_mean_zg_30Nto70N"].data
         ),
@@ -1862,9 +1862,9 @@ def calc_total_great_circle_distance_along_line(line):
     return total_distance
 
 
-def calc_great_circle_sinousity(line1, line2):
+def calc_great_circle_sinuosity(line1, line2):
     """
-    Calculates sinousity by comparing the great circle distance between
+    Calculates sinuosity by comparing the great circle distance between
     two (multi-)linestrings
 
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309

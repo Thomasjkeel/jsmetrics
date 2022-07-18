@@ -1,7 +1,10 @@
 ==================
 jsmetrics: Jet-stream metrics and algorithms
 ==================
-[Links]
+
+|license| |pre-commit| |black| 
+
+.. pypi| |conda| |coveralls| |codefactor|  |zenodo| |docs| 
 ----
 
 This is jsmetrics ...
@@ -76,3 +79,32 @@ Project To-Do's
   - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
 - TO SOLVE: subsetting longitude if it wraps around 0-360
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
+
+
+.. |license| 
+        :target: https://github.com/Thomasjkeel/jsmetrics/blob/master/LICENSE
+        :alt: License
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+        :target: https://github.com/python/black
+        :alt: Python Black
+
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/Thomasjkeel/jsmetrics/master.svg
+   :target: https://results.pre-commit.ci/latest/github/Thomasjkeel/jsmetrics/master
+   :alt: pre-commit.ci status
+
+.. .. |zenodo| image:: https://zenodo.org/badge/142608764.svg
+..         :target: https://zenodo.org/badge/latestdoi/142608764
+..         :alt: DOI
+
+.. .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge
+..         :target: https://jsmetrics.readthedocs.io/en/latest
+..         :alt: Documentation Status
+
+.. .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
+..         :target: https://pypi.python.org/pypi/jsmetrics
+..         :alt: Python Package Index Build
+
+.. .. |conda| image:: https://img.shields.io/conda/vn/conda-forge/jsmetrics.svg
+..         :target: https://anaconda.org/conda-forge/jsmetrics
+..         :alt: Conda-forge Build Version

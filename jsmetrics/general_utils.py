@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    General utility functions needed for the jet-stream metrics
-    TODO: sort this out (maybe move to init file)
+    Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed utils
 """
 
 # imports
@@ -15,13 +14,6 @@ import scipy.signal
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
-
-
-def check_kwargs(kwargs):
-    if not kwargs:
-        return {}
-    else:
-        return kwargs
 
 
 def find_nearest_value(array, value):
@@ -185,7 +177,7 @@ def haversine(lon1, lat1, lon2, lat2):
 
 def get_great_circle_distance_along_linestring(line):
     """
-    Calcualte great circle distance along the length of linestring
+    Calculate great circle distance along the length of linestring
     """
     numCoords = len(line.coords) - 1
     distance = 0

@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    Operations on cartesian geographical grid to calculate spatial mean and spatial integral on an xarray DataArray
-    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
-    Adapted for use in the jsmetrics module by Thomas Keel (https://github.com/Thomasjkeel)
+    All spatial operations needed for the jet-stream metrics and algorithms
 """
 
 import numpy as np
@@ -17,6 +15,8 @@ def _guess_bounds(points, bound_position=0.5):
     Guess bounds of grid cells.
 
     Simplified function from iris.coord.Coord.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
@@ -45,6 +45,9 @@ def _standardise_diffs_by_making_all_most_common_diff(diffs):
     """
     Lazy method to fill in gaps for bounds to make sure it is on a regular grid
     Adapted by githubuser:Thomasjkeel
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
+
     """
     counter_of_diffs = collections.Counter(diffs)
     if len(counter_of_diffs) > 1:
@@ -71,6 +74,8 @@ def _quadrant_area(radian_lat_bounds, radian_lon_bounds, radius_of_earth):
     *(radian_lat_bounds.shape[0], radian_lon_bounds.shape[0])*
     The calculations are done at 64 bit precision and the returned array
     will be of type numpy.float64.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
@@ -112,6 +117,8 @@ def grid_cell_areas(lon1d, lat1d, radius=EARTH_RADIUS):
     Calculate grid cell areas given 1D arrays of longitudes and latitudes
     for a planet with the given radius.
 
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
+
     Parameters
     ----------
     lon1d: numpy.array
@@ -136,6 +143,8 @@ def calc_spatial_mean(
 ):
     """
     Calculate spatial mean of xarray.DataArray with grid cell weighting.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
@@ -166,6 +175,8 @@ def calc_spatial_integral(
 ):
     """
     Calculate spatial integral of xarray.DataArray with grid cell weighting.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------

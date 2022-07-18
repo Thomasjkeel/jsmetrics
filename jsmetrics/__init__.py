@@ -9,4 +9,5 @@ from . import (
     jetstream_metrics,
     jetstream_metrics_utils,
     windspeed_utils,
+    spatial_utils,
 )

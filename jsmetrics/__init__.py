@@ -10,5 +10,3 @@ from . import (
     jetstream_metrics_utils,
     windspeed_utils,
 )
-
-# this is where the metrics.[something] objects can go i.e. errors

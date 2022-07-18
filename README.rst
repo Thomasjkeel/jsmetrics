@@ -35,7 +35,17 @@ Table of the metrics
 See [jsmetrics/details_for_all_metrics.py] for specifications of each 
 For their progress see [Project 1]
 
-[TABLE HERE]
+.. list-table:: Title
+   :widths: 25 25 50
+   :header-rows: 1
+
+   * - Metric/Algorithms source
+     - Status
+   * - `Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
+     - Needs verification
+   * - Row 2, column 1
+     - Row 2, column 2
+
 
 Installation 
 -------------

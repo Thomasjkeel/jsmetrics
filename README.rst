@@ -36,12 +36,11 @@ See [jsmetrics/details_for_all_metrics.py] for specifications of each
 For their progress see [Project 1]
 
 +-------+----------+------+
-| Metric/Algorithm   | Status |
-+=======+==========+======+
+| Metric/Algorithm       | Status   |
++========================+==========+
 | Woollings et al. 2010  | Complete |
-+-------+----------+------+
-| rows             | cell |
-+-------+----------+------+
++------------------------+----------+
+| rows                   | cell     |
 
 
 Installation 

@@ -41,7 +41,7 @@ For their progress see [Project 1]
 
    * - Metric/Algorithms source
      - Status
-   * - `Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
+   * - This
      - Needs verification
    * - Row 2, column 1
      - Row 2, column 2

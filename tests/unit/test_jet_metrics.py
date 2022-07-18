@@ -14,10 +14,10 @@ from parameterized import parameterized
 import xarray as xr
 import numpy as np
 from jsmetrics import (
+    details_for_all_metrics,
     general_utils,
     jetstream_metrics,
     jetstream_metrics_utils,
-    jetstream_metrics_dict,
 )
 from . import (
     set_up_test_uv_data,
@@ -38,7 +38,7 @@ MAX_VARIABLES = 7
 
 class TestJetStreamMetricDict(unittest.TestCase):
     def setUp(self):
-        self.metric_dict = jetstream_metrics_dict.JETSTREAM_METRIC_DICT
+        self.metric_dict = details_for_all_metrics.JETSTREAM_METRIC_DICT
 
     def test_metric_dict_keys(self):
         for metric_name in self.metric_dict.keys():

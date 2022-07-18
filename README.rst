@@ -27,22 +27,19 @@ Project To-Do's
 -------------------
 - ADD cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
 - ADD pint (see: https://pint.readthedocs.io/en/stable/)
+- ADD DOI
 
 
-
-- ADD short description of each metric in Readme or seperate text file AND in the function description 
-- THINK ABOUT way of highlighting jetstream-dict (Also rename this file)
 - way of dealing with data from different sources (some sort of data translator module or maybe included in tests)
   - for example what if 'v' or 'v-wind' is passed to func instead of 'va'
   - for example what if 'mbar' or 'model levels' instead of 'plev'
   - https://confluence.ecmwf.int/display/CKB/ERA5%3A+compute+pressure+and+geopotential+on+model+levels%2C+geopotential+height+and+geometric+height
 - ADD way of subsetting longitude if it wraps around 0-360
-- IMPROVE readme(s) and add links (DOI?)m (https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
+- IMPROVE readme(s) and add links ( (https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
 - ADD lat and lon subsetting to jetstream_metrics_dict
 - ADD benchmark speed tests for each metric based on standard sizes of the dataset
 - Check that methods using just U account for negative values (maybe need for abs())
 
-#### Lagragian unit versus Photo unit
 
 #### Why class based algorithms:
 - see https://softwareengineering.stackexchange.com/questions/294076/how-to-represent-an-algorithm-as-a-class

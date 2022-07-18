@@ -2,16 +2,15 @@ from . import jetstream_metrics
 
 
 # RULES for METRIC_DETAILS dictionary:
-# 1. must have the keys: 'variables', 'coords' 'metric' and 'name'
-# 2. 'variables' will contain the required CMIP6? model output variable names
-# 3. 'coords' will contain the required CMIP6? standard coords
-#       and each coord will provide a list of 2 values: mininum value
-#       for coord and maximum value for coord and must be a number
+# 1. must have the keys: 'variables', 'coords' 'metric', 'plev_units', 'metric', 'name', 'description, and 'doi'
+# 2. 'variables' will contain the required variable names in the data conforming to the CMIP Controlled Vocabulary (Taylor et al. 2011)
+# 3. 'coords' will contain the required conforming to the CMIP Controlled Vocabulary
+#       and each coord will provide a list of 2 integer values: a minimum and maximum value
 #    3.1 for 'plev' coord it is in Pa/mbar and higher pressure is considered
 #        the minimum value (e.g. 85000 Pmbar - 50000 mbar)
-# 4. 'plev_units' is units for the pressure level
-# 5. 'metric' is the name of a function in jetstream_metrics.py
-# 6. 'name' is the paper name
+# 4. 'plev_units' is units for the pressure level (i.e. Pa, mbar, hPa)
+# 5. 'metric' is the relative path to the function
+# 6. 'name' is the name of the paper
 # 7. 'doi' is the DOI link
 
 

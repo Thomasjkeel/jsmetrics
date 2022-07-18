@@ -3,7 +3,7 @@
 """
     Metrics used to identify or classify jet-stream in the literature
 
-    All functions should return a xarray.Dataset unless otherwise stated
+    All functions should return a xarray.Dataset
 """
 
 # imports

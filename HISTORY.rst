@@ -4,7 +4,8 @@ History
 
 0.0.8 (2022-07-18)
 ------------------
-* Format the Readme
+* Format the readme
+* seperate metrics into metrics and algorithms
 * Move around the utils files 
 * Update year on LICENSE 
 

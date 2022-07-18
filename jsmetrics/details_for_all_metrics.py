@@ -173,11 +173,11 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "https://doi.org/10.1002/2016GL070309",
     },
-    # "Chenoli2017": {
+    # "Chenoli2017_SouthernHemisphere": {
     #     "variables": ["ua"],
     #     "coords": {"plev": [10000, 30000], "lat": [-40, -20], "lon": [70, 290]},
     #     "plev_units": "Pa",
-    #     "metric": jetstream_metrics.chenoli_et_al_2017,
+    #     "metric": jetstream_metrics.chenoli_et_al_2017 Southern Hemisphere,
     #     "name": "Chenoli et al. 2017",
     #     "description": "",
     #     "doi": "https://doi.org/10.1007/s00382-016-3102-y",

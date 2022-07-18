@@ -22,6 +22,8 @@ In some cases I have used a different dataset to the one used.
 
 This project is very much a work in progress, so contributors are very welcome. You  
 
+Details provided in: 'details_for_all_metrics' is not exact as in some cases ... Most algorithms can be used at different pressure-levels etc.  
+
 Where you can find my working-out:
 - I have included all of my working out in jupyter-notebooks available at: ... (warning: these notebooks have not been formatted nicely) 
 - I am currently creating a verification notebook available at: ... where 

@@ -66,7 +66,7 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jetstream_metrics.manney_et_al_2011,
         "name": "Manney et al. 2011",
-        "description": "surface to 0.1 hPa",
+        "description": "",
         "doi": "https://doi.org/10.5194/acp-11-6115-2011",
     },
     "BarnesPolvani2013": {
@@ -102,7 +102,7 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jetstream_metrics.kuang_et_al_2014,
         "name": "Kuang et al. 2014.",
-        "description": "NOTE: Should be 200hPa only",
+        "description": "",
         "doi": "https://doi.org/10.1007/s00704-013-0994-x",
     },
     "BarnesPolvani2015": {

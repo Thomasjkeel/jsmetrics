@@ -13,7 +13,7 @@ This is jsmetrics ...
 .. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
 
 
-The layout and content of this project and was inspired by xclim (https://github.com/Ouranosinc/xclim) 
+The layout and content of this project and was inspired by jsmetrics (https://github.com/Ouranosinc/jsmetrics) 
 .. which contains other climate indices and metrics.
 Started with Cookiecutter (https://github.com/audreyfeldroy/cookiecutter-pypackage).
 
@@ -49,23 +49,23 @@ Installation
 
 .. Documentation
 .. -------------
-.. The official documentation is at https://xclim.readthedocs.io/
+.. The official documentation is at https://jsmetrics.readthedocs.io/
 
 .. Contributing
 .. ------------
-.. xclim is in active development and it's being used in production by climate services specialists.
+.. jsmetrics is in active development and it's being used in production by climate services specialists.
 
-.. * If you're interested in participating in the development of xclim by suggesting new features, new indices or report bugs, please leave us a message on the `issue tracker`_. There is also a chat room on gitter (|gitter|).
+.. * If you're interested in participating in the development of jsmetrics by suggesting new features, new indices or report bugs, please leave us a message on the `issue tracker`_. There is also a chat room on gitter (|gitter|).
 
 .. * If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
 
-.. .. _issue tracker: https://github.com/Ouranosinc/xclim/issues
-.. .. _Contributing Guidelines: https://github.com/Ouranosinc/xclim/blob/master/.github/CONTRIBUTING.rst
+.. .. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
+.. .. _Contributing Guidelines: https://github.com/Thomasjkeel/jsmetrics/blob/master/.github/CONTRIBUTING.rst
 
 
 .. How to cite this library
 .. ------------------------
-.. If you wish to cite `xclim` in a research publication, we kindly ask that you use the bibliographical reference information available through `Zenodo`
+.. If you wish to cite `jsmetrics` in a research publication, we kindly ask that you use the bibliographical reference information available through `Zenodo`
 
 
 Project To-Do's

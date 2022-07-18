@@ -35,17 +35,13 @@ Table of the metrics
 See [jsmetrics/details_for_all_metrics.py] for specifications of each 
 For their progress see [Project 1]
 
-.. list-table:: Title
-   :widths: 25 25 50
-   :header-rows: 1
+`Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
+| Metric/algorithm  | Status |
+| ------------- | ------------- |
+| [Woollings](#www.google.com)  | Content Cell  |
+| Content Cell  | Content Cell  |
 
-   * - Metric/Algorithms source
-     - Status
-   * - This
-     - Needs verification
-   * - Row 2, column 1
-     - Row 2, column 2
-
+`Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
 
 Installation 
 -------------

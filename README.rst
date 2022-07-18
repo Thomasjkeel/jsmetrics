@@ -42,7 +42,13 @@ For their progress see [Project 1]
    ============================================================================== ==============
    Metric/Algorithm                                                                 Status                                           
    ============================================================================== ==============
-   `Woollings-et-al.-2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
+   `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
+   `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
+   `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
+   `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
+   `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
+   `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
+   `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete
    ============================================================================== ==============
 
 

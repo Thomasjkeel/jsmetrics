@@ -5,6 +5,7 @@ History
 0.0.8 (2022-07-18)
 ------------------
 * Format the Readme
+* Move around the utils files 
 * Update year on LICENSE 
 
 0.0.7-beta (2022-06-30)

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    Base classes and function for dealing with windspeed vectors
-    and slices of windspeed
-    TODO: Probably needs a better name
+    Operations needed for the jet-stream metrics and algorithms that specifically operate on windspeed data.
+    Includes the base classes and function for dealing with windspeed vectors and slices of windspeed
 """
 
 # imports

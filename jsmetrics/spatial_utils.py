@@ -34,6 +34,16 @@ def haversine(lon1, lat1, lon2, lat2):
 def get_great_circle_distance_along_linestring(line):
     """
     Calculate great circle distance along the length of linestring
+
+    Parameters
+    ----------
+    line : shapely.geometry.LineString
+        Line to calculate great circle (haversine) distance along
+
+    Returns
+    ----------
+    distance : float
+        Great circle (haversine) distance along input line
     """
     numCoords = len(line.coords) - 1
     distance = 0

@@ -26,17 +26,12 @@ For their progress see [Project 1]
 
 Project To-Do's
 -------------------
-- ADD cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
-- ADD pint (see: https://pint.readthedocs.io/en/stable/)
-- ADD DOI
-- way of dealing with data from different sources (some sort of data translator module or maybe included in tests)
+- ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
+- ADD: pint (see: https://pint.readthedocs.io/en/stable/)
+- ADD: DOI
+- LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
+- TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
   - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)
   - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
-- ADD way of subsetting longitude if it wraps around 0-360
-- IMPROVE readme(s) and add links (https://github.com/othneildrew/Best-README-Template/blob/master/README.md)
-- ADD benchmark speed tests for each metric based on standard sizes of the dataset
-- Check that methods using just U account for negative values (maybe need for abs())
-
-
-#### Why class based algorithms:
-- see https://softwareengineering.stackexchange.com/questions/294076/how-to-represent-an-algorithm-as-a-class
+- TO SOLVE: subsetting longitude if it wraps around 0-360
+- CHECK: that methods using just U account for negative values (maybe need for abs() or not)

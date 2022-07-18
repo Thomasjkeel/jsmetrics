@@ -5,7 +5,7 @@ History
 0.0.7-beta (2022-06-30)
 ------------------
 * swap 'plev' and 'lat' in manney_et_al_2011 method so that it groups cores better
-* rename 'sinousity' to 'sinuosity'
+* rename 'sinouisity' to 'sinuosity'
 
 0.0.7-alpha (2022-06-10)
 ------------------

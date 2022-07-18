@@ -7,15 +7,12 @@ jsmetrics: Jet-stream metrics and algorithms
 .. pypi| |conda| |coveralls| |codefactor|  |zenodo| |docs| 
 ----
 
-This is jsmetrics ...
+This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
+written in Python and built from xarray.
 
-[Table of Contents]
+
+.. [Table of Contents]
 .. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
-
-
-The layout and content of this project and was inspired by jsmetrics (https://github.com/Ouranosinc/jsmetrics) 
-.. which contains other climate indices and metrics.
-Started with Cookiecutter (https://github.com/audreyfeldroy/cookiecutter-pypackage).
 
 DISCLAIMER
 -------------
@@ -91,11 +88,18 @@ Project To-Do's
 - ADD: DOI
 - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
 - TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
-  - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)
+  - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  
   - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
 - TO SOLVE: subsetting longitude if it wraps around 0-360
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
 
+Credits
+-------------
+
+The layout and content of this project and was inspired by xclim (https://github.com/Ouranosinc/xclim) 
+which contains other climate indices and metrics.
+
+This package was created with Cookiecutter and the audreyr/cookiecutter-pypackage project template.
 
 .. |license| image:: https://img.shields.io/badge/License-MIT-lightgray.svg?style=flt-square
         :target: https://github.com/Thomasjkeel/jsmetrics/blob/master/LICENSE

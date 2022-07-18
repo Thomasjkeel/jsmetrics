@@ -1,4 +1,4 @@
-from . import jetstream_metrics
+from . import jetstream_metrics, jetstream_algorithms
 
 
 # RULES for METRIC_DETAILS dictionary:
@@ -19,7 +19,7 @@ METRIC_DETAILS = {
         "variables": ["ua", "va"],
         "coords": {"plev": [10000, 40000]},
         "plev_units": "Pa",
-        "metric": jetstream_metrics.koch_et_al_2006,
+        "metric": jetstream_algorithms.koch_et_al_2006,
         "name": "Koch et al. 2006",
         "description": "",
         "doi": "https://doi.org/10.1002/joc.1255",
@@ -28,7 +28,7 @@ METRIC_DETAILS = {
         "variables": ["ua", "va"],
         "coords": {"plev": [10000, 40000]},
         "plev_units": "Pa",
-        "metric": jetstream_metrics.archer_caldeira_2008,
+        "metric": jetstream_algorithms.archer_caldeira_2008,
         "name": "Archer & Caldeira 2008",
         "description": "",
         "doi": "https://doi.org/10.1029/2008GL033614",
@@ -37,7 +37,7 @@ METRIC_DETAILS = {
         "variables": ["ua", "va"],
         "coords": {"plev": [10000, 50000]},
         "plev_units": "Pa",
-        "metric": jetstream_metrics.schiemann_et_al_2009,
+        "metric": jetstream_algorithms.schiemann_et_al_2009,
         "name": "Schiemann et al 2009",
         "description": "",
         "doi": "https://doi.org/10.1175/2008JCLI2625.1",

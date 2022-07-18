@@ -17,6 +17,7 @@ from jsmetrics import (
     details_for_all_metrics,
     general_utils,
     jetstream_metrics,
+    jetstream_algorithms,
     jetstream_metrics_utils,
 )
 from . import (
@@ -99,7 +100,7 @@ class TestKoch2006(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jetstream_metrics.koch_et_al_2006
+        tested_func = jetstream_algorithms.koch_et_al_2006
         result = tested_func(self.data, ws_threshold=8)
         # check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
@@ -152,7 +153,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        result = jetstream_metrics.archer_caldeira_2008(self.data)
+        result = jetstream_algorithms.archer_caldeira_2008(self.data)
         for col in [
             "mass_weighted_average_ws",
             "mass_flux_weighted_pressure",
@@ -166,7 +167,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
         )
 
     def test_get_mass_weighted_average_windspeed(self):
-        tested_func = jetstream_metrics.archer_caldeira_2008
+        tested_func = jetstream_algorithms.archer_caldeira_2008
         test_data = self.data.isel(plev=1)
         # should fail because needs two plevs
         self.assertRaises(ValueError, lambda: tested_func(test_data))
@@ -177,7 +178,7 @@ class TestSchiemann2009(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jetstream_metrics.schiemann_et_al_2009
+        tested_func = jetstream_algorithms.schiemann_et_al_2009
         sub_data = self.data.isel(time=slice(0, 1), lon=slice(0, 30))
         result = tested_func(sub_data)
         self.assertTrue(result)
@@ -263,9 +264,9 @@ class TestManney2011(unittest.TestCase):
         subset_data = self.data.sel(plev=slice(25000, 20000)).isel(
             time=slice(0, 1)
         )
-        result = jetstream_metrics.manney_et_al_2011(subset_data)
+        result = jetstream_algorithms.manney_et_al_2011(subset_data)
         self.assertEqual(result["jet_core_id"].max(), 2)
-        # jetstream_metrics.manney_et_al_2011(subset_data.transpose("lat", ...))
+        # jetstream_algorithms.manney_et_al_2011(subset_data.transpose("lat", ...))
 
 
 class TestBarnesPolvani2013(unittest.TestCase):

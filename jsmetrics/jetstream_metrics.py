@@ -10,7 +10,7 @@
 import numpy as np
 import xarray
 from . import jetstream_metrics_utils
-from . import general_utils, windspeed_utils, xgrid_utils
+from . import general_utils, windspeed_utils, spatial_utils
 
 # docs
 __author__ = "Thomas Keel"
@@ -751,7 +751,7 @@ def ceppi_et_al_2018(data):
         Data containing centroid latitude of u-wind for each time unit (e.g. each day)
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
-    total_area_m2 = xgrid_utils.grid_cell_areas(data["lon"], data["lat"])
+    total_area_m2 = spatial_utils.grid_cell_areas(data["lon"], data["lat"])
     data["total_area_m2"] = (("lat", "lon"), total_area_m2)
 
     #  Step 2. calculate zonal mean

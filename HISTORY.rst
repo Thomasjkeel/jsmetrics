@@ -15,7 +15,7 @@ History
 
 0.0.7-alpha (2022-06-10)
 ------------------
-* update xgrid_utils with lazy method for guessing bounds and assuming a regular grid (func is "_standardise_diffs_by_making_all_most_common_diff")
+* update spatial_utils with lazy method for guessing bounds and assuming a regular grid (func is "_standardise_diffs_by_making_all_most_common_diff")
 * update Pena-Ortiz method to seperate into subtropical and polar front jet
 * remove prints from windspeed utils
 * rename bp13 jet lat 
@@ -26,7 +26,7 @@ History
 * add Kerr et al. 2020
 * add nearest method function to general utils
 * Speed up Ceppi and fix integration method within (still need to verify)
-* Add xgrid utils for grid cell m2 method
+* Add spatial utils for grid cell m2 method
 
 0.0.6-beta (2022-05-31)
 ------------------

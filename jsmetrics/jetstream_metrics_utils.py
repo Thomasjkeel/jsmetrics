@@ -16,7 +16,7 @@ import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
 import shapely.geometry
-from . import windspeed_utils, general_utils
+from . import general_utils, spatial_utils, windspeed_utils
 
 # docs
 __author__ = "Thomas Keel"
@@ -1848,13 +1848,13 @@ def calc_total_great_circle_distance_along_line(line):
     if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
         for i, _ in enumerate(line):
             total_distance += (
-                general_utils.get_great_circle_distance_along_linestring(
+                spatial_utils.get_great_circle_distance_along_linestring(
                     shapely.geometry.LineString((line[i]))
                 )
             )
     elif isinstance(line, shapely.geometry.LineString):
         total_distance += (
-            general_utils.get_great_circle_distance_along_linestring(line)
+            spatial_utils.get_great_circle_distance_along_linestring(line)
         )
     else:
         return np.nan

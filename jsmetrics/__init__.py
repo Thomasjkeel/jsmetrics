@@ -7,8 +7,8 @@ __version__ = "0.0.7-beta"
 from . import (
     general_utils,
     jetstream_metrics,
+    jetstream_algorithms,
     jetstream_metrics_utils,
     windspeed_utils,
+    spatial_utils,
 )
-
-# this is where the metrics.[something] objects can go i.e. errors

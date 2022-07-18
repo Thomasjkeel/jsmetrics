@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 """
-    General utility functions needed for the jet-stream metrics
-    TODO: sort this out (maybe move to init file)
+    Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed or spatial utils.
+    Built from xarray
 """
 
 # imports
-import math
 import itertools
 import numpy as np
 import scipy.signal
@@ -17,31 +16,9 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-def check_kwargs(kwargs):
-    if not kwargs:
-        return {}
-    else:
-        return kwargs
-
-
-def find_nearest_value(array, value):
-    """
-    Taken from https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array
-    """
-    idx = np.searchsorted(array, value, side="left")
-    if idx > 0 and (
-        idx == len(array)
-        or np.math.fabs(value - array[idx - 1])
-        < np.math.fabs(value - array[idx])
-    ):
-        return array[idx - 1]
-    else:
-        return array[idx]
-
-
 def check_at_least_two_plevs_in_data(data):
     """
-    Checks there are two pressure-levels (plevs) in xarray dataset
+    Checks there are at least two pressure-levels (plevs) in xarray dataset
 
     Parameters
     ----------
@@ -61,22 +38,34 @@ def check_at_least_two_plevs_in_data(data):
 
 def get_local_minima(arr, axis=0):
     """
-    from
+    Uses scipy.signal.argrelextrema to get index location of maximum value in array
+
+    Taken from
     https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
 
-    TODO: add asserts/method for checking input
-    TODO: add doc example of using axis
+    Parameters
+    ----------
+    arr : array-like
+        array to find index location of maxima value from
+    axis : int
+        axis for scipy.signal.argrelextrema
     """
     return scipy.signal.argrelextrema(arr, np.less, axis=axis)
 
 
 def get_local_maxima(arr, axis=0):
     """
-    from
+    Uses scipy.signal.argrelextrema to get index location of minimum value in array
+
+    Taken from
     https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
 
-    TODO: add asserts/method for checking input
-    TODO: add doc example of using axis
+    Parameters
+    ----------
+    arr : array-like
+        array to find index location of minima value from
+    axis : int
+        axis for scipy.signal.argrelextrema
     """
     return scipy.signal.argrelextrema(arr, np.greater, axis=axis)
 
@@ -91,6 +80,11 @@ def get_climatology(data, freq):
         data with regular time stamp
     freq : str
         'day', 'month' or 'season'
+
+    Returns
+    ----------
+    climatology : xarray.Dataset
+        Climatology of a given frequency
 
     Usage
     ----------
@@ -108,22 +102,39 @@ def is_djf(month):
     return (month == 12) | (month >= 1) & (month <= 2)
 
 
-def remove_duplicates(vals):
+def remove_duplicates(arr):
     """
-    removes duplicates see:
+    Removes duplicates from array. From:
     https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
 
-    Used in a few metrics
+    Parameters
+    ----------
+    arr : array-like
+        arr to remove duplicates from
+
+    Returns
+    ----------
+    arr : array-like
+        arr with no duplicates
     """
 
-    vals.sort()
-    vals = list(v for v, _ in itertools.groupby(vals))
-    return vals
+    arr.sort()
+    return list(v for v, _ in itertools.groupby(arr))
 
 
 def get_all_hPa_list(data):
     """
-    Will get a list of all the pressure levels in the data in hPa
+    Will get a list of all the pressure levels in the data in hPa/mbar
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        data with plev coord
+
+    Returns
+    ----------
+    plev : np.array
+        arr containing pressure level list in data in hPa/mbar
     """
     if "plev" not in data.coords:
         raise KeyError("Data does not contain coord: 'plev'")
@@ -131,10 +142,9 @@ def get_all_hPa_list(data):
     if (
         data["plev"].units != "Pa"
         and data["plev"].units != "hPa"
-        and data["plev"].units != "millibars"
+        and data["plev"].units != "mbar"
     ):
-        raise ValueError("Plev units need to be Pa or hPa")
-    #  TODO: what if mbar?
+        raise ValueError("Plev units need to be mbar, Pa or hPa")
 
     plevs = np.array([plev for plev in data["plev"]])
     if data["plev"].units == "Pa":
@@ -144,53 +154,20 @@ def get_all_hPa_list(data):
 
 def get_num_of_decimal_places(num):
     """
-    func for getting number of decimal places in a float
+    Gets number of decimal places in a float
+
+    Parameters
+    ----------
+    num : float or int
+        input number to get decimal places from
+
+    Returns
+    ----------
+    decimal_places : int
+        number of decimal places
     """
     num = "{:f}".format(num).rstrip("0")
     decimal_places = num[::-1].find(".")
     if decimal_places < 0:
         decimal_places = 0
     return decimal_places
-
-
-def standardise_dimension_order(
-    data, dim_order=("time", "plev", "lat", "lon")
-):
-    """
-    Used to make sure that the ordering of the dimensions for a particular
-    dataset is the always the same
-    """
-    return data.transpose(*dim_order)
-
-
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians
-    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
-
-    # haversine formula
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = (
-        math.sin(dlat / 2) ** 2
-        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
-    )
-    c = 2 * math.asin(math.sqrt(a))
-    r = 6371  # Radius of earth in kilometers. Use 3956 for miles
-    return c * r
-
-
-def get_great_circle_distance_along_linestring(line):
-    """
-    Calcualte great circle distance along the length of linestring
-    """
-    numCoords = len(line.coords) - 1
-    distance = 0
-    for i in range(0, numCoords):
-        point1 = line.coords[i]
-        point2 = line.coords[i + 1]
-        distance += haversine(point1[0], point1[1], point2[0], point2[1])
-    return distance

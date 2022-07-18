@@ -2,6 +2,13 @@
 History
 =======
 
+0.0.8 (2022-07-18)
+------------------
+* Format the readme
+* seperate metrics into metrics and algorithms
+* Move around the utils files 
+* Update year on LICENSE 
+
 0.0.7-beta (2022-06-30)
 ------------------
 * swap 'plev' and 'lat' in manney_et_al_2011 method so that it groups cores better
@@ -9,7 +16,7 @@ History
 
 0.0.7-alpha (2022-06-10)
 ------------------
-* update xgrid_utils with lazy method for guessing bounds and assuming a regular grid (func is "_standardise_diffs_by_making_all_most_common_diff")
+* update spatial_utils with lazy method for guessing bounds and assuming a regular grid (func is "_standardise_diffs_by_making_all_most_common_diff")
 * update Pena-Ortiz method to seperate into subtropical and polar front jet
 * remove prints from windspeed utils
 * rename bp13 jet lat 
@@ -20,7 +27,7 @@ History
 * add Kerr et al. 2020
 * add nearest method function to general utils
 * Speed up Ceppi and fix integration method within (still need to verify)
-* Add xgrid utils for grid cell m2 method
+* Add spatial utils for grid cell m2 method
 
 0.0.6-beta (2022-05-31)
 ------------------
@@ -45,7 +52,7 @@ BIG CHANGES:
 0.0.5-beta (2022-05-03)
 ------------------
 * update Woollings et al. 2010 with seasonal cycle
-* update jsmetric dict with 'plev_units' argument 
+* update metric details dict with 'plev_units' argument 
 * fix archer and caldiera call to mass weighted ws (STILL TODO: better plev understanding)
 
 0.0.5-alpha (2022-04-24)
@@ -54,7 +61,7 @@ BIG CHANGES:
 
 0.0.4-beta (2022-02-09)
 ------------------
-* add description, name and DOI to metric dict
+* add description, name and DOI to metric details dict
 
 0.0.4-alpha (2022-01-26)
 ------------------

@@ -4,7 +4,7 @@
 from setuptools import find_packages, setup
 
 NAME = "jet-stream-metrics"
-DESCRIPTION = "Implementations of various jet-stream metrics from literature."
+DESCRIPTION = "Library of algorithms and metrics used to characterise and/or identify jet-streams, based on xarray."
 URL = "https://github.com/Thomasjkeel/jet-stream-metrics"
 AUTHOR = "Thomas Keel"
 AUTHOR_EMAIL = "thomas.keel.18@ucl.ac.uk"
@@ -12,7 +12,7 @@ REQUIRES_PYTHON = ">=3.7.0"
 VERSION = "0.0.7-beta"
 LICENSE = "MIT License"
 
-KEYWORDS = "jet-stream metrics climate xarray"
+KEYWORDS = "jet-stream climate metrics algorithms xarray"
 
 with open("README.rst") as file:
     readme = file.read()
@@ -49,9 +49,9 @@ setup(
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Topic :: Scientific/Engineering :: Atmospheric Science",
     ],
     description=DESCRIPTION,

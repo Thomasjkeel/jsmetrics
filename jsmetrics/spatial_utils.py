@@ -1,15 +1,57 @@
 # -*- coding: utf-8 -*-
 """
-    Operations on cartesian geographical grid to calculate spatial mean and spatial integral on an xarray DataArray
-    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
-    Adapted for use in the jsmetrics module by Thomas Keel (https://github.com/Thomasjkeel)
+    All spatial operations needed for the jet-stream metrics and algorithms
 """
 
 import numpy as np
 import collections
+import math
 
 
 EARTH_RADIUS = 6371000.0  # m
+
+
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians
+    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
+    c = 2 * math.asin(math.sqrt(a))
+    r = 6371  # Radius of earth in kilometers. Use 3956 for miles
+    return c * r
+
+
+def get_great_circle_distance_along_linestring(line):
+    """
+    Calculate great circle distance along the length of linestring
+
+    Parameters
+    ----------
+    line : shapely.geometry.LineString
+        Line to calculate great circle (haversine) distance along
+
+    Returns
+    ----------
+    distance : float
+        Great circle (haversine) distance along input line
+    """
+    numCoords = len(line.coords) - 1
+    distance = 0
+    for i in range(0, numCoords):
+        point1 = line.coords[i]
+        point2 = line.coords[i + 1]
+        distance += haversine(point1[0], point1[1], point2[0], point2[1])
+    return distance
 
 
 def _guess_bounds(points, bound_position=0.5):
@@ -17,6 +59,8 @@ def _guess_bounds(points, bound_position=0.5):
     Guess bounds of grid cells.
 
     Simplified function from iris.coord.Coord.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
@@ -45,6 +89,9 @@ def _standardise_diffs_by_making_all_most_common_diff(diffs):
     """
     Lazy method to fill in gaps for bounds to make sure it is on a regular grid
     Adapted by githubuser:Thomasjkeel
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
+
     """
     counter_of_diffs = collections.Counter(diffs)
     if len(counter_of_diffs) > 1:
@@ -71,6 +118,8 @@ def _quadrant_area(radian_lat_bounds, radian_lon_bounds, radius_of_earth):
     *(radian_lat_bounds.shape[0], radian_lon_bounds.shape[0])*
     The calculations are done at 64 bit precision and the returned array
     will be of type numpy.float64.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
@@ -112,6 +161,8 @@ def grid_cell_areas(lon1d, lat1d, radius=EARTH_RADIUS):
     Calculate grid cell areas given 1D arrays of longitudes and latitudes
     for a planet with the given radius.
 
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
+
     Parameters
     ----------
     lon1d: numpy.array
@@ -136,6 +187,8 @@ def calc_spatial_mean(
 ):
     """
     Calculate spatial mean of xarray.DataArray with grid cell weighting.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
@@ -166,6 +219,8 @@ def calc_spatial_integral(
 ):
     """
     Calculate spatial integral of xarray.DataArray with grid cell weighting.
+
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------

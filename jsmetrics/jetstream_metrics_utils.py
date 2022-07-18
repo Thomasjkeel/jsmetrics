@@ -5,7 +5,7 @@
     identify or classify jet-stream in the literature.
 
     This file is in order of publish year of the metrics
-    (see jetstream_metrics_dict.py)
+    (see details_for_all_metrics.py)
 """
 
 # imports
@@ -15,9 +15,8 @@ import matplotlib.pyplot
 import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
-import shapely
 import shapely.geometry
-from . import windspeed_utils, general_utils
+from . import general_utils, spatial_utils, windspeed_utils
 
 # docs
 __author__ = "Thomas Keel"
@@ -702,12 +701,12 @@ class JetStreamCoreIdentificationAlgorithm:
                 "Windspeed core threshold needs to be more than boundary\
                     threshold and both need to be more than 0"
             ) from e
-        # standardise data
-        data = general_utils.standardise_dimension_order(
-            data, dim_order=(..., "lat", "plev")
-        )
+        # Transpose data
+        data = data.transpose(*(..., "lat", "plev"))
+
         # Step 1. make windspeed slice
         self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)
+
         # Step 2. Get core and potential boundary points
         self._labelled_data = self._lat_ws_slice.label_slice(
             self._lat_ws_slice["ws"] < ws_core_threshold, "Core"
@@ -1849,13 +1848,13 @@ def calc_total_great_circle_distance_along_line(line):
     if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
         for i, _ in enumerate(line):
             total_distance += (
-                general_utils.get_great_circle_distance_along_linestring(
+                spatial_utils.get_great_circle_distance_along_linestring(
                     shapely.geometry.LineString((line[i]))
                 )
             )
     elif isinstance(line, shapely.geometry.LineString):
         total_distance += (
-            general_utils.get_great_circle_distance_along_linestring(line)
+            spatial_utils.get_great_circle_distance_along_linestring(line)
         )
     else:
         return np.nan

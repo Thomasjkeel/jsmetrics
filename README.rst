@@ -35,11 +35,13 @@ Table of the metrics
 See [jsmetrics/details_for_all_metrics.py] for specifications of each 
 For their progress see [Project 1]
 
-  | Metric/algorithm  | Status |
-  | ------------- | ------------- |
-  | `Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
-  | Content Cell  |
-  | Content Cell  | Content Cell  |
++-------+----------+------+
+| Table Headings   | Here |
++=======+==========+======+
+| rows             | cell |
++-------+----------+------+
+| rows             | cell |
++-------+----------+------+
 
 
 Installation 

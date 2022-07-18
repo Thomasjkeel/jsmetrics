@@ -38,13 +38,26 @@ For their progress see [Project 1]
 +------------------------+----------+
 | Metric/Algorithm       | Status   |
 +========================+==========+
-| `Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_ | Complete |
+| Woollings et al. 2010  | Complete |
 +------------------------+----------+
 | rows                   | cell     |
 +------------------------+----------+
 
 Installation 
 -------------
+.. table::
+   :align: left
+   :widths: auto
+   
+   ================================== ======
+   Website                            Type                                           
+   ================================== ======
+   `Google <https://www.google.com>`_ Search
+   `Yahoo <https://www.yahoo.com>`_   Search
+   `CNN <https://www.cnn.com>`_       News  
+   ================================== ======
+
+
 .. code-block:: python
 
     import jsmetrics

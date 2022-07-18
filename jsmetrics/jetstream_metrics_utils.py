@@ -701,12 +701,12 @@ class JetStreamCoreIdentificationAlgorithm:
                 "Windspeed core threshold needs to be more than boundary\
                     threshold and both need to be more than 0"
             ) from e
-        # standardise data
-        data = general_utils.standardise_dimension_order(
-            data, dim_order=(..., "lat", "plev")
-        )
+        # Transpose data
+        data = data.transpose(*(..., "lat", "plev"))
+
         # Step 1. make windspeed slice
         self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)
+
         # Step 2. Get core and potential boundary points
         self._labelled_data = self._lat_ws_slice.label_slice(
             self._lat_ws_slice["ws"] < ws_core_threshold, "Core"

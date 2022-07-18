@@ -119,7 +119,7 @@ class TestKoch2006(unittest.TestCase):
         new_data = self.data.rename({"plev": "pl"})
         self.assertRaises(KeyError, lambda: tested_func(new_data))
         new_data2 = self.data.copy()
-        new_data2["plev"] = self.data.plev.assign_attrs(units="mbar")
+        new_data2["plev"] = self.data.plev.assign_attrs(units="wrong")
         self.assertRaises(ValueError, lambda: tested_func(new_data2))
 
     def test_sum_weighted_ws(self):

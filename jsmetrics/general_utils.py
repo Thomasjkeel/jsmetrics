@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed or spatial utils
+    Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed or spatial utils.
+    Built from xarray
 """
 
 # imports
@@ -80,6 +81,11 @@ def get_climatology(data, freq):
     freq : str
         'day', 'month' or 'season'
 
+    Returns
+    ----------
+    climatology : xarray.Dataset
+        Climatology of a given frequency
+
     Usage
     ----------
     climatology = get_climatology(data, 'month')
@@ -96,22 +102,39 @@ def is_djf(month):
     return (month == 12) | (month >= 1) & (month <= 2)
 
 
-def remove_duplicates(vals):
+def remove_duplicates(arr):
     """
-    removes duplicates see:
+    Removes duplicates from array. From:
     https://stackoverflow.com/questions/2213923/removing-duplicates-from-a-list-of-lists
 
-    Used in a few metrics
+    Parameters
+    ----------
+    arr : array-like
+        arr to remove duplicates from
+
+    Returns
+    ----------
+    arr : array-like
+        arr with no duplicates
     """
 
-    vals.sort()
-    vals = list(v for v, _ in itertools.groupby(vals))
-    return vals
+    arr.sort()
+    return list(v for v, _ in itertools.groupby(arr))
 
 
 def get_all_hPa_list(data):
     """
-    Will get a list of all the pressure levels in the data in hPa
+    Will get a list of all the pressure levels in the data in hPa/mbar
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        data with plev coord
+
+    Returns
+    ----------
+    plev : np.array
+        arr containing pressure level list in data in hPa/mbar
     """
     if "plev" not in data.coords:
         raise KeyError("Data does not contain coord: 'plev'")
@@ -119,10 +142,9 @@ def get_all_hPa_list(data):
     if (
         data["plev"].units != "Pa"
         and data["plev"].units != "hPa"
-        and data["plev"].units != "millibars"
+        and data["plev"].units != "mbar"
     ):
-        raise ValueError("Plev units need to be Pa or hPa")
-    #  TODO: what if mbar?
+        raise ValueError("Plev units need to be mbar, Pa or hPa")
 
     plevs = np.array([plev for plev in data["plev"]])
     if data["plev"].units == "Pa":
@@ -132,20 +154,20 @@ def get_all_hPa_list(data):
 
 def get_num_of_decimal_places(num):
     """
-    func for getting number of decimal places in a float
+    Gets number of decimal places in a float
+
+    Parameters
+    ----------
+    num : float or int
+        input number to get decimal places from
+
+    Returns
+    ----------
+    decimal_places : int
+        number of decimal places
     """
     num = "{:f}".format(num).rstrip("0")
     decimal_places = num[::-1].find(".")
     if decimal_places < 0:
         decimal_places = 0
     return decimal_places
-
-
-def standardise_dimension_order(
-    data, dim_order=("time", "plev", "lat", "lon")
-):
-    """
-    Used to make sure that the ordering of the dimensions for a particular
-    dataset is the always the same
-    """
-    return data.transpose(*dim_order)

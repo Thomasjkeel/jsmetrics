@@ -7,6 +7,7 @@ jsmetrics: Jet-stream metrics and algorithms
 This is jsmetrics ...
 
 [Table of Contents]
+.. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
 
 
 The layout and content of this project and was inspired by xclim (https://github.com/Ouranosinc/xclim) 

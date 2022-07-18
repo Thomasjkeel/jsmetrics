@@ -289,7 +289,7 @@ class TestPenaOrtiz2013(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.penaortiz_et_al_2013(self.data)
+        # result = jetstream_algorithms.penaortiz_et_al_2013(self.data)
         # self.assertIn("ws", result)
         pass
 
@@ -317,7 +317,7 @@ class TestKuang2014(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jetstream_metrics.kuang_et_al_2014
+        tested_func = jetstream_algorithms.kuang_et_al_2014
         lon_data = self.data.sel(plev=50000).isel(time=slice(0, 2))
         result = tested_func(lon_data)
         self.assertEqual(result["jet_ocurrence1_jet_centre2"].max(), 2)

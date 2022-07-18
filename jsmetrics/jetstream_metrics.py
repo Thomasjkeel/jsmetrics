@@ -10,7 +10,7 @@
 import numpy as np
 import xarray
 from . import jetstream_metrics_utils
-from . import general_utils, windspeed_utils, spatial_utils
+from . import general_utils, spatial_utils
 
 # docs
 __author__ = "Thomas Keel"
@@ -183,53 +183,6 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     return output
 
 
-def penaortiz_et_al_2013(data):
-    """
-    Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
-
-    Will calculate local wind maxima days per monthyear
-    Actual methodology uses 100-400 hPa
-
-    NOTE: Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing u- and v-component wind
-
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data containing number of days per month with local wind maxima
-    """
-    #  Step 1. Calculate wind vector
-    data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
-
-    #  Step 2. Make array of zeros for local wind maxima location algorithm
-    local_wind_maxima = (
-        jetstream_metrics_utils.get_empty_local_wind_maxima_data(data)
-    )
-
-    #  Step 3. Find local wind maxima locations by day
-    local_wind_maxima_by_timeunit = local_wind_maxima.groupby("time").map(
-        jetstream_metrics_utils.get_local_wind_maxima_by_timeunit
-    )
-
-    #  Step 4. Get number of days per month with local wind maxima
-    local_wind_maxima_timeunits_by_monthyear = jetstream_metrics_utils.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(
-        local_wind_maxima_by_timeunit
-    )
-    local_wind_maxima_timeunits_by_monthyear = (
-        local_wind_maxima_timeunits_by_monthyear.to_dataset()
-    )
-
-    #  Step 5. Sort into PJ and STJ
-    output = jetstream_metrics_utils.subdivide_local_wind_maxima_into_stj_pfj(
-        local_wind_maxima_timeunits_by_monthyear
-    )
-    return output
-
-
 # def screen_and_simmonds_2013(data):
 #     """
 #     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
@@ -250,40 +203,6 @@ def penaortiz_et_al_2013(data):
 #     if isinstance(data, xarray.DataArray):
 #         data = data.to_dataset()
 #     return data
-
-
-def kuang_et_al_2014(data, occurence_ws_threshold=30):
-    """
-    Method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
-
-    Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
-    Best at 100-500 hPa
-    NOTE: Currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing u- and v-component wind
-    occurence_ws_threshold : int or float
-        Threshold used to identify a jet-stream occurence point (default=30)
-
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data containing jet-occurence and jet-centres (1 is occurence, 2 is core)
-    """
-    if "plev" in data.dims:
-        if data["plev"].count() == 1:
-            data = data.isel(plev=0)
-        else:
-            raise ValueError("Please subset to one plev value for algorithm")
-
-    # Step 1. Run Jet-stream Occurence and Centre Algorithm
-    output = data.groupby("time").map(
-        jetstream_metrics_utils.run_jet_occurence_and_centre_alg_on_one_day,
-        (occurence_ws_threshold,),
-    )
-    return output
 
 
 def barnes_polvani_2015(data):
@@ -583,14 +502,6 @@ def ceppi_et_al_2018(data):
         zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
     )
     return data
-
-
-# def kern_et_al_2018(data):
-#     """
-#     Write function description
-#     TODO: ask about equation
-#     """
-#     return data
 
 
 # def rikus_2018(data):

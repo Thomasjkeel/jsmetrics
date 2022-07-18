@@ -38,7 +38,7 @@ For their progress see [Project 1]
 +-------+----------+------+
 | Metric/Algorithm   | Status |
 +=======+==========+======+
-| `Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_             | Complete |
+| this | Complete |
 +-------+----------+------+
 | .. _a link: https://domain.invalid/         | cell |
 +-------+----------+------+

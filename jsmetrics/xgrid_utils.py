@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Operations on cartesian geographical grid.
-   Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
-   Adapted by Thomas Keel (https://github.com/Thomasjkeel)
-   """
+"""
+    Operations on cartesian geographical grid to calculate spatial mean and spatial integral on an xarray DataArray
+    Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
+    Adapted for use in the jsmetrics module by Thomas Keel (https://github.com/Thomasjkeel)
+"""
+
 import numpy as np
 import collections
 

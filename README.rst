@@ -52,13 +52,13 @@ For their progress see [Project 1]
    :align: left
    :widths: auto
    
-   ================================== ======
-   Website                            Type                                           
-   ================================== ======
-   `Woollings-et-al.-2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_      Search
-   `Yahoo <https://www.yahoo.com>`_   Search
-   `CNN <https://www.cnn.com>`_       News  
-   ================================== ======
+   ============================================================================== =========
+   Metric                                                                           Status                                           
+   ============================================================================== =========
+   `Woollings-et-al.-2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Search
+   `Yahoo <https://www.yahoo.com>`_                                                 Search
+   `CNN <https://www.cnn.com>`_                                                     News  
+   ============================================================================== =========
 
 
 

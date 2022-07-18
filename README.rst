@@ -81,7 +81,7 @@ Project To-Do's
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
 
 
-.. |license| 
+.. |license| image:: https://img.shields.io/badge/License-MIT-lightgray.svg?style=flt-square
         :target: https://github.com/Thomasjkeel/jsmetrics/blob/master/LICENSE
         :alt: License
 

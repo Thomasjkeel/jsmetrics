@@ -2,6 +2,10 @@
 History
 =======
 
+0.0.8 (2022-07-18)
+------------------
+* Update year on LICENSE 
+
 0.0.7-beta (2022-06-30)
 ------------------
 * swap 'plev' and 'lat' in manney_et_al_2011 method so that it groups cores better

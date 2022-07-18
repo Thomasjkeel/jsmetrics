@@ -36,16 +36,16 @@ __status__ = "Development"
 MAX_VARIABLES = 7
 
 
-class TestJetStreamMetricDict(unittest.TestCase):
+class TestMetricDetailsDict(unittest.TestCase):
     def setUp(self):
-        self.metric_dict = details_for_all_metrics.JETSTREAM_METRIC_DICT
+        self.metric_details = details_for_all_metrics.METRIC_DETAILS
 
     def test_metric_dict_keys(self):
-        for metric_name in self.metric_dict.keys():
+        for metric_name in self.metric_details.keys():
             self.assertIsInstance(metric_name, str)
 
     def test_metric_dict_values(self):
-        for metric in self.metric_dict.values():
+        for metric in self.metric_details.values():
             self.assertIsInstance(metric, dict)
             self.assertEqual(len(metric.keys()), MAX_VARIABLES)
             self.assertListEqual(
@@ -62,13 +62,13 @@ class TestJetStreamMetricDict(unittest.TestCase):
             )
 
     def test_variables(self):
-        for metric in self.metric_dict.values():
+        for metric in self.metric_details.values():
             self.assertIsInstance(metric["variables"], list)
             self.assertGreaterEqual(len(metric["variables"]), 0)
             self.assertLessEqual(len(metric["variables"]), MAX_VARIABLES)
 
     def test_metric_coords(self):
-        for metric in self.metric_dict.values():
+        for metric in self.metric_details.values():
             self.assertIsInstance(metric["coords"], dict)
             for coord in metric["coords"].keys():
                 self.assertIsInstance(coord, str)
@@ -81,7 +81,7 @@ class TestJetStreamMetricDict(unittest.TestCase):
         ]
     )
     def test_each_coord(self, coord, min_value, max_value):
-        for metric in self.metric_dict.values():
+        for metric in self.metric_details.values():
             if coord in metric["coords"].keys():
                 self.assertEqual(len(metric["coords"][coord]), 2)
                 self.assertGreaterEqual(
@@ -90,7 +90,7 @@ class TestJetStreamMetricDict(unittest.TestCase):
                 self.assertLessEqual(max(metric["coords"][coord]), max_value)
 
     def test_funcs(self):
-        for metric in self.metric_dict.values():
+        for metric in self.metric_details.values():
             self.assertTrue(callable(metric["metric"]))
 
 

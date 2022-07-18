@@ -5,7 +5,7 @@
     identify or classify jet-stream in the literature.
 
     This file is in order of publish year of the metrics
-    (see jetstream_metrics_dict.py)
+    (see details_for_all_metrics.py)
 """
 
 # imports

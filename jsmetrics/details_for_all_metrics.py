@@ -1,7 +1,7 @@
 from . import jetstream_metrics
 
 
-# RULES for JETSTREAM_METRICS dictionary:
+# RULES for METRIC_DETAILS dictionary:
 # 1. must have the keys: 'variables', 'coords' 'metric' and 'name'
 # 2. 'variables' will contain the required CMIP6? model output variable names
 # 3. 'coords' will contain the required CMIP6? standard coords
@@ -15,7 +15,7 @@ from . import jetstream_metrics
 # 7. 'doi' is the DOI link
 
 
-JETSTREAM_METRIC_DICT = {
+METRIC_DETAILS = {
     "Koch2006": {
         "variables": ["ua", "va"],
         "coords": {"plev": [10000, 40000]},

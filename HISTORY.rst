@@ -45,7 +45,7 @@ BIG CHANGES:
 0.0.5-beta (2022-05-03)
 ------------------
 * update Woollings et al. 2010 with seasonal cycle
-* update jsmetric dict with 'plev_units' argument 
+* update metric details dict with 'plev_units' argument 
 * fix archer and caldiera call to mass weighted ws (STILL TODO: better plev understanding)
 
 0.0.5-alpha (2022-04-24)
@@ -54,7 +54,7 @@ BIG CHANGES:
 
 0.0.4-beta (2022-02-09)
 ------------------
-* add description, name and DOI to metric dict
+* add description, name and DOI to metric details dict
 
 0.0.4-alpha (2022-01-26)
 ------------------

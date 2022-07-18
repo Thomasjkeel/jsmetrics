@@ -4,38 +4,17 @@ jsmetrics: Jet-stream metrics and algorithms
 [Links]
 ----
 
-This is ...
+This is jsmetrics ...
 
-Inspired by xclim ()
+[Table of Contents]
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+
+The layout and content of this project and was inspired by xclim (https://github.com/Ouranosinc/xclim) 
+.. which contains other climate indices and metrics.
+Started with Cookiecutter (https://github.com/audreyfeldroy/cookiecutter-pypackage).
 
 DISCLAIMER
-------------------
+-------------
 I have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
 
 In some cases I have used a different dataset to the one used. 
@@ -48,12 +27,21 @@ Where you can find my working-out:
 
 
 Table of the metrics
--------------------
+-------------
 See [jsmetrics/details_for_all_metrics.py] for specifications of each 
 For their progress see [Project 1]
 
 [TABLE HERE]
 
+Installation 
+-------------
+.. code-block:: python
+
+    import jsmetrics
+    import xarray as xr
+
+    ua_data = xr.open_dataset(filename)
+    w10 = jsmetrics.jetstream_metrics.woollings_et_al_2010(ua_data)
 
 .. Documentation
 .. -------------
@@ -77,7 +65,7 @@ For their progress see [Project 1]
 
 
 Project To-Do's
--------------------
+-------------
 - ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
 - ADD: pint (see: https://pint.readthedocs.io/en/stable/)
 - ADD: DOI

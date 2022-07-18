@@ -411,26 +411,26 @@ def penaortiz_et_al_2013(data):
     return output
 
 
-def screen_and_simmonds_2013(data):
-    """
-    Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
+# def screen_and_simmonds_2013(data):
+#     """
+#     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
 
-    Slightly adjusted in Screen and Simmonds 2014
-    TODO: insure that Earth sphericity is accounted for in the perimeter calc
+#     Slightly adjusted in Screen and Simmonds 2014
+#     TODO: insure that Earth sphericity is accounted for in the perimeter calc
 
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing geopotential height (zg)
+#     Parameters
+#     ----------
+#     data : xarray.Dataset
+#         Data containing geopotential height (zg)
 
-    Returns
-    ----------
-    data : xarray.Dataset
-        Data containing ... TODO
-    """
-    if isinstance(data, xarray.DataArray):
-        data = data.to_dataset()
-    return data
+#     Returns
+#     ----------
+#     data : xarray.Dataset
+#         Data containing ... TODO
+#     """
+#     if isinstance(data, xarray.DataArray):
+#         data = data.to_dataset()
+#     return data
 
 
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
@@ -667,11 +667,11 @@ def grise_polvani_2017(data):
     return output
 
 
-def molnos_et_al_2017(data):
-    """
-    Write function description
-    """
-    return data
+# def molnos_et_al_2017(data):
+#     """
+#     Write function description
+#     """
+#     return data
 
 
 def bracegirdle_et_al_2018(data):
@@ -766,19 +766,19 @@ def ceppi_et_al_2018(data):
     return data
 
 
-def kern_et_al_2018(data):
-    """
-    Write function description
-    TODO: ask about equation
-    """
-    return data
+# def kern_et_al_2018(data):
+#     """
+#     Write function description
+#     TODO: ask about equation
+#     """
+#     return data
 
 
-def rikus_2018(data):
-    """
-    Write function description
-    """
-    return data
+# def rikus_2018(data):
+#     """
+#     Write function description
+#     """
+#     return data
 
 
 def kerr_et_al_2020(data):

@@ -35,13 +35,21 @@ Table of the metrics
 See [jsmetrics/details_for_all_metrics.py] for specifications of each 
 For their progress see [Project 1]
 
-`Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
+
+| Tables        |      Are      |  Cool |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      |    centered   |   $12 |
+| zebra stripes |    are neat   |    $1 |
+
+
+
 | Metric/algorithm  | Status |
 | ------------- | ------------- |
-| [Woollings](#www.google.com)  | Content Cell  |
+| `Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
+  | Content Cell  |
 | Content Cell  | Content Cell  |
 
-`Woolling et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_
 
 Installation 
 -------------

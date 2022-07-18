@@ -28,7 +28,7 @@ METRIC_DETAILS = {
         "variables": ["ua", "va"],
         "coords": {"plev": [10000, 40000]},
         "plev_units": "Pa",
-        "metric": jetstream_algorithms.archer_caldeira_2008,
+        "metric": jetstream_metrics.archer_caldeira_2008,
         "name": "Archer & Caldeira 2008",
         "description": "",
         "doi": "https://doi.org/10.1029/2008GL033614",

@@ -153,7 +153,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        result = jetstream_algorithms.archer_caldeira_2008(self.data)
+        result = jetstream_metrics.archer_caldeira_2008(self.data)
         for col in [
             "mass_weighted_average_ws",
             "mass_flux_weighted_pressure",
@@ -167,7 +167,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
         )
 
     def test_get_mass_weighted_average_windspeed(self):
-        tested_func = jetstream_algorithms.archer_caldeira_2008
+        tested_func = jetstream_metrics.archer_caldeira_2008
         test_data = self.data.isel(plev=1)
         # should fail because needs two plevs
         self.assertRaises(ValueError, lambda: tested_func(test_data))

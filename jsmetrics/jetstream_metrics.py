@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    Metrics used to identify or classify jet-stream in the literature
+    Metrics (or Indices) used to identify or classify jet-stream in the literature
+    TODO: including metrics to calculate average jet latitudes and upper-level wind sinuosity
 
     All functions should return a xarray.Dataset
 """
@@ -10,12 +11,71 @@
 import numpy as np
 import xarray
 from . import jetstream_metrics_utils
-from . import general_utils, spatial_utils
+from . import general_utils, windspeed_utils, spatial_utils
 
 # docs
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
+
+
+def archer_caldeira_2008(data):
+    """
+    Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+
+    Calculates the mass-weighted average wind speed, mass flux weighted pressure
+    and mass flux weighted latitude. This method has some similarities to method
+    used in Koch et al. 2006. In paper, 100-400 hPa is used.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u- and v-component wind
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing mass weighted average ws, mass flux weighted pressure and latitude
+    """
+    #  Step 1. Get monthly means
+    mon_mean = data.groupby("time.month").mean()
+
+    #  Step 2. Calculate wind-speed from u and v-component wind
+    mon_mean["ws"] = windspeed_utils.get_resultant_wind(
+        mon_mean["ua"], mon_mean["va"]
+    )
+
+    #  Step 3. Calculate mass weighted average
+    mass_weighted_average = jetstream_metrics_utils.calc_mass_weighted_average(
+        mon_mean, ws_col="ws"
+    )
+    mass_flux_weighted_pressure = (
+        jetstream_metrics_utils.calc_mass_flux_weighted_pressure(
+            mon_mean, ws_col="ws"
+        )
+    )
+    mass_flux_weighted_latitude = (
+        jetstream_metrics_utils.calc_mass_flux_weighted_latitude(
+            mon_mean, lat_min=15, lat_max=75, ws_col="ws"
+        )
+    )
+    output = data.assign(
+        {
+            "mass_weighted_average_ws": (
+                ("month", "lat", "lon"),
+                mass_weighted_average.data,
+            ),
+            "mass_flux_weighted_pressure": (
+                ("month", "lat", "lon"),
+                mass_flux_weighted_pressure.data,
+            ),
+            "mass_flux_weighted_latitude": (
+                ("month", "lon"),
+                mass_flux_weighted_latitude.data,
+            ),
+        }
+    )
+    return output
 
 
 def woollings_et_al_2010(data, filter_freq=10, window_size=61):

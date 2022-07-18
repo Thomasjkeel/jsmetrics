@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed utils
+    Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed or spatial utils
 """
 
 # imports
@@ -15,24 +15,9 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-def find_nearest_value(array, value):
-    """
-    Taken from https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array
-    """
-    idx = np.searchsorted(array, value, side="left")
-    if idx > 0 and (
-        idx == len(array)
-        or np.math.fabs(value - array[idx - 1])
-        < np.math.fabs(value - array[idx])
-    ):
-        return array[idx - 1]
-    else:
-        return array[idx]
-
-
 def check_at_least_two_plevs_in_data(data):
     """
-    Checks there are two pressure-levels (plevs) in xarray dataset
+    Checks there are at least two pressure-levels (plevs) in xarray dataset
 
     Parameters
     ----------
@@ -52,22 +37,34 @@ def check_at_least_two_plevs_in_data(data):
 
 def get_local_minima(arr, axis=0):
     """
-    from
+    Uses scipy.signal.argrelextrema to get index location of maximum value in array
+
+    Taken from
     https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
 
-    TODO: add asserts/method for checking input
-    TODO: add doc example of using axis
+    Parameters
+    ----------
+    arr : array-like
+        array to find index location of maxima value from
+    axis : int
+        axis for scipy.signal.argrelextrema
     """
     return scipy.signal.argrelextrema(arr, np.less, axis=axis)
 
 
 def get_local_maxima(arr, axis=0):
     """
-    from
+    Uses scipy.signal.argrelextrema to get index location of minimum value in array
+
+    Taken from
     https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
 
-    TODO: add asserts/method for checking input
-    TODO: add doc example of using axis
+    Parameters
+    ----------
+    arr : array-like
+        array to find index location of minima value from
+    axis : int
+        axis for scipy.signal.argrelextrema
     """
     return scipy.signal.argrelextrema(arr, np.greater, axis=axis)
 

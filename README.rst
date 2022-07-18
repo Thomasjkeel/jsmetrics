@@ -35,29 +35,19 @@ Table of the metrics
 See [jsmetrics/details_for_all_metrics.py] for specifications of each 
 For their progress see [Project 1]
 
-+------------------------+----------+
-| Metric/Algorithm       | Status   |
-+========================+==========+
-| Woollings et al. 2010  | Complete |
-+------------------------+----------+
-| rows                   | cell     |
-+------------------------+----------+
-
-Installation 
--------------
 .. table::
    :align: left
    :widths: auto
    
-   ================================== ======
-   Website                            Type                                           
-   ================================== ======
-   `Google <https://www.google.com>`_ Search
-   `Yahoo <https://www.yahoo.com>`_   Search
-   `CNN <https://www.cnn.com>`_       News  
+   ================================== ========
+   Metric/Algorithm                    Status                                           
+   ================================== ========
+   `Woollings et al. 2010 <https://www.google.com>`_ Search
    ================================== ======
 
 
+Installation 
+-------------
 .. code-block:: python
 
     import jsmetrics

@@ -8,7 +8,7 @@ from . import (
     data_utils,
     jetstream_metrics,
     jetstream_algorithms,
-    jetstream_metrics_utils,
+    jetstream_metrics_components,
     windspeed_utils,
     spatial_utils,
 )

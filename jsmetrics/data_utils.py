@@ -8,6 +8,7 @@
 # imports
 import itertools
 import numpy as np
+import xarray as xr
 import scipy.signal
 
 # docs
@@ -34,6 +35,43 @@ def check_at_least_two_plevs_in_data(data):
         raise ValueError(
             "Need at least 2 pressure levels (plevs) for calculation"
         )
+
+
+def check_coord_in_data(data, req_coords):
+    for coord in req_coords:
+        if coord not in data.coords:
+            raise KeyError("'%s' is not in the data" % (coord,))
+
+
+def check_if_xarray_dataset_or_array(data):
+    if not isinstance(data, xr.Dataset) or isinstance(data, xr.DataArray):
+        raise TypeError("input needs to be xarray.DataSet or xarray.DataArray")
+
+
+def check_only_required_coords_are_in_data(data, req_coords, to_remove=()):
+    dims = set(data.dims)
+    for rem in to_remove:
+        try:
+            dims.remove(rem)
+        except Exception as e:
+            e
+            pass
+            # print('cannot remove %s from dims' % (rem))
+
+    req_coords = set(req_coords)
+    difference = dims.difference(set(req_coords))
+    if len(difference) > 0:
+        raise ValueError(
+            "Unwanted coords in data: %s.\
+             Please subset/remove so that the slice can be 2D."
+            % (difference,)
+        )
+
+
+def check_var_in_data(data, req_variables):
+    for var in req_variables:
+        if var not in data.variables:
+            raise KeyError("'%s' is not the data" % (var,))
 
 
 def get_local_maxima(arr, axis=0):

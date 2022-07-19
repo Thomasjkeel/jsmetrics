@@ -366,7 +366,7 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
 
 def get_zonal_mean(data):
     """
-    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
@@ -402,7 +402,7 @@ def get_zonal_mean(data):
 
 def calc_low_pass_weights(window, cutoff):
     """
-    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Calculate weights for a low pass Lanczos filter.
@@ -438,7 +438,7 @@ def calc_low_pass_weights(window, cutoff):
 
 def apply_lanczos_filter(dataarray, filter_freq, window_size):
     """
-    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Will carry out Lanczos low-pass filter
@@ -486,7 +486,7 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
 
 def get_latitude_and_speed_where_max_ws(data_row):
     """
-    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
     & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
@@ -531,7 +531,7 @@ def assign_jet_lat_and_speed_to_data(
     data, max_lat_ws, max_lats_col="jet_lat", max_ws_col="jet_speed"
 ):
     """
-    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
 
     Will return a data array with the maximum windspeed and latitude of that maximum wind speed
@@ -564,7 +564,7 @@ def assign_jet_lat_and_speed_to_data(
 
 def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
     """
-    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
     Carries out a Fourier transform for filtering keeping only low frequencies
     ADAPTED FROM:
@@ -604,7 +604,7 @@ def assign_filtered_lats_and_ws_to_data(
     data, filtered_max_lats, filtered_max_ws, dim
 ):
     """
-    Component of method from Woolings et al (2010) http://dx.doi.org/10.1002/qj.625
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     Assigns the filtered data back to the returned dataset
 
     Parameters

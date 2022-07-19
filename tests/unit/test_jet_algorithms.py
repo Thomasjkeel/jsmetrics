@@ -101,22 +101,22 @@ class TestManney2011(unittest.TestCase):
         subset_data = self.data.sel(plev=slice(25000, 20000)).isel(
             time=slice(0, 1)
         )
-        result_unexpanded_plev = test_func(subset_data.sel(plev=25000))
-        self.assertEqual(result_unexpanded_plev["jet_core_id"].max(), 2)
+        res = test_func(subset_data.sel(plev=25000))
+        self.assertEqual(res["jet_core_id"].max(), 2)
 
 
 class TestPenaOrtiz2013(unittest.TestCase):
     def setUp(self):
-        # TODO
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        # result = jetstream_algorithms.penaortiz_et_al_2013(self.data)
-        # self.assertIn("ws", result)
-        pass
-
-    def test_get_resultant_wind(self):
-        pass
+        tested_func = jetstream_algorithms.penaortiz_et_al_2013
+        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(
+            time=slice(0, 1)
+        )
+        res = tested_func(subset_data)
+        self.assertTrue("polar_front_jet" in res)
+        self.assertEqual(res["subtropical_jet"].max(), 1)
 
     def test_get_empty_local_wind_maxima(self):
         pass
@@ -138,6 +138,10 @@ class TestKuang2014(unittest.TestCase):
             time=slice(0, 2)
         )
         self.assertRaises(ValueError, lambda: tested_func(lon_data))
+        plev_data = self.data.sel(plev=slice(25000, 25000)).isel(
+            time=slice(0, 2)
+        )
+        tested_func(plev_data)
 
 
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):

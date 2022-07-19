@@ -18,6 +18,10 @@ from jsmetrics import windspeed_utils
 #     self.assertIsInstance(tested_func(self.data), xr.Dataset)
 
 
+# def test_get_resultant_wind(self):
+#     pass
+
+
 class TestWindSpeedSlice(unittest.TestCase):
     def test_basic(self):
         self.assertRaises(

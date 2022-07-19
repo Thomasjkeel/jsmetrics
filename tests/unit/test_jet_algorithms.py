@@ -14,9 +14,8 @@ import unittest
 import xarray as xr
 import numpy as np
 from jsmetrics import (
-    jetstream_algorithms_components,
     jetstream_algorithms,
-    jetstream_metrics_components,
+    jetstream_algorithms_components,
 )
 from . import (
     set_up_test_uv_data,
@@ -57,7 +56,7 @@ class TestKoch2006(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(new_data2))
 
     def test_sum_weighted_ws(self):
-        tested_func = jetstream_metrics_components.get_sum_weighted_ws
+        tested_func = jetstream_algorithms_components.get_sum_weighted_ws
         self.assertRaises(TypeError, lambda: tested_func(self.data, 1))
         new_data = self.data.rename({"plev": "pl"})
         self.assertRaises(KeyError, lambda: tested_func(new_data, [10, 20]))
@@ -66,10 +65,10 @@ class TestKoch2006(unittest.TestCase):
         self.assertGreater(sum_weighted.max(), 0)
 
     def test_weighted_average_ws(self):
-        tested_func = jetstream_metrics_components.get_weighted_average_ws
+        tested_func = jetstream_algorithms_components.get_weighted_average_ws
 
         self.assertRaises(TypeError, lambda: tested_func(self.data, 1))
-        sum_weighted = jetstream_metrics_components.get_sum_weighted_ws(
+        sum_weighted = jetstream_algorithms_components.get_sum_weighted_ws(
             self.data, [0, 100]
         )
         weighted_av = tested_func(sum_weighted, np.array([0, 100]))
@@ -147,7 +146,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
     def test_ws_thresholds(self):
         tested_alg = (
-            jetstream_metrics_components.JetStreamCoreIdentificationAlgorithm
+            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm
         )
         self.assertRaises(ValueError, lambda: tested_alg(self.data))
         test_data = self.data.isel(time=0, lon=0)
@@ -158,7 +157,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
     def test_inner_funcs(self):
         tested_alg = (
-            jetstream_metrics_components.JetStreamCoreIdentificationAlgorithm
+            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm
         )
         test_data = self.data.isel(time=0, lon=0)
         result = tested_alg(test_data)
@@ -188,14 +187,14 @@ class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
 
     def test_ws_thresholds(self):
         tested_alg = (
-            jetstream_metrics_components.JetStreamOccurenceAndCentreAlgorithm
+            jetstream_algorithms_components.JetStreamOccurenceAndCentreAlgorithm
         )
         test_data = self.data.isel(plev=0, time=0)
         self.assertRaises(ValueError, lambda: tested_alg(test_data, -10))
 
     def test_inner_functions(self):
         tested_alg = (
-            jetstream_metrics_components.JetStreamOccurenceAndCentreAlgorithm
+            jetstream_algorithms_components.JetStreamOccurenceAndCentreAlgorithm
         )
         test_data = self.data.isel(plev=4, time=0)
         result = tested_alg(test_data)

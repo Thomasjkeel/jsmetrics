@@ -8,7 +8,7 @@
 # imports
 # import numpy as np
 # import xarray
-from . import jetstream_metrics_components, jetstream_algorithms_components
+from . import jetstream_algorithms_components
 from . import windspeed_utils
 
 # docs
@@ -52,13 +52,15 @@ def koch_et_al_2006(data, ws_threshold=30):
     all_plevs_hPa = jetstream_algorithms_components.get_all_hPa_list(data)
 
     # Step 2: get weighted sum windspeed
-    sum_weighted_ws = jetstream_metrics_components.get_sum_weighted_ws(
+    sum_weighted_ws = jetstream_algorithms_components.get_sum_weighted_ws(
         data, all_plevs_hPa
     )
 
     # Step 3: calculate average weighted
-    weighted_average_ws = jetstream_metrics_components.get_weighted_average_ws(
-        sum_weighted_ws, all_plevs_hPa
+    weighted_average_ws = (
+        jetstream_algorithms_components.get_weighted_average_ws(
+            sum_weighted_ws, all_plevs_hPa
+        )
     )
 
     # Step 4: Apply windspeed threshold
@@ -97,7 +99,7 @@ def schiemann_et_al_2009(data):
 
     #  Step 2. Calculate jet maximas
     output = data.groupby("time").map(
-        jetstream_metrics_components.get_local_jet_maximas_by_timeunit_by_plev
+        jetstream_algorithms_components.get_local_jet_maximas_by_timeunit_by_plev
     )
     return output
 
@@ -130,7 +132,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
     # Step 1. Run Jet-stream Core Idenfication Algorithm
     output = data.groupby("time").map(
-        jetstream_metrics_components.run_jet_core_algorithm_on_one_day,
+        jetstream_algorithms_components.run_jet_core_algorithm_on_one_day,
         (
             ws_core_threshold,
             ws_boundary_threshold,
@@ -163,16 +165,16 @@ def penaortiz_et_al_2013(data):
 
     #  Step 2. Make array of zeros for local wind maxima location algorithm
     local_wind_maxima = (
-        jetstream_metrics_components.get_empty_local_wind_maxima_data(data)
+        jetstream_algorithms_components.get_empty_local_wind_maxima_data(data)
     )
 
     #  Step 3. Find local wind maxima locations by day
     local_wind_maxima_by_timeunit = local_wind_maxima.groupby("time").map(
-        jetstream_metrics_components.get_local_wind_maxima_by_timeunit
+        jetstream_algorithms_components.get_local_wind_maxima_by_timeunit
     )
 
     #  Step 4. Get number of days per month with local wind maxima
-    local_wind_maxima_timeunits_by_monthyear = jetstream_metrics_components.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(
+    local_wind_maxima_timeunits_by_monthyear = jetstream_algorithms_components.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(
         local_wind_maxima_by_timeunit
     )
     local_wind_maxima_timeunits_by_monthyear = (
@@ -180,10 +182,8 @@ def penaortiz_et_al_2013(data):
     )
 
     #  Step 5. Sort into PJ and STJ
-    output = (
-        jetstream_metrics_components.subdivide_local_wind_maxima_into_stj_pfj(
-            local_wind_maxima_timeunits_by_monthyear
-        )
+    output = jetstream_algorithms_components.subdivide_local_wind_maxima_into_stj_pfj(
+        local_wind_maxima_timeunits_by_monthyear
     )
     return output
 
@@ -216,7 +216,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
     # Step 1. Run Jet-stream Occurence and Centre Algorithm
     output = data.groupby("time").map(
-        jetstream_metrics_components.run_jet_occurence_and_centre_alg_on_one_day,
+        jetstream_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day,
         (occurence_ws_threshold,),
     )
     return output

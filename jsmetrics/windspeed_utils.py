@@ -102,8 +102,8 @@ class WindSpeedSlice:
         data_utils.check_if_data_is_xarray_datatype(data)
         data_utils.check_coords_in_data(data, self.req_coords)
         data_utils.check_var_in_data(data, self.req_variables)
-        data_utils.check_only_required_coords_are_in_data(
-            data, self.req_coords, to_remove=("bnds",)
+        data_utils.remove_unwanted_coords_from_data(
+            data, wanted_coords=self.req_coords, unwanted_coords=("bnds",)
         )
 
     def label_slice(self, condition, label):

@@ -31,6 +31,36 @@ def get_wind_direction_in_degrees(u, v):
     return (180 + (180 / np.pi) * np.arctan2(u, v)) % 360
 
 
+def get_zonal_mean(data):
+    """
+    Will get the zonal mean either by pressure level (plev) or for one layer
+    TODO: add to Archer & Caldiera
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing lon and plev coords
+
+    Returns
+    ----------
+    zonal_mean : xarray.DataSet
+        zonal mean data
+
+    Raises
+    ----------
+    KeyError
+        when 'lon' not discovered as coord
+    """
+    if "lon" not in data.coords:
+        raise KeyError("data does not contain 'lon' coord")
+
+    coords_for_mean = ["lon", "plev"]
+    if "plev" not in data.coords or int(data["plev"].count()) == 1:
+        coords_for_mean = ["lon"]
+    zonal_mean = data.mean(coords_for_mean)
+    return zonal_mean
+
+
 class WindSpeedSlice:
     """
     Base class for windspeed slice

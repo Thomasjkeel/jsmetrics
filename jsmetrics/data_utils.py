@@ -129,13 +129,6 @@ def get_num_of_decimal_places(num):
     return decimal_places
 
 
-def is_djf(month):
-    """
-    Mask used for getting DJF
-    """
-    return (month == 12) | (month >= 1) & (month <= 2)
-
-
 def remove_duplicates(arr):
     """
     Removes duplicates from array. From:

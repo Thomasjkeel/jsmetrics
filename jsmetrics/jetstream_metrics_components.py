@@ -389,42 +389,6 @@ def get_climatology(data, freq):
     return climatology
 
 
-def get_zonal_mean(data):
-    """
-    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
-    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-    & Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
-
-    Will get the zonal mean either by pressure level (plev) or for one layer
-    TODO: add to Archer & Caldiera
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing lon and plev coords
-
-    Returns
-    ----------
-    zonal_mean : xarray.DataSet
-        zonal mean data
-
-    Raises
-    ----------
-    KeyError
-        when 'lon' not discovered as coord
-    """
-    if "lon" not in data.coords:
-        raise KeyError("data does not contain 'lon' coord")
-
-    coords_for_mean = ["lon", "plev"]
-    if "plev" not in data.coords or int(data["plev"].count()) == 1:
-        coords_for_mean = ["lon"]
-    zonal_mean = data.mean(coords_for_mean)
-    return zonal_mean
-
-
 def calc_low_pass_weights(window, cutoff):
     """
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625

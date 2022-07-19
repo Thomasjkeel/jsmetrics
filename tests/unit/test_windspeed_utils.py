@@ -11,6 +11,13 @@ import unittest
 from jsmetrics import windspeed_utils
 
 
+# def test_get_zonal_mean(self):
+#     tested_func = windspeed_utils.get_zonal_mean
+#     new_data = self.data.rename({"lon": "ln"})
+#     self.assertRaises(KeyError, lambda: tested_func(new_data))
+#     self.assertIsInstance(tested_func(self.data), xr.Dataset)
+
+
 class TestWindSpeedSlice(unittest.TestCase):
     def test_basic(self):
         self.assertRaises(

@@ -143,12 +143,6 @@ class TestWoollings2010(unittest.TestCase):
         self.assertEqual(result["ff_jet_lat"][0], 36.25)
         self.assertEqual(result["ff_jet_speed"][0], 43.365413665771484)
 
-    def test_get_zonal_mean(self):
-        tested_func = jetstream_metrics_components.get_zonal_mean
-        new_data = self.data.rename({"lon": "ln"})
-        self.assertRaises(KeyError, lambda: tested_func(new_data))
-        self.assertIsInstance(tested_func(self.data), xr.Dataset)
-
     def test_apply_lancoz_filter(self):
         tested_func = jetstream_metrics_components.apply_lanczos_filter
         test_ua = self.data["ua"]

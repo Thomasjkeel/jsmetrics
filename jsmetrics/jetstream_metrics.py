@@ -104,7 +104,7 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
     # Step 1: Calculate long and/or plev mean
-    zonal_mean = jetstream_metrics_components.get_zonal_mean(data)
+    zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2: Apply n-day lancoz filter
     lancoz_filtered_mean_data = (
@@ -199,9 +199,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     )
 
     #  Step 4.  Get max latitude and wind speed at max
-    zonal_mean = jetstream_metrics_components.get_zonal_mean(
-        filtered_pressure_weighted_ua
-    )
+    zonal_mean = windspeed_utils.get_zonal_mean(filtered_pressure_weighted_ua)
     all_max_lats_and_ws = np.array(
         list(
             map(
@@ -288,7 +286,7 @@ def barnes_polvani_2015(data):
         Data containing jet-stream position and jet-speed
     """
     # Step 1. Get zonal mean
-    zonal_mean = jetstream_metrics_components.get_zonal_mean(data)
+    zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2. Get jet lat and jet speed values
     output = zonal_mean.groupby("time").map(
@@ -436,7 +434,7 @@ def grise_polvani_2017(data):
         data = data.to_dataset()
 
     # Step 1. Calculate zonal-mean
-    zonal_mean = jetstream_metrics_components.get_zonal_mean(data)
+    zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2. Get the 3 latitudes and speeds around max zonal wind-speed (e.g. lat-1, lat, lat+1)
     all_max_lats_and_ws = np.array(
@@ -563,7 +561,7 @@ def ceppi_et_al_2018(data):
     data["total_area_m2"] = (("lat", "lon"), total_area_m2)
 
     #  Step 2. calculate zonal mean
-    zonal_mean = jetstream_metrics_components.get_zonal_mean(data)
+    zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 3: Assign laitude of jet-stream centroids to main data
     data[

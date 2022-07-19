@@ -70,31 +70,6 @@ def get_local_maxima(arr, axis=0):
     return scipy.signal.argrelextrema(arr, np.greater, axis=axis)
 
 
-def get_climatology(data, freq):
-    """
-    Makes a climatology at given interval (i.e. days, months, season)
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        data with regular time stamp
-    freq : str
-        'day', 'month' or 'season'
-
-    Returns
-    ----------
-    climatology : xarray.Dataset
-        Climatology of a given frequency
-
-    Usage
-    ----------
-    climatology = get_climatology(data, 'month')
-
-    """
-    climatology = data.groupby("time.%s" % (freq)).mean("time")
-    return climatology
-
-
 def is_djf(month):
     """
     Mask used for getting DJF

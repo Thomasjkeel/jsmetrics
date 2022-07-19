@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    Tests for general utils (general_utils.py)
+    Tests for general utils (data_utils.py)
     Includes:
     TODO
 """

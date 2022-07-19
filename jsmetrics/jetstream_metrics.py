@@ -10,7 +10,7 @@
 # imports
 import numpy as np
 import xarray
-from . import data_utils, jetstream_metrics_components
+from . import jetstream_metrics_components
 from . import windspeed_utils, spatial_utils
 
 # docs
@@ -129,7 +129,9 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         )
     )
     # Step 4: Make seasonal climatology
-    climatology = data_utils.get_climatology(zonal_mean_lat_ws, "season")
+    climatology = jetstream_metrics_components.get_climatology(
+        zonal_mean_lat_ws, "season"
+    )
 
     # Step 5: Apply low-freq fourier filter to both max lats and max ws
     fourier_filtered_lats = (
@@ -502,8 +504,12 @@ def bracegirdle_et_al_2018(data):
             raise ValueError("Please subset to one plev value for this metric")
 
     #  Step 1. Make seasonal & annual climatologies
-    seasonal_climatology = data_utils.get_climatology(data, "season")
-    annual_climatology = data_utils.get_climatology(data, "year")
+    seasonal_climatology = jetstream_metrics_components.get_climatology(
+        data, "season"
+    )
+    annual_climatology = jetstream_metrics_components.get_climatology(
+        data, "year"
+    )
 
     #  Step 2. Get zonal mean from climatologies
     seasonal_zonal_mean = seasonal_climatology.mean("lon")

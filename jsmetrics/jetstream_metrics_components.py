@@ -364,6 +364,31 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
     return row
 
 
+def get_climatology(data, freq):
+    """
+    Makes a climatology at given interval (i.e. days, months, season)
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        data with regular time stamp
+    freq : str
+        'day', 'month' or 'season'
+
+    Returns
+    ----------
+    climatology : xarray.Dataset
+        Climatology of a given frequency
+
+    Usage
+    ----------
+    climatology = get_climatology(data, 'month')
+
+    """
+    climatology = data.groupby("time.%s" % (freq)).mean("time")
+    return climatology
+
+
 def get_zonal_mean(data):
     """
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
@@ -2011,7 +2036,7 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
 
     Usage
     ----------
-    seasonal_climatology = general_utils.get_climatology(data, "season")
+    seasonal_climatology = jetstream_metrics_components.get_climatology(data, "season")
     seasonal_zonal_mean = seasonal_climatology.mean("lon")
     (
         seasonal_max_lats,

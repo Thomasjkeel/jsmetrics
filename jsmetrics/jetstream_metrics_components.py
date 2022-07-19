@@ -253,49 +253,6 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max, ws_col):
     return mass_flux_weighted_latitude
 
 
-def get_local_jet_maximas_by_timeunit_by_plev(row):
-    """
-    Component of method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
-    TODO: add checks
-    TODO: will only work is 1 day is the resolution
-    TODO: maybe combine with pena-ortiz method
-
-    Parameters
-    ----------
-    row : xarray.Dataset
-        Data of a sinlge time unit containing windspeed (ws), plev, lat, lon
-
-    Returns
-    ----------
-    row : xarray.Dataset
-        Data of a sinlge time unit with value for jet-maxima (1 == maxima, 0 == none)
-
-    """
-    row["jet_maxima"] = (
-        ("plev", "lat", "lon"),
-        np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
-    )  # TODO
-    for lon in row["lon"]:
-        for plev in row["plev"]:
-            current = row.sel(lon=lon, plev=plev)
-            current = current.where(
-                (abs(current["ws"]) >= 30) & (current["ua"] > 0)
-            )
-            local_maxima_lat_inds = data_utils.get_local_maxima(
-                current["ws"].data
-            )[0]
-            if len(local_maxima_lat_inds) > 0:
-                for lat_ind in local_maxima_lat_inds:
-                    row["jet_maxima"].loc[
-                        dict(
-                            lat=current["lat"].data[lat_ind],
-                            lon=lon,
-                            plev=plev,
-                        )
-                    ] = 1.0
-    return row
-
-
 def get_climatology(data, freq):
     """
     Makes a climatology at given interval (i.e. days, months, season)

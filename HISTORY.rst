@@ -6,7 +6,7 @@ History
 ------------------
 * Format the readme
 * seperate metrics into metrics and algorithms
-* Move around the utils files 
+* Reorder and write better docstrings for the utils files 
 * Update year on LICENSE 
 
 0.0.7-beta (2022-06-30)

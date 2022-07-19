@@ -96,13 +96,13 @@ class TestManney2011(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
+        test_func = jetstream_algorithms.manney_et_al_2011
         # NOTE: this metric is a generator
         subset_data = self.data.sel(plev=slice(25000, 20000)).isel(
             time=slice(0, 1)
         )
-        result = jetstream_algorithms.manney_et_al_2011(subset_data)
-        self.assertEqual(result["jet_core_id"].max(), 2)
-        # jetstream_algorithms.manney_et_al_2011(subset_data.transpose("lat", ...))
+        result_unexpanded_plev = test_func(subset_data.sel(plev=25000))
+        self.assertEqual(result_unexpanded_plev["jet_core_id"].max(), 2)
 
 
 class TestPenaOrtiz2013(unittest.TestCase):

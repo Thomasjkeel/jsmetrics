@@ -80,41 +80,6 @@ def check_if_data_is_xarray_datatype(data):
         raise TypeError("input needs to be xarray.DataSet or xarray.DataArray")
 
 
-def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
-    """
-    What it says on the tin.
-    Built from xarray
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data to check
-
-    Raises
-    ----------
-    TypeError :
-        If input is not an xarray data type
-    """
-    dims = set(data.dims)
-    for rem in unwanted_coords:
-        try:
-            dims.remove(rem)
-        except Exception as e:
-            # unknown unknowns
-            e
-            # print('cannot remove %s from dims' % (rem))
-            pass
-
-    wanted_coords = set(wanted_coords)
-    difference = dims.difference(set(wanted_coords))
-    if len(difference) > 0:
-        raise ValueError(
-            "Unwanted coords in data: %s.\
-             Please subset/remove so that the slice can be 2D."
-            % (difference,)
-        )
-
-
 def check_var_in_data(data, req_variables):
     for var in req_variables:
         if var not in data.variables:
@@ -194,6 +159,41 @@ def remove_duplicates(arr):
 
     arr.sort()
     return list(v for v, _ in itertools.groupby(arr))
+
+
+def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
+    """
+    What it says on the tin.
+    Built from xarray
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data to check
+
+    Raises
+    ----------
+    TypeError :
+        If input is not an xarray data type
+    """
+    dims = set(data.dims)
+    for rem in unwanted_coords:
+        try:
+            dims.remove(rem)
+        except Exception as e:
+            # unknown unknowns
+            e
+            # print('cannot remove %s from dims' % (rem))
+            pass
+
+    wanted_coords = set(wanted_coords)
+    difference = dims.difference(set(wanted_coords))
+    if len(difference) > 0:
+        raise ValueError(
+            "Unwanted coords in data: %s.\
+             Please subset/remove so that the slice can be 2D."
+            % (difference,)
+        )
 
 
 def rescale_lat_resolution(lats, lat_resolution):

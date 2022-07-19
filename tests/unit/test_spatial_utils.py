@@ -7,7 +7,7 @@
 """
 
 # imports
-
+# import shapely.geometry
 
 # docs
 __author__ = "Thomas Keel"

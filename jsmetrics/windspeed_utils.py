@@ -101,7 +101,7 @@ class WindSpeedSlice:
     def _check_input_data_can_be_used_for_windspeed_slice(self, data):
         data_utils.check_if_data_is_xarray_datatype(data)
         data_utils.check_coords_in_data(data, self.req_coords)
-        data_utils.check_var_in_data(data, self.req_variables)
+        data_utils.check_variables_in_data(data, self.req_variables)
         data_utils.remove_unwanted_coords_from_data(
             data, wanted_coords=self.req_coords, unwanted_coords=("bnds",)
         )

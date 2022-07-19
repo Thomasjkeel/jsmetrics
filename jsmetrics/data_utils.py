@@ -80,7 +80,23 @@ def check_if_data_is_xarray_datatype(data):
         raise TypeError("input needs to be xarray.DataSet or xarray.DataArray")
 
 
-def check_var_in_data(data, req_variables):
+def check_variables_in_data(data, req_variables):
+    """
+    What it says on the tin.
+    Built from xarray
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data to check
+    req_variables : array-like
+        Variables needed in data
+
+    Raises
+    ----------
+    KeyError :
+        If variables not in data
+    """
     for var in req_variables:
         if var not in data.variables:
             raise KeyError("'%s' is not the data" % (var,))
@@ -171,20 +187,24 @@ def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
     data : xarray.Dataset
         Data to check
 
+    wanted_coords : array-like or tuple
+        Coords to retain in data
+    unwanted_coords : array-like or tuple
+        Coords to remove from data
+
+
     Raises
     ----------
-    TypeError :
-        If input is not an xarray data type
+    ValueError :
+        If coord cannot be removed from data
     """
     dims = set(data.dims)
     for rem in unwanted_coords:
         try:
             dims.remove(rem)
         except Exception as e:
-            # unknown unknowns
+            # a little sloppy, but probably okay
             e
-            # print('cannot remove %s from dims' % (rem))
-            pass
 
     wanted_coords = set(wanted_coords)
     difference = dims.difference(set(wanted_coords))

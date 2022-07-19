@@ -8,7 +8,7 @@
 # imports
 # import numpy as np
 # import xarray
-from . import data_utils, jetstream_metrics_components
+from . import jetstream_metrics_components, jetstream_algorithms_components
 from . import windspeed_utils
 
 # docs
@@ -49,7 +49,7 @@ def koch_et_al_2006(data, ws_threshold=30):
         )
 
     # Step 1: get all pressure levels (hPa) as list
-    all_plevs_hPa = data_utils.get_all_hPa_list(data)
+    all_plevs_hPa = jetstream_algorithms_components.get_all_hPa_list(data)
 
     # Step 2: get weighted sum windspeed
     sum_weighted_ws = jetstream_metrics_components.get_sum_weighted_ws(

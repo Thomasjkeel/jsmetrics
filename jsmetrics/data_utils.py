@@ -2,7 +2,7 @@
 
 """
     Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed or spatial utils.
-    Built from xarray
+    The module is built from xarray data-structures, so this file contains all the stuff that helps the library handle xarray dataset/dataarrays
 """
 
 # imports
@@ -95,36 +95,6 @@ def remove_duplicates(arr):
 
     arr.sort()
     return list(v for v, _ in itertools.groupby(arr))
-
-
-def get_all_hPa_list(data):
-    """
-    Will get a list of all the pressure levels in the data in hPa/mbar
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        data with plev coord
-
-    Returns
-    ----------
-    plev : np.array
-        arr containing pressure level list in data in hPa/mbar
-    """
-    if "plev" not in data.coords:
-        raise KeyError("Data does not contain coord: 'plev'")
-
-    if (
-        data["plev"].units != "Pa"
-        and data["plev"].units != "hPa"
-        and data["plev"].units != "mbar"
-    ):
-        raise ValueError("Plev units need to be mbar, Pa or hPa")
-
-    plevs = np.array([plev for plev in data["plev"]])
-    if data["plev"].units == "Pa":
-        plevs = plevs / 100
-    return plevs
 
 
 def get_num_of_decimal_places(num):

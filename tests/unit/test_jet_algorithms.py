@@ -14,7 +14,7 @@ import unittest
 import xarray as xr
 import numpy as np
 from jsmetrics import (
-    data_utils,
+    jetstream_algorithms_components,
     jetstream_algorithms,
     jetstream_metrics_components,
 )
@@ -44,7 +44,7 @@ class TestKoch2006(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(new_data))
 
     def test_get_all_hPa_list(self):
-        tested_func = data_utils.get_all_hPa_list
+        tested_func = jetstream_algorithms_components.get_all_hPa_list
         # make sure it returns an array
         self.assertIsInstance(tested_func(self.data), (np.ndarray))
         # make sure it takes errors wrong types

@@ -97,6 +97,29 @@ def remove_duplicates(arr):
     return list(v for v, _ in itertools.groupby(arr))
 
 
+def rescale_lat_resolution(lats, lat_resolution):
+    """
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
+
+    TODO: what if larger resolution
+
+    Parameters
+    ----------
+    lats : xr.DataArray or array-like
+        Array of latitude values
+    lat_resolution : int or float
+        Latitude resolution in degrees
+
+    Returns
+    ----------
+    output : numpy.array
+        Rescaled array of latitude values
+    """
+    return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
+
+
 def get_num_of_decimal_places(num):
     """
     Gets number of decimal places in a float

@@ -1119,29 +1119,6 @@ def scale_lat_vals_with_quadratic_func(lats, speeds, scaled_lats):
     return scaled_lat_vals
 
 
-def rescale_lat_resolution(lats, lat_resolution):
-    """
-    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
-    & Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-
-    TODO: what if larger resolution
-
-    Parameters
-    ----------
-    lats : xr.DataArray or array-like
-        Array of latitude values
-    lat_resolution : int or float
-        Latitude resolution in degrees
-
-    Returns
-    ----------
-    output : numpy.array
-        Rescaled array of latitude values
-    """
-    return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
-
-
 def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
     lats_and_ws, lat_resolution
 ):
@@ -1168,7 +1145,7 @@ def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
     lats = [lat for lat in lats if not np.isnan(lat)]
     ws = [s for s in ws if not np.isnan(s)]
     #  Scale lats
-    scaled_lats = rescale_lat_resolution(lats, lat_resolution)
+    scaled_lats = data_utils.rescale_lat_resolution(lats, lat_resolution)
     scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, scaled_lats)
     decimal_places = data_utils.get_num_of_decimal_places(lat_resolution)
     max_speed_at_scaled_lat = np.max(scaled_lat_vals)
@@ -2003,7 +1980,9 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
     max_ws : float
         maximum wind-speed at the given latitude for time period
     """
-    scaled_lats = rescale_lat_resolution(data["lat"], lat_resolution)
+    scaled_lats = data_utils.rescale_lat_resolution(
+        data["lat"], lat_resolution
+    )
     csi = cubic_spline_interpolation(data["lat"], data[ua_col])
     interpolated_ws = csi(scaled_lats)
     max_lat = scaled_lats[np.argmax(interpolated_ws)]

@@ -38,8 +38,8 @@ class TestXarrayDataCheck(unittest.TestCase):
             lambda: tested_func(self.data, req_variables=["notthere"]),
         )
 
-    def test_check_at_least_two_plevs_in_data(self):
-        tested_func = data_utils.check_at_least_two_plevs_in_data
+    def test_check_at_least_n_plevs_in_data(self):
+        tested_func = data_utils.check_at_least_n_plevs_in_data
         self.assertRaises(ValueError, lambda: tested_func(self.data))
 
     def test_check_if_data_is_xarray_datatype(self):

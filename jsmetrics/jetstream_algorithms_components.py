@@ -9,11 +9,12 @@
 """
 
 # imports
-# import collections
+import collections
 import numpy as np
 
 # import matplotlib.pyplot
-# import xarray as xr
+import xarray as xr
+
 # import scipy.fftpack
 # import scipy.interpolate
 # # import shapely.geometry
@@ -439,3 +440,383 @@ class JetStreamCoreIdentificationAlgorithm:
                     )
                 ] = jet_core["id"]
         return self._lat_ws_slice.values
+
+
+def make_empty_local_wind_maxima_data_var(data):
+    """
+    Will add a new data var of zeros for local wind maxima
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    TODO: add asserts
+    """
+    data["local_wind_maxima"] = (
+        ("time", "plev", "lat", "lon"),
+        np.zeros(
+            (
+                len(data["time"]),
+                len(data["plev"]),
+                len(data["lat"]),
+                len(data["lon"]),
+            )
+        ),
+    )
+    return data
+
+
+def get_empty_local_wind_maxima_data(data):
+    """
+    Will add a new data var of zeros for local wind maxima
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Input data with (time, plev, lat, lon) dimensions
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        Data containing zeros array of (time, plev, lat, lon) dimensions
+    TODO: add asserts
+    """
+    data["local_wind_maxima"] = (
+        ("time", "plev", "lat", "lon"),
+        np.zeros(
+            (
+                len(data["time"]),
+                len(data["plev"]),
+                len(data["lat"]),
+                len(data["lon"]),
+            )
+        ),
+    )
+    return data
+
+
+def get_potential_local_wind_maximas_by_ws_threshold(
+    ws_slice, ws_threshold=30
+):
+    """
+    Will return a 2-d array of potential local windspeed maximas
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    Parameters
+    ----------
+    ws_slice : xarray.Dataset
+        Data slice of windspeed that has only lat and lon dims
+
+    ws_threshold : int or float
+        windspeed threshold to apply (default=30 ms-1)
+    Returns
+    ----------
+    ws_slice : xarray.Dataset
+        Data slice of windspeed (lat, lon only) with ws_threshold applied
+    TODO: add checks
+    """
+    return ws_slice.where(lambda x: x > ws_threshold).fillna(0.0)
+
+
+def get_local_wind_maxima_by_timeunit(row):
+    """
+    Get local wind maxima by timeunit (i.e. day)
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Data of a single time unit containing windspeed (ws)
+
+    Returns
+    ----------
+    row : xarray.Dataset
+        Data of a single time unit containing 0 or 1 value (local wind maxima) for that time unit
+    """
+    if "local_wind_maxima" not in row.data_vars:
+        raise ValueError("local_wind_maxima needs to be defined.")
+
+    row = row.transpose("plev", "lat", ...)
+    for lon in row["lon"]:
+        current = row.sel(lon=lon)
+        pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(
+            current["ws"], 30
+        ).data
+        ind_local_wind_maximas = data_utils.get_local_maxima(
+            pot_local_maximas, axis=1
+        )
+        # Turn into 2-d numpy array
+        ind_local_wind_maximas = np.array(
+            [
+                [arr1, arr2]
+                for arr1, arr2 in zip(
+                    ind_local_wind_maximas[0], ind_local_wind_maximas[1]
+                )
+            ]
+        )
+        for plev_ind, lat_ind in ind_local_wind_maximas:
+            row["local_wind_maxima"].loc[
+                dict(
+                    plev=current["plev"].data[plev_ind],
+                    lon=lon,
+                    lat=current["lat"].data[lat_ind],
+                )
+            ] = 1.0
+    return row
+
+
+def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
+    """
+    Will resample by each month and return number of timeunits (i.e. day) with local wind maxima
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Input data with local wind maxima values by time unit (i.e. day)
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        Data containing zeros array of (time, plev, lat, lon) dimensions
+
+    """
+    data = (
+        data["local_wind_maxima"]
+        .resample(time="MS")
+        .sum()
+        .rename({"time": "monthyear"})
+    )
+    return data
+
+
+def subdivide_local_wind_maxima_into_stj_pfj(data):
+    """
+    Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on pg. 2709
+
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Input data with local wind maxima values
+
+    Returns
+    ----------
+    data : xarray.Dataset
+        data with polar_front_jet and subtropical_jet subdivisions
+    """
+    DJF_STJ = data.sel(
+        monthyear=data.monthyear.dt.month.isin([1, 2, 12]), lat=slice(15, 40)
+    )["local_wind_maxima"]
+    MAM_SON_PFJ = data.sel(
+        monthyear=data.monthyear.dt.month.isin([3, 4, 5, 9, 10, 11]),
+        lat=slice(10, 70),
+    )["local_wind_maxima"]
+    JJA_PFJ = data.sel(
+        monthyear=data.monthyear.dt.month.isin([6, 7, 8]), lat=slice(30, 60)
+    )["local_wind_maxima"]
+    SH_STJ = data.sel(lat=slice(-40, -15))["local_wind_maxima"]
+    SH_PFJ = data.sel(lat=slice(-70, -41))["local_wind_maxima"]
+    data["polar_front_jet"] = xr.merge([MAM_SON_PFJ, JJA_PFJ, SH_PFJ])[
+        "local_wind_maxima"
+    ]
+    data["subtropical_jet"] = xr.merge([DJF_STJ, SH_STJ])["local_wind_maxima"]
+    return data
+
+
+def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
+    """
+    Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
+
+    Runs JetStreamCoreIdentificationAlgorithm method on a single day
+
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Single time-unit of dataset containing u- and v-component wind
+    occurence_ws_threshold : int or float
+        Threshold used to identify a jet-stream occurence point
+
+    Returns
+    ----------
+    occ_alg.output_data : xarray.Dataset
+        Data with jet occurence and centre points (1 for occurence, 2 for centre)
+    """
+    occ_alg = JetStreamOccurenceAndCentreAlgorithm(row, occurence_ws_threshold)
+    occ_alg.run()
+    return occ_alg.output_data
+
+
+class JetStreamOccurenceAndCentreAlgorithm:
+    """
+    Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
+    """
+
+    def __init__(self, data, occurence_ws_threshold=30):
+        """
+        Parameters
+        ----------
+        data : xarray.Dataset
+            Single time-unit of dataset containing u- and v-component wind. Needs to be 2-dimensions (lat, lon)
+        occurence_ws_threshold : int or float
+            Threshold used to identify a jet-stream occurence point
+        """
+        try:
+            assert occurence_ws_threshold > 0
+        except Exception as e:
+            raise ValueError(
+                "Occurence wind-speed threshold needs to be more than 0"
+            ) from e
+
+        # Load in data as a pressure level 2d wind-speed slice
+        self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(
+            data
+        ).values
+        self.plev_ws_slice["jet_ocurrence1_jet_centre2"] = self.plev_ws_slice[
+            "ws"
+        ].copy()
+        self.plev_ws_slice["jet_ocurrence1_jet_centre2"] = self.plev_ws_slice[
+            "jet_ocurrence1_jet_centre2"
+        ].where(lambda x: x >= occurence_ws_threshold)
+        self._jet_occurence = self.plev_ws_slice
+        self._lat_resolution = float(
+            self.plev_ws_slice["lat"][1] - self.plev_ws_slice["lat"][0]
+        )
+        self._lon_resolution = float(
+            self.plev_ws_slice["lon"][1] - self.plev_ws_slice["lon"][0]
+        )
+
+        # make_duplicate data for output
+        self.output_data = self._jet_occurence.copy(deep=True)
+
+        # Initialise lists needed for search algorithm
+        self._all_coords = []
+        self._lats_with_3 = []
+        self._lats_for_search = []
+        self._jet_centres = []
+
+        # Needed to keep track of algorithm
+        self.algorithm_has_run = False
+
+    @classmethod
+    def run_algorithm(cls, data):
+        return cls(data).run()
+
+    def run(self):
+        self._get_all_coords_of_jet_occurence()
+        self._all_coords_arr = np.array(self._all_coords)
+        # Get a counter of all the latitude coordinates
+        # TODO: add tests to see if this works
+        try:
+            self._count_lats = collections.Counter(self._all_coords_arr[:, 0])
+        except Exception as e:
+            print(e)
+            self._count_lats = {}
+        self._get_all_lats_of_jet_centre_for_search()
+        self._calc_jet_centre_points()
+        self._get_jet_centre_data()
+        self._label_jet_occurence()
+
+        self.algorithm_has_run = True
+
+    def _get_jet_centre_data(self):
+        """
+        Calculates jet-stream centres based on if one jet-stream occurence grid
+        is surrounded by 8 cells of jet-stream occurence (default is 30 m/s)
+        """
+        # TODO: there's got to be a quicker way
+        for centre in self._jet_centres:
+            self.output_data["jet_ocurrence1_jet_centre2"].loc[
+                dict(lat=centre[0], lon=centre[1])
+            ] = 2
+
+    def _get_all_coords_of_jet_occurence(self):
+        for val in self._jet_occurence["jet_ocurrence1_jet_centre2"].notnull():
+            if val.any():
+                for sub_val in val:
+                    if sub_val:
+                        self._all_coords.append(
+                            [float(sub_val["lat"]), float(sub_val["lon"])]
+                        )
+
+    def _get_all_lats_of_jet_centre_for_search(self):
+        """
+        Will get all latitudes that 'may' be a jet-stream centre-point
+        i.e. where latitude appears at least three times for 3*3 lat/lon grid.
+        NOTE: speeds up calculation as less values are searched through
+        """
+        # Step 1. look for all latitudes with at least 3 occurences - 3*3 grid
+        self._get_all_latitudes_that_occur_at_least_three_times()
+        # Step 2. Check if the latitudes above and below the lats with 3 values
+        # are present i.e. Y component of for 3*3
+        self._get_all_latitudes_available_in_3by3_grid()
+
+    def _get_all_latitudes_that_occur_at_least_three_times(self):
+        for lat in self._count_lats.items():
+            if lat[1] >= 3:
+                self._lats_with_3.append(lat[0])
+
+    def _get_all_latitudes_available_in_3by3_grid(self):
+        for lat in self._lats_with_3:
+            if (
+                lat - self._lat_resolution in self._lats_with_3
+                and lat + self._lat_resolution in self._lats_with_3
+            ):
+                self._lats_for_search.append(lat)
+
+    def _calc_jet_centre_points(self):
+        """
+        Will return a list of the coordinates for all jet-centre points
+        """
+        for lat in self._lats_for_search:
+            coords_to_search = self._all_coords_arr[
+                np.where(self._all_coords_arr[::, 0] == lat)
+            ]
+            for coord in coords_to_search:
+                if (
+                    coord[0] == 0
+                    or coord[1] == 0
+                    and 360 - self._lon_resolution
+                    not in coords_to_search[::, 1]
+                ):
+                    continue
+                # check if coord is jet centre point i.e. 9*9 all above 30
+                lat_grid_vals = np.arange(
+                    coord[0] - self._lat_resolution,
+                    coord[0] + self._lat_resolution + 0.1,
+                    self._lat_resolution,
+                )
+                lon_grid_vals = np.arange(
+                    coord[1] - self._lon_resolution,
+                    coord[1] + self._lon_resolution + 0.1,
+                    self._lon_resolution,
+                )
+                matrix_vals_to_check = np.array(
+                    np.meshgrid(lat_grid_vals, lon_grid_vals)
+                ).T.reshape(-1, 2)
+                matrix_vals_to_check = (
+                    matrix_vals_to_check % 360
+                )  # loop around
+                add_coord = True
+                for val in matrix_vals_to_check:
+                    if not val.tolist() in self._all_coords:
+                        add_coord = False
+                        break
+                if add_coord:
+                    self._jet_centres.append(coord)
+
+    def _label_jet_occurence(self):
+        """
+        Will label all non 2 values of windspeed for the occurence
+        Used in Kuang et al. 2014
+        """
+        self.output_data["jet_ocurrence1_jet_centre2"] = self.output_data[
+            "jet_ocurrence1_jet_centre2"
+        ].where(lambda x: np.isfinite(x), 0)
+        self.output_data["jet_ocurrence1_jet_centre2"] = self.output_data[
+            "jet_ocurrence1_jet_centre2"
+        ].where(lambda x: ((x == 0) | (x == 2)), 1)

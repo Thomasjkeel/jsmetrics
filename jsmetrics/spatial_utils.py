@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """
     All spatial operations needed for the jet-stream metrics and algorithms
+
+    This file is order alphabetically.
 """
 
 import numpy as np

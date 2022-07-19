@@ -3,6 +3,8 @@
 """
     Operations needed for the jet-stream metrics and jet-stream algorithms that specifically operate on windspeed data.
     Includes the base classes and function for dealing with windspeed vectors and lat/lon or lat/plev slices of windspeed (so called: WindSpeedSlice class)
+
+    This file is order alphabetically.
 """
 
 # imports

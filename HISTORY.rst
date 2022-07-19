@@ -6,7 +6,7 @@ History
 ------------------
 * Format the readme
 * seperate metrics into metrics and algorithms
-* Move around the utils files 
+* Reorder and write better docstrings for the utils files 
 * Update year on LICENSE 
 
 0.0.7-beta (2022-06-30)
@@ -75,7 +75,7 @@ BIG CHANGES:
 
 0.0.3-beta (2022-01-14)
 ------------------
-* Use real part from fourier filter to woolings and its tests
+* Use real part from fourier filter to Woollings and its tests
 
 0.0.3-alpha (2022-01-14)
 ------------------

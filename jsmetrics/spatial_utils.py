@@ -1,57 +1,19 @@
 # -*- coding: utf-8 -*-
 """
     All spatial operations needed for the jet-stream metrics and algorithms
+
+    This file is ordered alphabetically.
 """
 
 import numpy as np
+import xarray as xr
 import collections
 import math
+import shapely
+import matplotlib
 
 
 EARTH_RADIUS = 6371000.0  # m
-
-
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians
-    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
-
-    # haversine formula
-    dlon = lon2 - lon1
-    dlat = lat2 - lat1
-    a = (
-        math.sin(dlat / 2) ** 2
-        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
-    )
-    c = 2 * math.asin(math.sqrt(a))
-    r = 6371  # Radius of earth in kilometers. Use 3956 for miles
-    return c * r
-
-
-def get_great_circle_distance_along_linestring(line):
-    """
-    Calculate great circle distance along the length of linestring
-
-    Parameters
-    ----------
-    line : shapely.geometry.LineString
-        Line to calculate great circle (haversine) distance along
-
-    Returns
-    ----------
-    distance : float
-        Great circle (haversine) distance along input line
-    """
-    numCoords = len(line.coords) - 1
-    distance = 0
-    for i in range(0, numCoords):
-        point1 = line.coords[i]
-        point2 = line.coords[i + 1]
-        distance += haversine(point1[0], point1[1], point2[0], point2[1])
-    return distance
 
 
 def _guess_bounds(points, bound_position=0.5):
@@ -156,30 +118,35 @@ def _quadrant_area(radian_lat_bounds, radian_lon_bounds, radius_of_earth):
     return np.abs(areas)
 
 
-def grid_cell_areas(lon1d, lat1d, radius=EARTH_RADIUS):
+def calc_spatial_integral(
+    xr_da, lon_name="longitude", lat_name="latitude", radius=EARTH_RADIUS
+):
     """
-    Calculate grid cell areas given 1D arrays of longitudes and latitudes
-    for a planet with the given radius.
+    Calculate spatial integral of xarray.DataArray with grid cell weighting.
 
     Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
-    lon1d: numpy.array
-        Array of longitude points [degrees] of shape (M,)
-    lat1d: numpy.array
-        Array of latitude points [degrees] of shape (M,)
-    radius: float, optional
-        Radius of the planet [metres] (currently assumed spherical)
+    xr_da: xarray.DataArray
+        Data to average
+    lon_name: str, optional
+        Name of x-coordinate
+    lat_name: str, optional
+        Name of y-coordinate
+    radius: float
+        Radius of the planet [metres], currently assumed spherical (not important anyway)
 
     Returns
     -------
-    Array of grid cell areas [metres**2] of shape (M, N).
+    Spatially averaged xarray.DataArray.
     """
-    lon_bounds_radian = np.deg2rad(_guess_bounds(lon1d))
-    lat_bounds_radian = np.deg2rad(_guess_bounds(lat1d))
-    area = _quadrant_area(lat_bounds_radian, lon_bounds_radian, radius)
-    return area
+    lon = xr_da[lon_name].values
+    lat = xr_da[lat_name].values
+
+    area_weights = grid_cell_areas(lon, lat, radius=radius)
+
+    return (xr_da * area_weights).sum(dim=[lon_name, lat_name])
 
 
 def calc_spatial_mean(
@@ -214,32 +181,169 @@ def calc_spatial_mean(
     return (xr_da * aw_factor).mean(dim=[lon_name, lat_name])
 
 
-def calc_spatial_integral(
-    xr_da, lon_name="longitude", lat_name="latitude", radius=EARTH_RADIUS
-):
+def calc_total_great_circle_distance_along_line(line):
     """
-    Calculate spatial integral of xarray.DataArray with grid cell weighting.
+    Returns the total great circle (haversine) distance along a linestring
+    or multilinestring
+
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
+    Parameters
+    ----------
+    line : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Line to calculate great circle distance from
+
+    Returns
+    ----------
+    total_distance : int or float
+        Total distance in degrees or m? TODO
+
+    """
+    total_distance = 0
+    if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
+        for i, _ in enumerate(line):
+            total_distance += get_great_circle_distance_along_linestring(
+                shapely.geometry.LineString((line[i]))
+            )
+    elif isinstance(line, shapely.geometry.LineString):
+        total_distance += get_great_circle_distance_along_linestring(line)
+    else:
+        return np.nan
+    return total_distance
+
+
+def get_great_circle_distance_along_linestring(line):
+    """
+    Calculate great circle distance along the length of linestring
+
+    Parameters
+    ----------
+    line : shapely.geometry.LineString
+        Line to calculate great circle (haversine) distance along
+
+    Returns
+    ----------
+    distance : float
+        Great circle (haversine) distance along input line
+    """
+    numCoords = len(line.coords) - 1
+    distance = 0
+    for i in range(0, numCoords):
+        point1 = line.coords[i]
+        point2 = line.coords[i + 1]
+        distance += haversine(point1[0], point1[1], point2[0], point2[1])
+    return distance
+
+
+def get_latitude_circle_linestring(latitude, lon_min, lon_max):
+    """
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+    Will return a linestring of a latitude circle
+
+    Parameters
+    ----------
+    latitude : int or float
+        given latitude to calculate circle from
+    lon_min : int or float
+        Minimum longitude for circle to extend to
+    lon_max : int or float
+        Maximum longitude for circle to extend to
+
+    Returns
+    ----------
+    circle : shapely.geometry.LineString
+        Linestring of latitude circle around a hemisphere
+    """
+    vals = np.column_stack(
+        (
+            np.arange(lon_min, lon_max + 0.1, 0.5),
+            np.array([latitude] * len(np.arange(lon_min, lon_max + 0.1, 0.5))),
+        )
+    )
+    circle = shapely.geometry.LineString(vals)
+    return circle
+
+
+def get_one_contour_linestring(dataarray, contour_level):
+    """
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
+    Returns a linestring or multi-linestring of a given contour
+
+    Parameters
+    ----------
+    dataarray : xarray.DataArray
+        Array of Geopotential height (zg) values to calculate contour from
+    contour_level :
+        Value with which to calculate a contour from geopotential height
+
+    Returns
+    ----------
+    contour_line : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Contour line of geopotential height (zg) a given contour
+    """
+    assert isinstance(
+        dataarray, xr.DataArray
+    ), "Data needs to be type xr.DataArray"
+    assert (
+        "lat" in dataarray.coords and "lon" in dataarray.coords
+    ), "Data array needs to have latitude and longitude coords"
+    one_contour = dataarray.plot.contour(levels=[contour_level])
+    matplotlib.pyplot.close()
+    if len(one_contour.allsegs[0]) > 1:
+        try:
+            contour_line = shapely.geometry.MultiLineString(
+                (one_contour.allsegs[0])
+            )
+        except ValueError as ve:
+            print(ve)
+            return np.nan
+    else:
+        contour_line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
+    return contour_line
+
+
+def grid_cell_areas(lon1d, lat1d, radius=EARTH_RADIUS):
+    """
+    Calculate grid cell areas given 1D arrays of longitudes and latitudes
+    for a planet with the given radius.
 
     Author: Denis Sergev (https://github.com/dennissergeev) https://gist.github.com/dennissergeev/60bf7b03443f1b2c8eb96ce0b1880150
 
     Parameters
     ----------
-    xr_da: xarray.DataArray
-        Data to average
-    lon_name: str, optional
-        Name of x-coordinate
-    lat_name: str, optional
-        Name of y-coordinate
-    radius: float
-        Radius of the planet [metres], currently assumed spherical (not important anyway)
+    lon1d: numpy.array
+        Array of longitude points [degrees] of shape (M,)
+    lat1d: numpy.array
+        Array of latitude points [degrees] of shape (M,)
+    radius: float, optional
+        Radius of the planet [metres] (currently assumed spherical)
 
     Returns
     -------
-    Spatially averaged xarray.DataArray.
+    Array of grid cell areas [metres**2] of shape (M, N).
     """
-    lon = xr_da[lon_name].values
-    lat = xr_da[lat_name].values
+    lon_bounds_radian = np.deg2rad(_guess_bounds(lon1d))
+    lat_bounds_radian = np.deg2rad(_guess_bounds(lat1d))
+    area = _quadrant_area(lat_bounds_radian, lon_bounds_radian, radius)
+    return area
 
-    area_weights = grid_cell_areas(lon, lat, radius=radius)
 
-    return (xr_da * area_weights).sum(dim=[lon_name, lat_name])
+def haversine(lon1, lat1, lon2, lat2):
+    """
+    Calculate the great circle distance between two points
+    on the earth (specified in decimal degrees)
+    """
+    # convert decimal degrees to radians
+    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
+
+    # haversine formula
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
+    c = 2 * math.asin(math.sqrt(a))
+    r = 6371  # Radius of earth in kilometers. Use 3956 for miles
+    return c * r

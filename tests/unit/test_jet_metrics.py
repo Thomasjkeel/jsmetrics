@@ -15,7 +15,7 @@ import numpy as np
 from jsmetrics import (
     details_for_all_metrics,
     jetstream_metrics,
-    jetstream_metrics_utils,
+    jetstream_metrics_components,
 )
 from . import (
     set_up_test_uv_data,
@@ -143,14 +143,8 @@ class TestWoollings2010(unittest.TestCase):
         self.assertEqual(result["ff_jet_lat"][0], 36.25)
         self.assertEqual(result["ff_jet_speed"][0], 43.365413665771484)
 
-    def test_get_zonal_mean(self):
-        tested_func = jetstream_metrics_utils.get_zonal_mean
-        new_data = self.data.rename({"lon": "ln"})
-        self.assertRaises(KeyError, lambda: tested_func(new_data))
-        self.assertIsInstance(tested_func(self.data), xr.Dataset)
-
     def test_apply_lancoz_filter(self):
-        tested_func = jetstream_metrics_utils.apply_lanczos_filter
+        tested_func = jetstream_metrics_components.apply_lanczos_filter
         test_ua = self.data["ua"]
         self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 4))
         self.assertRaises(AssertionError, lambda: tested_func(test_ua, -2, 1))
@@ -170,7 +164,7 @@ class TestWoollings2010(unittest.TestCase):
 
     def test_get_latitude_and_speed_where_max_ws(self):
         tested_func = (
-            jetstream_metrics_utils.get_latitude_and_speed_where_max_ws
+            jetstream_metrics_components.get_latitude_and_speed_where_max_ws
         )
         self.assertRaises(AttributeError, lambda: tested_func(["lol"]))
         tested_data = self.data["ua"].isel(plev=0, lon=0, time=0)
@@ -183,7 +177,9 @@ class TestWoollings2010(unittest.TestCase):
         self.assertEqual(tested_func(nan_dataset), (np.nan, np.nan))
 
     def test_apply_fourier_filter(self):
-        tested_func = jetstream_metrics_utils.apply_low_freq_fourier_filter
+        tested_func = (
+            jetstream_metrics_components.apply_low_freq_fourier_filter
+        )
         res = tested_func(self.test_sig, 2)
         self.assertAlmostEqual(res[10].real, -0.0956296962962675, places=7)
 

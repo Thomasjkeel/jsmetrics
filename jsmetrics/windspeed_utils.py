@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 """
-    Operations needed for the jet-stream metrics and algorithms that specifically operate on windspeed data.
-    Includes the base classes and function for dealing with windspeed vectors and slices of windspeed
+    Operations needed for the jet-stream metrics and jet-stream algorithms that specifically operate on windspeed data.
+    Includes the base classes and function for dealing with windspeed vectors and lat/lon or lat/plev slices of windspeed (so called: WindSpeedSlice class)
+
+    This file is ordered alphabetically.
 """
 
 # imports
 import xarray as xr
 import numpy as np
+from . import data_utils
 
 # docs
 __author__ = "Thomas Keel"
@@ -28,6 +31,36 @@ def get_wind_direction_in_degrees(u, v):
     In degrees (0-360)
     """
     return (180 + (180 / np.pi) * np.arctan2(u, v)) % 360
+
+
+def get_zonal_mean(data):
+    """
+    Will get the zonal mean either by pressure level (plev) or for one layer
+    TODO: add to Archer & Caldiera
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing lon and plev coords
+
+    Returns
+    ----------
+    zonal_mean : xarray.DataSet
+        zonal mean data
+
+    Raises
+    ----------
+    KeyError
+        when 'lon' not discovered as coord
+    """
+    if "lon" not in data.coords:
+        raise KeyError("data does not contain 'lon' coord")
+
+    coords_for_mean = ["lon", "plev"]
+    if "plev" not in data.coords or int(data["plev"].count()) == 1:
+        coords_for_mean = ["lon"]
+    zonal_mean = data.mean(coords_for_mean)
+    return zonal_mean
 
 
 class WindSpeedSlice:
@@ -66,11 +99,11 @@ class WindSpeedSlice:
         return get_resultant_wind(data["ua"], data["va"])
 
     def _check_input_data_can_be_used_for_windspeed_slice(self, data):
-        check_if_xarray_dataset_or_array(data)
-        check_coord_in_data(data, self.req_coords)
-        check_var_in_data(data, self.req_variables)
-        check_only_required_coords_are_in_data(
-            data, self.req_coords, to_remove=("bnds",)
+        data_utils.check_if_data_is_xarray_datatype(data)
+        data_utils.check_coords_in_data(data, self.req_coords)
+        data_utils.check_variables_in_data(data, self.req_variables)
+        data_utils.remove_unwanted_coords_from_data(
+            data, wanted_coords=self.req_coords, unwanted_coords=("bnds",)
         )
 
     def label_slice(self, condition, label):
@@ -85,52 +118,8 @@ class PressureLevelWindSpeedSlice(WindSpeedSlice, req_coords=("lat", "lon")):
     Data will be lon*lat
     """
 
-    def print_lats(self):
-        print(self["lat"])
-
 
 class LatitudeWindSpeedSlice(WindSpeedSlice, req_coords=("lat", "plev")):
     """
     Data will be lon*plev
     """
-
-    def print_lats(self):
-        print(self["lat"])
-
-
-# Checks for windspeed slices
-def check_if_xarray_dataset_or_array(data):
-    if not isinstance(data, xr.Dataset) or isinstance(data, xr.DataArray):
-        raise TypeError("input needs to be xarray.DataSet or xarray.DataArray")
-
-
-def check_coord_in_data(data, req_coords):
-    for coord in req_coords:
-        if coord not in data.coords:
-            raise KeyError("'%s' is not in the data" % (coord,))
-
-
-def check_var_in_data(data, req_variables):
-    for var in req_variables:
-        if var not in data.variables:
-            raise KeyError("'%s' is not the data" % (var,))
-
-
-def check_only_required_coords_are_in_data(data, req_coords, to_remove=()):
-    dims = set(data.dims)
-    for rem in to_remove:
-        try:
-            dims.remove(rem)
-        except Exception as e:
-            e
-            pass
-            # print('cannot remove %s from dims' % (rem))
-
-    req_coords = set(req_coords)
-    difference = dims.difference(set(req_coords))
-    if len(difference) > 0:
-        raise ValueError(
-            "Unwanted coords in data: %s.\
-             Please subset/remove so that the slice can be 2D."
-            % (difference,)
-        )

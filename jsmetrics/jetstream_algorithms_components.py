@@ -13,13 +13,7 @@
 # imports
 import collections
 import numpy as np
-
-# import matplotlib.pyplot
 import xarray as xr
-
-# import scipy.fftpack
-# import scipy.interpolate
-# # import shapely.geometry
 from . import data_utils, windspeed_utils
 
 # docs

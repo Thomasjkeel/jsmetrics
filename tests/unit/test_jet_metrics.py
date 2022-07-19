@@ -136,12 +136,12 @@ class TestWoollings2010(unittest.TestCase):
         return test_sig
 
     def test_metric(self):
-        result = jetstream_metrics.woollings_et_al_2010(
-            self.data, filter_freq=1, window_size=2
-        )
+        tested_func = jetstream_metrics.woollings_et_al_2010
+        result = tested_func(self.data, filter_freq=1, window_size=2)
         self.assertIsInstance(result, xr.Dataset)
         self.assertEqual(result["ff_jet_lat"][0], 36.25)
         self.assertEqual(result["ff_jet_speed"][0], 43.365413665771484)
+        tested_func(self.data["ua"], filter_freq=1, window_size=2)
 
     def test_apply_lancoz_filter(self):
         tested_func = jetstream_metrics_components.apply_lanczos_filter
@@ -245,9 +245,11 @@ class TestCattiaux2016(unittest.TestCase):
         self.data = set_up_test_zg_data()
 
     def test_metric(self):
-        # result = jetstream_metrics.cattiaux_et_al_2016(self.data)
-        # self.assertTrue(result)
-        pass
+        tested_func = jetstream_metrics.cattiaux_et_al_2016
+        subset_data = self.data.isel(plev=0)
+        res = tested_func(subset_data)
+        tested_func(subset_data["zg"])
+        self.assertEqual(res["sinuosity"], 20)
 
 
 class TestBarnesSimpson2017(unittest.TestCase):
@@ -267,6 +269,7 @@ class TestGrisePolvani2017(unittest.TestCase):
 
     def test_metric(self):
         result = jetstream_metrics.grise_polvani_2017(self.data)
+        jetstream_metrics.grise_polvani_2017(self.data["ua"])
         self.assertEqual(float(result["max_lat_0.01"].min()), 35.38)
         self.assertEqual(float(result["max_lat_0.01"].max()), 36.41)
         self.assertEqual(
@@ -290,8 +293,9 @@ class TestBracegirdle2018(unittest.TestCase):
 
     def test_metric(self):
         tested_func = jetstream_metrics.bracegirdle_et_al_2018
-        test_data = self.data.sel(plev=85000)
+        test_data = self.data.sel(plev=slice(85000, 85000))
         result = tested_func(test_data)
+        tested_func(test_data["ua"])
         self.assertRaises(ValueError, lambda: tested_func(self.data))
         self.assertEqual(float(result["seasonal_JPOS"].max()), 37.725)
         self.assertEqual(float(result["annual_JPOS"].max()), 37.725)

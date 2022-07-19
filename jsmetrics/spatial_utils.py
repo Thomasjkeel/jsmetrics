@@ -9,7 +9,7 @@ import numpy as np
 import xarray as xr
 import collections
 import math
-import shapely
+import shapely.geometry
 import matplotlib
 
 

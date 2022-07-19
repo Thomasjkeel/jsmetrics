@@ -372,9 +372,7 @@ def cattiaux_et_al_2016(data):
     )
 
     #  Step 2. Get latitude circle of 50 N
-    circle_50N = jetstream_metrics_components.get_latitude_circle_linestring(
-        50, 0, 360
-    )
+    circle_50N = spatial_utils.get_latitude_circle_linestring(50, 0, 360)
 
     #  Step 3. Loop over each time step and calculate sinuosity
     output = data.groupby("time").map(

@@ -4,8 +4,11 @@
 """
 
 import numpy as np
+import xarray as xr
 import collections
 import math
+import shapely
+import matplotlib
 
 
 EARTH_RADIUS = 6371000.0  # m
@@ -243,3 +246,102 @@ def calc_spatial_integral(
     area_weights = grid_cell_areas(lon, lat, radius=radius)
 
     return (xr_da * area_weights).sum(dim=[lon_name, lat_name])
+
+
+def get_one_contour_linestring(dataarray, contour_level):
+    """
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
+    Returns a linestring or multi-linestring of a given contour
+
+    Parameters
+    ----------
+    dataarray : xarray.DataArray
+        Array of Geopotential height (zg) values to calculate contour from
+    contour_level :
+        Value with which to calculate a contour from geopotential height
+
+    Returns
+    ----------
+    contour_line : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Contour line of geopotential height (zg) a given contour
+    """
+    assert isinstance(
+        dataarray, xr.DataArray
+    ), "Data needs to be type xr.DataArray"
+    assert (
+        "lat" in dataarray.coords and "lon" in dataarray.coords
+    ), "Data array needs to have latitude and longitude coords"
+    one_contour = dataarray.plot.contour(levels=[contour_level])
+    matplotlib.pyplot.close()
+    if len(one_contour.allsegs[0]) > 1:
+        try:
+            contour_line = shapely.geometry.MultiLineString(
+                (one_contour.allsegs[0])
+            )
+        except ValueError as ve:
+            print(ve)
+            return np.nan
+    else:
+        contour_line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
+    return contour_line
+
+
+def calc_total_great_circle_distance_along_line(line):
+    """
+    Returns the total great circle (haversine) distance along a linestring
+    or multilinestring
+
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
+    Parameters
+    ----------
+    line : shapely.geometry.LineString or shapely.geometry.MultiLineString
+        Line to calculate great circle distance from
+
+    Returns
+    ----------
+    total_distance : int or float
+        Total distance in degrees or m? TODO
+
+    """
+    total_distance = 0
+    if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
+        for i, _ in enumerate(line):
+            total_distance += get_great_circle_distance_along_linestring(
+                shapely.geometry.LineString((line[i]))
+            )
+    elif isinstance(line, shapely.geometry.LineString):
+        total_distance += get_great_circle_distance_along_linestring(line)
+    else:
+        return np.nan
+    return total_distance
+
+
+def get_latitude_circle_linestring(latitude, lon_min, lon_max):
+    """
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+    Will return a linestring of a latitude circle
+
+    Parameters
+    ----------
+    latitude : int or float
+        given latitude to calculate circle from
+    lon_min : int or float
+        Minimum longitude for circle to extend to
+    lon_max : int or float
+        Maximum longitude for circle to extend to
+
+    Returns
+    ----------
+    circle : shapely.geometry.LineString
+        Linestring of latitude circle around a hemisphere
+    """
+    vals = np.column_stack(
+        (
+            np.arange(lon_min, lon_max + 0.1, 0.5),
+            np.array([latitude] * len(np.arange(lon_min, lon_max + 0.1, 0.5))),
+        )
+    )
+    circle = shapely.geometry.LineString(vals)
+    return circle

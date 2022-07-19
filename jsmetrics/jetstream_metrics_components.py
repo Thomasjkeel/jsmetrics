@@ -10,11 +10,9 @@
 
 # imports
 import numpy as np
-import matplotlib.pyplot
 import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
-import shapely.geometry
 from . import data_utils, spatial_utils
 
 # docs
@@ -930,35 +928,6 @@ def calc_meridional_circulation_index(data):
     return data["va"] * abs(data["va"]) / (data["ua"] ** 2 + data["va"] ** 2)
 
 
-def get_latitude_circle_linestring(latitude, lon_min, lon_max):
-    """
-    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
-    Will return a linestring of a latitude circle
-
-    Parameters
-    ----------
-    latitude : int or float
-        given latitude to calculate circle from
-    lon_min : int or float
-        Minimum longitude for circle to extend to
-    lon_max : int or float
-        Maximum longitude for circle to extend to
-
-    Returns
-    ----------
-    circle : shapely.geometry.LineString
-        Linestring of latitude circle around a hemisphere
-    """
-    vals = np.column_stack(
-        (
-            np.arange(lon_min, lon_max + 0.1, 0.5),
-            np.array([latitude] * len(np.arange(lon_min, lon_max + 0.1, 0.5))),
-        )
-    )
-    circle = shapely.geometry.LineString(vals)
-    return circle
-
-
 def get_sinuosity_of_zonal_mean_zg(row, latitude_circle):
     """
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
@@ -978,86 +947,12 @@ def get_sinuosity_of_zonal_mean_zg(row, latitude_circle):
         Data containing sinuousity value (determined by calc_great_circle_sinuosity function)
     """
     row["sinuosity"] = calc_great_circle_sinuosity(
-        get_one_contour_linestring(
+        spatial_utils.get_one_contour_linestring(
             row["zg"], row["zonal_mean_zg_30Nto70N"].data
         ),
         latitude_circle,
     )
     return row
-
-
-def get_one_contour_linestring(dataarray, contour_level):
-    """
-    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
-
-    Returns a linestring or multi-linestring of a given contour
-
-    Parameters
-    ----------
-    dataarray : xarray.DataArray
-        Array of Geopotential height (zg) values to calculate contour from
-    contour_level :
-        Value with which to calculate a contour from geopotential height
-
-    Returns
-    ----------
-    contour_line : shapely.geometry.LineString or shapely.geometry.MultiLineString
-        Contour line of geopotential height (zg) a given contour
-    """
-    assert isinstance(
-        dataarray, xr.DataArray
-    ), "Data needs to be type xr.DataArray"
-    assert (
-        "lat" in dataarray.coords and "lon" in dataarray.coords
-    ), "Data array needs to have latitude and longitude coords"
-    one_contour = dataarray.plot.contour(levels=[contour_level])
-    matplotlib.pyplot.close()
-    if len(one_contour.allsegs[0]) > 1:
-        try:
-            contour_line = shapely.geometry.MultiLineString(
-                (one_contour.allsegs[0])
-            )
-        except ValueError as ve:
-            print(ve)
-            return np.nan
-    else:
-        contour_line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
-    return contour_line
-
-
-def calc_total_great_circle_distance_along_line(line):
-    """
-    Returns the total great circle (haversine) distance along a linestring
-    or multilinestring
-
-    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
-
-    Parameters
-    ----------
-    line : shapely.geometry.LineString or shapely.geometry.MultiLineString
-        Line to calculate great circle distance from
-
-    Returns
-    ----------
-    total_distance : int or float
-        Total distance in degrees or m? TODO
-
-    """
-    total_distance = 0
-    if isinstance(line, shapely.geometry.multilinestring.MultiLineString):
-        for i, _ in enumerate(line):
-            total_distance += (
-                spatial_utils.get_great_circle_distance_along_linestring(
-                    shapely.geometry.LineString((line[i]))
-                )
-            )
-    elif isinstance(line, shapely.geometry.LineString):
-        total_distance += (
-            spatial_utils.get_great_circle_distance_along_linestring(line)
-        )
-    else:
-        return np.nan
-    return total_distance
 
 
 def calc_great_circle_sinuosity(line1, line2):
@@ -1080,9 +975,9 @@ def calc_great_circle_sinuosity(line1, line2):
     sinuosity : int or float
         Sinuosity value between length of two lines
     """
-    return calc_total_great_circle_distance_along_line(
+    return spatial_utils.calc_total_great_circle_distance_along_line(
         line1
-    ) / calc_total_great_circle_distance_along_line(line2)
+    ) / spatial_utils.calc_total_great_circle_distance_along_line(line2)
 
 
 def assign_jet_lat_speed_to_ten_day_mean_data(ten_day_mean):

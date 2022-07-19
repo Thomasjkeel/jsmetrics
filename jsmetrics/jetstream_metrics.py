@@ -5,6 +5,8 @@
     TODO: including metrics to calculate average jet latitudes and upper-level wind sinuosity with the specific purpose of capturing the jet-stream 'waviness'
 
     All functions should return a xarray.Dataset.
+
+    This file is ordered by paper publish year
 """
 
 # imports

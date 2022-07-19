@@ -6,6 +6,8 @@
 
     This file is in order of publish year of the metrics
     (see details_for_all_metrics.py)
+
+    This file is ordered by the year of the paper that uses each algorithm first
 """
 
 # imports

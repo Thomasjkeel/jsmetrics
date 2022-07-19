@@ -2,7 +2,9 @@
 
 """
     Jet-stream algorithms used in the literature.
-    Algorithms are different from metrics because ...
+    Algorithms are treated seperately to metrics, as in general, metrics are used to summarise information about the jet-stream, the algorithms simply identify it
+
+    This file is ordered by paper publish year.
 """
 
 # imports

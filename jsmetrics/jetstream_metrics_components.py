@@ -115,7 +115,7 @@ def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
         mon_mean = data.groupby("time.month").mean()
         mass_weighted_average = jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
     """
-    data_utils.check_at_least_two_plevs_in_data(data)
+    data_utils.check_at_least_n_plevs_in_data(data, n_plevs=2)
     sum_weighted_ws = None  # TODO
     for plev_Pa in data["plev"].data:
         plev_hPa = plev_Pa / 100  # TODO
@@ -152,7 +152,7 @@ def get_sum_atm_mass(data):
         Sum of atmospheric mass
     """
     sum_atm_mass = 0
-    data_utils.check_at_least_two_plevs_in_data(data)
+    data_utils.check_at_least_n_plevs_in_data(data, n_plevs=2)
     for plev_Pa in data["plev"].data:
         plev_hPa = plev_Pa / 100  # TODO
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)

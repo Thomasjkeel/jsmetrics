@@ -19,7 +19,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-def check_at_least_two_plevs_in_data(data):
+def check_at_least_n_plevs_in_data(data, n_plevs):
     """
     Checks there are at least two pressure-levels (plevs) in xarray dataset
 
@@ -33,9 +33,10 @@ def check_at_least_two_plevs_in_data(data):
     ValueError :
         If not two pressure levels
     """
-    if data["plev"].count() < 2:
+    if data["plev"].count() < n_plevs:
         raise ValueError(
-            "Need at least 2 pressure levels (plevs) for calculation"
+            "Need at least %s pressure levels (plevs) for calculation"
+            % (n_plevs)
         )
 
 

@@ -16,7 +16,7 @@ import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
 import shapely.geometry
-from . import general_utils, spatial_utils, windspeed_utils
+from . import data_utils, spatial_utils, windspeed_utils
 
 # docs
 __author__ = "Thomas Keel"
@@ -184,7 +184,7 @@ def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
         mon_mean = data.groupby("time.month").mean()
         mass_weighted_average = jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
     """
-    general_utils.check_at_least_two_plevs_in_data(data)
+    data_utils.check_at_least_two_plevs_in_data(data)
     sum_weighted_ws = None  # TODO
     for plev_Pa in data["plev"].data:
         plev_hPa = plev_Pa / 100  # TODO
@@ -221,7 +221,7 @@ def get_sum_atm_mass(data):
         Sum of atmospheric mass
     """
     sum_atm_mass = 0
-    general_utils.check_at_least_two_plevs_in_data(data)
+    data_utils.check_at_least_two_plevs_in_data(data)
     for plev_Pa in data["plev"].data:
         plev_hPa = plev_Pa / 100  # TODO
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
@@ -349,7 +349,7 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
             current = current.where(
                 (abs(current["ws"]) >= 30) & (current["ua"] > 0)
             )
-            local_maxima_lat_inds = general_utils.get_local_maxima(
+            local_maxima_lat_inds = data_utils.get_local_maxima(
                 current["ws"].data
             )[0]
             if len(local_maxima_lat_inds) > 0:
@@ -836,7 +836,7 @@ class JetStreamCoreIdentificationAlgorithm:
                 area.append(val)
                 new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
-                vals_copy = general_utils.remove_duplicates(vals_copy)
+                vals_copy = data_utils.remove_duplicates(vals_copy)
                 return self._get_pot_jetcore_area(
                     vals_copy, area=area, core_found=core_found
                 )
@@ -845,7 +845,7 @@ class JetStreamCoreIdentificationAlgorithm:
                 area.append(val)
                 new_vals = self._get_indexes_to_check(val)
                 vals_copy.extend(new_vals)
-                vals_copy = general_utils.remove_duplicates(vals_copy)
+                vals_copy = data_utils.remove_duplicates(vals_copy)
                 return self._get_pot_jetcore_area(
                     vals_copy, area=area, core_found=core_found
                 )
@@ -876,7 +876,7 @@ class JetStreamCoreIdentificationAlgorithm:
                 vals_to_check, area=[]
             )
             already_covered.extend(area)
-            already_covered = general_utils.remove_duplicates(already_covered)
+            already_covered = data_utils.remove_duplicates(already_covered)
             # add area to js_core_indexes if part of core
             if core_found:
                 id_number += 1
@@ -1145,7 +1145,7 @@ def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
     #  Scale lats
     scaled_lats = rescale_lat_resolution(lats, lat_resolution)
     scaled_lat_vals = scale_lat_vals_with_quadratic_func(lats, ws, scaled_lats)
-    decimal_places = general_utils.get_num_of_decimal_places(lat_resolution)
+    decimal_places = data_utils.get_num_of_decimal_places(lat_resolution)
     max_speed_at_scaled_lat = np.max(scaled_lat_vals)
     return (
         round(scaled_lats[np.argmax(scaled_lat_vals)], decimal_places),
@@ -1380,7 +1380,7 @@ def get_local_wind_maxima_by_timeunit(row):
         pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(
             current["ws"], 30
         ).data
-        ind_local_wind_maximas = general_utils.get_local_maxima(
+        ind_local_wind_maximas = data_utils.get_local_maxima(
             pot_local_maximas, axis=1
         )
         # Turn into 2-d numpy array

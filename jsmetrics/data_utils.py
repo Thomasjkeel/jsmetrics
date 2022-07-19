@@ -153,8 +153,6 @@ def get_num_of_decimal_places(num):
     """
     num = "{:f}".format(num).rstrip("0")
     decimal_places = num[::-1].find(".")
-    if decimal_places < 0:
-        decimal_places = 0
     return decimal_places
 
 

@@ -77,3 +77,10 @@ class TestLocalMinimaMaxima(unittest.TestCase):
             ),
             [43, 48, 58, 65],
         )
+
+
+class TestGetNumOfDecimalPlaces(unittest.TestCase):
+    def test_func(self):
+        tested_func = data_utils.get_num_of_decimal_places
+        self.assertEqual(tested_func(2.33), 2)
+        self.assertEqual(tested_func(2), 0)

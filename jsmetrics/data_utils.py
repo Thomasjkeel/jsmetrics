@@ -36,6 +36,23 @@ def check_at_least_two_plevs_in_data(data):
         )
 
 
+def get_local_maxima(arr, axis=0):
+    """
+    Uses scipy.signal.argrelextrema to get index location of minimum value in array
+
+    Taken from
+    https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
+
+    Parameters
+    ----------
+    arr : array-like
+        array to find index location of minima value from
+    axis : int
+        axis for scipy.signal.argrelextrema
+    """
+    return scipy.signal.argrelextrema(arr, np.greater, axis=axis)
+
+
 def get_local_minima(arr, axis=0):
     """
     Uses scipy.signal.argrelextrema to get index location of maximum value in array
@@ -53,21 +70,25 @@ def get_local_minima(arr, axis=0):
     return scipy.signal.argrelextrema(arr, np.less, axis=axis)
 
 
-def get_local_maxima(arr, axis=0):
+def get_num_of_decimal_places(num):
     """
-    Uses scipy.signal.argrelextrema to get index location of minimum value in array
-
-    Taken from
-    https://stackoverflow.com/questions/4624970/finding-local-maxima-minima-with-numpy-in-a-1d-numpy-array
+    Gets number of decimal places in a float
 
     Parameters
     ----------
-    arr : array-like
-        array to find index location of minima value from
-    axis : int
-        axis for scipy.signal.argrelextrema
+    num : float or int
+        input number to get decimal places from
+
+    Returns
+    ----------
+    decimal_places : int
+        number of decimal places
     """
-    return scipy.signal.argrelextrema(arr, np.greater, axis=axis)
+    num = "{:f}".format(num).rstrip("0")
+    decimal_places = num[::-1].find(".")
+    if decimal_places < 0:
+        decimal_places = 0
+    return decimal_places
 
 
 def is_djf(month):
@@ -118,24 +139,3 @@ def rescale_lat_resolution(lats, lat_resolution):
         Rescaled array of latitude values
     """
     return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
-
-
-def get_num_of_decimal_places(num):
-    """
-    Gets number of decimal places in a float
-
-    Parameters
-    ----------
-    num : float or int
-        input number to get decimal places from
-
-    Returns
-    ----------
-    decimal_places : int
-        number of decimal places
-    """
-    num = "{:f}".format(num).rstrip("0")
-    decimal_places = num[::-1].find(".")
-    if decimal_places < 0:
-        decimal_places = 0
-    return decimal_places

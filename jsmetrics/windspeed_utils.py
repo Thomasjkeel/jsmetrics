@@ -4,7 +4,7 @@
     Operations needed for the jet-stream metrics and jet-stream algorithms that specifically operate on windspeed data.
     Includes the base classes and function for dealing with windspeed vectors and lat/lon or lat/plev slices of windspeed (so called: WindSpeedSlice class)
 
-    This file is order alphabetically.
+    This file is ordered alphabetically.
 """
 
 # imports
@@ -99,8 +99,8 @@ class WindSpeedSlice:
         return get_resultant_wind(data["ua"], data["va"])
 
     def _check_input_data_can_be_used_for_windspeed_slice(self, data):
-        data_utils.check_if_xarray_dataset_or_array(data)
-        data_utils.check_coord_in_data(data, self.req_coords)
+        data_utils.check_if_data_is_xarray_datatype(data)
+        data_utils.check_coords_in_data(data, self.req_coords)
         data_utils.check_var_in_data(data, self.req_variables)
         data_utils.check_only_required_coords_are_in_data(
             data, self.req_coords, to_remove=("bnds",)

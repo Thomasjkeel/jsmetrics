@@ -4,7 +4,7 @@
     Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed or spatial utils.
     The module is built from xarray data-structures, so this file contains all the stuff that helps the library handle xarray dataset/dataarrays
 
-    This file is order alphabetically
+    This file is ordered alphabetically
 """
 
 # imports
@@ -39,13 +39,43 @@ def check_at_least_two_plevs_in_data(data):
         )
 
 
-def check_coord_in_data(data, req_coords):
+def check_coords_in_data(data, req_coords):
+    """
+    Will check if a given coordinates are in the data and raises a key error if any of them are not.
+    This function is needed to check before algorithm continues and uses too much memory.
+    Built from xarray.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data to check
+    req_coords : array-like or tuple
+        Coordinates to check if in data
+
+    Raises
+    ----------
+    KeyError :
+        If any given coord is not in data
+    """
     for coord in req_coords:
         if coord not in data.coords:
             raise KeyError("'%s' is not in the data" % (coord,))
 
 
-def check_if_xarray_dataset_or_array(data):
+def check_if_data_is_xarray_datatype(data):
+    """
+    What it says on the tin.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data to check
+
+    Raises
+    ----------
+    TypeError :
+        If input is not an xarray data type
+    """
     if not isinstance(data, xr.Dataset) or isinstance(data, xr.DataArray):
         raise TypeError("input needs to be xarray.DataSet or xarray.DataArray")
 

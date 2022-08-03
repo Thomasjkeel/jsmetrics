@@ -249,7 +249,7 @@ class TestCattiaux2016(unittest.TestCase):
         subset_data = self.data.isel(plev=0)
         res = tested_func(subset_data)
         tested_func(subset_data["zg"])
-        self.assertEqual(res["sinuosity"], 20)
+        self.assertEqual(round(float(res["sinuosity"].max()), 3), 2.749)
 
 
 class TestBarnesSimpson2017(unittest.TestCase):

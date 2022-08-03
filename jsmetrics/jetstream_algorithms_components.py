@@ -259,10 +259,6 @@ class JetStreamCoreIdentificationAlgorithm:
         self._currently_a_core = None
         self.algorithm_has_run = False
 
-    def __add__(self, other):
-        print("TODO: need to implement behaviour for adding slices together")
-        pass
-
     def __repr__(self):
         """
         Representation of the class. Have it return the labelled data

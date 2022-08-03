@@ -303,8 +303,8 @@ class JetStreamCoreIdentificationAlgorithm:
             ws_boundary_threshold=ws_boundary_threshold,
         )
 
-        js_core_indexes = js_algorithm.run()
-        return js_core_indexes
+        js_algorithm.run()
+        return js_algorithm
 
     def run(self):
         self.final_jet_cores = self._get_jet_core_boundary()

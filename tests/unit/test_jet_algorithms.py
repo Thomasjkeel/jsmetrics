@@ -148,6 +148,17 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()
 
+    def test_repr(self):
+        tested_alg = (
+            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm
+        )
+        test_data = self.data.isel(time=0, lon=0)
+        jetCoreAlg = tested_alg(test_data)
+
+        repr(jetCoreAlg)
+        jetCoreAlg.run()
+        repr(jetCoreAlg)
+
     def test_ws_thresholds(self):
         tested_alg = (
             jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm
@@ -182,6 +193,17 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         self.assertEqual(result.num_of_cores, 3)
         self.assertListEqual(
             result.final_jet_cores[0]["index_of_area"][0], [16, 4]
+        )
+
+    def test_classmethod(self):
+        tested_alg = (
+            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm.run_algorithm
+        )
+        test_data = self.data.isel(time=0, lon=0)
+        result = tested_alg(test_data)
+        self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
+        self.assertEqual(
+            len(np.where(result._labelled_data["ws"] == "Core")[1]), 46
         )
 
 

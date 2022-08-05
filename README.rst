@@ -11,6 +11,9 @@ This is jsmetrics, a library containing implementations of various metrics and a
 written in Python and built from xarray.
 
 
+WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
+
+
 .. [Table of Contents]
 .. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
 

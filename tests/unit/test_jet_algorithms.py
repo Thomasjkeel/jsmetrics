@@ -17,9 +17,7 @@ from jsmetrics import (
     jetstream_algorithms,
     jetstream_algorithms_components,
 )
-from . import (
-    set_up_test_uv_data,
-)
+from . import set_up_test_uv_data
 
 # docs
 __author__ = "Thomas Keel"
@@ -36,9 +34,7 @@ class TestKoch2006(unittest.TestCase):
         result = tested_func(self.data, ws_threshold=8)
         # check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(
-            float(result["weighted_average_ws"].max()), 8.775158882141113
-        )
+        self.assertEqual(float(result["weighted_average_ws"].max()), 8.775158882141113)
         new_data = self.data.isel(plev=0)
         self.assertRaises(ValueError, lambda: tested_func(new_data))
 
@@ -98,9 +94,7 @@ class TestManney2011(unittest.TestCase):
     def test_metric(self):
         test_func = jetstream_algorithms.manney_et_al_2011
         # NOTE: this metric is a generator
-        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(
-            time=slice(0, 1)
-        )
+        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
         res = test_func(subset_data.sel(plev=25000))
         self.assertEqual(res["jet_core_id"].max(), 2)
 
@@ -111,18 +105,22 @@ class TestPenaOrtiz2013(unittest.TestCase):
 
     def test_metric(self):
         tested_func = jetstream_algorithms.penaortiz_et_al_2013
-        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(
-            time=slice(0, 1)
-        )
+        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
         res = tested_func(subset_data)
         self.assertTrue("polar_front_jet" in res)
         self.assertEqual(res["subtropical_jet"].max(), 1)
 
     def test_get_empty_local_wind_maxima(self):
-        pass
+        test_func = (
+            jetstream_algorithms_components.make_empty_local_wind_maxima_data_var
+        )
+        empty_local_wind_data = test_func(self.data)
+        self.assertEqual(empty_local_wind_data.max(), 0)
+        self.assertTrue("local_wind_maxima" in empty_local_wind_data)
 
-    def test_num_timeunits_per_monthyear_with_local_wind_maxima(self):
-        pass
+    def test_get_local_wind_maxima_by_timeunit(self):
+        test_func = jetstream_algorithms_components.get_local_wind_maxima_by_timeunit
+        self.assertRaises(ValueError, lambda: test_func(self.data.isel(time=0)))
 
 
 class TestKuang2014(unittest.TestCase):
@@ -134,13 +132,9 @@ class TestKuang2014(unittest.TestCase):
         lon_data = self.data.sel(plev=50000).isel(time=slice(0, 2))
         result = tested_func(lon_data)
         self.assertEqual(result["jet_ocurrence1_jet_centre2"].max(), 2)
-        lon_data = self.data.sel(plev=slice(50000, 25000)).isel(
-            time=slice(0, 2)
-        )
+        lon_data = self.data.sel(plev=slice(50000, 25000)).isel(time=slice(0, 2))
         self.assertRaises(ValueError, lambda: tested_func(lon_data))
-        plev_data = self.data.sel(plev=slice(25000, 25000)).isel(
-            time=slice(0, 2)
-        )
+        plev_data = self.data.sel(plev=slice(25000, 25000)).isel(time=slice(0, 2))
         tested_func(plev_data)
 
 
@@ -179,21 +173,13 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         result.run()
         print(result._initial_core_ids.mean())
         self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
+        self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 46)
         self.assertEqual(
-            len(np.where(result._labelled_data["ws"] == "Core")[1]), 46
-        )
-        self.assertEqual(
-            len(
-                np.where(result._labelled_data["ws"] == "Potential Boundary")[
-                    1
-                ]
-            ),
+            len(np.where(result._labelled_data["ws"] == "Potential Boundary")[1]),
             81,
         )
         self.assertEqual(result.num_of_cores, 3)
-        self.assertListEqual(
-            result.final_jet_cores[0]["index_of_area"][0], [16, 4]
-        )
+        self.assertListEqual(result.final_jet_cores[0]["index_of_area"][0], [16, 4])
 
     def test_classmethod(self):
         tested_alg = (
@@ -202,9 +188,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         test_data = self.data.isel(time=0, lon=0)
         result = tested_alg(test_data)
         self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
-        self.assertEqual(
-            len(np.where(result._labelled_data["ws"] == "Core")[1]), 46
-        )
+        self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 46)
 
 
 class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
@@ -225,9 +209,7 @@ class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
         test_data = self.data.isel(plev=4, time=0)
         result = tested_alg(test_data)
         result.run()
-        self.assertEqual(
-            float(result._jet_occurence["ws"].max()), 85.84358978271484
-        )
+        self.assertEqual(float(result._jet_occurence["ws"].max()), 85.84358978271484)
         self.assertListEqual(result._jet_centres[0].tolist(), [5.0, 331.875])
 
 

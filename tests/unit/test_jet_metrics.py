@@ -82,9 +82,7 @@ class TestMetricDetailsDict(unittest.TestCase):
         for metric in self.metric_details.values():
             if coord in metric["coords"].keys():
                 self.assertEqual(len(metric["coords"][coord]), 2)
-                self.assertGreaterEqual(
-                    min(metric["coords"][coord]), min_value
-                )
+                self.assertGreaterEqual(min(metric["coords"][coord]), min_value)
                 self.assertLessEqual(max(metric["coords"][coord]), max_value)
 
     def test_funcs(self):
@@ -130,9 +128,9 @@ class TestWoollings2010(unittest.TestCase):
         time_step = 0.25
         period = 5.0
         time_vec = np.arange(0, 5, time_step)
-        test_sig = np.sin(
-            2 * np.pi / period * time_vec
-        ) + 0.5 * np.random.randn(time_vec.size)
+        test_sig = np.sin(2 * np.pi / period * time_vec) + 0.5 * np.random.randn(
+            time_vec.size
+        )
         return test_sig
 
     def test_metric(self):
@@ -158,14 +156,10 @@ class TestWoollings2010(unittest.TestCase):
             ValueError,
             lambda: tested_func(test_ua, 2, test_ua["time"].count() + 1),
         )
-        self.assertEqual(
-            float(tested_func(test_ua, 2, 4).max()), 99.514892578125
-        )
+        self.assertEqual(float(tested_func(test_ua, 2, 4).max()), 99.514892578125)
 
     def test_get_latitude_and_speed_where_max_ws(self):
-        tested_func = (
-            jetstream_metrics_components.get_latitude_and_speed_where_max_ws
-        )
+        tested_func = jetstream_metrics_components.get_latitude_and_speed_where_max_ws
         self.assertRaises(AttributeError, lambda: tested_func(["lol"]))
         tested_data = self.data["ua"].isel(plev=0, lon=0, time=0)
         self.assertEqual(tested_func(tested_data)[0], 81.25)
@@ -177,9 +171,7 @@ class TestWoollings2010(unittest.TestCase):
         self.assertEqual(tested_func(nan_dataset), (np.nan, np.nan))
 
     def test_apply_fourier_filter(self):
-        tested_func = (
-            jetstream_metrics_components.apply_low_freq_fourier_filter
-        )
+        tested_func = jetstream_metrics_components.apply_low_freq_fourier_filter
         res = tested_func(self.test_sig, 2)
         self.assertAlmostEqual(res[10].real, -0.0956296962962675, places=7)
 
@@ -196,6 +188,16 @@ class TestBarnesPolvani2013(unittest.TestCase):
         self.assertEqual(result["jet_lat"][1], 35.85)
         self.assertEqual(round(float(result["jet_speed"][2]), 5), 33.1134)
         self.assertEqual(float(result["jet_width"][1]), 17.5)
+
+    def test_calc_jet_width_for_one_day(self):
+        test_func = jetstream_metrics_components.calc_jet_width_for_one_day
+        self.assertTrue(
+            np.isnan(test_func(self.data["ua"].isel(time=0, plev=0), 25, None))
+        )
+
+    def test_get_3_latitudes_and_speed_around_max_ws(self):
+        # test_func = jetstream_metrics_components.get_3_latitudes_and_speed_around_max_ws
+        pass
 
 
 class TestScreenSimmonds2013(unittest.TestCase):
@@ -272,9 +274,7 @@ class TestGrisePolvani2017(unittest.TestCase):
         jetstream_metrics.grise_polvani_2017(self.data["ua"])
         self.assertEqual(float(result["max_lat_0.01"].min()), 35.38)
         self.assertEqual(float(result["max_lat_0.01"].max()), 36.41)
-        self.assertEqual(
-            round(float(result["max_speed_0.01"].max()), 5), 22.92644
-        )
+        self.assertEqual(round(float(result["max_speed_0.01"].max()), 5), 22.92644)
 
 
 class TestCeppi2018(unittest.TestCase):
@@ -313,9 +313,7 @@ class TestKerr2020(unittest.TestCase):
         self.assertRaises(IndexError, lambda: tested_func(self.data))
         test_data = self.data.sel(plev=50000)
         result = tested_func(test_data)
-        self.assertEqual(
-            result["jet_lat_by_lon"].isel(time=0).dropna("lon").size, 192
-        )
+        self.assertEqual(result["jet_lat_by_lon"].isel(time=0).dropna("lon").size, 192)
         self.assertEqual(float(result["jet_lat_by_lon"].max()), 72.5)
         self.assertEqual(float(result["smoothed_jet_lats"].max()), 65.0)
         self.assertEqual(

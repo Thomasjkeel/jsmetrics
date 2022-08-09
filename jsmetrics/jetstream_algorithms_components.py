@@ -672,7 +672,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
         self._get_all_coords_of_jet_occurence()
         self._all_coords_arr = np.array(self._all_coords)
         # Get a counter of all the latitude coordinates
-        # TODO: add tests to see if this works
+        # TODO: write tests to see if this works as this was a workaround needed for some reason
         try:
             self._count_lats = collections.Counter(self._all_coords_arr[:, 0])
         except Exception as e:

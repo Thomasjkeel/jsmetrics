@@ -46,17 +46,14 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
         raise KeyError("Data does not contain coord: 'plev'")
 
     if not isinstance(all_plevs_hPa, (list, np.ndarray)):
-        raise TypeError(
-            "array of pressure level needs to be list or numpy.array"
-        )
+        raise TypeError("array of pressure level needs to be list or numpy.array")
 
     sum_weighted_ws = 0
     for plev, (i, plev_hPa) in zip(data["plev"], enumerate(all_plevs_hPa)):
         if i != 0:
             plev_hPa = plev_hPa - all_plevs_hPa[i - 1]
         sum_weighted_ws += (
-            (data.sel(plev=plev)["ua"] ** 2 + data.sel(plev=plev)["va"] ** 2)
-            ** (1 / 2)
+            (data.sel(plev=plev)["ua"] ** 2 + data.sel(plev=plev)["va"] ** 2) ** (1 / 2)
         ) * plev_hPa
     return sum_weighted_ws
 
@@ -81,9 +78,7 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
         Data containing weighted average windspeed values
     """
     if not isinstance(all_plevs_hPa, (list, np.ndarray)):
-        raise TypeError(
-            "array of pressure level needs to be a list or numpy.array"
-        )
+        raise TypeError("array of pressure level needs to be a list or numpy.array")
     weighted_average_ws = sum_weighted_ws * (
         1 / (all_plevs_hPa.max() - all_plevs_hPa.min())
     )
@@ -145,12 +140,8 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
     for lon in row["lon"]:
         for plev in row["plev"]:
             current = row.sel(lon=lon, plev=plev)
-            current = current.where(
-                (abs(current["ws"]) >= 30) & (current["ua"] > 0)
-            )
-            local_maxima_lat_inds = data_utils.get_local_maxima(
-                current["ws"].data
-            )[0]
+            current = current.where((abs(current["ws"]) >= 30) & (current["ua"] > 0))
+            local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
             if len(local_maxima_lat_inds) > 0:
                 for lat_ind in local_maxima_lat_inds:
                     row["jet_maxima"].loc[
@@ -163,9 +154,7 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
     return row
 
 
-def run_jet_core_algorithm_on_one_day(
-    row, ws_core_threshold, ws_boundary_threshold
-):
+def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_threshold):
     """
     Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
     Runs JetStreamCoreIdentificationAlgorithm method on a single time unit
@@ -267,11 +256,7 @@ class JetStreamCoreIdentificationAlgorithm:
             print(
                 "A total of %d initial Jet-stream cores have been found\
                  in the wind-speed slice"
-                % (
-                    self._labelled_data["ws"]
-                    .where(lambda x: x == "Core")
-                    .count()
-                )
+                % (self._labelled_data["ws"].where(lambda x: x == "Core").count())
             )
             print(
                 "A total of %d potential Jet-stream boundaries have been found\
@@ -284,16 +269,11 @@ class JetStreamCoreIdentificationAlgorithm:
             )
             return repr(self._labelled_data)
         else:
-            print(
-                "A total of %d cores have been discovered"
-                % (self.num_of_cores)
-            )
+            print("A total of %d cores have been discovered" % (self.num_of_cores))
             return repr(self.output_data)
 
     @classmethod
-    def run_algorithm(
-        cls, data, ws_core_threshold=40, ws_boundary_threshold=30
-    ):
+    def run_algorithm(cls, data, ws_core_threshold=40, ws_boundary_threshold=30):
         """
         Class method for running algorithm
         """
@@ -316,9 +296,7 @@ class JetStreamCoreIdentificationAlgorithm:
         Will return the indexes in the ws data that ARE jet-stream cores
         and COULD BE jet-stream core boundaries
         """
-        pot_boundary_ids = np.where(
-            self._labelled_data["ws"] == "Potential Boundary"
-        )
+        pot_boundary_ids = np.where(self._labelled_data["ws"] == "Potential Boundary")
         initial_core_ids = np.where(self._labelled_data["ws"] == "Core")
         pot_boundary_ids = np.stack(pot_boundary_ids, axis=-1)
         initial_core_ids = np.stack(initial_core_ids, axis=-1)
@@ -399,17 +377,13 @@ class JetStreamCoreIdentificationAlgorithm:
             if pot_boundary.tolist() in already_covered:
                 continue
             vals_to_check = self._get_indexes_to_check(pot_boundary)
-            area, core_found = self._get_pot_jetcore_area(
-                vals_to_check, area=[]
-            )
+            area, core_found = self._get_pot_jetcore_area(vals_to_check, area=[])
             already_covered.extend(area)
             already_covered = data_utils.remove_duplicates(already_covered)
             # add area to js_core_indexes if part of core
             if core_found:
                 id_number += 1
-                js_core_indexes.extend(
-                    [{"id": id_number, "index_of_area": area}]
-                )
+                js_core_indexes.extend([{"id": id_number, "index_of_area": area}])
         self.num_of_cores = id_number
         return js_core_indexes
 
@@ -487,9 +461,7 @@ def get_empty_local_wind_maxima_data(data):
     return data
 
 
-def get_potential_local_wind_maximas_by_ws_threshold(
-    ws_slice, ws_threshold=30
-):
+def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold=30):
     """
     Will return a 2-d array of potential local windspeed maximas
 
@@ -536,9 +508,7 @@ def get_local_wind_maxima_by_timeunit(row):
         pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(
             current["ws"], 30
         ).data
-        ind_local_wind_maximas = data_utils.get_local_maxima(
-            pot_local_maximas, axis=1
-        )
+        ind_local_wind_maximas = data_utils.get_local_maxima(pot_local_maximas, axis=1)
         # Turn into 2-d numpy array
         ind_local_wind_maximas = np.array(
             [
@@ -665,9 +635,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ) from e
 
         # Load in data as a pressure level 2d wind-speed slice
-        self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(
-            data
-        ).values
+        self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(data).values
         self.plev_ws_slice["jet_ocurrence1_jet_centre2"] = self.plev_ws_slice[
             "ws"
         ].copy()
@@ -696,7 +664,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
 
     @classmethod
     def run_algorithm(cls, data):
-        return cls(data).run()
+        alg_output = cls(data)
+        alg_output.run()
+        return alg_output
 
     def run(self):
         self._get_all_coords_of_jet_occurence()
@@ -772,8 +742,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
                 if (
                     coord[0] == 0
                     or coord[1] == 0
-                    and 360 - self._lon_resolution
-                    not in coords_to_search[::, 1]
+                    and 360 - self._lon_resolution not in coords_to_search[::, 1]
                 ):
                     continue
                 # check if coord is jet centre point i.e. 9*9 all above 30
@@ -790,9 +759,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
                 matrix_vals_to_check = np.array(
                     np.meshgrid(lat_grid_vals, lon_grid_vals)
                 ).T.reshape(-1, 2)
-                matrix_vals_to_check = (
-                    matrix_vals_to_check % 360
-                )  # loop around
+                matrix_vals_to_check = matrix_vals_to_check % 360  # loop around
                 add_coord = True
                 for val in matrix_vals_to_check:
                     if not val.tolist() in self._all_coords:

@@ -193,24 +193,26 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
 class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
     def setUp(self):
-        self.data = set_up_test_uv_data()
+        self.data = set_up_test_uv_data().isel(time=slice(0, 1))
+        self.tested_alg = (
+            jetstream_algorithms_components.JetStreamOccurenceAndCentreAlgorithm
+        )
 
     def test_ws_thresholds(self):
-        tested_alg = (
-            jetstream_algorithms_components.JetStreamOccurenceAndCentreAlgorithm
-        )
         test_data = self.data.isel(plev=0, time=0)
-        self.assertRaises(ValueError, lambda: tested_alg(test_data, -10))
+        self.assertRaises(ValueError, lambda: self.tested_alg(test_data, -10))
 
     def test_inner_functions(self):
-        tested_alg = (
-            jetstream_algorithms_components.JetStreamOccurenceAndCentreAlgorithm
-        )
         test_data = self.data.isel(plev=4, time=0)
-        result = tested_alg(test_data)
+        result = self.tested_alg(test_data)
         result.run()
         self.assertEqual(float(result._jet_occurence["ws"].max()), 85.84358978271484)
         self.assertListEqual(result._jet_centres[0].tolist(), [5.0, 331.875])
+
+    def test_cls_method(self):
+        test_data = self.data.isel(plev=4, time=0)
+        result = self.tested_alg.run_algorithm(test_data)
+        self.assertEqual(float(result._jet_occurence["ws"].max()), 85.84358978271484)
 
 
 if __name__ == "__main__":

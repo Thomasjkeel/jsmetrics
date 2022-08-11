@@ -205,8 +205,20 @@ class TestBarnesPolvani2013(unittest.TestCase):
         )
 
     def test_get_3_latitudes_and_speed_around_max_ws(self):
-        # test_func = jetstream_metrics_components.get_3_latitudes_and_speed_around_max_ws
-        pass
+        test_func = jetstream_metrics_components.get_3_latitudes_and_speed_around_max_ws
+        test_data = self.data["ua"].isel(time=0, plev=0, lat=slice(0, 2))
+        res = test_func(test_data["lat"])
+        self.assertEqual(len(res[0]), 3)
+        self.assertTrue(np.isnan(res[0][0]))
+        test_data = self.data["ua"].isel(time=0, plev=0, lat=slice(68, 73))
+        res = test_func(test_data["lat"])
+        self.assertEqual(len(res[0]), 3)
+        self.assertTrue(np.isnan(res[0][-1]))
+
+    def test_get_3_neighbouring_coord_values(self):
+        test_func = jetstream_metrics_components.get_3_neighbouring_coord_values
+        res = test_func(45, 1)
+        self.assertEqual(list(res), [44.0, 45.0, 46.0])
 
 
 class TestScreenSimmonds2013(unittest.TestCase):

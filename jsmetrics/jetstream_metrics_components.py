@@ -756,15 +756,24 @@ def get_3_latitudes_and_speed_around_max_ws(row):
     ]
     neighbouring_speeds = row.sel(lat=neighbouring_lats).data
 
-    #  TODO: move work around to func
+    #  add nan value to edges
     if len(neighbouring_lats) < 3:
-        if neighbouring_lats[0] == lat_min:
-            neighbouring_lats = np.insert(neighbouring_lats, 0, np.nan)
-            neighbouring_speeds = np.insert(neighbouring_speeds, 0, np.nan)
-        if neighbouring_lats[-1] == lat_max:
-            neighbouring_lats = np.append(neighbouring_lats, np.nan)
-            neighbouring_speeds = np.append(neighbouring_speeds, np.nan)
+        neighbouring_lats = add_nan_value_to_arr_if_on_edge_of_lat_range(
+            neighbouring_lats, lat_min, lat_max
+        )
+        neighbouring_speeds = add_nan_value_to_arr_if_on_edge_of_lat_range(
+            neighbouring_speeds, lat_min, lat_max
+        )
+
     return (neighbouring_lats, neighbouring_speeds)
+
+
+def add_nan_value_to_arr_if_on_edge_of_lat_range(arr, lat_min, lat_max):
+    if arr[0] == lat_min:
+        arr = np.insert(arr, 0, np.nan)
+    elif arr[-1] == lat_max:
+        arr = np.append(arr, np.nan)
+    return arr
 
 
 def get_3_neighbouring_coord_values(coord_val, coord_resolution):

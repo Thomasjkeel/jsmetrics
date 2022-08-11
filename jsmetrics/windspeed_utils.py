@@ -8,7 +8,6 @@
 """
 
 # imports
-import xarray as xr
 import numpy as np
 from . import data_utils
 
@@ -81,13 +80,6 @@ class WindSpeedSlice:
 
     def __getitem__(self, item):
         return self.values[item]
-
-    def __add__(self, other):
-        if (
-            self.req_coords == other.req_coords
-            and self.req_variables == other.req_variables
-        ):
-            return xr.concat([self.values, other.values], dim="time")
 
     @staticmethod
     def _calc_windspeed(data):

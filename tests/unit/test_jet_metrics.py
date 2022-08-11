@@ -194,6 +194,15 @@ class TestBarnesPolvani2013(unittest.TestCase):
         self.assertTrue(
             np.isnan(test_func(self.data["ua"].isel(time=0, plev=0), 25, None))
         )
+        self.assertTrue(
+            np.isnan(
+                test_func(
+                    self.data["ua"].isel(time=0, plev=0, lon=0, lat=slice(2, 5)),
+                    0,
+                    1,
+                )
+            )
+        )
 
     def test_get_3_latitudes_and_speed_around_max_ws(self):
         # test_func = jetstream_metrics_components.get_3_latitudes_and_speed_around_max_ws

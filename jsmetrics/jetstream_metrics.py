@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    Metrics (or Indices) used to identify or classify jet-stream in the literature
-    TODO: write better
-    Including metrics to calculate average jet latitudes and upper-level wind sinuosity with the specific purpose of capturing the jet-stream 'waviness'
+    Metrics (or Indices) used to identify or classify jet-stream in the literature. This includes metrics to calculate
+    latitudes at which highest wind-speed occurs or and upper-level wind sinuosity with the specific purpose of capturing the jet-stream 'waviness'
 
     All functions should return a xarray.Dataset.
 

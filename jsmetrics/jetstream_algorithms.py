@@ -41,9 +41,6 @@ def koch_et_al_2006(data, ws_threshold=30):
     weighted_average_ws : xarray.Dataset
         data containing weighted average ws above windspeed threshold
 
-    TODO: check with chris
-    TODO: add equation to this doc
-    TODO: what if mbar?
     """
     if data["plev"].count() < 2:
         raise ValueError(
@@ -59,22 +56,16 @@ def koch_et_al_2006(data, ws_threshold=30):
     )
 
     # Step 3: calculate average weighted
-    weighted_average_ws = (
-        jetstream_algorithms_components.get_weighted_average_ws(
-            sum_weighted_ws, all_plevs_hPa
-        )
+    weighted_average_ws = jetstream_algorithms_components.get_weighted_average_ws(
+        sum_weighted_ws, all_plevs_hPa
     )
 
     # Step 4: Apply windspeed threshold
-    weighted_average_ws = weighted_average_ws.where(
-        weighted_average_ws >= ws_threshold
-    )
+    weighted_average_ws = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
 
     weighted_average_ws = weighted_average_ws.fillna(0.0)
     # Step 5: turn into dataset
-    weighted_average_ws = weighted_average_ws.rename(
-        "weighted_average_ws"
-    ).to_dataset()
+    weighted_average_ws = weighted_average_ws.rename("weighted_average_ws").to_dataset()
     return weighted_average_ws
 
 
@@ -101,7 +92,7 @@ def schiemann_et_al_2009(data):
 
     #  Step 2. Calculate jet maximas
     output = data.groupby("time").map(
-        jetstream_algorithms_components.get_local_jet_maximas_by_timeunit_by_plev
+        jetstream_algorithms_components.get_local_jet_maximas_by_oneday_by_plev
     )
     return output
 
@@ -222,11 +213,3 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
         (occurence_ws_threshold,),
     )
     return output
-
-
-# def kern_et_al_2018(data):
-#     """
-#     Write function description
-#     TODO: ask about equation
-#     """
-#     return data

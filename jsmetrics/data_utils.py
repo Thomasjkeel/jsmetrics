@@ -35,8 +35,7 @@ def check_at_least_n_plevs_in_data(data, n_plevs):
     """
     if data["plev"].count() < n_plevs:
         raise ValueError(
-            "Need at least %s pressure levels (plevs) for calculation"
-            % (n_plevs)
+            "Need at least %s pressure levels (plevs) for calculation" % (n_plevs)
         )
 
 
@@ -221,7 +220,6 @@ def rescale_lat_resolution(lats, lat_resolution):
     & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
     & Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
 
-    TODO: what if larger resolution
 
     Parameters
     ----------

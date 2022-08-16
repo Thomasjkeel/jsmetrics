@@ -254,13 +254,13 @@ class TestFrancisVavrus2015(unittest.TestCase):
         self.assertTrue(result["mci"].min() == -1)
 
 
-class TestLocalWaveActivity(unittest.TestCase):
-    def setUp(self):
-        self.data = set_up_test_zg_data()
+# class TestLocalWaveActivity(unittest.TestCase):
+#     def setUp(self):
+#         self.data = set_up_test_zg_data()
 
-    def test_metric(self):
-        result = jetstream_metrics.local_wave_activity(self.data)
-        self.assertTrue(result)
+#     def test_metric(self):
+#         result = jetstream_metrics.local_wave_activity(self.data)
+#         self.assertTrue(result)
 
 
 class TestCattiaux2016(unittest.TestCase):

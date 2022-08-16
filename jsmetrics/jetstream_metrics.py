@@ -2,7 +2,8 @@
 
 """
     Metrics (or Indices) used to identify or classify jet-stream in the literature
-    TODO: including metrics to calculate average jet latitudes and upper-level wind sinuosity with the specific purpose of capturing the jet-stream 'waviness'
+    TODO: write better
+    Including metrics to calculate average jet latitudes and upper-level wind sinuosity with the specific purpose of capturing the jet-stream 'waviness'
 
     All functions should return a xarray.Dataset.
 
@@ -43,15 +44,11 @@ def archer_caldeira_2008(data):
     mon_mean = data.groupby("time.month").mean()
 
     #  Step 2. Calculate wind-speed from u and v-component wind
-    mon_mean["ws"] = windspeed_utils.get_resultant_wind(
-        mon_mean["ua"], mon_mean["va"]
-    )
+    mon_mean["ws"] = windspeed_utils.get_resultant_wind(mon_mean["ua"], mon_mean["va"])
 
     #  Step 3. Calculate mass weighted average
-    mass_weighted_average = (
-        jetstream_metrics_components.calc_mass_weighted_average(
-            mon_mean, ws_col="ws"
-        )
+    mass_weighted_average = jetstream_metrics_components.calc_mass_weighted_average(
+        mon_mean, ws_col="ws"
     )
     mass_flux_weighted_pressure = (
         jetstream_metrics_components.calc_mass_flux_weighted_pressure(
@@ -109,12 +106,9 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2: Apply n-day lancoz filter
-    lancoz_filtered_mean_data = (
-        jetstream_metrics_components.apply_lanczos_filter(
-            zonal_mean["ua"], filter_freq, window_size
-        )
+    lancoz_filtered_mean_data = jetstream_metrics_components.apply_lanczos_filter(
+        zonal_mean["ua"], filter_freq, window_size
     )
-    # TODO make way of assuring that a dataarray is passed
 
     # Step 3: Calculate max windspeed and lat where max ws found
     max_lat_ws = np.array(
@@ -125,10 +119,8 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
             )
         )
     )
-    zonal_mean_lat_ws = (
-        jetstream_metrics_components.assign_jet_lat_and_speed_to_data(
-            zonal_mean, max_lat_ws
-        )
+    zonal_mean_lat_ws = jetstream_metrics_components.assign_jet_lat_and_speed_to_data(
+        zonal_mean, max_lat_ws
     )
     # Step 4: Make seasonal climatology
     climatology = jetstream_metrics_components.get_climatology(
@@ -136,15 +128,11 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     )
 
     # Step 5: Apply low-freq fourier filter to both max lats and max ws
-    fourier_filtered_lats = (
-        jetstream_metrics_components.apply_low_freq_fourier_filter(
-            climatology["jet_lat"].values, highest_freq_to_keep=2
-        )
+    fourier_filtered_lats = jetstream_metrics_components.apply_low_freq_fourier_filter(
+        climatology["jet_lat"].values, highest_freq_to_keep=2
     )
-    fourier_filtered_ws = (
-        jetstream_metrics_components.apply_low_freq_fourier_filter(
-            climatology["jet_speed"].values, highest_freq_to_keep=2
-        )
+    fourier_filtered_ws = jetstream_metrics_components.apply_low_freq_fourier_filter(
+        climatology["jet_speed"].values, highest_freq_to_keep=2
     )
 
     # Step 6: Join filtered climatology back to the data
@@ -182,23 +170,17 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
         Data containing values for z_lat, z_spd, z_width for jet-stream latitude, speed and width
     """
     #  Step 1. Get pressure-weighted u-component wind
-    pressure_weighted_ua = (
-        jetstream_metrics_components.calc_mass_weighted_average(
-            data, ws_col="ua"
-        )
+    pressure_weighted_ua = jetstream_metrics_components.calc_mass_weighted_average(
+        data, ws_col="ua"
     )
     #  Step 2. Filter pressure-weighted u-component wind with low-pass Lanczos filter
-    filtered_pressure_weighted_ua = (
-        jetstream_metrics_components.apply_lanczos_filter(
-            pressure_weighted_ua,
-            filter_freq=filter_freq,
-            window_size=window_size,
-        )
+    filtered_pressure_weighted_ua = jetstream_metrics_components.apply_lanczos_filter(
+        pressure_weighted_ua,
+        filter_freq=filter_freq,
+        window_size=window_size,
     )
     #  Step 3. Turn dataarray into dataset for next part
-    filtered_pressure_weighted_ua = filtered_pressure_weighted_ua.to_dataset(
-        name="ua"
-    )
+    filtered_pressure_weighted_ua = filtered_pressure_weighted_ua.to_dataset(name="ua")
 
     #  Step 4.  Get max latitude and wind speed at max
     zonal_mean = windspeed_utils.get_zonal_mean(filtered_pressure_weighted_ua)
@@ -256,7 +238,6 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 #     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
 
 #     Slightly adjusted in Screen and Simmonds 2014
-#     TODO: insure that Earth sphericity is accounted for in the perimeter calc
 
 #     Parameters
 #     ----------
@@ -266,7 +247,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 #     Returns
 #     ----------
 #     data : xarray.Dataset
-#         Data containing ... TODO
+#         Data containing u- and v- component wind speed
 #     """
 #     if isinstance(data, xarray.DataArray):
 #         data = data.to_dataset()
@@ -323,28 +304,25 @@ def francis_vavrus_2015(data):
         Data containing MCI
     """
     #  Step 1. calculating Meridional Circulation Index from data
-    data[
-        "mci"
-    ] = jetstream_metrics_components.calc_meridional_circulation_index(data)
+    data["mci"] = jetstream_metrics_components.calc_meridional_circulation_index(data)
 
     #  Step 2. TODO Calculate anomaly from season
     # maybe TODO: Step 3 Calculate anomaly from season
     return data
 
 
-def local_wave_activity(data):
-    """
-    Introduced by Huang and Nakamura for Potential Vorticity, but then used by:
-    Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA
-    with 500 hPa zg instead of pv
-    TODO: Ask Chris about equation in Blackport 2020 and others
+# def local_wave_activity(data):
+#     """
+#     Introduced by Huang and Nakamura for Potential Vorticity, but then used by:
+#     Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA
+#     with 500 hPa zg instead of pv
 
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing geopotential height (zg)
-    """
-    return data
+#     Parameters
+#     ----------
+#     data : xarray.Dataset
+#         Data containing geopotential height (zg)
+#     """
+#     return data
 
 
 def cattiaux_et_al_2016(data):
@@ -417,8 +395,7 @@ def grise_polvani_2017(data):
 
     See also Ceppi et al. 2012
     Methodology is for Southern Hemisphere
-    TODO: work out if relevant as this method also uses poleward edge of sub-tropical dry zone
-    and poleward edge of Hadley cell derived from precip. record
+    NOTE: This method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record
 
     Parameters
     ----------
@@ -502,12 +479,8 @@ def bracegirdle_et_al_2018(data):
             raise ValueError("Please subset to one plev value for this metric")
 
     #  Step 1. Make seasonal & annual climatologies
-    seasonal_climatology = jetstream_metrics_components.get_climatology(
-        data, "season"
-    )
-    annual_climatology = jetstream_metrics_components.get_climatology(
-        data, "year"
-    )
+    seasonal_climatology = jetstream_metrics_components.get_climatology(data, "season")
+    annual_climatology = jetstream_metrics_components.get_climatology(data, "year")
 
     #  Step 2. Get zonal mean from climatologies
     seasonal_zonal_mean = seasonal_climatology.mean("lon")
@@ -594,9 +567,7 @@ def kerr_et_al_2020(data):
         Data containing jet-stream latitude by longitude and smoothed jet_latitude
     """
     if data["plev"].size != 1:
-        raise IndexError(
-            "Please subset your data to have one pressure level (plev)"
-        )
+        raise IndexError("Please subset your data to have one pressure level (plev)")
     output = data.groupby("time").map(
         jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
     )

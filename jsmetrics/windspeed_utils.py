@@ -8,7 +8,6 @@
 """
 
 # imports
-import xarray as xr
 import numpy as np
 from . import data_utils
 
@@ -36,7 +35,6 @@ def get_wind_direction_in_degrees(u, v):
 def get_zonal_mean(data):
     """
     Will get the zonal mean either by pressure level (plev) or for one layer
-    TODO: add to Archer & Caldiera
 
     Parameters
     ----------
@@ -81,13 +79,6 @@ class WindSpeedSlice:
 
     def __getitem__(self, item):
         return self.values[item]
-
-    def __add__(self, other):
-        if (
-            self.req_coords == other.req_coords
-            and self.req_variables == other.req_variables
-        ):
-            return xr.concat([self.values, other.values], dim="time")
 
     @staticmethod
     def _calc_windspeed(data):

@@ -114,9 +114,9 @@ def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
         mass_weighted_average = jetstream_metrics_utils.get_mass_weighted_average_ws(mon_mean)
     """
     data_utils.check_at_least_n_plevs_in_data(data, n_plevs=2)
-    sum_weighted_ws = None  # TODO
+    sum_weighted_ws = None
     for plev_Pa in data["plev"].data:
-        plev_hPa = plev_Pa / 100  # TODO
+        plev_hPa = plev_Pa / 100
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
         weighted_average = get_weighted_average_at_one_Pa(
             data, plev_Pa, atm_mass, ws_col
@@ -152,7 +152,7 @@ def get_sum_atm_mass(data):
     sum_atm_mass = 0
     data_utils.check_at_least_n_plevs_in_data(data, n_plevs=2)
     for plev_Pa in data["plev"].data:
-        plev_hPa = plev_Pa / 100  # TODO
+        plev_hPa = plev_Pa / 100
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
         sum_atm_mass += atm_mass
     return sum_atm_mass
@@ -162,7 +162,6 @@ def calc_mass_weighted_average(data, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    TODO: add equation
 
     Parameters
     ----------
@@ -185,7 +184,6 @@ def calc_mass_weighted_average(data, ws_col):
 def calc_mass_flux_weighted_pressure(data, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
-    TODO: add equation
 
     Parameters
     ----------
@@ -210,7 +208,6 @@ def calc_mass_flux_weighted_pressure(data, ws_col):
 def calc_mass_flux_weighted_latitude(data, lat_min, lat_max, ws_col):
     """
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
-    TODO: add equation
     WARNING: Problem with including 1000 hPa
 
     Parameters
@@ -780,8 +777,6 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
     """
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-
-    TODO: add to JetStreamOccurenceAndCentreAlgorithm and ...
 
     Parameters
     ----------

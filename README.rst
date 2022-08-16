@@ -45,24 +45,24 @@ For their progress see [Project 1]
    =============================================================================== ==============  ==  =============================================================================== ==============
    Metric/Algorithm                                                                Status              Metric/Algorithm                                                                Status                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
-   `Gallego et al. 2005 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     Complete            `Strong & Davis 2005 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     Complete
-   `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        Complete            `Archer & Caldiera 2008 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_  Complete
-   `Schiemann et al. 2009 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete            `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete
-   `Manney et al. 2011 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_      Complete            `Allen et al. 2012 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       Complete
-   `Barnes & Polvani 2013 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete            `Pena-Ortiz et al. 2013 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_  Complete      
-   `Screen & Simmonds 2013 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_  Complete            `Kuang et al. 2014 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       Complete            
-   `Barnes & Polvani 2015 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete            `Francis & Vavrus 2015 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete            
-   `Cattiaux et al. 2016 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete            `Barnes & Simpson 2017 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete            
-   `Grise & Polvani 2017 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete            `Chenoli et al. 2017 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     Complete            
-   `Molnos et al. 2017  <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     Complete            `Adam et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        Complete            
-   `Bracegirdle et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_ Complete            `Ceppi et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       Complete            
-   `Kern et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        Complete            `Rikus 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_              Complete            
-   `Kern & Westermann 2019 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_  Complete            `Kerr et al. 2020 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        Complete            
-   `Maher et al. 2020 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       Complete            `Winters et al. 2020 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     Complete            
-   `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_             Complete            `Bosiger et al. 2022 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     Complete            
-   `Local Wave Activity <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     Complete                        
+   `Gallego et al. 2005 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     To start            `Strong & Davis 2005 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     To start
+   `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        To verify           `Archer & Caldiera 2008 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_  To verify
+   `Schiemann et al. 2009 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   To verify           `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete
+   `Manney et al. 2011 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_      In progess*         `Allen et al. 2012 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       To start
+   `Barnes & Polvani 2013 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   To verify            `Pena-Ortiz et al. 2013 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_ To verify      
+   `Screen & Simmonds 2013 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_  In progress*        `Kuang et al. 2014 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       To verify            
+   `Barnes & Polvani 2015 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   To verify           `Francis & Vavrus 2015 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete            
+   `Cattiaux et al. 2016 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    To verify           `Barnes & Simpson 2017 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   To verify            
+   `Grise & Polvani 2017 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_    Complete            `Chenoli et al. 2017 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     In progress            
+   `Molnos et al. 2017  <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     In progress*        `Adam et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        To start            
+   `Bracegirdle et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_ Complete            `Ceppi et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       To verify            
+   `Kern et al. 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        To start*           `Rikus 2018 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_              In progress            
+   `Kern & Westermann 2019 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_  To start            `Kerr et al. 2020 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_        To verify            
+   `Maher et al. 2020 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_       To start            `Winters et al. 2020 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     To start            
+   `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_             To start*           `Bosiger et al. 2022 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     To start            
+   `Local Wave Activity <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     In progress*                        
    =============================================================================== ==============  ==  =============================================================================== ==============
-
+'*' == help needed
 .. * also mention related references (i.e. Manney et al. )
 .. also Local Wave Activity (maybe martineu?)
 .. Gallego

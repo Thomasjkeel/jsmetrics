@@ -35,8 +35,11 @@ Where you can find my working-out:
 
 Table of the metrics
 -------------
-See [jsmetrics/details_for_all_metrics.py] for specifications of each 
-For their progress see [Project 1]
+See `all metrics`_ for specifications of each metric and algorithm. For progress on their completion see `issues`_.
+
+.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
+.. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
+
 
 .. table::
    :align: left
@@ -62,10 +65,14 @@ For their progress see [Project 1]
    `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_             To start*           `Bosiger et al. 2022 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     To start            
    `Local Wave Activity <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_     In progress*                        
    =============================================================================== ==============  ==  =============================================================================== ==============
-'*' == help needed
-.. * also mention related references (i.e. Manney et al. )
-.. also Local Wave Activity (maybe martineu?)
-.. Gallego
+* == help needed
+
+
+.. 
+        _also mention related references (i.e. Manney et al. )
+        also Local Wave Activity (maybe martineu?)
+        Gallego
+
 
 Installation 
 -------------

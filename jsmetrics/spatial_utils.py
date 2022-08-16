@@ -196,7 +196,7 @@ def calc_total_great_circle_distance_along_line(line):
     Returns
     ----------
     total_distance : int or float
-        Total distance in degrees or m? TODO
+        Total distance in degrees or m
 
     """
     total_distance = 0
@@ -282,9 +282,7 @@ def get_one_contour_linestring(dataarray, contour_level):
     contour_line : shapely.geometry.LineString or shapely.geometry.MultiLineString
         Contour line of geopotential height (zg) a given contour
     """
-    assert isinstance(
-        dataarray, xr.DataArray
-    ), "Data needs to be type xr.DataArray"
+    assert isinstance(dataarray, xr.DataArray), "Data needs to be type xr.DataArray"
     assert (
         "lat" in dataarray.coords and "lon" in dataarray.coords
     ), "Data array needs to have latitude and longitude coords"
@@ -292,9 +290,7 @@ def get_one_contour_linestring(dataarray, contour_level):
     matplotlib.pyplot.close()
     if len(one_contour.allsegs[0]) > 1:
         try:
-            contour_line = shapely.geometry.MultiLineString(
-                (one_contour.allsegs[0])
-            )
+            contour_line = shapely.geometry.MultiLineString((one_contour.allsegs[0]))
         except ValueError as ve:
             print(ve)
             return np.nan

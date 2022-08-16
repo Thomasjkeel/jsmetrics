@@ -35,7 +35,6 @@ def get_wind_direction_in_degrees(u, v):
 def get_zonal_mean(data):
     """
     Will get the zonal mean either by pressure level (plev) or for one layer
-    TODO: add to Archer & Caldiera
 
     Parameters
     ----------

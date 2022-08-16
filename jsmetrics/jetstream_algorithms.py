@@ -41,9 +41,6 @@ def koch_et_al_2006(data, ws_threshold=30):
     weighted_average_ws : xarray.Dataset
         data containing weighted average ws above windspeed threshold
 
-    TODO: check with chris
-    TODO: add equation to this doc
-    TODO: what if mbar?
     """
     if data["plev"].count() < 2:
         raise ValueError(
@@ -216,11 +213,3 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
         (occurence_ws_threshold,),
     )
     return output
-
-
-# def kern_et_al_2018(data):
-#     """
-#     Write function description
-#     TODO: ask about equation
-#     """
-#     return data

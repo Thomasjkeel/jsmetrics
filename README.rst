@@ -13,6 +13,7 @@ written in Python and built from xarray.
 
 WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
 
+WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
 .. [Table of Contents]
 .. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's

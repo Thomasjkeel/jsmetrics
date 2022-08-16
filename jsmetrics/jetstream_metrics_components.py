@@ -871,7 +871,6 @@ def get_jet_lat_and_speed_using_parabola_by_day(data_row):
 def fit_parabola(x, y):
     """
     Fits a parabola
-    TODO: check if correct
 
     Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     """

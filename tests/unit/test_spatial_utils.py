@@ -2,8 +2,6 @@
 
 """
     Tests for spatial utils (spatial_utils.py)
-    Includes:
-    TODO
 """
 
 # imports

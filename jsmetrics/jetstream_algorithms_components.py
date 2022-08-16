@@ -115,12 +115,10 @@ def get_all_hPa_list(data):
     return plevs
 
 
-def get_local_jet_maximas_by_timeunit_by_plev(row):
+def get_local_jet_maximas_by_oneday_by_plev(row):
     """
     Component of method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
-    TODO: add checks
-    TODO: will only work is 1 day is the resolution
-    TODO: maybe combine with pena-ortiz method
+    NOTE: will only work if 1 day is the resolution
 
     Parameters
     ----------
@@ -136,7 +134,7 @@ def get_local_jet_maximas_by_timeunit_by_plev(row):
     row["jet_maxima"] = (
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
-    )  # TODO
+    )
     for lon in row["lon"]:
         for plev in row["plev"]:
             current = row.sel(lon=lon, plev=plev)
@@ -176,7 +174,7 @@ def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_thresh
     row["jet_core_id"] = (
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
-    )  # TODO
+    )
     for lon in row["lon"]:
         current = row.sel(lon=lon)
         core_alg = JetStreamCoreIdentificationAlgorithm(
@@ -414,7 +412,6 @@ def make_empty_local_wind_maxima_data_var(data):
 
     Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
-    TODO: add asserts
     """
     data["local_wind_maxima"] = (
         ("time", "plev", "lat", "lon"),
@@ -445,7 +442,6 @@ def get_empty_local_wind_maxima_data(data):
     ----------
     data : xarray.Dataset
         Data containing zeros array of (time, plev, lat, lon) dimensions
-    TODO: add asserts
     """
     data["local_wind_maxima"] = (
         ("time", "plev", "lat", "lon"),
@@ -478,7 +474,6 @@ def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold=30):
     ----------
     ws_slice : xarray.Dataset
         Data slice of windspeed (lat, lon only) with ws_threshold applied
-    TODO: add checks
     """
     return ws_slice.where(lambda x: x > ws_threshold).fillna(0.0)
 

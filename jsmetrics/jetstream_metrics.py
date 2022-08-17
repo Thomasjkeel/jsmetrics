@@ -281,13 +281,7 @@ def francis_vavrus_2015(data):
     """
     Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
 
-    Calculates the Meridional Circulation Index (MCI):
-
-           v * abs(v)
-    MCI =  ――――――――――
-           u**2 * v**2
-
-    When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
+    Calculates the Meridional Circulation Index (MCI). When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
 
     NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1

@@ -35,7 +35,7 @@ Where you can find my working-out:
 
 
 Table of the metrics
--------------
+--------------------
 See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `issues`_.
 
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
@@ -64,7 +64,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    `Kern & Westermann 2019 <https://doi.org/10.2312/vmv.20191321>`_                To start            `Kerr et al. 2020 <https://doi.org/10.1029/2020JD032735>`_                      To verify            
    `Maher et al. 2020 <https://doi.org/10.1007/s00382-019-05084-6>`_               To start            `Winters et al. 2020 <https://doi.org/10.1175/MWR-D-19-0353.1>`_                To start            
    `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1029/2020JD033668>`_       To start*           `Bosiger et al. 2022 <https://doi.org/10.5194/gmd-15-1079-2022>`_               To start            
-   `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*                        
+   `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*
    =============================================================================== ==============  ==  =============================================================================== ==============
 * == help needed
 

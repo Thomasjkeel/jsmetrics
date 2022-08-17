@@ -68,13 +68,13 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    =============================================================================== ==============  ==  =============================================================================== ==============
 * == help needed
 
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
    
    installation
    usage
+   metrics
    contributing
    authors
    history

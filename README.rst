@@ -15,6 +15,8 @@ WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from t
 
 WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
+NOT DEPENDENT ON time, lat/lon resolution, lat/lon bbox, plev height (all changable)
+ALSO can use components to rebuilt aspects of the methodology 
 .. [Table of Contents]
 .. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
 

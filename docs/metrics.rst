@@ -15,7 +15,7 @@ Metrics
    :widths: auto
    
    =============================================================================== ==============  ==  =============================================================================== ==============
-   Metric/Algorithm                                                                Status              Metric/Algorithm                                                                Status                                                                                
+   Metric                                                                          Status              Metric                                                                          Status                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Archer & Caldiera 2008 <http://doi.wiley.com/10.1029/2008GL033614>`_           To verify           `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete
    `Barnes & Polvani 2013 <https://doi.org/10.1175/JCLI-D-12-00536.1>`_            To verify           `Screen & Simmonds 2013 <http://doi.wiley.com/10.1002/grl.50174>`_              In progress*        
@@ -55,7 +55,7 @@ Algorithms
    :widths: auto
    
    =============================================================================== ==============  ==  =============================================================================== ==============
-   Metric/Algorithm                                                                Status              Metric/Algorithm                                                                Status                                                                                
+   Algorithm                                                                       Status              Algorithm                                                                       Status                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      To verify           `Schiemann et al. 2009 <https://doi.org/10.1175/2008JCLI2625.1>`_               To verify          
    `Manney et al. 2011 <https://acp.copernicus.org/articles/11/6115/2011/>`_       In progess*         `Pena-Ortiz et al. 2013 <http://doi.wiley.com/10.1002/jgrd.50305>`_             To verify      

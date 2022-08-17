@@ -103,6 +103,8 @@ html_static_path = ["_static"]
 # Output file base name for HTML help builder.
 htmlhelp_basename = "jsmetricsdoc"
 
+# autodoc options (manually added)
+autodoc_member_order = "bysource"
 
 # -- Options for LaTeX output ------------------------------------------
 
@@ -127,7 +129,7 @@ latex_elements = {
 latex_documents = [
     (
         master_doc,
-        "jmetrics.tex",
+        "jsmetrics.tex",
         "jsmetrics Documentation",
         "Tom Keel",
         "manual",

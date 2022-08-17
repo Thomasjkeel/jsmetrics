@@ -39,8 +39,9 @@ Metrics
 
 .. automodule:: jsmetrics.jetstream_metrics
    :members:
-   :undoc-members:
    :imported-members:
+   :undoc-members:
+   :show-inheritance:
    :noindex:
 
 
@@ -49,8 +50,9 @@ Metric sub-components
 
 .. automodule:: jsmetrics.jetstream_metrics_components
    :members:
-   :undoc-members:
    :imported-members:
+   :undoc-members:
+   :show-inheritance:
    :noindex:
 
 Algorithms
@@ -58,16 +60,17 @@ Algorithms
 
 .. automodule:: jsmetrics.jetstream_algorithms
    :members:
-   :undoc-members:
    :imported-members:
+   :undoc-members:
+   :show-inheritance:
    :noindex:
-
 
 Algorithm sub-components
 ------------------------
 
 .. automodule:: jsmetrics.jetstream_algorithms_components
    :members:
-   :undoc-members:
    :imported-members:
+   :undoc-members:
+   :show-inheritance:
    :noindex:

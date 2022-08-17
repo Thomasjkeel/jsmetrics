@@ -33,8 +33,6 @@ def calc_atmospheric_mass_at_kPa(pressure, gravity=9.81, atmospheric_area=5.1e8)
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
-    Returns
-
     Parameters
     ---------------
     pressure : float

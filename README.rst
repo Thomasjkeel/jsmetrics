@@ -121,6 +121,7 @@ Project To-Do's
   - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
 - TO SOLVE: subsetting longitude if it wraps around 0-360
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
+- CLEAN UP docstrings for the functions so more readable on  readthedocs
 
 Credits
 -------------

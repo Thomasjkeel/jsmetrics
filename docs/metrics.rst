@@ -9,7 +9,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 
 Metrics
---------------
+########
 .. table::
    :align: left
    :widths: auto
@@ -48,7 +48,7 @@ Metric sub-components
    :noindex:
 
 Algorithms
---------------
+##########
 
 .. table::
    :align: left
@@ -74,6 +74,41 @@ Algorithm sub-components
 ------------------------
 
 .. automodule:: jsmetrics.jetstream_algorithms_components
+   :members:
+   :imported-members:
+   :undoc-members:
+   :show-inheritance:
+   :noindex:
+
+Utils
+########
+
+Data Utils
+------------------------
+
+.. automodule:: jsmetrics.data_utils
+   :members:
+   :imported-members:
+   :undoc-members:
+   :show-inheritance:
+   :noindex:
+
+
+Spatial Utils
+------------------------
+
+.. automodule:: jsmetrics.spatial_utils
+   :members:
+   :imported-members:
+   :undoc-members:
+   :show-inheritance:
+   :noindex:
+
+
+Windspeed Utils
+------------------------
+
+.. automodule:: jsmetrics.windspeed_utils
    :members:
    :imported-members:
    :undoc-members:

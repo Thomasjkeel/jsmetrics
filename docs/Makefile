@@ -5,7 +5,7 @@
 # from the environment for the first two.
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
-SPHINXPROJ    = jet-stream-metrics
+SPHINXPROJ    = jsmetrics
 SOURCEDIR     = .
 BUILDDIR      = _build
 # Put it first so that "make" without argument is like "make help".

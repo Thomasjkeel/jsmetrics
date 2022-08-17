@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use jet-stream-metrics in a project::
+To use jsmetrics in a project::
 
     import jsmetrics

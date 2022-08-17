@@ -1,4 +1,4 @@
-"""Top-level package for jet-stream-metrics."""
+"""Top-level package for jsmetrics."""
 
 __author__ = """Tom Keel"""
 __email__ = "thomas.keel.18@ucl.ac.uk"

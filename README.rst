@@ -15,6 +15,8 @@ WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from t
 
 WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
+NOT DEPENDENT ON time, lat/lon resolution, lat/lon bbox, plev height (all changable)
+ALSO can use components to rebuilt aspects of the methodology 
 .. [Table of Contents]
 .. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
 
@@ -26,7 +28,7 @@ In some cases I have used a different dataset to the one used.
 
 This project is very much a work in progress, so contributors are very welcome. You  
 
-Details provided in: 'details_for_all_metrics' is not exact as in some cases ... Most algorithms can be used at different pressure-levels etc.  
+Details provided in: `all metrics`_ is not exact as in some cases ... Most algorithms can be used at different pressure-levels etc.  
 
 Where you can find my working-out:
 - I have included all of my working out in jupyter-notebooks available at: ... (warning: these notebooks have not been formatted nicely) 
@@ -35,10 +37,7 @@ Where you can find my working-out:
 
 Table of the metrics
 -------------
-See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `issues`_.
-
-.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
-.. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
+See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `Status`_.
 
 
 .. table::
@@ -46,7 +45,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    :widths: auto
    
    =============================================================================== ==============  ==  =============================================================================== ==============
-   Metric/Algorithm                                                                Status              Metric/Algorithm                                                                Status                                                                                
+   Metric/Algorithm                                                                `Status`_           Metric/Algorithm                                                                `Status`_                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Gallego et al. 2005 <http://link.springer.com/10.1007/s00382-005-0006-7>`_     To start            `Strong & Davis 2005 <http://doi.wiley.com/10.1029/2004GL022039>`_              To start
    `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      To verify           `Archer & Caldiera 2008 <http://doi.wiley.com/10.1029/2008GL033614>`_           To verify
@@ -67,6 +66,8 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    =============================================================================== ==============  ==  =============================================================================== ==============
 * == help needed
 
+.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
+.. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 .. 
         _also mention related references (i.e. Manney et al. )
@@ -119,6 +120,7 @@ Project To-Do's
   - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
 - TO SOLVE: subsetting longitude if it wraps around 0-360
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
+- CLEAN UP docstrings for the functions so more readable on  readthedocs
 
 Credits
 -------------

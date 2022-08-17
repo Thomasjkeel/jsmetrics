@@ -1,4 +1,4 @@
-- jet-stream-metrics version:
+- jsmetrics version:
 - Python version:
 - Operating System:
 

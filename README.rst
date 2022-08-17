@@ -48,7 +48,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    :widths: auto
    
    =============================================================================== ==============  ==  =============================================================================== ==============
-   Metric/Algorithm                                                                Status              Metric/Algorithm                                                                Status                                                                                
+   Metric/Algorithm                                                                `Status`_           Metric/Algorithm                                                                `Status`_                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Gallego et al. 2005 <http://link.springer.com/10.1007/s00382-005-0006-7>`_     To start            `Strong & Davis 2005 <http://doi.wiley.com/10.1029/2004GL022039>`_              To start
    `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      To verify           `Archer & Caldiera 2008 <http://doi.wiley.com/10.1029/2008GL033614>`_           To verify
@@ -69,6 +69,8 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    =============================================================================== ==============  ==  =============================================================================== ==============
 * == help needed
 
+
+.. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 .. 
         _also mention related references (i.e. Manney et al. )

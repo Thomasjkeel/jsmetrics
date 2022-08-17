@@ -47,7 +47,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    :widths: auto
    
    =============================================================================== ==============  ==  =============================================================================== ==============
-   Metric/Algorithm                                                                Status              Metric/Algorithm                                                                Status                                                                                
+   Metric/Algorithm                                                                `Status`_           Metric/Algorithm                                                                `Status`_                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Gallego et al. 2005 <http://link.springer.com/10.1007/s00382-005-0006-7>`_     To start            `Strong & Davis 2005 <http://doi.wiley.com/10.1029/2004GL022039>`_              To start
    `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      To verify           `Archer & Caldiera 2008 <http://doi.wiley.com/10.1029/2008GL033614>`_           To verify
@@ -64,9 +64,13 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    `Kern & Westermann 2019 <https://doi.org/10.2312/vmv.20191321>`_                To start            `Kerr et al. 2020 <https://doi.org/10.1029/2020JD032735>`_                      To verify            
    `Maher et al. 2020 <https://doi.org/10.1007/s00382-019-05084-6>`_               To start            `Winters et al. 2020 <https://doi.org/10.1175/MWR-D-19-0353.1>`_                To start            
    `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1029/2020JD033668>`_       To start*           `Bosiger et al. 2022 <https://doi.org/10.5194/gmd-15-1079-2022>`_               To start            
-   `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*
+   `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*                        
    =============================================================================== ==============  ==  =============================================================================== ==============
 * == help needed
+
+
+.. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
+
 
 .. toctree::
    :maxdepth: 2

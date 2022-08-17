@@ -48,7 +48,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "jsmetrics"
-copyright = "2021, Tom Keel"
+copyright = "2022, Tom Keel"
 author = "Tom Keel"
 
 # The version info for the project you're documenting, acts as replacement

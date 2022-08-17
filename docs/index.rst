@@ -6,6 +6,8 @@
 Welcome to jsmetrics's documentation!
 ==============================================
 
+[WRITE SOMETHING HERE]
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

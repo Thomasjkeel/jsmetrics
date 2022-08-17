@@ -8,13 +8,13 @@ Installation
 Stable release
 --------------
 
-To install jet-stream-metrics, run this command in your terminal:
+To install jsmetrics, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install jet-stream-metrics
+    $ pip install jsmetrics
 
-This is the preferred method to install jet-stream-metrics, as it will always install the most recent stable release.
+This is the preferred method to install jsmetrics, as it will always install the most recent stable release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,19 +26,19 @@ you through the process.
 From sources
 ------------
 
-The sources for jet-stream-metrics can be downloaded from the `Github repo`_.
+The sources for jsmetrics can be downloaded from the `Github repo`_.
 
 You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/Thomasjkeel/jet-stream-metrics
+    $ git clone git://github.com/Thomasjkeel/jsmetrics
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl -OJL https://github.com/Thomasjkeel/jet-stream-metrics/tarball/master
+    $ curl -OJL https://github.com/Thomasjkeel/jsmetrics/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +47,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/Thomasjkeel/jet-stream-metrics
-.. _tarball: https://github.com/Thomasjkeel/jet-stream-metrics/tarball/master
+.. _Github repo: https://github.com/Thomasjkeel/jsmetrics
+.. _tarball: https://github.com/Thomasjkeel/jsmetrics/tarball/master

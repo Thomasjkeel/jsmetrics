@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=jet-stream-metrics
+set SPHINXPROJ=jsmetrics
 
 if "%1" == "" goto help
 

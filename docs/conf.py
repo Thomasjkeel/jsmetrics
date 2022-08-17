@@ -47,7 +47,7 @@ source_suffix = ".rst"
 master_doc = "index"
 
 # General information about the project.
-project = "jet-stream-metrics"
+project = "jsmetrics"
 copyright = "2021, Tom Keel"
 author = "Tom Keel"
 

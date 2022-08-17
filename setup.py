@@ -3,9 +3,9 @@
 """The setup script."""
 from setuptools import find_packages, setup
 
-NAME = "jet-stream-metrics"
+NAME = "jsmetrics"
 DESCRIPTION = "Library of algorithms and metrics used to characterise and/or identify jet-streams, based on xarray."
-URL = "https://github.com/Thomasjkeel/jet-stream-metrics"
+URL = "https://github.com/Thomasjkeel/jsmetrics"
 AUTHOR = "Thomas Keel"
 AUTHOR_EMAIL = "thomas.keel.18@ucl.ac.uk"
 REQUIRES_PYTHON = ">=3.7.0"

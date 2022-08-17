@@ -36,10 +36,7 @@ Where you can find my working-out:
 
 Table of the metrics
 --------------------
-See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `issues`_.
-
-.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
-.. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
+See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `Status`_.
 
 
 .. table::
@@ -68,7 +65,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    =============================================================================== ==============  ==  =============================================================================== ==============
 * == help needed
 
-
+.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
 .. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 

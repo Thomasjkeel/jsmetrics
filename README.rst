@@ -15,7 +15,14 @@ WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from t
 
 WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
-NOT DEPENDENT ON time, lat/lon resolution, lat/lon bbox, plev height (all changable)
+The philosophy of this module was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
+*but* to not limit the method to a given:
+        - time period
+        - time unit (i.e. day, month, DJF)
+        - lat/lon resolution
+        - latitude/longitude region (where possible),
+        - Pressure levels
+All can be handle user-side.
 ALSO can use components to rebuilt aspects of the methodology 
 
 My email: thomas.keel.18@ucl.ac.uk

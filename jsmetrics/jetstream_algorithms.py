@@ -71,7 +71,7 @@ def koch_et_al_2006(data, ws_threshold=30):
 
 def schiemann_et_al_2009(data):
     """
-    Actual methodology uses 100-500 hPa
+    An occurrence-based jet climatology. Uses three rules: wind-vector wind-speed is local maxima is above 30 m/s and u-wind is more than 0 m/s.
 
     Method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
 

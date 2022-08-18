@@ -255,6 +255,10 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
 def barnes_polvani_2015(data):
     """
+    Calculates the jet speed and jet position by fitting a parabola around the
+    maximum of zonally average wind and taking the maximum magnitude and position
+    to be the jet speed and jet latitude respectively.
+
     Method from Barnes & Polvani (2015) https://doi.org/10.1175/JCLI-D-14-00589.1
 
     Parameters

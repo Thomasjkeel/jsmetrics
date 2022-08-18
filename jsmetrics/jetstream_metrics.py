@@ -6,7 +6,7 @@
 
     All functions should return a xarray.Dataset.
 
-    This file is ordered by paper publish year
+    Classes and Functions ordered by paper publish year.
 """
 
 # imports
@@ -23,11 +23,11 @@ __status__ = "Development"
 
 def archer_caldeira_2008(data):
     """
-    Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
-
     Calculates the mass-weighted average wind speed, mass flux weighted pressure
     and mass flux weighted latitude. This method has some similarities to method
     used in Koch et al. 2006. In paper, 100-400 hPa is used.
+
+    Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
 
     Parameters
     ----------
@@ -80,10 +80,10 @@ def archer_caldeira_2008(data):
 
 def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     """
-    Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
-
     Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woollings et al. (2010).
     Will calculate this metric based on data (regardless of pressure level of time span etc.).
+
+    Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
     Parameters
     ----------
@@ -149,10 +149,10 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 
 def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     """
-    Method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
     Pressure weighted u-component wind then gets low-pass lanczos filtered (10-day, 41 weights) and 0.01 quadratic function applied
     for jet-lat and speed. "We define the jet width as the full width at half of the maximum jet speed".
+
+    Method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -234,9 +234,8 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
 # def screen_and_simmonds_2013(data):
 #     """
-#     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
-
 #     Slightly adjusted in Screen and Simmonds 2014
+#     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
 
 #     Parameters
 #     ----------
@@ -255,6 +254,10 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
 def barnes_polvani_2015(data):
     """
+    Calculates the jet speed and jet position by fitting a parabola around the
+    maximum of zonally average wind and taking the maximum magnitude and position
+    to be the jet speed and jet latitude respectively.
+
     Method from Barnes & Polvani (2015) https://doi.org/10.1175/JCLI-D-14-00589.1
 
     Parameters
@@ -279,12 +282,10 @@ def barnes_polvani_2015(data):
 
 def francis_vavrus_2015(data):
     """
-    Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
-
     Calculates the Meridional Circulation Index (MCI). When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
 
-    NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1
+    Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
 
     Parameters
     ----------
@@ -320,6 +321,9 @@ def francis_vavrus_2015(data):
 
 def cattiaux_et_al_2016(data):
     """
+    A sinousity metric for upper-air flow.
+    Calculates, for each time unit, the value of the selected isohypse precisely corresponds to the Z500 average over 30–70∘N .
+    Then uses the perimeter of this isohype and around 50 .N to calculate sinuosity
     Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
     NOTE: Currently takes a moderate amount of time i.e. 2 seconds per 100 time unit with 1 plev on AMD Ryzen 5 3600 6-core processor
@@ -356,17 +360,20 @@ def cattiaux_et_al_2016(data):
 
 def barnes_simpson_2017(data):
     """
-    Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    "Time series of jet latitude and jet speed are defined as the latitude and speed of the 10-day-averaged
+     maximum 700-hPa zonal winds averaged over the longitudinal sector of interest"
 
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing u-component wind
+     Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
 
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
+     Parameters
+     ----------
+     data : xarray.Dataset
+         Data containing u-component wind
+
+     Returns
+     ----------
+     output : xarray.Dataset
+         Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
     """
     ten_day_mean = data.resample(time="10D").mean()
     ten_day_mean = (
@@ -383,8 +390,8 @@ def barnes_simpson_2017(data):
 
 def grise_polvani_2017(data):
     """
-    Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     Calculates maximum latitude of jet-stream to 0.01 degree resolution each time unit
+    Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
     See also Ceppi et al. 2012
     Methodology is for Southern Hemisphere
@@ -448,8 +455,8 @@ def grise_polvani_2017(data):
 
 def bracegirdle_et_al_2018(data):
     """
+    Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal wind climatology.
     Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-    Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal mean climatology
 
     NOTE: Originally for Southern Hemisphere
 
@@ -507,9 +514,8 @@ def bracegirdle_et_al_2018(data):
 
 def ceppi_et_al_2018(data):
     """
+    Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution
     Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
-    Calculates the jet-centroid  from u-component wind data each time unit
-
     "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
 
     Parameters
@@ -547,6 +553,9 @@ def ceppi_et_al_2018(data):
 
 def kerr_et_al_2020(data):
     """
+    Described in section 2.4.2 of paper. Defines the latitude of the jet-stream as where the
+    maximum zonal winds occur for each longitude for each time unit (i.e. day) before smoothing
+    with a rectangular pulse (of width 10 degrees) to get a moving average.
     Method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
 
     Parameters

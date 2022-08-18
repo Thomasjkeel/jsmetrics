@@ -2,7 +2,7 @@
 """
     All spatial operations needed for the jet-stream metrics and algorithms
 
-    This file is ordered alphabetically.
+    Classes and Functions ordered alphabetically.
 """
 
 import numpy as np

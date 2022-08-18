@@ -7,7 +7,7 @@
     This file is in order of publish year of the metrics
     (see details_for_all_metrics.py)
 
-    This file is ordered by the year of the paper that uses each metric component first
+    Functions and Classes ordered by the year of the paper that uses each metric component first
 """
 
 # imports
@@ -89,10 +89,10 @@ def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
 
 def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
     """
+    Get mass-weighted average wind-speed from 'u', 'v' component wind or 'wind vector'.
+
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
-    Get mass-weighted average wind-speed from 'u', 'v' component wind or 'wind vector'.
 
     Parameters
     ----------
@@ -270,11 +270,11 @@ def get_climatology(data, freq):
 
 def calc_low_pass_weights(window, cutoff):
     """
-    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
-    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
     Calculate weights for a low pass Lanczos filter.
     A low-pass filter removes short-term random fluctations in a time series
+
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     TAKEN FROM:
     https://scitools.org.uk/iris/docs/v1.2/examples/graphics/SOI_filtering.html
@@ -306,10 +306,10 @@ def calc_low_pass_weights(window, cutoff):
 
 def apply_lanczos_filter(dataarray, filter_freq, window_size):
     """
+    Will carry out Lanczos low-pass filter
+
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
-    Will carry out Lanczos low-pass filter
 
     Parameters
     ----------
@@ -352,14 +352,14 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
 
 def get_latitude_and_speed_where_max_ws(data_row):
     """
+    Will return the latitude and windspeed at the index of maximum wind speed
+    from a row of data
+    TODO: expects only one cell to be max
+
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
     & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
-
-    Will return the latitude and windspeed at the index of maximum wind speed
-    from a row of data
-    TODO: expects only one cell to be max
 
     Parameters
     ----------
@@ -397,10 +397,10 @@ def assign_jet_lat_and_speed_to_data(
     data, max_lat_ws, max_lats_col="jet_lat", max_ws_col="jet_speed"
 ):
     """
+    Will return a data array with the maximum windspeed and latitude of that maximum wind speed
+
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
-
-    Will return a data array with the maximum windspeed and latitude of that maximum wind speed
 
     Parameters
     ----------
@@ -428,9 +428,10 @@ def assign_jet_lat_and_speed_to_data(
 
 def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
     """
+    Carries out a Fourier transform for filtering keeping only low frequencies
+
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
-    Carries out a Fourier transform for filtering keeping only low frequencies
     ADAPTED FROM:
     https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
 
@@ -466,8 +467,9 @@ def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
 
 def assign_filtered_lats_and_ws_to_data(data, filtered_max_lats, filtered_max_ws, dim):
     """
-    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     Assigns the filtered data back to the returned dataset
+
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
     Parameters
     ----------

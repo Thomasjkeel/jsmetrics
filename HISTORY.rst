@@ -6,6 +6,8 @@ History
 ------------------
 * Finish tests
 * Remove TODOs
+* Outline metric_verification notebooks
+* Improve docs
 
 0.0.8 (2022-07-18)
 ------------------

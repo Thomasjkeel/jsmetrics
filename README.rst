@@ -10,22 +10,31 @@ jsmetrics: Jet-stream metrics and algorithms
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.
 
+These metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 
 WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
+At the foundation of studies that look at jet-streams is the metric used to describe or characterise it.
 
 WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
-NOT DEPENDENT ON time, lat/lon resolution, lat/lon bbox, plev height (all changable)
+The philosophy of this module was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
+*but* to not limit the method to a given:
+        - time period
+        - time unit (i.e. day, month, DJF)
+        - lat/lon resolution
+        - latitude/longitude region (where possible),
+        - pressure level region
+All can be handle user-side.
 ALSO can use components to rebuilt aspects of the methodology 
-.. [Table of Contents]
-.. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
+
+My email: thomas.keel.18@ucl.ac.uk
 
 DISCLAIMER
 -------------
 I have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
 
 In some cases I have used a different dataset to the one used. 
-
+These metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 This project is very much a work in progress, so contributors are very welcome. You  
 
 Details provided in: `all metrics`_ is not exact as in some cases ... Most algorithms can be used at different pressure-levels etc.  
@@ -35,8 +44,8 @@ Where you can find my working-out:
 - I am currently creating a verification notebook available at: ... where 
 
 
-Table of the metrics
--------------
+Metrics & Algorithms
+--------------------
 See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `Status`_.
 
 
@@ -76,6 +85,9 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 
 Installation 
+-------------
+
+Usage
 -------------
 .. code-block:: python
 
@@ -120,7 +132,8 @@ Project To-Do's
   - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
 - TO SOLVE: subsetting longitude if it wraps around 0-360
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
-- CLEAN UP docstrings for the functions so more readable on  readthedocs
+- ADD examples of a few metrics and few visualisations i.e. core, fv15 and woollings_et_al_2010
+- WRITE AND CLEAN-UP all metric/algorithm descriptions in docs and in-func
 
 Credits
 -------------

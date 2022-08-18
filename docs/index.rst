@@ -79,4 +79,5 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    contributing
    authors
    history
+   statement
 

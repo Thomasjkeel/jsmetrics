@@ -13,3 +13,5 @@ pytest-cov
 matplotlib
 nc-time-axis
 sphinx
+numpydoc
+sphinx-rtd-theme

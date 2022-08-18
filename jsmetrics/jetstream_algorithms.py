@@ -4,7 +4,7 @@
     Jet-stream algorithms used in the literature.
     Algorithms are treated seperately to metrics, as in general, metrics are used to summarise information about the jet-stream, the algorithms simply identify it
 
-    This file is ordered by paper publish year.
+    Classes and Functions ordered by paper publish year.
 """
 
 # imports
@@ -21,13 +21,13 @@ __status__ = "Development"
 
 def koch_et_al_2006(data, ws_threshold=30):
     """
-    Method from Koch et al (2006) https://doi.org/10.1002/joc.1255
-
     Calculates the weighted average windspeed and applies a threshold to identify the jet.
     The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
 
     weighted average windspeed = 1/(p2-p1) integral(p2, p1)(u^2+v^2)^(1/2)dp
     where p1, p2 is min, max pressure level
+
+    Method from Koch et al (2006) https://doi.org/10.1002/joc.1255
 
     Parameters
     ----------
@@ -71,9 +71,10 @@ def koch_et_al_2006(data, ws_threshold=30):
 
 def schiemann_et_al_2009(data):
     """
+    An occurrence-based jet climatology. Uses three rules: wind-vector wind-speed is local maxima is above 30 m/s and u-wind is more than 0 m/s.
+
     Method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
 
-    Actual methodology uses 100-500 hPa
     NOTE: Currently takes a very long time i.e. 8 seconds per time unit (i.e. 8 seconds per day) on AMD Ryzen 5 3600 6-core processor
     TODO: speed this metric up
 
@@ -99,11 +100,12 @@ def schiemann_et_al_2009(data):
 
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
+    Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
+    Paper uses 100-400 hPa.
+
     Method from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
     Also see Manney et al. 2011, 2014, 2017 and Manney & Hegglin 2018
 
-    Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
-    Paper uses 100-400 hPa.
     NOTE: Currently takes a long time i.e. 7.6 seconds per time unit with 8 plevs (i.e. 7.6 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
@@ -136,10 +138,9 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
 def penaortiz_et_al_2013(data):
     """
-    Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
-
     Will calculate local wind maxima days per monthyear
-    Actual methodology uses 100-400 hPa
+
+    Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
     NOTE: Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
@@ -183,10 +184,10 @@ def penaortiz_et_al_2013(data):
 
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
     """
+    Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
+
     Method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
 
-    Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
-    Best at 100-500 hPa
     NOTE: Currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters

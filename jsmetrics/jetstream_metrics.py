@@ -321,6 +321,9 @@ def francis_vavrus_2015(data):
 
 def cattiaux_et_al_2016(data):
     """
+    A sinousity metric for upper-air flow.
+    Calculates, for each time unit, the value of the selected isohypse precisely corresponds to the Z500 average over 30–70∘N .
+    Then uses the perimeter of this isohype and around 50 .N to calculate sinuosity
     Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
     NOTE: Currently takes a moderate amount of time i.e. 2 seconds per 100 time unit with 1 plev on AMD Ryzen 5 3600 6-core processor

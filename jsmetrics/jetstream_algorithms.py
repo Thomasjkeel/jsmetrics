@@ -185,7 +185,6 @@ def penaortiz_et_al_2013(data):
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
     """
     Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
-    Best at 100-500 hPa
 
     Method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
 

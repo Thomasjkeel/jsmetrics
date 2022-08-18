@@ -13,6 +13,7 @@ written in Python and built from xarray.
 These metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 
 WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
+At the foundation of studies that look at jet-streams is the metric used to describe or characterise it.
 
 WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 

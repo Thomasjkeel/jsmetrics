@@ -10,6 +10,7 @@ jsmetrics: Jet-stream metrics and algorithms
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.
 
+These metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 
 WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
 
@@ -21,20 +22,18 @@ The philosophy of this module was to keep the methodology of each metric as clos
         - time unit (i.e. day, month, DJF)
         - lat/lon resolution
         - latitude/longitude region (where possible),
-        - Pressure levels
+        - pressure level region
 All can be handle user-side.
 ALSO can use components to rebuilt aspects of the methodology 
 
 My email: thomas.keel.18@ucl.ac.uk
-.. [Table of Contents]
-.. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
 
 DISCLAIMER
 -------------
 I have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
 
 In some cases I have used a different dataset to the one used. 
-
+These metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 This project is very much a work in progress, so contributors are very welcome. You  
 
 Details provided in: `all metrics`_ is not exact as in some cases ... Most algorithms can be used at different pressure-levels etc.  

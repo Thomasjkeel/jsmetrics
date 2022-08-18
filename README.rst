@@ -85,6 +85,9 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 Installation 
 -------------
+
+Usage
+-------------
 .. code-block:: python
 
     import xarray as xr

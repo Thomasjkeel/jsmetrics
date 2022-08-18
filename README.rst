@@ -17,6 +17,8 @@ WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this 
 
 NOT DEPENDENT ON time, lat/lon resolution, lat/lon bbox, plev height (all changable)
 ALSO can use components to rebuilt aspects of the methodology 
+
+My email: thomas.keel.18@ucl.ac.uk
 .. [Table of Contents]
 .. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
 
@@ -120,7 +122,7 @@ Project To-Do's
   - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
 - TO SOLVE: subsetting longitude if it wraps around 0-360
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
-- CLEAN UP docstrings for the functions so more readable on  readthedocs
+- ADD examples of a few metrics and few visualisations i.e. core, fv15 and woollings_et_al_2010
 
 Credits
 -------------

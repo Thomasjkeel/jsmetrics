@@ -123,6 +123,7 @@ Project To-Do's
 - TO SOLVE: subsetting longitude if it wraps around 0-360
 - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
 - ADD examples of a few metrics and few visualisations i.e. core, fv15 and woollings_et_al_2010
+- WRITE AND CLEAN-UP all metric/algorithm descriptions in docs and in-func
 
 Credits
 -------------

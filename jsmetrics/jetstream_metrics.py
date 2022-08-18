@@ -452,8 +452,8 @@ def grise_polvani_2017(data):
 
 def bracegirdle_et_al_2018(data):
     """
+    Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal wind climatology.
     Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-    Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal mean climatology
 
     NOTE: Originally for Southern Hemisphere
 

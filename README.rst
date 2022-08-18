@@ -35,8 +35,8 @@ Where you can find my working-out:
 - I am currently creating a verification notebook available at: ... where 
 
 
-Table of the metrics
--------------
+Metrics & Algorithms
+--------------------
 See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `Status`_.
 
 

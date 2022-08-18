@@ -4,7 +4,7 @@
     Various utility functions needed for the jet-stream metrics and algorithms not belonging to windspeed or spatial utils.
     The module is built from xarray data-structures, so this file contains all the stuff that helps the library handle xarray dataset/dataarrays
 
-    This file is ordered alphabetically
+    Classes and Functions ordered alphabetically
 """
 
 # imports

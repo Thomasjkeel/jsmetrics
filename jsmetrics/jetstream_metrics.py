@@ -6,7 +6,7 @@
 
     All functions should return a xarray.Dataset.
 
-    This file is ordered by paper publish year
+    Classes and Functions ordered by paper publish year.
 """
 
 # imports

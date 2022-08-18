@@ -139,7 +139,6 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 def penaortiz_et_al_2013(data):
     """
     Will calculate local wind maxima days per monthyear
-    Actual methodology uses 100-400 hPa
 
     Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 

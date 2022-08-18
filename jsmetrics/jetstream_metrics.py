@@ -357,17 +357,20 @@ def cattiaux_et_al_2016(data):
 
 def barnes_simpson_2017(data):
     """
-    Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    "Time series of jet latitude and jet speed are defined as the latitude and speed of the 10-day-averaged
+     maximum 700-hPa zonal winds averaged over the longitudinal sector of interest"
 
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing u-component wind
+     Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
 
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
+     Parameters
+     ----------
+     data : xarray.Dataset
+         Data containing u-component wind
+
+     Returns
+     ----------
+     output : xarray.Dataset
+         Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
     """
     ten_day_mean = data.resample(time="10D").mean()
     ten_day_mean = (

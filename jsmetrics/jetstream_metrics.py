@@ -28,6 +28,7 @@ def archer_caldeira_2008(data):
     used in Koch et al. 2006. In paper, 100-400 hPa is used.
 
     Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+
     Parameters
     ----------
     data : xarray.Dataset

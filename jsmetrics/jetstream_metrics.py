@@ -23,12 +23,11 @@ __status__ = "Development"
 
 def archer_caldeira_2008(data):
     """
-    Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
-
     Calculates the mass-weighted average wind speed, mass flux weighted pressure
     and mass flux weighted latitude. This method has some similarities to method
     used in Koch et al. 2006. In paper, 100-400 hPa is used.
 
+    Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     Parameters
     ----------
     data : xarray.Dataset
@@ -80,10 +79,10 @@ def archer_caldeira_2008(data):
 
 def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     """
-    Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
-
     Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woollings et al. (2010).
     Will calculate this metric based on data (regardless of pressure level of time span etc.).
+
+    Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
     Parameters
     ----------
@@ -149,10 +148,10 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 
 def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     """
-    Method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
     Pressure weighted u-component wind then gets low-pass lanczos filtered (10-day, 41 weights) and 0.01 quadratic function applied
     for jet-lat and speed. "We define the jet width as the full width at half of the maximum jet speed".
+
+    Method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -234,9 +233,8 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
 # def screen_and_simmonds_2013(data):
 #     """
-#     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
-
 #     Slightly adjusted in Screen and Simmonds 2014
+#     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
 
 #     Parameters
 #     ----------
@@ -283,10 +281,10 @@ def barnes_polvani_2015(data):
 
 def francis_vavrus_2015(data):
     """
-    Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
-
     Calculates the Meridional Circulation Index (MCI). When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
+
+    Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
 
     NOTE: The paper is not clear about whether the absolute value for MCI is taken instead thus 0-1
 
@@ -387,8 +385,8 @@ def barnes_simpson_2017(data):
 
 def grise_polvani_2017(data):
     """
-    Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
     Calculates maximum latitude of jet-stream to 0.01 degree resolution each time unit
+    Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
     See also Ceppi et al. 2012
     Methodology is for Southern Hemisphere

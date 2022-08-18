@@ -551,6 +551,9 @@ def ceppi_et_al_2018(data):
 
 def kerr_et_al_2020(data):
     """
+    Described in section 2.4.2 of paper. Defines the latitude of the jet-stream as where the
+    maximum zonal winds occur for each longitude for each time unit (i.e. day) before smoothing
+    with a rectangular pulse (of width 10 degrees) to get a moving average.
     Method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
 
     Parameters

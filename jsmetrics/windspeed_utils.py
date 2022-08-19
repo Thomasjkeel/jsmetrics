@@ -63,7 +63,7 @@ def get_zonal_mean(data):
 
 class WindSpeedSlice:
     """
-    Base class for windspeed slice
+    Base class for windspeed slice.
     """
 
     def __init__(self, data, req_variables=("ua", "va")):
@@ -90,6 +90,9 @@ class WindSpeedSlice:
         return get_resultant_wind(data["ua"], data["va"])
 
     def _check_input_data_can_be_used_for_windspeed_slice(self, data):
+        """
+        Check input data is valid for the windspeed slice.
+        """
         data_utils.check_if_data_is_xarray_datatype(data)
         data_utils.check_coords_in_data(data, self.req_coords)
         data_utils.check_variables_in_data(data, self.req_variables)
@@ -98,9 +101,15 @@ class WindSpeedSlice:
         )
 
     def label_slice(self, condition, label):
+        """
+        Returns labels where condition is met.
+        """
         return self.values.where(condition, other=label)
 
     def get_values(self):
+        """
+        Get values.
+        """
         return self.values
 
 

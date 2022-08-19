@@ -237,8 +237,9 @@ def get_great_circle_distance_along_linestring(line):
 
 def get_latitude_circle_linestring(latitude, lon_min, lon_max):
     """
+    Will return a linestring of a latitude circle.
+
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
-    Will return a linestring of a latitude circle
 
     Parameters
     ----------
@@ -266,9 +267,9 @@ def get_latitude_circle_linestring(latitude, lon_min, lon_max):
 
 def get_one_contour_linestring(dataarray, contour_level):
     """
-    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+    Returns a linestring or multi-linestring of a given contour.
 
-    Returns a linestring or multi-linestring of a given contour
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
     Parameters
     ----------

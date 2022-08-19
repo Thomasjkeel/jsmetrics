@@ -25,10 +25,10 @@ __status__ = "Development"
 def get_sum_weighted_ws(data, all_plevs_hPa):
     """
     Get sum of weighted windspeed.
-    Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
-
     sum weighted windspeed = integral(p2, p1)(u^2+v^2)^(1/2)dp
     where p1, p2 is min, max pressure level
+
+    Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
 
     Parameters
     ----------
@@ -60,10 +60,11 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
 
 def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
     """
-    Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
-
+    Calculates weighted average wind-speed:
     weighted average windspeed = 1/(p2-p1) * sum average windspeed
     where p1, p2 is min, max pressure level
+
+    Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
 
     Parameters
     ----------
@@ -117,6 +118,8 @@ def get_all_hPa_list(data):
 
 def get_local_jet_maximas_by_oneday_by_plev(row):
     """
+    Get local jet maxima for one day.
+
     Component of method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
     NOTE: will only work if 1 day is the resolution
 
@@ -154,8 +157,9 @@ def get_local_jet_maximas_by_oneday_by_plev(row):
 
 def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_threshold):
     """
+    Runs JetStreamCoreIdentificationAlgorithm method on a single time unit.
+
     Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
-    Runs JetStreamCoreIdentificationAlgorithm method on a single time unit
 
     Parameters
     ----------
@@ -189,15 +193,16 @@ def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_thresh
 
 class JetStreamCoreIdentificationAlgorithm:
     """
-    Jet-stream core identification algorithm
+    Jet-stream core identification algorithm.
+
     Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
     """
 
     def __init__(self, data, ws_core_threshold=40, ws_boundary_threshold=30):
         """
-        Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
-        input will need to be longitudinal slice of windspeed values
+        Input will need to be longitudinal slice of windspeed values.
 
+        Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
 
         Parameters
         ----------
@@ -285,6 +290,9 @@ class JetStreamCoreIdentificationAlgorithm:
         return js_algorithm
 
     def run(self):
+        """
+        Runs algorithm.
+        """
         self.final_jet_cores = self._get_jet_core_boundary()
         self.output_data = self._add_cores_to_data()
         self.algorithm_has_run = True
@@ -305,7 +313,6 @@ class JetStreamCoreIdentificationAlgorithm:
         """
         Will return an array of indexes to check for potential boundaries
         or jetstream cores.
-        Used in Manney et al. 2011
         """
         vals_to_check = []
         if pot_boundary[0] != 0:
@@ -386,6 +393,9 @@ class JetStreamCoreIdentificationAlgorithm:
         return js_core_indexes
 
     def _add_cores_to_data(self):
+        """
+        Add cores to data.
+        """
         self._lat_ws_slice.values["core_id"] = (
             ("plev", "lat"),
             np.zeros(
@@ -526,7 +536,7 @@ def get_local_wind_maxima_by_timeunit(row):
 
 def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
     """
-    Will resample by each month and return number of timeunits (i.e. day) with local wind maxima
+    Will resample by each month and return number of timeunits (i.e. day) with local wind maxima.
 
     Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
@@ -552,7 +562,7 @@ def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
 
 def subdivide_local_wind_maxima_into_stj_pfj(data):
     """
-    Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on pg. 2709
+    Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on pg. 2709.
 
     Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
@@ -587,9 +597,9 @@ def subdivide_local_wind_maxima_into_stj_pfj(data):
 
 def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
     """
-    Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
+    Runs JetStreamCoreIdentificationAlgorithm method on a single day.
 
-    Runs JetStreamCoreIdentificationAlgorithm method on a single day
+    Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
 
     Parameters
     ----------
@@ -610,6 +620,8 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
 
 class JetStreamOccurenceAndCentreAlgorithm:
     """
+    Jet-stream occurence and centre algorithm.
+
     Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
     """
 
@@ -659,11 +671,17 @@ class JetStreamOccurenceAndCentreAlgorithm:
 
     @classmethod
     def run_algorithm(cls, data):
+        """
+        Class method for running the algorithm.
+        """
         alg_output = cls(data)
         alg_output.run()
         return alg_output
 
     def run(self):
+        """
+        Run the algorithm.
+        """
         self._get_all_coords_of_jet_occurence()
         self._all_coords_arr = np.array(self._all_coords)
         # Get a counter of all the latitude coordinates
@@ -692,6 +710,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ] = 2
 
     def _get_all_coords_of_jet_occurence(self):
+        """
+        Get all coords with the jet occurence value.
+        """
         for val in self._jet_occurence["jet_ocurrence1_jet_centre2"].notnull():
             if val.any():
                 for sub_val in val:
@@ -713,11 +734,17 @@ class JetStreamOccurenceAndCentreAlgorithm:
         self._get_all_latitudes_available_in_3by3_grid()
 
     def _get_all_latitudes_that_occur_at_least_three_times(self):
+        """
+        Get all latitudes that occur at least three times.
+        """
         for lat in self._count_lats.items():
             if lat[1] >= 3:
                 self._lats_with_3.append(lat[0])
 
     def _get_all_latitudes_available_in_3by3_grid(self):
+        """
+        Get all latitudes available in 3 by 3 grid.
+        """
         for lat in self._lats_with_3:
             if (
                 lat - self._lat_resolution in self._lats_with_3

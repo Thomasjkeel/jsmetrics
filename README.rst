@@ -9,13 +9,12 @@ jsmetrics: Jet-stream metrics and algorithms
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.
+*WORK IN PROGRESS*
 
-These metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
+.. WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
+.. At the foundation of studies that look at jet-streams is the metric used to describe or characterise it.
 
-WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
-At the foundation of studies that look at jet-streams is the metric used to describe or characterise it.
-
-WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
+.. WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
 The philosophy of this module was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
@@ -24,24 +23,44 @@ The philosophy of this module was to keep the methodology of each metric as clos
         - lat/lon resolution
         - latitude/longitude region (where possible),
         - pressure level region
-All can be handle user-side.
-ALSO can use components to rebuilt aspects of the methodology 
+All of these can be handled user-side.
+
+.. 
+        ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
+        As such each can be used seperately and this allows users to rebuilt aspects of a methodology (e.g. to replace a filtering method)
+
+Usage
+-------------
+.. code-block:: python
+
+    import xarray as xr
+    import jsmetrics
+
+    # load windspeed data with u- and v- component wind.
+    uv_data = xr.open_dataset(filename)
+
+    # run Kuang et al. 2014 metric 
+    k14 = jsmetrics.jetstream_algorithms.kuang_et_al_2014(uv_data)
+
+.. image:: docs/_static/images/kuang_jet_centers.png
+  :width: 360
+  :align: center
+  :alt: Kuang et al. 2014 Jet-core algorithm
 
 My email: thomas.keel.18@ucl.ac.uk
 
 DISCLAIMER
 -------------
 I have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
+In some cases I have used a different dataset to the one used in the paper they originate from or with different data resolution. 
+Further, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
+This project is very much a work in progress, so contributors are very welcome [TODO]
 
-In some cases I have used a different dataset to the one used. 
-These metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
-This project is very much a work in progress, so contributors are very welcome. You  
-
-Details provided in: `all metrics`_ is not exact as in some cases ... Most algorithms can be used at different pressure-levels etc.  
+You can find details of each metric or algorithm here: `all metrics`_.
 
 Where you can find my working-out:
-- I have included all of my working out in jupyter-notebooks available at: ... (warning: these notebooks have not been formatted nicely) 
-- I am currently creating a verification notebook available at: ... where 
+- I have included all of my working out in jupyter-notebooks available at: ... [TODO] (warning: these notebooks have not been formatted nicely) 
+- I am currently creating a verification notebook available at: ... [TODO] 
 
 
 Metrics & Algorithms
@@ -87,19 +106,6 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 Installation 
 -------------
 
-Usage
--------------
-.. code-block:: python
-
-    import xarray as xr
-    import jsmetrics
-
-    # load u-component windspeed data
-    ua_data = xr.open_dataset(filename)
-
-    # run Woollings et al. 2010 metric 
-    w10 = jsmetrics.jetstream_metrics.woollings_et_al_2010(ua_data)
-
 .. Documentation
 .. -------------
 .. The official documentation is at https://jsmetrics.readthedocs.io/
@@ -123,17 +129,17 @@ Usage
 
 Project To-Do's
 -------------
-- ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
-- ADD: pint (see: https://pint.readthedocs.io/en/stable/)
-- ADD: DOI
-- LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
-- TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
-  - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  
-  - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
-- TO SOLVE: subsetting longitude if it wraps around 0-360
-- CHECK: that methods using just U account for negative values (maybe need for abs() or not)
-- ADD examples of a few metrics and few visualisations i.e. core, fv15 and woollings_et_al_2010
-- WRITE AND CLEAN-UP all metric/algorithm descriptions in docs and in-func
+        - WRITE AND CLEAN-UP README
+        - ADD: DOI
+        - FINISH verification notebook.
+        - WRITE plan to finish metrics.
+        - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
+        - TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
+                - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  
+                - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
+        - TO SOLVE: subsetting longitude if it wraps around 0-360
+        - ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
+        - ADD: pint (see: https://pint.readthedocs.io/en/stable/)
 
 Credits
 -------------

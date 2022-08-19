@@ -29,6 +29,10 @@ ALSO can use components to rebuilt aspects of the methodology
 
 My email: thomas.keel.18@ucl.ac.uk
 
+.. image:: docs/_static/images/kuang_jet_centers.png
+  :width: 400
+  :alt: Kuang et al. 2014 Jet-core algorithm
+
 DISCLAIMER
 -------------
 I have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.

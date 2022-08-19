@@ -9,7 +9,7 @@ jsmetrics: Jet-stream metrics and algorithms
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.
-.. *WORK IN PROGRESS*
+*WORK IN PROGRESS*
 
 .. WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
 .. At the foundation of studies that look at jet-streams is the metric used to describe or characterise it.

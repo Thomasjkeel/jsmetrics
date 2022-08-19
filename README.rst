@@ -24,8 +24,10 @@ The philosophy of this module was to keep the methodology of each metric as clos
         - latitude/longitude region (where possible),
         - pressure level region
 All of these can be handled user-side.
-.. ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
-.. As such each can be used seperately and this allows users to rebuilt aspects of a methodology (e.g. to replace a filtering method)
+
+.. 
+        ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
+        As such each can be used seperately and this allows users to rebuilt aspects of a methodology (e.g. to replace a filtering method)
 
 Usage
 -------------

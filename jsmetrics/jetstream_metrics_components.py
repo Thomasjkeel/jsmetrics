@@ -45,6 +45,8 @@ def calc_atmospheric_mass_at_kPa(pressure, gravity=9.81, atmospheric_area=5.1e8)
 
 def get_atm_mass_at_one_hPa(hPa):
     """
+    Get atmospheric mass at one pressure level.
+
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
@@ -65,6 +67,8 @@ def get_atm_mass_at_one_hPa(hPa):
 
 def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
     """
+    Get weighted average wind speed at one pressure level.
+
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
@@ -134,6 +138,8 @@ def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
 
 def get_sum_atm_mass(data):
     """
+    Sum atmospheric mass for given pressure levels.
+
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
@@ -158,6 +164,7 @@ def get_sum_atm_mass(data):
 
 def calc_mass_weighted_average(data, ws_col):
     """
+    Calculate mass weighted average wind-speed.
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
@@ -181,6 +188,8 @@ def calc_mass_weighted_average(data, ws_col):
 
 def calc_mass_flux_weighted_pressure(data, ws_col):
     """
+    Calculate mass-flux weighted pressure.
+
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
 
     Parameters
@@ -205,8 +214,10 @@ def calc_mass_flux_weighted_pressure(data, ws_col):
 
 def calc_mass_flux_weighted_latitude(data, lat_min, lat_max, ws_col):
     """
+    Calculate mass-flux weighted latitude.
+
     Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
-    WARNING: Problem with including 1000 hPa
+    NOTE: Problem with including 1000 hPa
 
     Parameters
     ----------
@@ -498,9 +509,9 @@ def assign_filtered_lats_and_ws_to_data(data, filtered_max_lats, filtered_max_ws
 
 def calc_jet_width_for_one_day(data_row, jet_lat, jet_speed):
     """
-    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
     Calculates jet width on a given data array using the calculated jet lat and speed at that lat
+
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -534,9 +545,9 @@ def calc_jet_width_for_one_day(data_row, jet_lat, jet_speed):
 
 def get_possible_surrounding_jet_lat_vals_for_one_day(one_day_wind_data, jet_speed):
     """
-    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    Returns array of windspeed values that are within half speed of the jet_speed given.
 
-    Returns array of windspeed values that are within half speed of the jet_speed given
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -561,9 +572,9 @@ def get_width_of_jet_from_surrounding_lat_vals(
     jet_lat, possible_surrounding_jet_lat_vals, lat_resolution
 ):
     """
-    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
     Get latitude width of jet around the given jet latitude value. Width given in units of latitude
+
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -592,9 +603,9 @@ def get_all_surrounding_jet_lats_around_max_lat(
     jet_lat, possible_surrounding_jet_lat_vals, lat_resolution
 ):
     """
-    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    Returns all the latitudes in a continuous group (i.e. within one unit of lat resolution) around selected jet (jet_lat).
 
-    Returns all the latitudes in a continuous group (i.e. within one unit of lat resolution) around jet lat
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -626,9 +637,9 @@ def check_lats_within_jet_in_one_direction(
     jet_lat, possible_surrounding_jet_lat_vals, amount_to_add_to_lat_val
 ):
     """
-    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-
     Creates a list of latitudes that are within a given distance from the jet_lat and only in one direction i.e. increasing or decreasing
+
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
 
     Parameters
     ----------
@@ -658,10 +669,10 @@ def check_lats_within_jet_in_one_direction(
 
 def scale_lat_vals_with_quadratic_func(lats, speeds, scaled_lats):
     """
+    Will downscale or upscale the resolution of latitude using a quadratic func.
+
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-
-    Will downscale or upscale the resolution of latitude using a quadratic func
 
     Parameters
     ----------
@@ -685,10 +696,11 @@ def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
     lats_and_ws, lat_resolution
 ):
     """
+    Get latitude and speed where max windspeed at a reduced resolution.
+    Makes use of the quadratic func to scale latitude values.
+
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-
-    Makes use of the quadratic func to scale latitude values
 
     Parameters
     ----------
@@ -719,10 +731,10 @@ def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
 
 def get_3_latitudes_and_speed_around_max_ws(row):
     """
+    Will get the latitudes neighbouring to east, at and to west where the max windspeed is found
+
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-
-    Will get the latitudes neighbouring to east, at and to west where the max windspeed is found
 
     Parameters
     --------------
@@ -766,6 +778,27 @@ def get_3_latitudes_and_speed_around_max_ws(row):
 
 
 def add_nan_value_to_arr_if_on_edge_of_lat_range(arr, lat_min, lat_max):
+    """
+    Add NaN value to array if any values in the array match the lat_min or lat_max input.
+
+    Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    Parameters
+    ----------
+    arr : array-like
+        Array to check.
+    lat_min : int or float
+        Min latitude in degrees.
+    lat_max : int or float
+        Max latitude in degrees.
+
+    Returns
+    ----------
+    arr : array-like
+        new array
+
+    """
     if arr[0] == lat_min:
         arr = np.insert(arr, 0, np.nan)
     elif arr[-1] == lat_max:
@@ -775,6 +808,8 @@ def add_nan_value_to_arr_if_on_edge_of_lat_range(arr, lat_min, lat_max):
 
 def get_3_neighbouring_coord_values(coord_val, coord_resolution):
     """
+    Get the three neighbouring values to a given input coord (coord_val)
+
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
@@ -806,9 +841,10 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
 
 def quadratic_func(x, y):
     """
+    Quadratic function.
+
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
-
 
     Parameters
     ----------
@@ -823,6 +859,8 @@ def quadratic_func(x, y):
 
 def apply_quadratic_func(x, y, vals):
     """
+    Apply quadratic function to an array of values (vals).
+
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
@@ -870,7 +908,7 @@ def get_jet_lat_and_speed_using_parabola_by_day(data_row):
 
 def fit_parabola(x, y):
     """
-    Fits a parabola
+    Fits a parabola.
 
     Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     """
@@ -881,7 +919,8 @@ def fit_parabola(x, y):
 
 def parabola(x, a, b, c):
     """
-    Parabola
+    Parabola.
+
     Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     """
     return a * x**2 + b * x + c
@@ -889,7 +928,6 @@ def parabola(x, a, b, c):
 
 def calc_meridional_circulation_index(data):
     """
-    Component of method from Francis and Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
     Calculates the Meridional Circulation Index (MCI)
     When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
@@ -897,6 +935,8 @@ def calc_meridional_circulation_index(data):
            v * abs(v)
     MCI =  ――――――――――
            u**2 * v**2
+
+    Component of method from Francis and Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
 
     NOTE: The paper is not clear about whether the absolute value for MCI
     is taken instead thus 0-1
@@ -919,9 +959,10 @@ def calc_meridional_circulation_index(data):
 
 def get_sinuosity_of_zonal_mean_zg(row, latitude_circle):
     """
-    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
     Works on a grouped data set and will calculate sinuosity of zonal mean
     geopotential (ZG) contour compared to a latitude circle
+
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
     Parameters
     ----------
@@ -946,8 +987,7 @@ def get_sinuosity_of_zonal_mean_zg(row, latitude_circle):
 
 def calc_great_circle_sinuosity(line1, line2):
     """
-    Calculates sinuosity by comparing the great circle distance between
-    two (multi-)linestrings
+    Calculates sinuosity by comparing the great circle distance between two (multi-)linestrings.
 
     Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
@@ -971,7 +1011,7 @@ def calc_great_circle_sinuosity(line1, line2):
 
 def assign_jet_lat_speed_to_ten_day_mean_data(ten_day_mean):
     """
-    Joins the values for latitude and windspeed of the point of maximum windspeed for a given sector to the ten_day_mean data
+    Joins the values for latitude and windspeed of the point of maximum windspeed for a given sector to the ten_day_mean data.
 
     Component of method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
 
@@ -1018,8 +1058,9 @@ def assign_ten_day_average_jet_lat_speed_to_data(data, ten_day_mean):
 
 def cubic_spline_interpolation(x, y):
     """
+    Runs a cubic spline interpolation using 2 equal-length arrays.
+
     Component of method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-    Runs a cubic spline interpolation using 2 equal-length arrays
 
     Parameters
     ----------
@@ -1040,8 +1081,9 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
     data, lat_resolution, ua_col="ua"
 ):
     """
+    Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude.
+
     Component of method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-    Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude
 
     Parameters
     ----------
@@ -1071,8 +1113,9 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
     data, lat_resolution, time_col
 ):
     """
+    Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude for each.
+
     Component of method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-    Runs a cubic spline interpolation to find maximum latitude and maximum windspeed at a given resolution of latitude for each
 
     Parameters
     ----------
@@ -1115,13 +1158,13 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
 
 def calc_centroid_jet_lat_from_zonal_mean(zonal_mean, area_by_lat):
     """
-    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
-
     Will get the centroid latitude of the u-component wind using:
 
                 integral(60deg, 30deg)(zonal_u**2*lat) dlat
     jet_lat =   ------------------------------
                 integral(60deg, 30deg)(zonal_u**2) dlat
+
+    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
 
     Parameters
     ----------
@@ -1137,7 +1180,10 @@ def calc_centroid_jet_lat_from_zonal_mean(zonal_mean, area_by_lat):
 
 def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row):
     """
+    Get moving average of smoothed_jet_lats for one day. Used in combination with a groupby mapping.
+
     Component of method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+
     Parameters
     ----------
     data_row : xarray.DataArray
@@ -1157,7 +1203,7 @@ def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row):
 
 def smooth_jet_lat_across_lon_with_rectangular_pulse(jet_lat_data, width_of_pulse):
     """
-    Smooth jet position (jet latitude) by carrying out a convolution with a rectangular pulse
+    Smooth jet position (jet latitude) by carrying out a convolution with a rectangular pulse.
 
     Component of method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
 
@@ -1181,7 +1227,7 @@ def smooth_jet_lat_across_lon_with_rectangular_pulse(jet_lat_data, width_of_puls
 
 def get_jet_lat_by_lon(data_row):
     """
-    Gets all the latitudes of maximum wind-speeds by longitude
+    Gets all the latitudes of maximum wind-speeds by longitude.
 
     Component of method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
 

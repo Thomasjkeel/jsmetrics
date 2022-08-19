@@ -123,17 +123,17 @@ Usage
 
 Project To-Do's
 -------------
-- ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
-- ADD: pint (see: https://pint.readthedocs.io/en/stable/)
-- ADD: DOI
-- LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
-- TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
-  - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  
-  - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
-- TO SOLVE: subsetting longitude if it wraps around 0-360
-- CHECK: that methods using just U account for negative values (maybe need for abs() or not)
-- ADD examples of a few metrics and few visualisations i.e. core, fv15 and woollings_et_al_2010
-- WRITE AND CLEAN-UP all metric/algorithm descriptions in docs and in-func
+        - ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
+        - ADD: pint (see: https://pint.readthedocs.io/en/stable/)
+        - ADD: DOI
+        - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
+        - TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
+                - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  
+                - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
+        - TO SOLVE: subsetting longitude if it wraps around 0-360
+        - CHECK: that methods using just U account for negative values (maybe need for abs() or not)
+        - ADD examples of a few metrics and few visualisations i.e. core, fv15 and woollings_et_al_2010
+        - WRITE AND CLEAN-UP all metric/algorithm descriptions in docs and in-func
 
 Credits
 -------------

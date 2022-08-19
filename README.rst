@@ -30,8 +30,9 @@ ALSO can use components to rebuilt aspects of the methodology
 My email: thomas.keel.18@ucl.ac.uk
 
 .. image:: docs/_static/images/kuang_jet_centers.png
-  :width: 400
-  :alt: Kuang et al. 2014 Jet-core algorithm
+        :width: 300
+        :align: center
+        :alt: Kuang et al. 2014 Jet-core algorithm
 
 DISCLAIMER
 -------------

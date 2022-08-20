@@ -24,11 +24,9 @@ jobs:
       - name: Run tests with pytest-cov
         run: |
           conda run -n jsmet pytest --cov
-      # - name: Codecov
-      #   uses: codecov/codecov-action@v3.1.0
 
-      - name: Coveralls
-        uses: AndreMiras/coveralls-python-action@develop
-        with:
-          parallel: true
-          flag-name: Unit Test
+#       - name: Coveralls
+#         uses: AndreMiras/coveralls-python-action@develop
+#         with:
+#           parallel: true
+#           flag-name: Unit Test

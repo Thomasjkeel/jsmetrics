@@ -20,8 +20,23 @@ jobs:
           conda env create -f environment.yml
           conda run -n jsmet pip install pytest==6.2.4
           conda run -n jsmet pip install parameterized==0.8.1
-      - name: Run tests with pytest
+      - name: Run tests with pytest-cov
         run: |
-          conda run -n jsmet pytest
-      - name: Codecov
-        uses: codecov/codecov-action@v3.1.0
+          conda run -n jsmet pytest --cov
+      # - name: Codecov
+      #   uses: codecov/codecov-action@v3.1.0
+
+      - name: Coveralls
+        uses: AndreMiras/coveralls-python-action@develop
+        with:
+          parallel: true
+          flag-name: Unit Test
+
+    coveralls_finish:
+      needs: test
+      runs-on: ubuntu-latest
+      steps:
+        - name: Coveralls Finished
+          uses: AndreMiras/coveralls-python-action@develop
+          with:
+            parallel-finished: true

@@ -23,3 +23,5 @@ jobs:
       - name: Run tests with pytest
         run: |
           conda run -n jsmet pytest
+      - name: Codecov
+        uses: codecov/codecov-action@v3.1.0

@@ -23,9 +23,3 @@ jobs:
       - name: Run tests with pytest
         run: |
           conda run -n jsmet pytest
-      - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@1.1.3
-        with:
-          flag-name: Unit
-          parallel: true
-          github-token: ${{ secrets.github_token }}

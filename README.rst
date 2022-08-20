@@ -2,9 +2,9 @@
 jsmetrics: Jet-stream metrics and algorithms
 ==================
 
-|license| |pre-commit| |black| |codefactor|
+|license| |pre-commit| |codefactor| |coveralls| |black| 
 
-.. pypi| |conda| |coveralls| |codefactor|  |zenodo| |docs| 
+.. pypi| |conda| |codefactor|  |zenodo| |docs| 
 ----
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
@@ -165,6 +165,9 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
    :target: https://www.codefactor.io/repository/github/thomasjkeel/jsmetrics
    :alt: CodeFactor
    
+.. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
+:target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
+
 .. .. |zenodo| image:: https://zenodo.org/badge/142608764.svg
 ..         :target: https://zenodo.org/badge/latestdoi/142608764
 ..         :alt: DOI

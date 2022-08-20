@@ -32,7 +32,7 @@ All of these can be handled user-side.
 
 Documentation
 -------------
-The official documentation is at https://jsmetrics.readthedocs.io/en/latest/
+The official documentation is at https://jsmetrics.readthedocs.io/en/latest/  
 My email is: thomas.keel.18@ucl.ac.uk
 
 Usage

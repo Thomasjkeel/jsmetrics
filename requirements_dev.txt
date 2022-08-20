@@ -1,5 +1,16 @@
 # Testing and development dependencies
 pip
+xarray>=0.20.2
+numpy>=1.20
+scipy>=1.2
+numba
+pandas>=1.1
+cftime>=1.4.1
+dask>=2.6.0
+netCDF4
+bottleneck>=1.3.1,<1.4
+matplotlib>=3.3.2
+shapely
 bump2version
 black
 coverage

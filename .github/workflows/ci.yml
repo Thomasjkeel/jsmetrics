@@ -28,3 +28,4 @@ jobs:
         with:
           flag-name: Unit
           parallel: true
+          github-token: ${{ secrets.github_token }}

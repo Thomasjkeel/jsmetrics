@@ -3,6 +3,7 @@ pip
 bump2version
 black
 coverage
+pytest-cov
 flake8
 parameterized
 pre_commit

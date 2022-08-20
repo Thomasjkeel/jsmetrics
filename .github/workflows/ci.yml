@@ -20,7 +20,7 @@ jobs:
           conda env create -f environment.yml
           conda run -n jsmet pip install pytest==6.2.4
           conda run -n jsmet pip install parameterized==0.8.1
-          conda run -n jsmet pip install coverage
+          conda run -n jsmet pip install pytest-cov
       - name: Run tests with pytest-cov
         run: |
           conda run -n jsmet pytest --cov

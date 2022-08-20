@@ -157,8 +157,8 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
         :target: https://github.com/python/black
         :alt: Python Black
 
-.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/Thomasjkeel/jsmetrics/master.svg
-   :target: https://results.pre-commit.ci/latest/github/Thomasjkeel/jsmetrics/master
+.. |pre-commit| image:: https://results.pre-commit.ci/badge/github/Thomasjkeel/jsmetrics/main.svg
+   :target: https://results.pre-commit.ci/latest/github/Thomasjkeel/jsmetrics/main
    :alt: pre-commit.ci status
 
 .. .. |zenodo| image:: https://zenodo.org/badge/142608764.svg

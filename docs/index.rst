@@ -8,30 +8,60 @@ Welcome to jsmetrics's documentation!
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.
+*WORK IN PROGRESS*
+
+.. WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
+.. At the foundation of studies that look at jet-streams is the metric used to describe or characterise it.
+
+.. WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
+
+The philosophy of this module was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
+*but* to not limit the method to a given:
+        - time period
+        - time unit (i.e. day, month, DJF)
+        - lat/lon resolution
+        - latitude/longitude region (where possible),
+        - pressure level region
+All of these can be handled user-side.
+
+.. 
+        ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
+        As such each can be used seperately and this allows users to rebuilt aspects of a methodology (e.g. to replace a filtering method)
 
 
-WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
+Usage
+-------------
+.. code-block:: python
 
-WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
+    import xarray as xr
+    import jsmetrics
 
-NOT DEPENDENT ON time, lat/lon resolution, lat/lon bbox, plev height (all changable)
-ALSO can use components to rebuilt aspects of the methodology 
-.. [Table of Contents]
-.. Disclaimer, table of metrics, Installation, Documentations, Contributing, How to cite, Project To-do's
+    # load windspeed data with u- and v- component wind.
+    uv_data = xr.open_dataset(filename)
+
+    # run Kuang et al. 2014 metric 
+    k14 = jsmetrics.jetstream_algorithms.kuang_et_al_2014(uv_data)
+
+.. image:: docs/_static/images/kuang_jet_centers.png
+  :width: 360
+  :align: center
+  :alt: Kuang et al. 2014 Jet-core algorithm
+
+My email: thomas.keel.18@ucl.ac.uk
+
 
 DISCLAIMER
 -------------
 I have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
+In some cases I have used a different dataset to the one used in the paper they originate from or with different data resolution. 
+Further, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
+This project is very much a work in progress, so contributors are very welcome [TODO]
 
-In some cases I have used a different dataset to the one used. 
-
-This project is very much a work in progress, so contributors are very welcome. You  
-
-Details provided in: `all metrics`_ is not exact as in some cases ... Most algorithms can be used at different pressure-levels etc.  
+You can find details of each metric or algorithm here: `all metrics`_.
 
 Where you can find my working-out:
-- I have included all of my working out in jupyter-notebooks available at: ... (warning: these notebooks have not been formatted nicely) 
-- I am currently creating a verification notebook available at: ... where 
+- I have included all of my working out in jupyter-notebooks available at: ... [TODO] (warning: these notebooks have not been formatted nicely) 
+- I am currently creating a verification notebook available at: ... [TODO] 
 
 
 Table of the metrics

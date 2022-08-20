@@ -29,6 +29,12 @@ All of these can be handled user-side.
         ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
         As such each can be used seperately and this allows users to rebuilt aspects of a methodology (e.g. to replace a filtering method)
 
+
+Documentation
+-------------
+The official documentation is at https://jsmetrics.readthedocs.io/en/latest/
+My email is: thomas.keel.18@ucl.ac.uk
+
 Usage
 -------------
 .. code-block:: python
@@ -46,8 +52,6 @@ Usage
   :width: 360
   :align: center
   :alt: Kuang et al. 2014 Jet-core algorithm
-
-My email: thomas.keel.18@ucl.ac.uk
 
 DISCLAIMER
 -------------
@@ -105,10 +109,6 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 Installation 
 -------------
-
-.. Documentation
-.. -------------
-.. The official documentation is at https://jsmetrics.readthedocs.io/
 
 .. Contributing
 .. ------------

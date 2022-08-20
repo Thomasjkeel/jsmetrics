@@ -2,7 +2,7 @@
 jsmetrics: Jet-stream metrics and algorithms
 ==================
 
-|license| |pre-commit| |codefactor| |coveralls| |black| 
+|license| |pre-commit| |codefactor| |coveralls| |docs| |black| 
 
 .. pypi| |conda| |codefactor|  |zenodo| |docs| 
 ----
@@ -172,9 +172,9 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 ..         :target: https://zenodo.org/badge/latestdoi/142608764
 ..         :alt: DOI
 
-.. .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge
-..         :target: https://jsmetrics.readthedocs.io/en/latest
-..         :alt: Documentation Status
+.. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest
+    :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 .. .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
 ..         :target: https://pypi.python.org/pypi/jsmetrics

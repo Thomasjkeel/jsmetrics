@@ -2,6 +2,12 @@
 History
 =======
 
+
+0.0.10 (2022-08-21)
+------------------
+* First release to pypi
+* Clean up rst docs
+
 0.0.9 (2022-08-16)
 ------------------
 * Finish tests

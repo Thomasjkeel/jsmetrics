@@ -2,7 +2,7 @@
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
 
-|license| |pre-commit| |codefactor| |coveralls| |docs| |black| 
+|license| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |black| 
 --------------------------------------------------------------
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
@@ -176,9 +176,9 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
     :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
-.. .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
-..         :target: https://pypi.python.org/pypi/jsmetrics
-..         :alt: Python Package Index Build
+.. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
+        :target: https://pypi.org/project/jsmetrics/
+        :alt: Python Package Index Build
 
 .. .. |conda| image:: https://img.shields.io/conda/vn/conda-forge/jsmetrics.svg
 ..         :target: https://anaconda.org/conda-forge/jsmetrics

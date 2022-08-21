@@ -196,6 +196,13 @@ class JetStreamCoreIdentificationAlgorithm:
     Jet-stream core identification algorithm.
 
     Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Methods
+    -------
+    run:
+        run algorithm
+    run_algorithm:
+        class method for running algorithm
     """
 
     def __init__(self, data, ws_core_threshold=40, ws_boundary_threshold=30):
@@ -623,6 +630,13 @@ class JetStreamOccurenceAndCentreAlgorithm:
     Jet-stream occurence and centre algorithm.
 
     Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
+
+    Methods
+    -------
+    run:
+        run algorithm
+    run_algorithm:
+        class method for running algorithm
     """
 
     def __init__(self, data, occurence_ws_threshold=30):

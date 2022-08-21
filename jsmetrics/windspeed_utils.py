@@ -64,6 +64,13 @@ def get_zonal_mean(data):
 class WindSpeedSlice:
     """
     Base class for windspeed slice.
+
+    Methods
+    -------
+    label_slice:
+        Label the windspeed slice using where condtion
+    get_values:
+        Get values using xarray
     """
 
     def __init__(self, data, req_variables=("ua", "va")):
@@ -116,10 +123,24 @@ class WindSpeedSlice:
 class PressureLevelWindSpeedSlice(WindSpeedSlice, req_coords=("lat", "lon")):
     """
     Data will be lon*lat
+
+    Methods
+    -------
+    label_slice:
+        Label the windspeed slice using where condtion
+    get_values:
+        Get values using xarray
     """
 
 
 class LatitudeWindSpeedSlice(WindSpeedSlice, req_coords=("lat", "plev")):
     """
     Data will be lon*plev
+
+    Methods
+    -------
+    label_slice:
+        Label the windspeed slice using where condtion
+    get_values:
+        Get values using xarray
     """

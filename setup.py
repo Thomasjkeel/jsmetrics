@@ -31,7 +31,7 @@ requirements = [
     "matplotlib>=3.3.2",
     "xarray>=0.19.0",
     "scipy>=1.5.3",
-    "dask[array]>=2.6",
+    "dask[array]",
     "netCDF4>=1.5.5.1",
     "bottleneck",
     "cf_xarray",

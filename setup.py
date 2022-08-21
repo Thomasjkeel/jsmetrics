@@ -30,7 +30,7 @@ requirements = [
     "pandas>=0.23",
     "matplotlib>=3.3.2",
     "xarray>=0.19.0",
-    "scipy>=1.5.3",
+    "scipy",
     "dask[array]",
     "netCDF4",
     "Bottleneck",

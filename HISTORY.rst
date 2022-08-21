@@ -7,7 +7,6 @@ History
 -------------------
 * First release to pypi
 * Clean up rst docs
-* remove dependency versions
 
 0.0.9 (2022-08-16)
 ------------------

@@ -13,8 +13,6 @@ matplotlib>=3.3.2
 shapely
 bump2version
 black
-coverage
-pytest-cov
 flake8
 parameterized
 pre_commit

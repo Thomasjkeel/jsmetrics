@@ -20,10 +20,10 @@ with open("README.rst") as file:
 with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
-dev_requirements = []
-with open("requirements_dev.txt") as dev:
-    for dependency in dev.readlines():
-        dev_requirements.append(dependency)
+# dev_requirements = []
+# with open("requirements_dev.txt", "rb") as dev:
+#     for dependency in dev.readlines():
+#         dev_requirements.append(dependency)
 
 requirements = [
     "numpy>=1.21.2",
@@ -36,6 +36,21 @@ requirements = [
     "bottleneck",
     "cf_xarray",
     "Shapely",
+]
+
+dev_requirements = [
+    "bump2version",
+    "black",
+    "pytest",
+    "pytest-cov",
+    "flake8",
+    "parameterized",
+    "pre_commit",
+    "pylint",
+    "pytest",
+    "sphinx",
+    "numpydoc",
+    "sphinx-rtd-theme",
 ]
 
 setup(
@@ -63,7 +78,7 @@ setup(
     include_package_data=True,
     keywords=KEYWORDS,
     name=NAME,
-    packages=find_packages(include=["metrics"]),
+    packages=find_packages(),
     tests_require=["pytest", "parameterized"],
     extras_require={
         "dev": dev_requirements,

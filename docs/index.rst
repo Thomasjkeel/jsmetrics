@@ -42,11 +42,6 @@ Usage
     # run Kuang et al. 2014 metric 
     k14 = jsmetrics.jetstream_algorithms.kuang_et_al_2014(uv_data)
 
-.. image:: docs/_static/images/kuang_jet_centers.png
-  :width: 360
-  :align: center
-  :alt: Kuang et al. 2014 Jet-core algorithm
-
 My email: thomas.keel.18@ucl.ac.uk
 
 

@@ -1,6 +1,6 @@
-==================
+============================================
 jsmetrics: Jet-stream metrics and algorithms
-==================
+============================================
 
 |license| |pre-commit| |codefactor| |coveralls| |docs| |black| 
 
@@ -129,7 +129,7 @@ Installation
 
 
 Project To-Do's
--------------
+---------------
         - WRITE AND CLEAN-UP README
         - ADD: DOI
         - FINISH verification notebook.

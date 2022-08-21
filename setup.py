@@ -21,7 +21,7 @@ with open("HISTORY.rst") as history_file:
     history = history_file.read()
 
 # dev_requirements = []
-# with open("requirements_dev.txt", "rb") as dev:
+# with open("requirements_dev.txt") as dev:
 #     for dependency in dev.readlines():
 #         dev_requirements.append(dependency)
 
@@ -57,7 +57,7 @@ setup(
     author=AUTHOR,
     author_email=AUTHOR_EMAIL,
     classifiers=[
-        "Development Status :: 3 - Beta",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",

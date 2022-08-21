@@ -26,16 +26,16 @@ with open("HISTORY.rst") as history_file:
 #         dev_requirements.append(dependency)
 
 requirements = [
-    "numpy",
-    "pandas",
-    "matplotlib",
-    "xarray",
-    "scipy",
+    "numpy>=1.21.2",
+    "pandas>=0.23",
+    "matplotlib>=3.3.2",
+    "xarray>=0.19.0",
+    "scipy>=1.5.3",
     "dask[array]",
-    "netCDF4",
-    "Bottleneck",
+    "netCDF4>=1.5.5.1",
+    "bottleneck",
     "cf_xarray",
-    "shapely",
+    "Shapely",
 ]
 
 dev_requirements = [

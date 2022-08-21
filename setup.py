@@ -35,7 +35,7 @@ requirements = [
     "netCDF4>=1.5.5.1",
     "bottleneck",
     "cf_xarray",
-    "Shapely",
+    "shapely",
 ]
 
 dev_requirements = [

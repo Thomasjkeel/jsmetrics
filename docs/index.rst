@@ -17,11 +17,11 @@ written in Python and built from xarray.
 
 The philosophy of this module was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
-        - time period
-        - time unit (i.e. day, month, DJF)
-        - lat/lon resolution
-        - latitude/longitude region (where possible),
-        - pressure level region
+- time period
+- time unit (i.e. day, month, DJF)
+- lat/lon resolution
+- latitude/longitude region (where possible),
+- pressure level region
 All of these can be handled user-side.
 
 .. 
@@ -93,6 +93,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1029/2020JD033668>`_       To start*           `Bosiger et al. 2022 <https://doi.org/10.5194/gmd-15-1079-2022>`_               To start            
    `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*                        
    =============================================================================== ==============  ==  =============================================================================== ==============
+
 * == help needed
 
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py

@@ -26,6 +26,7 @@ Metrics
    `Ceppi et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0323.1>`_                 To verify           `Rikus 2018 <http://dx.doi.org/10.1007/s00382-015-2560-y>`_                     In progress            
    `Kerr et al. 2020 <https://doi.org/10.1029/2020JD032735>`_                      To verify           `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*
    =============================================================================== ==============  ==  =============================================================================== ==============
+
 * == help needed
 
 
@@ -61,6 +62,7 @@ Algorithms
    `Manney et al. 2011 <https://acp.copernicus.org/articles/11/6115/2011/>`_       In progess*         `Pena-Ortiz et al. 2013 <http://doi.wiley.com/10.1002/jgrd.50305>`_             To verify      
    `Kuang et al. 2014 <http://link.springer.com/10.1007/s00704-013-0994-x>`_       To verify                 
    =============================================================================== ==============  ==  =============================================================================== ==============
+
 * == help needed
 
 .. automodule:: jsmetrics.jetstream_algorithms

@@ -439,12 +439,11 @@ def assign_jet_lat_and_speed_to_data(
 
 def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
     """
-    Carries out a Fourier transform for filtering keeping only low frequencies
+    Carries out a Fourier transform for filtering keeping only low frequencies.
 
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
-    ADAPTED FROM:
-    https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
+    ADAPTED FROM: https://scipy-lectures.org/intro/scipy/auto_examples/plot_fftpack.html
 
     Parameters
     ----------
@@ -452,8 +451,7 @@ def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
         time series data at regular intervals
     highest_freq_to_keep : int
         highest frequency to keep in the fourier transform expression
-        NOTE: starts at 0, so highest_freq_to_keep=1
-              will only keep the constant and first expresion
+        NOTE: starts at 0, so highest_freq_to_keep=1 will only keep the constant and first expresion
 
     Returns
     ----------
@@ -928,14 +926,10 @@ def parabola(x, a, b, c):
 
 def calc_meridional_circulation_index(data):
     """
-    Calculates the Meridional Circulation Index (MCI)
+    Calculates the Meridional Circulation Index (MCI):
+    MCI = v * abs(v) / u**2 * v**2
     When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
     from the South (North).
-
-           v * abs(v)
-    MCI =  ――――――――――
-           u**2 * v**2
-
     Component of method from Francis and Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
 
     NOTE: The paper is not clear about whether the absolute value for MCI
@@ -1159,10 +1153,7 @@ def run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_a
 def calc_centroid_jet_lat_from_zonal_mean(zonal_mean, area_by_lat):
     """
     Will get the centroid latitude of the u-component wind using:
-
-                integral(60deg, 30deg)(zonal_u**2*lat) dlat
-    jet_lat =   ------------------------------
-                integral(60deg, 30deg)(zonal_u**2) dlat
+    jet_lat = integral(60deg, 30deg)(zonal_u**2*lat) dlat / integral(60deg, 30deg)(zonal_u**2) dlat
 
     Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
 

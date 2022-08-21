@@ -8,7 +8,7 @@ pandas>=1.1
 cftime>=1.4.1
 dask
 netCDF4
-bottleneck>=1.3.1,<1.4
+Bottleneck
 matplotlib>=3.3.2
 shapely
 bump2version

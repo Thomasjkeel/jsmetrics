@@ -109,6 +109,9 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 Installation 
 -------------
+.. code-block:: bash
+    
+    pip install jsmetrics
 
 .. Contributing
 .. ------------

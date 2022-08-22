@@ -2,7 +2,7 @@
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
 
-|license| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |black| 
+|pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| 
 --------------------------------------------------------------
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
@@ -152,7 +152,7 @@ which contains other climate indices and metrics.
 
 This package was created with Cookiecutter and the audreyr/cookiecutter-pypackage project template.
 
-.. |license| image:: https://img.shields.io/badge/License-MIT-lightgray.svg?style=flt-square
+.. |license| image:: https://img.shields.io/github/license/thomasjkeel/jsmetrics
         :target: https://github.com/Thomasjkeel/jsmetrics/blob/master/LICENSE
         :alt: License
 

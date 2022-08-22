@@ -152,7 +152,7 @@ which contains other climate indices and metrics.
 
 This package was created with Cookiecutter and the audreyr/cookiecutter-pypackage project template.
 
-.. |license| image:: https://img.shields.io/badge/License-MIT-lightgray.svg?style=flt-square
+.. |license| image:: https://img.shields.io/github/license/thomasjkeel/jsmetrics
         :target: https://github.com/Thomasjkeel/jsmetrics/blob/master/LICENSE
         :alt: License
 

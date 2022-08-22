@@ -771,7 +771,6 @@ def get_3_latitudes_and_speed_around_max_ws(row):
         neighbouring_speeds = add_nan_value_to_arr_if_not_len_enough(
             neighbouring_speeds, len_required=3
         )
-    print(neighbouring_lats, neighbouring_speeds)
     return (neighbouring_lats, neighbouring_speeds)
 
 

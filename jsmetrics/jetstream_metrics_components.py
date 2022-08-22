@@ -765,19 +765,19 @@ def get_3_latitudes_and_speed_around_max_ws(row):
 
     #  add nan value to edges
     if len(neighbouring_lats) < 3:
-        neighbouring_lats = add_nan_value_to_arr_if_on_edge_of_lat_range(
-            neighbouring_lats, lat_min, lat_max
+        neighbouring_lats = add_nan_value_to_arr_if_not_len_enough(
+            neighbouring_lats, len_required=3
         )
-        neighbouring_speeds = add_nan_value_to_arr_if_on_edge_of_lat_range(
-            neighbouring_speeds, lat_min, lat_max
+        neighbouring_speeds = add_nan_value_to_arr_if_not_len_enough(
+            neighbouring_speeds, len_required=3
         )
-
+    print(neighbouring_lats, neighbouring_speeds)
     return (neighbouring_lats, neighbouring_speeds)
 
 
-def add_nan_value_to_arr_if_on_edge_of_lat_range(arr, lat_min, lat_max):
+def add_nan_value_to_arr_if_not_len_enough(arr, len_required):
     """
-    Add NaN value to array if any values in the array match the lat_min or lat_max input.
+    Add NaN value to array if any values in the array so it is a certain length
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
@@ -786,10 +786,8 @@ def add_nan_value_to_arr_if_on_edge_of_lat_range(arr, lat_min, lat_max):
     ----------
     arr : array-like
         Array to check.
-    lat_min : int or float
-        Min latitude in degrees.
-    lat_max : int or float
-        Max latitude in degrees.
+    len_required : int
+        length of array required
 
     Returns
     ----------
@@ -797,10 +795,12 @@ def add_nan_value_to_arr_if_on_edge_of_lat_range(arr, lat_min, lat_max):
         new array
 
     """
-    if arr[0] == lat_min:
-        arr = np.insert(arr, 0, np.nan)
-    elif arr[-1] == lat_max:
+    assert (
+        len(arr) <= len_required
+    ), "length of input array needs to be less or same as len_required"
+    if len(arr) != len_required:
         arr = np.append(arr, np.nan)
+        return add_nan_value_to_arr_if_not_len_enough(arr, len_required)
     return arr
 
 

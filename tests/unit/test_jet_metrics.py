@@ -209,7 +209,7 @@ class TestBarnesPolvani2013(unittest.TestCase):
         test_data = self.data["ua"].isel(time=0, plev=0, lat=slice(0, 2))
         res = test_func(test_data["lat"])
         self.assertEqual(len(res[0]), 3)
-        self.assertTrue(np.isnan(res[0][0]))
+        self.assertTrue(np.isnan(res[0][-1]))
         test_data = self.data["ua"].isel(time=0, plev=0, lat=slice(68, 73))
         res = test_func(test_data["lat"])
         self.assertEqual(len(res[0]), 3)

@@ -2,7 +2,7 @@
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
 
-|license| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |black| 
+|pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| 
 --------------------------------------------------------------
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams

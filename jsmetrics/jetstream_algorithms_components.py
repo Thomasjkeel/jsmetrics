@@ -11,7 +11,6 @@
 """
 
 # imports
-import collections
 import numpy as np
 import xarray as xr
 from . import data_utils, windspeed_utils
@@ -630,13 +629,6 @@ class JetStreamOccurenceAndCentreAlgorithm:
     Jet-stream occurence and centre algorithm.
 
     Component of method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
-
-    Methods
-    -------
-    run:
-        run algorithm
-    run_algorithm:
-        class method for running algorithm
     """
 
     def __init__(self, data, occurence_ws_threshold=30):
@@ -698,14 +690,6 @@ class JetStreamOccurenceAndCentreAlgorithm:
         """
         self._get_all_coords_of_jet_occurence()
         self._all_coords_arr = np.array(self._all_coords)
-        # Get a counter of all the latitude coordinates
-        # TODO: write tests to see if this works as this was a workaround needed for some reason
-        try:
-            self._count_lats = collections.Counter(self._all_coords_arr[:, 0])
-        except Exception as e:
-            print(e)
-            self._count_lats = {}
-        self._get_all_lats_of_jet_centre_for_search()
         self._calc_jet_centre_points()
         self._get_jet_centre_data()
         self._label_jet_occurence()
@@ -766,7 +750,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ):
                 self._lats_for_search.append(lat)
 
-    def _calc_jet_centre_points(self):
+    def _calc_jet_centre_points_old(self):
         """
         Will return a list of the coordinates for all jet-centre points
         """
@@ -803,6 +787,45 @@ class JetStreamOccurenceAndCentreAlgorithm:
                         break
                 if add_coord:
                     self._jet_centres.append(coord)
+
+    def _calc_jet_centre_points(self):
+        """
+        Will return a list of the coordinates for all jet-centre points
+        """
+        for coord in self._all_coords_arr:
+            coord_ws = float(self.output_data.sel(lat=coord[0], lon=coord[1])["ws"])
+            lat_grid_vals = np.arange(
+                coord[0] - self._lat_resolution,
+                coord[0] + self._lat_resolution + 0.1,
+                self._lat_resolution,
+            )
+            lat_grid_vals = lat_grid_vals[
+                (lat_grid_vals >= float(self.output_data["lat"].min()))
+                & (lat_grid_vals <= float(self.output_data["lat"].max()))
+            ]
+            lon_grid_vals = np.arange(
+                coord[1] - self._lon_resolution,
+                coord[1] + self._lon_resolution + 0.1,
+                self._lon_resolution,
+            )
+            matrix_vals_to_check = np.array(
+                np.meshgrid(lat_grid_vals, lon_grid_vals)
+            ).T.reshape(-1, 2)
+            matrix_vals_to_check = matrix_vals_to_check % 360  # loop lon around
+            add_coord = True
+            for val_to_check in matrix_vals_to_check:
+                if (
+                    float(
+                        self.output_data.sel(lat=val_to_check[0], lon=val_to_check[1])[
+                            "ws"
+                        ]
+                    )
+                    > coord_ws
+                ):
+                    add_coord = False
+                    break
+            if add_coord:
+                self._jet_centres.append(coord)
 
     def _label_jet_occurence(self):
         """

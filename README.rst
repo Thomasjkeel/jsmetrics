@@ -115,9 +115,9 @@ Installation
 
 .. Contributing
 .. ------------
-.. jsmetrics is in active development and it's being used in production by climate services specialists.
+.. jsmetrics is in active development.
 
-.. * If you're interested in participating in the development of jsmetrics by suggesting new features, new indices or report bugs, please leave us a message on the `issue tracker`_. There is also a chat room on gitter (|gitter|).
+.. * If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker`_. There is also a chat room on gitter (|gitter|).
 
 .. * If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
 

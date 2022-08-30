@@ -207,7 +207,7 @@ class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
         result = self.tested_alg(test_data)
         result.run()
         self.assertEqual(float(result._jet_occurence["ws"].max()), 85.84358978271484)
-        self.assertListEqual(result._jet_centres[0].tolist(), [5.0, 331.875])
+        self.assertListEqual(result._jet_centres[0].tolist(), [0.0, 247.5])
 
     def test_cls_method(self):
         test_data = self.data.isel(plev=4, time=0)

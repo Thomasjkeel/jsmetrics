@@ -2,6 +2,10 @@
 History
 =======
 
+0.0.11-alpha (2022-08-30)
+-------------------------
+* Update and fix the JetStreamOccurenceAndCentreAlgorithm method for Kuang
+
 
 0.0.10 (2022-08-21)
 -------------------

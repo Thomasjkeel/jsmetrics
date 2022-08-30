@@ -231,7 +231,7 @@ class JetStreamCoreIdentificationAlgorithm:
                     threshold and both need to be more than 0"
             ) from e
         # Transpose data
-        data = data.transpose(*(..., "lat", "plev"))
+        # data = data.transpose(*(..., "lat", "plev"))
 
         # Step 1. make windspeed slice
         self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)

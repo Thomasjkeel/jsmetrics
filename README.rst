@@ -133,7 +133,6 @@ Installation
 Project To-Do's
 ---------------
         - WRITE AND CLEAN-UP README
-        - ADD: DOI
         - FINISH verification notebook.
         - WRITE plan to finish metrics.
         - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
@@ -172,8 +171,8 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7081634.svg
-..         :target: https://doi.org/10.5281/zenodo.7081634
-..         :alt: DOI
+        :target: https://doi.org/10.5281/zenodo.7081634
+        :alt: DOI
 
 .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest
     :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest

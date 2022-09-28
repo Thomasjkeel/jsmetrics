@@ -133,8 +133,6 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     fourier_filtered_ws = jetstream_metrics_components.apply_low_freq_fourier_filter(
         climatology["jet_speed"].values, highest_freq_to_keep=2
     )
-
-    # Step 6: Join filtered climatology back to the data
     time_dim = climatology["jet_speed"].dims[0]
     fourier_filtered_data = (
         jetstream_metrics_components.assign_filtered_lats_and_ws_to_data(
@@ -144,6 +142,9 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
             dim=time_dim,
         )
     )
+
+    # Step 6: Calculate jet latitude and jet speed anomalies from the seasonal cycle
+
     return fourier_filtered_data
 
 

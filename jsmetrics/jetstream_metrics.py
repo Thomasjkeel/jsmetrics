@@ -134,18 +134,16 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         climatology["jet_speed"].values, highest_freq_to_keep=2
     )
     time_dim = climatology["jet_speed"].dims[0]
-    fourier_filtered_data = (
-        jetstream_metrics_components.assign_filtered_lats_and_ws_to_data(
-            zonal_mean_lat_ws,
-            fourier_filtered_lats.real,
-            fourier_filtered_ws.real,
-            dim=time_dim,
-        )
+    output = jetstream_metrics_components.assign_filtered_lats_and_ws_to_data(
+        zonal_mean_lat_ws,
+        fourier_filtered_lats.real,
+        fourier_filtered_ws.real,
+        dim=time_dim,
     )
 
     # Step 6: Calculate jet latitude and jet speed anomalies from the seasonal cycle
 
-    return fourier_filtered_data
+    return output
 
 
 def barnes_polvani_2013(data, filter_freq=10, window_size=41):

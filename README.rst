@@ -3,7 +3,7 @@ jsmetrics: Jet-stream metrics and algorithms
 ============================================
 
 |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
---------------------------------------------------------------
+------------------------------------------------------------------------------
 
 This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.

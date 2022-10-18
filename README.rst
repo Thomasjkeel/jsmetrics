@@ -16,11 +16,11 @@ written in Python and built from xarray.
 
 The philosophy of this module was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
-        - time period
-        - time unit (i.e. day, month, DJF)
-        - lat/lon resolution
-        - latitude/longitude region (where possible),
-        - pressure level region
+- time period
+- time unit (i.e. day, month, DJF)
+- lat/lon resolution
+- latitude/longitude region (where possible),
+- pressure level region
 All of these can be handled user-side.
 
 .. 

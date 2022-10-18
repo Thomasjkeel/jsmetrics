@@ -374,16 +374,9 @@ def barnes_simpson_2017(data):
      output : xarray.Dataset
          Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
     """
-    ten_day_mean = data.resample(time="10D").mean()
-    ten_day_mean = (
-        jetstream_metrics_components.assign_jet_lat_speed_to_ten_day_mean_data(
-            ten_day_mean
-        )
-    )
-    ten_day_mean = ten_day_mean.rename_dims({"time": "10_day_average"})
-    data = jetstream_metrics_components.assign_ten_day_average_jet_lat_speed_to_data(
-        data, ten_day_mean
-    )
+    data = data.resample(time="10D").mean()
+    data = jetstream_metrics_components.calc_latitude_and_speed_where_max_ws(data)
+    data = data.rename_dims({"time": "10_day_average"})
     return data
 
 

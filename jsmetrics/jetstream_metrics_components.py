@@ -406,6 +406,38 @@ def get_latitude_and_speed_where_max_ws(data_row):
         return np.nan, np.nan
 
 
+def calc_latitude_and_speed_where_max_ws(data, var_col="ua"):
+    """
+    Will return the latitude and windspeed at the index of maximum wind speed
+    from a row of data
+    TODO: expects only one cell to be max
+
+    Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
+
+    Parameters
+    ----------
+    dataarray : xarray.dataset
+        Dataset containing u-component wind
+
+    Returns
+    ----------
+    jet_lats :
+        Latitude of maximum windspeed
+    jet_speeds : int or float
+        Speed at latitude of maximum windspeed
+    """
+    inds = data[var_col].argmax(axis=1, skipna=False)
+    jet_lats = data[var_col]["lat"].data[inds]
+    data["jet_lat"] = ((inds.dims), jet_lats)
+    data["jet_speed"] = data[var_col].max(axis=1)
+    # cleans up missing values
+    data = data.dropna("time", subset=["jet_lat", "jet_speed"])
+    return data
+
+
 def assign_jet_lat_and_speed_to_data(
     data, max_lat_ws, max_lats_col="jet_lat", max_ws_col="jet_speed"
 ):

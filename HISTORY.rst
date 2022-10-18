@@ -2,6 +2,12 @@
 History
 =======
 
+0.0.12 (2022-10-18)
+-------------------------
+* Update calc_latitude_and_speed_where_max_ws to use numpy methods
+* Fix Barnes and Simpson 2017 method so it runs on each longitude
+
+
 0.0.11 (2022-09-15)
 -------------------------
 * Update and fix the JetStreamOccurenceAndCentreAlgorithm method for Kuang

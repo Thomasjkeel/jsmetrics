@@ -429,10 +429,10 @@ def calc_latitude_and_speed_where_max_ws(data, var_col="ua"):
     jet_speeds : int or float
         Speed at latitude of maximum windspeed
     """
-    inds = data[var_col].argmax(axis=1, skipna=False)
-    jet_lats = data[var_col]["lat"].data[inds]
-    data["jet_lat"] = ((inds.dims), jet_lats)
-    data["jet_speed"] = data[var_col].max(axis=1)
+    inds = data[var_col].argmax(dim="lat", skipna=False)
+    jet_lats = data[var_col]["lat"][inds]
+    data["jet_lat"] = ((inds.dims), jet_lats.data)
+    data["jet_speed"] = data[var_col].max(dim="lat")
     # cleans up missing values
     data = data.dropna("time", subset=["jet_lat", "jet_speed"])
     return data

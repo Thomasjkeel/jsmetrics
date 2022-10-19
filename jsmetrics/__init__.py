@@ -2,7 +2,7 @@
 
 __author__ = """Tom Keel"""
 __email__ = "thomas.keel.18@ucl.ac.uk"
-__version__ = "0.0.13-alpha"
+__version__ = "0.0.13-beta"
 
 from . import (
     data_utils,

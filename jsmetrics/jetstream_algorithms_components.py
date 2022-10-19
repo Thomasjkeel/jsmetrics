@@ -656,11 +656,11 @@ class JetStreamOccurenceAndCentreAlgorithm:
             "jet_ocurrence1_jet_centre2"
         ].where(lambda x: x >= occurence_ws_threshold)
         self._jet_occurence = self.plev_ws_slice
-        self._lat_resolution = float(
-            self.plev_ws_slice["lat"][1] - self.plev_ws_slice["lat"][0]
+        self._lat_resolution = abs(
+            float(self.plev_ws_slice["lat"][1] - self.plev_ws_slice["lat"][0])
         )
-        self._lon_resolution = float(
-            self.plev_ws_slice["lon"][1] - self.plev_ws_slice["lon"][0]
+        self._lon_resolution = abs(
+            float(self.plev_ws_slice["lon"][1] - self.plev_ws_slice["lon"][0])
         )
 
         # make_duplicate data for output
@@ -776,10 +776,10 @@ class JetStreamOccurenceAndCentreAlgorithm:
                     coord[1] + self._lon_resolution + 0.1,
                     self._lon_resolution,
                 )
+                lon_grid_vals = lon_grid_vals % 360  # loop around
                 matrix_vals_to_check = np.array(
                     np.meshgrid(lat_grid_vals, lon_grid_vals)
                 ).T.reshape(-1, 2)
-                matrix_vals_to_check = matrix_vals_to_check % 360  # loop around
                 add_coord = True
                 for val in matrix_vals_to_check:
                     if not val.tolist() in self._all_coords:
@@ -796,7 +796,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
             coord_ws = float(self.output_data.sel(lat=coord[0], lon=coord[1])["ws"])
             lat_grid_vals = np.arange(
                 coord[0] - self._lat_resolution,
-                coord[0] + self._lat_resolution + 0.1,
+                coord[0] + self._lat_resolution + 0.01,
                 self._lat_resolution,
             )
             lat_grid_vals = lat_grid_vals[
@@ -805,7 +805,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ]
             lon_grid_vals = np.arange(
                 coord[1] - self._lon_resolution,
-                coord[1] + self._lon_resolution + 0.1,
+                coord[1] + self._lon_resolution + 0.01,
                 self._lon_resolution,
             )
             matrix_vals_to_check = np.array(

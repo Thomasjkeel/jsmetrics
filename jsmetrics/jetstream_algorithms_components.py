@@ -750,44 +750,6 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ):
                 self._lats_for_search.append(lat)
 
-    def _calc_jet_centre_points_old(self):
-        """
-        Will return a list of the coordinates for all jet-centre points
-        """
-        for lat in self._lats_for_search:
-            coords_to_search = self._all_coords_arr[
-                np.where(self._all_coords_arr[::, 0] == lat)
-            ]
-            for coord in coords_to_search:
-                if (
-                    coord[0] == 0
-                    or coord[1] == 0
-                    and 360 - self._lon_resolution not in coords_to_search[::, 1]
-                ):
-                    continue
-                # check if coord is jet centre point i.e. 9*9 all above 30
-                lat_grid_vals = np.arange(
-                    coord[0] - self._lat_resolution,
-                    coord[0] + self._lat_resolution + 0.1,
-                    self._lat_resolution,
-                )
-                lon_grid_vals = np.arange(
-                    coord[1] - self._lon_resolution,
-                    coord[1] + self._lon_resolution + 0.1,
-                    self._lon_resolution,
-                )
-                lon_grid_vals = lon_grid_vals % 360  # loop around
-                matrix_vals_to_check = np.array(
-                    np.meshgrid(lat_grid_vals, lon_grid_vals)
-                ).T.reshape(-1, 2)
-                add_coord = True
-                for val in matrix_vals_to_check:
-                    if not val.tolist() in self._all_coords:
-                        add_coord = False
-                        break
-                if add_coord:
-                    self._jet_centres.append(coord)
-
     def _calc_jet_centre_points(self):
         """
         Will return a list of the coordinates for all jet-centre points
@@ -808,10 +770,10 @@ class JetStreamOccurenceAndCentreAlgorithm:
                 coord[1] + self._lon_resolution + 0.01,
                 self._lon_resolution,
             )
+            lon_grid_vals = lon_grid_vals % 360  # loop lon around
             matrix_vals_to_check = np.array(
                 np.meshgrid(lat_grid_vals, lon_grid_vals)
             ).T.reshape(-1, 2)
-            matrix_vals_to_check = matrix_vals_to_check % 360  # loop lon around
             add_coord = True
             for val_to_check in matrix_vals_to_check:
                 if (

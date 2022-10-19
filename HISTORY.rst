@@ -3,8 +3,9 @@ History
 =======
 
 
-0.0.12-beta (2022-10-19)
+0.0.12 (2022-10-19)
 -------------------------
+* fix kuang to work for southern hemisphere as well
 * add workflow for publish to PyPi
 
 

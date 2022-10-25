@@ -7,6 +7,8 @@ History
 -------------------------
 * update Pena Ortiz so that it returns monthyear and by day local wind maxima
 * remove make_empty_local_wind_maxima_data func
+* Fix CI 
+* Add millibars to get_all_hPa_list
 
 
 0.0.13 (2022-10-19)

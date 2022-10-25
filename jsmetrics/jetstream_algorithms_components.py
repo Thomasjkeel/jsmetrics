@@ -422,27 +422,6 @@ class JetStreamCoreIdentificationAlgorithm:
         return self._lat_ws_slice.values
 
 
-def make_empty_local_wind_maxima_data_var(data):
-    """
-    Will add a new data var of zeros for local wind maxima
-
-    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
-
-    """
-    data["local_wind_maxima"] = (
-        ("time", "plev", "lat", "lon"),
-        np.zeros(
-            (
-                len(data["time"]),
-                len(data["plev"]),
-                len(data["lat"]),
-                len(data["lon"]),
-            )
-        ),
-    )
-    return data
-
-
 def get_empty_local_wind_maxima_data(data):
     """
     Will add a new data var of zeros for local wind maxima

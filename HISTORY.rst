@@ -2,6 +2,13 @@
 History
 =======
 
+
+0.0.14-alpha (2022-10-25)
+-------------------------
+* update Pena Ortiz so that it returns monthyear and by day local wind maxima
+* remove make_empty_local_wind_maxima_data func
+
+
 0.0.13 (2022-10-19)
 -------------------------
 * fox workflow for publish to PyPi and TestPyPi

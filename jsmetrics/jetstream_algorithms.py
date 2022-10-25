@@ -158,26 +158,21 @@ def penaortiz_et_al_2013(data):
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
     #  Step 2. Make array of zeros for local wind maxima location algorithm
-    local_wind_maxima = (
-        jetstream_algorithms_components.get_empty_local_wind_maxima_data(data)
-    )
+    output = jetstream_algorithms_components.get_empty_local_wind_maxima_data(data)
 
     #  Step 3. Find local wind maxima locations by day
-    local_wind_maxima_by_timeunit = local_wind_maxima.groupby("time").map(
+    output = output.groupby("time").map(
         jetstream_algorithms_components.get_local_wind_maxima_by_timeunit
     )
 
     #  Step 4. Get number of days per month with local wind maxima
-    local_wind_maxima_timeunits_by_monthyear = jetstream_algorithms_components.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(
-        local_wind_maxima_by_timeunit
-    )
-    local_wind_maxima_timeunits_by_monthyear = (
-        local_wind_maxima_timeunits_by_monthyear.to_dataset()
+    output = jetstream_algorithms_components.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(
+        output
     )
 
-    #  Step 5. Sort into PJ and STJ
+    #  Step 5. Sort monthyear data into PJ and STJ
     output = jetstream_algorithms_components.subdivide_local_wind_maxima_into_stj_pfj(
-        local_wind_maxima_timeunits_by_monthyear
+        output
     )
     return output
 

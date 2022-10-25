@@ -116,7 +116,7 @@ class TestPenaOrtiz2013(unittest.TestCase):
         )
         empty_local_wind_data = test_func(self.data)
         self.assertEqual(empty_local_wind_data.max(), 0)
-        self.assertTrue("local_wind_maxima" in empty_local_wind_data)
+        self.assertTrue("local_wind_maxima_by_monthyear" in empty_local_wind_data)
 
     def test_get_local_wind_maxima_by_timeunit(self):
         test_func = jetstream_algorithms_components.get_local_wind_maxima_by_timeunit

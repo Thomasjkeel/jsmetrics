@@ -557,7 +557,7 @@ def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
         Data containing zeros array of (time, plev, lat, lon) dimensions
 
     """
-    data = (
+    data["local_wind_maxima_by_monthyear"] = (
         data["local_wind_maxima"]
         .resample(time="MS")
         .sum()
@@ -566,7 +566,9 @@ def get_number_of_timeunits_per_monthyear_with_local_wind_maxima(data):
     return data
 
 
-def subdivide_local_wind_maxima_into_stj_pfj(data):
+def subdivide_local_wind_maxima_into_stj_pfj(
+    data, local_wind_column_name="local_wind_maxima_by_monthyear"
+):
     """
     Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on pg. 2709.
 
@@ -584,20 +586,20 @@ def subdivide_local_wind_maxima_into_stj_pfj(data):
     """
     DJF_STJ = data.sel(
         monthyear=data.monthyear.dt.month.isin([1, 2, 12]), lat=slice(15, 40)
-    )["local_wind_maxima"]
+    )[local_wind_column_name]
     MAM_SON_PFJ = data.sel(
         monthyear=data.monthyear.dt.month.isin([3, 4, 5, 9, 10, 11]),
         lat=slice(10, 70),
-    )["local_wind_maxima"]
+    )[local_wind_column_name]
     JJA_PFJ = data.sel(
         monthyear=data.monthyear.dt.month.isin([6, 7, 8]), lat=slice(30, 60)
-    )["local_wind_maxima"]
-    SH_STJ = data.sel(lat=slice(-40, -15))["local_wind_maxima"]
-    SH_PFJ = data.sel(lat=slice(-70, -41))["local_wind_maxima"]
+    )[local_wind_column_name]
+    SH_STJ = data.sel(lat=slice(-40, -15))[local_wind_column_name]
+    SH_PFJ = data.sel(lat=slice(-70, -41))[local_wind_column_name]
     data["polar_front_jet"] = xr.merge([MAM_SON_PFJ, JJA_PFJ, SH_PFJ])[
-        "local_wind_maxima"
+        local_wind_column_name
     ]
-    data["subtropical_jet"] = xr.merge([DJF_STJ, SH_STJ])["local_wind_maxima"]
+    data["subtropical_jet"] = xr.merge([DJF_STJ, SH_STJ])[local_wind_column_name]
     return data
 
 

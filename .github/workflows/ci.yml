@@ -23,7 +23,7 @@ jobs:
           conda run -n jsmet pip install pytest-cov
       - name: Run tests with pytest-cov
         run: |
-          conda run -n jsmet python-m pytest --cov
+          conda run -n jsmet python -m pytest --cov
 
 #       - name: Coveralls
 #         uses: AndreMiras/coveralls-python-action@develop

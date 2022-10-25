@@ -106,8 +106,9 @@ def get_all_hPa_list(data):
         data["plev"].units != "Pa"
         and data["plev"].units != "hPa"
         and data["plev"].units != "mbar"
+        and data["plev"].units != "millibars"
     ):
-        raise ValueError("Plev units need to be mbar, Pa or hPa")
+        raise ValueError("Plev units need to be mbar, millibars, Pa or hPa")
 
     plevs = np.array([plev for plev in data["plev"]])
     if data["plev"].units == "Pa":

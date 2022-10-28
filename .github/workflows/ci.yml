@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies
         run: |
           conda env create -f environment.yml
-          conda run -n jsmet pip install pytest==6.2.4
+          conda run -n jsmet pip install pytest
           conda run -n jsmet pip install parameterized==0.8.1
           conda run -n jsmet pip install pytest-cov
       - name: Run tests with pytest-cov

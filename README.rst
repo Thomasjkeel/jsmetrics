@@ -5,7 +5,7 @@ jsmetrics: Jet-stream metrics and algorithms
 |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 ------------------------------------------------------------------------------
 
-This is jsmetrics, a library containing implementations of various metrics and algorithms for identifying or characterising jet-streams
+This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.
 *WORK IN PROGRESS*
 
@@ -14,7 +14,7 @@ written in Python and built from xarray.
 
 .. WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
-The philosophy of this module was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
+The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
 - time period
 - time unit (i.e. day, month, DJF)
@@ -125,7 +125,7 @@ Installation
 .. .. _Contributing Guidelines: https://github.com/Thomasjkeel/jsmetrics/blob/master/.github/CONTRIBUTING.rst
 
 
-.. How to cite this library
+.. How to cite this package
 .. ------------------------
 .. If you wish to cite `jsmetrics` in a research publication, we kindly ask that you use the bibliographical reference information available through `Zenodo`
 

@@ -17,7 +17,6 @@ flake8
 parameterized
 pre_commit
 pylint
-py
 pytest
 pytest-cov
 # Documentation and examples

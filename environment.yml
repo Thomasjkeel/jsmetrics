@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - default
 dependencies:
-  - python>=3.7
+  - python>=3.8
   - xarray>=0.20.2
   - cf_xarray>=0.6.1
   - numpy>=1.20
@@ -23,7 +23,7 @@ dependencies:
   - bump2version
   - pre_commit
   - pylint
-  - pytest>=7.1
+  - pytest
   - pip
   - pip:
       - shapely

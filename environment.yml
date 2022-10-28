@@ -22,6 +22,7 @@ dependencies:
   - flake8
   - bump2version
   - pre_commit
+  - py
   - pylint
   - pytest
   - pip

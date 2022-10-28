@@ -23,7 +23,7 @@ dependencies:
   - bump2version
   - pre_commit
   - pylint
-  - pytest
+  - pytest>=7.1
   - pip
   - pip:
       - shapely

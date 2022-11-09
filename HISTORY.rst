@@ -8,6 +8,7 @@ History
 * Fix get_3_latitudes_and_speed_around_max_ws to work with isel around lon
 * Fix barnes polvani parabola to deal with nan values
 * skipna=True for calc_latitude_and_speed_where_max_ws
+* Barnes and Simpson mean over longitude for jet lat 
 
 
 0.0.14 (2022-11-09)

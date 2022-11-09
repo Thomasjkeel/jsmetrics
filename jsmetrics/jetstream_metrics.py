@@ -468,7 +468,11 @@ def bracegirdle_et_al_2018(data):
         if data["plev"].count() == 1:
             data = data.isel(plev=0)
         else:
-            raise ValueError("Please subset to one plev value for this metric")
+            print(
+                "this metric was meant to only work on one plev, please subset plev to one value"
+            )
+            data = data.mean("plev")
+            # raise ValueError("Please subset to one plev value for this metric")
 
     #  Step 1. Make seasonal & annual climatologies
     seasonal_climatology = jetstream_metrics_components.get_climatology(data, "season")

@@ -429,7 +429,7 @@ def calc_latitude_and_speed_where_max_ws(data, var_col="ua"):
     jet_speeds : int or float
         Speed at latitude of maximum windspeed
     """
-    inds = data[var_col].argmax(dim="lat", skipna=False)
+    inds = data[var_col].argmax(dim="lat", skipna=True)
     jet_lats = data[var_col]["lat"][inds]
     data["jet_lat"] = ((inds.dims), jet_lats.data)
     data["jet_speed"] = data[var_col].max(dim="lat")
@@ -782,8 +782,6 @@ def get_3_latitudes_and_speed_around_max_ws(row):
     """
     assert "lat" in row.coords, "'lat' needs to be in data.coords"
 
-    lat_resolution = float(row["lat"][1] - row["lat"][0])
-    lat_min, lat_max = float(row["lat"].min()), float(row["lat"].max())
     max_lat, _ = get_latitude_and_speed_where_max_ws(row)
     if np.isnan(max_lat):
         # occurs when no data in slice
@@ -791,11 +789,20 @@ def get_3_latitudes_and_speed_around_max_ws(row):
             np.array([np.nan, np.nan, np.nan], dtype="float64"),
             np.array([np.nan, np.nan, np.nan], dtype="float64"),
         )
-    neighbouring_lats = get_3_neighbouring_coord_values(max_lat, lat_resolution)
-    neighbouring_lats = neighbouring_lats[
-        (neighbouring_lats >= lat_min) & (neighbouring_lats <= lat_max)
-    ]
-    neighbouring_speeds = row.sel(lat=neighbouring_lats).data
+    max_lat_argwhere = int(np.argwhere(row["lat"].data == max_lat))
+
+    if max_lat_argwhere == 0:
+        neighbouring_lats_ind = [max_lat_argwhere, max_lat_argwhere + 1]
+    elif max_lat_argwhere == row["lat"].data.size - 1:
+        neighbouring_lats_ind = [max_lat_argwhere - 1, max_lat_argwhere]
+    else:
+        neighbouring_lats_ind = [
+            max_lat_argwhere - 1,
+            max_lat_argwhere,
+            max_lat_argwhere + 1,
+        ]
+    neighbouring_lats = row["lat"].isel(lat=neighbouring_lats_ind).data
+    neighbouring_speeds = row.isel(lat=neighbouring_lats_ind).data
 
     #  add nan value to edges
     if len(neighbouring_lats) < 3:
@@ -930,9 +937,10 @@ def get_jet_lat_and_speed_using_parabola_by_day(data_row):
     data_row : xarray.DataArray
         Data of single time unit containing jet_lat and jet_speed variables
     """
-    fitted_parabola = fit_parabola(data_row["lat"].data, data_row["ua"].data)
+    data_ua = abs(data_row["ua"].dropna(dim="lat"))
+    fitted_parabola = fit_parabola(data_ua["lat"].data, data_ua.data)
     ind_of_max = fitted_parabola.argmax()
-    data_row["jet_lat"] = float(data_row.lat[ind_of_max])
+    data_row["jet_lat"] = float(data_ua.lat[ind_of_max])
     data_row["jet_speed"] = fitted_parabola.max()
     return data_row
 

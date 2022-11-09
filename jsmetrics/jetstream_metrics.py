@@ -431,8 +431,8 @@ def grise_polvani_2017(data):
     #  Step 4. Assign scaled max lats back to data
     output = data.assign(
         {
-            "max_lat_0.01": (("time"), scaled_max_lats),
-            "max_speed_0.01": (("time"), scaled_max_ws),
+            "jet_lat": (("time"), scaled_max_lats),
+            "jet_speed": (("time"), scaled_max_ws),
         }
     )
     return output

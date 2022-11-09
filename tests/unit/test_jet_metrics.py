@@ -280,7 +280,7 @@ class TestBarnesSimpson2017(unittest.TestCase):
     def test_metric(self):
         test_func = jetstream_metrics.barnes_simpson_2017
         result = test_func(self.data)
-        self.assertEqual(round(float(result["jet_lat"].mean()), 5), 42.79215)
+        self.assertEqual(round(float(result["jet_lat"].mean()), 5), 46.43962)
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 86.99976)
 
 

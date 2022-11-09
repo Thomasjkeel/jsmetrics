@@ -937,9 +937,10 @@ def get_jet_lat_and_speed_using_parabola_by_day(data_row):
     data_row : xarray.DataArray
         Data of single time unit containing jet_lat and jet_speed variables
     """
-    fitted_parabola = fit_parabola(data_row["lat"].data, data_row["ua"].data)
+    data_ua = abs(data_row["ua"].dropna(dim="lat"))
+    fitted_parabola = fit_parabola(data_ua["lat"].data, data_ua.data)
     ind_of_max = fitted_parabola.argmax()
-    data_row["jet_lat"] = float(data_row.lat[ind_of_max])
+    data_row["jet_lat"] = float(data_ua.lat[ind_of_max])
     data_row["jet_speed"] = fitted_parabola.max()
     return data_row
 

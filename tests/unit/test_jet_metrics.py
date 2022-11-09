@@ -236,11 +236,9 @@ class TestBarnesPolvani2015(unittest.TestCase):
 
     def test_metric(self):
         result = jetstream_metrics.barnes_polvani_2015(self.data)
-        self.assertEqual(float(result["jet_lat"].mean()), 42.5)
-        self.assertEqual(result["jet_lat"].max(), 42.5)
-        self.assertEqual(result["jet_lat"].min(), 42.5)
-        self.assertEqual(round(float(result["jet_speed"].max()), 5), 14.76429)
-        self.assertEqual(round(float(result["jet_speed"].min()), 5), 14.06167)
+        self.assertEqual(float(result["jet_lat"].mean()), 43.25)
+        self.assertEqual(round(float(result["jet_speed"].max()), 5), 14.31842)
+        self.assertEqual(round(float(result["jet_speed"].min()), 5), 13.52321)
 
 
 class TestFrancisVavrus2015(unittest.TestCase):

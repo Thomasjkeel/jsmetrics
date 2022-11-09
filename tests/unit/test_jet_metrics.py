@@ -236,11 +236,9 @@ class TestBarnesPolvani2015(unittest.TestCase):
 
     def test_metric(self):
         result = jetstream_metrics.barnes_polvani_2015(self.data)
-        self.assertEqual(float(result["jet_lat"].mean()), 42.5)
-        self.assertEqual(result["jet_lat"].max(), 42.5)
-        self.assertEqual(result["jet_lat"].min(), 42.5)
-        self.assertEqual(round(float(result["jet_speed"].max()), 5), 14.76429)
-        self.assertEqual(round(float(result["jet_speed"].min()), 5), 14.06167)
+        self.assertEqual(float(result["jet_lat"].mean()), 43.25)
+        self.assertEqual(round(float(result["jet_speed"].max()), 5), 14.31842)
+        self.assertEqual(round(float(result["jet_speed"].min()), 5), 13.52321)
 
 
 class TestFrancisVavrus2015(unittest.TestCase):
@@ -282,8 +280,8 @@ class TestBarnesSimpson2017(unittest.TestCase):
     def test_metric(self):
         test_func = jetstream_metrics.barnes_simpson_2017
         result = test_func(self.data)
-        self.assertEqual(round(float(result["jet_lat"].mean()), 5), 42.79215)
-        self.assertEqual(round(float(result["jet_speed"].max()), 5), 86.99976)
+        self.assertEqual(round(float(result["jet_lat"].mean()), 5), 36.25)
+        self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.05004)
 
 
 class TestGrisePolvani2017(unittest.TestCase):
@@ -293,9 +291,9 @@ class TestGrisePolvani2017(unittest.TestCase):
     def test_metric(self):
         result = jetstream_metrics.grise_polvani_2017(self.data)
         jetstream_metrics.grise_polvani_2017(self.data["ua"])
-        self.assertEqual(float(result["max_lat_0.01"].min()), 35.38)
-        self.assertEqual(float(result["max_lat_0.01"].max()), 36.41)
-        self.assertEqual(round(float(result["max_speed_0.01"].max()), 5), 22.92644)
+        self.assertEqual(float(result["jet_lat"].min()), 35.38)
+        self.assertEqual(float(result["jet_lat"].max()), 36.41)
+        self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.92644)
 
 
 class TestCeppi2018(unittest.TestCase):

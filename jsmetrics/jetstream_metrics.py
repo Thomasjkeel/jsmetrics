@@ -374,6 +374,16 @@ def barnes_simpson_2017(data):
      output : xarray.Dataset
          Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
     """
+    if "plev" in data.dims:
+        if data["plev"].count() == 1:
+            data = data.isel(plev=0)
+        else:
+            print(
+                "this metric was meant to only work on one plev, please subset plev to one value"
+            )
+            data = data.mean("plev")
+            # raise ValueError("Please subset to one plev value for this metric")
+    data = data.mean("lon")
     data = data.resample(time="10D").mean()
     data = jetstream_metrics_components.calc_latitude_and_speed_where_max_ws(data)
     data = data.rename_dims({"time": "10_day_average"})
@@ -431,8 +441,8 @@ def grise_polvani_2017(data):
     #  Step 4. Assign scaled max lats back to data
     output = data.assign(
         {
-            "max_lat_0.01": (("time"), scaled_max_lats),
-            "max_speed_0.01": (("time"), scaled_max_ws),
+            "jet_lat": (("time"), scaled_max_lats),
+            "jet_speed": (("time"), scaled_max_ws),
         }
     )
     return output

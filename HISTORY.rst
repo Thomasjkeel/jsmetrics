@@ -6,6 +6,7 @@ History
 -------------------------
 * rename max_lat_0.01 to jet_lat for Grise & Polvani 2017
 * Fix get_3_latitudes_and_speed_around_max_ws to work with isel around lon
+* Fix barnes polvani parabola to deal with nan values
 
 
 0.0.14 (2022-11-09)

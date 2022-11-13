@@ -429,12 +429,17 @@ def grise_polvani_2017(data):
     scaled_max_lats = []
     scaled_max_ws = []
     for max_lat_and_ws in all_max_lats_and_ws:
-        (
-            scaled_max_lat,
-            scaled_ws,
-        ) = jetstream_metrics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
-            max_lat_and_ws, lat_resolution=0.01
-        )
+        try:
+            (
+                scaled_max_lat,
+                scaled_ws,
+            ) = jetstream_metrics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
+                max_lat_and_ws, lat_resolution=0.01
+            )
+        except Exception as e:
+            print(e)
+            scaled_max_lat = np.nan
+            scaled_ws = np.nan
         scaled_max_lats.append(scaled_max_lat)
         scaled_max_ws.append(scaled_ws)
 

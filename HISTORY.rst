@@ -2,7 +2,7 @@
 History
 =======
 
-0.0.17 (2022-11-09)
+0.0.17 (2022-13-09)
 -------------------------
 * add try and except for Grise & Polvani 2017 to account for missing vals
 

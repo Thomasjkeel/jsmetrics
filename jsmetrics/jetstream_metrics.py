@@ -585,3 +585,28 @@ def kerr_et_al_2020(data):
         jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
     )
     return output
+
+
+def blackport_fyfe_2022(data):
+    """
+    Described in MATERIALS AND METHODS section of this paper under: 'Metrics and analysis':
+    The speed and latitude of the North Atlantic jet stream are calculated similar to a previous analysis (Barnes & Polvani 2015),
+    with some minor differences. At each longitude between 60°W and 0°, we fit a parabola around the seasonal averaged,
+    maximum U700 speeds found between 15°N and 75°N. The parabola is fit around the two points on either side of the maximum (five points in total).
+    The maximum of the resulting function is the jet speed, and the latitude of this maximum is the jet latitude. If the maximum speed occurs
+    at the northern or southern edge, then the speed and latitude are ignored for that longitude.
+
+    Method from Blackport & Fyfe (2022) https://www.science.org/doi/10.1126/sciadv.abn3112
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component windspeed at one plev
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing jet-stream latitude by longitude and smoothed jet_latitude
+    """
+    output = data
+    return output

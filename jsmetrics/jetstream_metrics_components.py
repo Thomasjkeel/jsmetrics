@@ -941,8 +941,7 @@ def get_jet_lat_and_speed_using_parabola_by_day(data_row):
     try:
         # Try and fit the parabola
         _, coeff = fit_parabola(data_ua["lat"].data, data_ua.data)
-    except Exception as e:
-        print(e)
+    except RuntimeError:
         coeff = [np.nan, np.nan]
     # Check that the max lat is not above the min or max (problem with using a parabola)
     if coeff[0] < data_row["lat"].min() or coeff[0] > data_row["lat"].max():

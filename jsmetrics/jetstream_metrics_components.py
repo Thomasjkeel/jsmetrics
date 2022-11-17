@@ -938,10 +938,9 @@ def get_jet_lat_and_speed_using_parabola_by_day(data_row):
         Data of single time unit containing jet_lat and jet_speed variables
     """
     data_ua = abs(data_row["ua"].dropna(dim="lat"))
-    fitted_parabola = fit_parabola(data_ua["lat"].data, data_ua.data)
-    ind_of_max = fitted_parabola.argmax()
-    data_row["jet_lat"] = float(data_ua.lat[ind_of_max])
-    data_row["jet_speed"] = fitted_parabola.max()
+    fitted_parabola, coeff = fit_parabola(data_ua["lat"].data, data_ua.data)
+    data_row["jet_lat"] = float(coeff[0])
+    data_row["jet_speed"] = float(coeff[1])
     return data_row
 
 
@@ -951,18 +950,18 @@ def fit_parabola(x, y):
 
     Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     """
-    coeff, cov = scipy.optimize.curve_fit(parabola, x, y)
+    coeff, _ = scipy.optimize.curve_fit(parabola, x, y)
     fitted_parabola = parabola(x, coeff[0], coeff[1], coeff[2])
-    return fitted_parabola
+    return fitted_parabola, coeff
 
 
-def parabola(x, a, b, c):
+def parabola(x, lat, speed, a):
     """
     Parabola.
 
     Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     """
-    return a * x**2 + b * x + c
+    return -a * (x - lat) ** 2 + speed
 
 
 def calc_meridional_circulation_index(data):

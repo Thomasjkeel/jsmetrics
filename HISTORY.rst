@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.18 (2022-17-09)
+-------------------------
+* update fitted parabola func for Barnes & Polvani 2015
+
+
 0.0.17 (2022-13-09)
 -------------------------
 * add try and except for Grise & Polvani 2017 to account for missing vals

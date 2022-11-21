@@ -266,4 +266,13 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "10.1029/2020JD032735",
     },
+    "BlackportFyfe2022_NorthAtlantic": {
+        "variables": ["ua"],
+        "coords": {"plev": [70000, 70000], "lat": [15, 75], "lon": [300, 360]},
+        "plev_units": "Pa",
+        "metric": jetstream_metrics.blackport_fyfe_2022,
+        "name": "Blackport & Fyfe 2022",
+        "description": "",
+        "doi": "10.1126/sciadv.abn3112",
+    },
 }

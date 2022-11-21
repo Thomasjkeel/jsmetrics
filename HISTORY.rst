@@ -2,6 +2,12 @@
 History
 =======
 
+0.0.18 (2022-21-09)
+-------------------------
+* update fitted parabola func for Barnes & Polvani 2015
+* Add Blackport & Fyfe 2022
+* update Barnes & Simpson 2017 to drop all NaN slices
+
 0.0.17 (2022-13-09)
 -------------------------
 * add try and except for Grise & Polvani 2017 to account for missing vals

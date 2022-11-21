@@ -2,7 +2,7 @@
 History
 =======
 
-0.0.18 (2022-17-09)
+0.0.18 (2022-21-09)
 -------------------------
 * update fitted parabola func for Barnes & Polvani 2015
 * Add Blackport & Fyfe 2022

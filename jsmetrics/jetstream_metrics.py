@@ -385,6 +385,8 @@ def barnes_simpson_2017(data):
             # raise ValueError("Please subset to one plev value for this metric")
     data = data.mean("lon")
     data = data.resample(time="10D").mean()
+    #  Drop all NaN slices
+    data = data.dropna("time")
     data = jetstream_metrics_components.calc_latitude_and_speed_where_max_ws(data)
     data = data.rename_dims({"time": "10_day_average"})
     return data

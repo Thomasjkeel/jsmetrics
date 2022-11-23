@@ -172,7 +172,7 @@ def penaortiz_et_al_2013(data):
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
     #  Step 2. Make array of zeros for local wind maxima location algorithm
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
     output = jetstream_algorithms_components.get_empty_local_wind_maxima_data(data)
 

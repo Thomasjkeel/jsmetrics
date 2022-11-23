@@ -204,8 +204,15 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
             raise ValueError("Please subset to one plev value for algorithm")
 
     # Step 1. Run Jet-stream Occurence and Centre Algorithm
-    output = data.groupby("time").map(
-        jetstream_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day,
-        (occurence_ws_threshold,),
-    )
+    if data["time"].size == 1:
+        output = (
+            jetstream_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day(
+                data
+            )
+        )
+    else:
+        output = data.groupby("time").map(
+            jetstream_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day,
+            (occurence_ws_threshold,),
+        )
     return output

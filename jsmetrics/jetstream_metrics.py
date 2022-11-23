@@ -40,7 +40,14 @@ def archer_caldeira_2008(data):
         Data containing mass weighted average ws, mass flux weighted pressure and latitude
     """
     #  Step 1. Get monthly means
-    mon_mean = data.groupby("time.month").mean()
+    if data["time"].size == 1:
+        print(
+            "Warning: only found one time step, and the time coord is being renamed month."
+        )
+        mon_mean = data.assign_coords(month=data["time"].dt.month)
+        mon_mean = mon_mean.expand_dims("month")
+    else:
+        mon_mean = data.groupby("time.month").mean()
 
     #  Step 2. Calculate wind-speed from u and v-component wind
     mon_mean["ws"] = windspeed_utils.get_resultant_wind(mon_mean["ua"], mon_mean["va"])
@@ -273,9 +280,16 @@ def barnes_polvani_2015(data):
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2. Get jet lat and jet speed values
-    output = zonal_mean.groupby("time").map(
-        jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day
-    )
+    if zonal_mean["time"].size == 1:
+        output = (
+            jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day(
+                zonal_mean
+            )
+        )
+    else:
+        output = zonal_mean.groupby("time").map(
+            jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day
+        )
     return output
 
 
@@ -341,6 +355,8 @@ def cattiaux_et_al_2016(data):
         data = data.to_dataset()
 
     #  Step 1. get zonal average for each timestep
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
     data["zonal_mean_zg_30Nto70N"] = (
         data["zg"].sel(lat=slice(30, 70)).groupby("time").mean(...)
     )
@@ -349,11 +365,18 @@ def cattiaux_et_al_2016(data):
     circle_50N = spatial_utils.get_latitude_circle_linestring(50, 0, 360)
 
     #  Step 3. Loop over each time step and calculate sinuosity
-    output = data.groupby("time").map(
-        lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
-            row, circle_50N
+    if data["time"].size == 1:
+        # shrink dims again
+        data = data.isel(time=0)
+        output = jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
+            data, circle_50N
         )
-    )
+    else:
+        output = data.groupby("time").map(
+            lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
+                row, circle_50N
+            )
+        )
     return output
 
 
@@ -382,8 +405,9 @@ def barnes_simpson_2017(data):
                 "this metric was meant to only work on one plev, please subset plev to one value"
             )
             data = data.mean("plev")
-            # raise ValueError("Please subset to one plev value for this metric")
     data = data.mean("lon")
+    if data["time"].size == 1 and "time" not in data.dims:
+        data = data.expand_dims("time")
     data = data.resample(time="10D").mean()
     #  Drop all NaN slices
     data = data.dropna("time")
@@ -413,6 +437,10 @@ def grise_polvani_2017(data):
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
+
+    # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
 
     # Step 1. Calculate zonal-mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
@@ -490,6 +518,10 @@ def bracegirdle_et_al_2018(data):
             )
             data = data.mean("plev")
             # raise ValueError("Please subset to one plev value for this metric")
+
+    # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
 
     #  Step 1. Make seasonal & annual climatologies
     seasonal_climatology = jetstream_metrics_components.get_climatology(data, "season")
@@ -583,9 +615,14 @@ def kerr_et_al_2020(data):
     """
     if data["plev"].size != 1:
         raise IndexError("Please subset your data to have one pressure level (plev)")
-    output = data.groupby("time").map(
-        jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
-    )
+    if data["time"].size == 1:
+        output = jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
+            data
+        )
+    else:
+        output = data.groupby("time").map(
+            jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
+        )
     return output
 
 

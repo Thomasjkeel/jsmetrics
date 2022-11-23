@@ -142,6 +142,7 @@ Project To-Do's
         - TO SOLVE: subsetting longitude if it wraps around 0-360
         - ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
         - ADD: pint (see: https://pint.readthedocs.io/en/stable/)
+        - ADD: var names to details_for_all_metrics
 
 Credits
 -------------

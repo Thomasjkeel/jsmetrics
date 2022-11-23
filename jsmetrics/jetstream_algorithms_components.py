@@ -77,7 +77,7 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
     weighted_average_ws : xarray.Dataset
         Data containing weighted average windspeed values
     """
-    if not isinstance(all_plevs_hPa, (list, np.ndarray)):
+    if not isinstance(all_plevs_hPa, (np.ndarray)):
         raise TypeError("array of pressure level needs to be a list or numpy.array")
     weighted_average_ws = sum_weighted_ws * (
         1 / (all_plevs_hPa.max() - all_plevs_hPa.min())
@@ -423,7 +423,9 @@ class JetStreamCoreIdentificationAlgorithm:
         return self._lat_ws_slice.values
 
 
-def get_empty_local_wind_maxima_data(data):
+def get_empty_local_wind_maxima_data(
+    data, expected_dims=("time", "plev", "lat", "lon")
+):
     """
     Will add a new data var of zeros for local wind maxima
 
@@ -439,16 +441,13 @@ def get_empty_local_wind_maxima_data(data):
     data : xarray.Dataset
         Data containing zeros array of (time, plev, lat, lon) dimensions
     """
+    expected_dims_set = set(expected_dims)
+    data_dim_set = set(data.dims)
+    actual_dims = tuple(expected_dims_set.intersection(data_dim_set))
+    dim_sizes = tuple(len(data[coord]) for coord in actual_dims)
     data["local_wind_maxima"] = (
-        ("time", "plev", "lat", "lon"),
-        np.zeros(
-            (
-                len(data["time"]),
-                len(data["plev"]),
-                len(data["lat"]),
-                len(data["lon"]),
-            )
-        ),
+        actual_dims,
+        np.zeros(dim_sizes),
     )
     return data
 
@@ -700,26 +699,6 @@ class JetStreamOccurenceAndCentreAlgorithm:
                         self._all_coords.append(
                             [float(sub_val["lat"]), float(sub_val["lon"])]
                         )
-
-    def _get_all_lats_of_jet_centre_for_search(self):
-        """
-        Will get all latitudes that 'may' be a jet-stream centre-point
-        i.e. where latitude appears at least three times for 3*3 lat/lon grid.
-        NOTE: speeds up calculation as less values are searched through
-        """
-        # Step 1. look for all latitudes with at least 3 occurences - 3*3 grid
-        self._get_all_latitudes_that_occur_at_least_three_times()
-        # Step 2. Check if the latitudes above and below the lats with 3 values
-        # are present i.e. Y component of for 3*3
-        self._get_all_latitudes_available_in_3by3_grid()
-
-    def _get_all_latitudes_that_occur_at_least_three_times(self):
-        """
-        Get all latitudes that occur at least three times.
-        """
-        for lat in self._count_lats.items():
-            if lat[1] >= 3:
-                self._lats_with_3.append(lat[0])
 
     def _get_all_latitudes_available_in_3by3_grid(self):
         """

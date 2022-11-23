@@ -31,7 +31,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-MAX_VARIABLES = 7
+MAX_VARIABLES_IN_METRIC_DETAIL_DICT = 7
 
 
 class TestMetricDetailsDict(unittest.TestCase):
@@ -45,7 +45,7 @@ class TestMetricDetailsDict(unittest.TestCase):
     def test_metric_dict_values(self):
         for metric in self.metric_details.values():
             self.assertIsInstance(metric, dict)
-            self.assertEqual(len(metric.keys()), MAX_VARIABLES)
+            self.assertEqual(len(metric.keys()), MAX_VARIABLES_IN_METRIC_DETAIL_DICT)
             self.assertListEqual(
                 list(metric.keys()),
                 [
@@ -63,7 +63,9 @@ class TestMetricDetailsDict(unittest.TestCase):
         for metric in self.metric_details.values():
             self.assertIsInstance(metric["variables"], list)
             self.assertGreaterEqual(len(metric["variables"]), 0)
-            self.assertLessEqual(len(metric["variables"]), MAX_VARIABLES)
+            self.assertLessEqual(
+                len(metric["variables"]), MAX_VARIABLES_IN_METRIC_DETAIL_DICT
+            )
 
     def test_metric_coords(self):
         for metric in self.metric_details.values():
@@ -88,6 +90,35 @@ class TestMetricDetailsDict(unittest.TestCase):
     def test_funcs(self):
         for metric in self.metric_details.values():
             self.assertTrue(callable(metric["metric"]))
+
+
+class TestMetricsOnOneDay(unittest.TestCase):
+    def setUp(self):
+        self.uvdata = set_up_test_uv_data()
+        self.uvdata = self.uvdata.isel(time=0)
+        self.zgdata = set_up_test_zg_data()
+        self.zgdata = self.zgdata.isel(time=0)
+        self.metric_details = details_for_all_metrics.METRIC_DETAILS
+
+    def test_all_metrics(self):
+        for metric_name in self.metric_details.keys():
+            uvdata = self.uvdata.copy(deep=True)
+            zgdata = self.zgdata.copy(deep=True)
+            # do not include w10 or bp13 as they have a time window requirement
+            if "Woollings2010" in metric_name or "BarnesPolvani2013" in metric_name:
+                try:
+                    self.metric_details[metric_name]["metric"](uvdata)
+                except ValueError:
+                    continue
+            if "Kuang2014" in metric_name or "Kerr2020" in metric_name:
+                self.metric_details[metric_name]["metric"](uvdata.isel(plev=0))
+                continue
+            if "zg" in self.metric_details[metric_name]["variables"]:
+                self.metric_details[metric_name]["metric"](zgdata.isel(plev=0))
+            else:
+                self.metric_details[metric_name]["metric"](uvdata)
+            # except Exception as e:
+            #     print(metric_name, e)
 
 
 class TestArcherCaldeira2008(unittest.TestCase):

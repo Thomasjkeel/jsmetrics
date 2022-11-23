@@ -10,7 +10,7 @@ import xarray as xr
 import collections
 import math
 import shapely.geometry
-import matplotlib
+import matplotlib.pyplot
 
 
 EARTH_RADIUS = 6371000.0  # m

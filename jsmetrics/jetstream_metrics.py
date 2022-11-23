@@ -355,6 +355,8 @@ def cattiaux_et_al_2016(data):
         data = data.to_dataset()
 
     #  Step 1. get zonal average for each timestep
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
     data["zonal_mean_zg_30Nto70N"] = (
         data["zg"].sel(lat=slice(30, 70)).groupby("time").mean(...)
     )
@@ -364,15 +366,16 @@ def cattiaux_et_al_2016(data):
 
     #  Step 3. Loop over each time step and calculate sinuosity
     if data["time"].size == 1:
+        # shrink dims again
+        data = data.isel(time=0)
         output = jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
             data, circle_50N
         )
-    else:
-        output = data.groupby("time").map(
-            lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
-                row, circle_50N
-            )
+    output = data.groupby("time").map(
+        lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
+            row, circle_50N
         )
+    )
     return output
 
 

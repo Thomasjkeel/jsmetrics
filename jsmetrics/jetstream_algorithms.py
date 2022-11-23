@@ -134,7 +134,8 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
     # Step 1. Run Jet-stream Core Idenfication Algorithm
     if data["time"].size == 1:
-        data = data.isel(time=0)
+        if "time" in data.dims:
+            data = data.isel(time=0)
         output = jetstream_algorithms_components.run_jet_core_algorithm_on_one_day(
             data, ws_core_threshold, ws_boundary_threshold
         )

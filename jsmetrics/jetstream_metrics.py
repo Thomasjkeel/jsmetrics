@@ -273,9 +273,16 @@ def barnes_polvani_2015(data):
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2. Get jet lat and jet speed values
-    output = zonal_mean.groupby("time").map(
-        jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day
-    )
+    if zonal_mean["time"].size == 1:
+        output = (
+            jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day(
+                zonal_mean
+            )
+        )
+    else:
+        output = zonal_mean.groupby("time").map(
+            jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day
+        )
     return output
 
 
@@ -349,11 +356,14 @@ def cattiaux_et_al_2016(data):
     circle_50N = spatial_utils.get_latitude_circle_linestring(50, 0, 360)
 
     #  Step 3. Loop over each time step and calculate sinuosity
-    output = data.groupby("time").map(
-        lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
-            row, circle_50N
+    if data["time"].size == 1:
+        jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(data, circle_50N)
+    else:
+        output = data.groupby("time").map(
+            lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
+                row, circle_50N
+            )
         )
-    )
     return output
 
 
@@ -583,9 +593,14 @@ def kerr_et_al_2020(data):
     """
     if data["plev"].size != 1:
         raise IndexError("Please subset your data to have one pressure level (plev)")
-    output = data.groupby("time").map(
-        jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
-    )
+    if data["time"].size == 1:
+        output = jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
+            data
+        )
+    else:
+        output = data.groupby("time").map(
+            jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
+        )
     return output
 
 

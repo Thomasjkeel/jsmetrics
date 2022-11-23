@@ -371,11 +371,12 @@ def cattiaux_et_al_2016(data):
         output = jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
             data, circle_50N
         )
-    output = data.groupby("time").map(
-        lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
-            row, circle_50N
+    else:
+        output = data.groupby("time").map(
+            lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
+                row, circle_50N
+            )
         )
-    )
     return output
 
 

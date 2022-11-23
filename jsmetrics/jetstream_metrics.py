@@ -40,7 +40,13 @@ def archer_caldeira_2008(data):
         Data containing mass weighted average ws, mass flux weighted pressure and latitude
     """
     #  Step 1. Get monthly means
-    mon_mean = data.groupby("time.month").mean()
+    if data["time"].size == 1:
+        print(
+            "Warning: only found one time step, so this may not produce a montly mean"
+        )
+        mon_mean = data
+    else:
+        mon_mean = data.groupby("time.month").mean()
 
     #  Step 2. Calculate wind-speed from u and v-component wind
     mon_mean["ws"] = windspeed_utils.get_resultant_wind(mon_mean["ua"], mon_mean["va"])
@@ -357,7 +363,9 @@ def cattiaux_et_al_2016(data):
 
     #  Step 3. Loop over each time step and calculate sinuosity
     if data["time"].size == 1:
-        jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(data, circle_50N)
+        output = jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
+            data, circle_50N
+        )
     else:
         output = data.groupby("time").map(
             lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(

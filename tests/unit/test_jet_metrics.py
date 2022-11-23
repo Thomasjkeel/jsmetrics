@@ -90,6 +90,20 @@ class TestMetricDetailsDict(unittest.TestCase):
             self.assertTrue(callable(metric["metric"]))
 
 
+class TestMetricsOnOneDay(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_uv_data()
+        self.data = self.data.isel(time=0)
+        self.metric_details = details_for_all_metrics.METRIC_DETAILS
+
+    def test_all_metrics(self):
+        for metric_name in self.metric_details.keys():
+            # try:
+            self.metric_details[metric_name]["metric"](self.data)
+            # except Exception as e:
+            #     print(metric_name, e)
+
+
 class TestArcherCaldeira2008(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()

@@ -42,9 +42,10 @@ def archer_caldeira_2008(data):
     #  Step 1. Get monthly means
     if data["time"].size == 1:
         print(
-            "Warning: only found one time step, so this may not produce a montly mean"
+            "Warning: only found one time step, and the time coord is being renamed month."
         )
-        mon_mean = data
+        mon_mean = data.assign_coords(month=data["time"].dt.month)
+        mon_mean = mon_mean.expand_dims("month")
     else:
         mon_mean = data.groupby("time.month").mean()
 

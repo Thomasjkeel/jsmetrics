@@ -102,20 +102,21 @@ class TestMetricsOnOneDay(unittest.TestCase):
 
     def test_all_metrics(self):
         for metric_name in self.metric_details.keys():
+            uvdata = self.uvdata.copy(deep=True)
+            zgdata = self.zgdata.copy(deep=True)
             # do not include w10 or bp13 as they have a time window requirement
             if "Woollings2010" in metric_name or "BarnesPolvani2013" in metric_name:
                 try:
-                    self.metric_details[metric_name]["metric"](self.uvdata)
+                    self.metric_details[metric_name]["metric"](uvdata)
                 except ValueError:
                     continue
-            if "Kuang2014" in metric_name:
-                self.metric_details[metric_name]["metric"](self.uvdata.isel(plev=0))
+            if "Kuang2014" in metric_name or "Kerr2020" in metric_name:
+                self.metric_details[metric_name]["metric"](uvdata.isel(plev=0))
                 continue
             if "zg" in self.metric_details[metric_name]["variables"]:
-                self.metric_details[metric_name]["metric"](self.zgdata.isel(plev=0))
-
+                self.metric_details[metric_name]["metric"](zgdata.isel(plev=0))
             else:
-                self.metric_details[metric_name]["metric"](self.uvdata)
+                self.metric_details[metric_name]["metric"](uvdata)
             # except Exception as e:
             #     print(metric_name, e)
 

@@ -519,6 +519,10 @@ def bracegirdle_et_al_2018(data):
             data = data.mean("plev")
             # raise ValueError("Please subset to one plev value for this metric")
 
+    # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
+
     #  Step 1. Make seasonal & annual climatologies
     seasonal_climatology = jetstream_metrics_components.get_climatology(data, "season")
     annual_climatology = jetstream_metrics_components.get_climatology(data, "year")

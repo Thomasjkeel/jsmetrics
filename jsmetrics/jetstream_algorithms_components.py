@@ -423,7 +423,9 @@ class JetStreamCoreIdentificationAlgorithm:
         return self._lat_ws_slice.values
 
 
-def get_empty_local_wind_maxima_data(data):
+def get_empty_local_wind_maxima_data(
+    data, expected_dims=("time", "plev", "lat", "lon")
+):
     """
     Will add a new data var of zeros for local wind maxima
 
@@ -439,16 +441,13 @@ def get_empty_local_wind_maxima_data(data):
     data : xarray.Dataset
         Data containing zeros array of (time, plev, lat, lon) dimensions
     """
+    expected_dims_set = set(expected_dims)
+    data_dim_set = set(data.dims)
+    actual_dims = tuple(expected_dims_set.intersection(data_dim_set))
+    dim_sizes = tuple(len(data[coord]) for coord in actual_dims)
     data["local_wind_maxima"] = (
-        ("time", "plev", "lat", "lon"),
-        np.zeros(
-            (
-                len(data["time"]),
-                len(data["plev"]),
-                len(data["lat"]),
-                len(data["lon"]),
-            )
-        ),
+        actual_dims,
+        np.zeros(dim_sizes),
     )
     return data
 

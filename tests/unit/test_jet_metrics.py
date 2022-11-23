@@ -98,8 +98,18 @@ class TestMetricsOnOneDay(unittest.TestCase):
 
     def test_all_metrics(self):
         for metric_name in self.metric_details.keys():
+            data = self.data.copy(deep=False)
+            # do not include w10 or bp13 as they have a time window requirement
+            if (
+                metric_name == "Woollings2010_NorthAtlantic"
+                or "BarnesPolvani2013" in metric_name
+            ):
+                try:
+                    self.metric_details[metric_name]["metric"](data)
+                except ValueError:
+                    continue
             # try:
-            self.metric_details[metric_name]["metric"](self.data)
+            self.metric_details[metric_name]["metric"](data)
             # except Exception as e:
             #     print(metric_name, e)
 

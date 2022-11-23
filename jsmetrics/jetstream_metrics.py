@@ -405,8 +405,9 @@ def barnes_simpson_2017(data):
                 "this metric was meant to only work on one plev, please subset plev to one value"
             )
             data = data.mean("plev")
-            # raise ValueError("Please subset to one plev value for this metric")
     data = data.mean("lon")
+    if data["time"].size == 1 and "time" not in data.dims:
+        data = data.expand_dims("time")
     data = data.resample(time="10D").mean()
     #  Drop all NaN slices
     data = data.dropna("time")

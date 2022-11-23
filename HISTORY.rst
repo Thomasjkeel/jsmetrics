@@ -7,6 +7,7 @@ History
 * update fitted parabola func for Barnes & Polvani 2015
 * Add Blackport & Fyfe 2022
 * update Barnes & Simpson 2017 to drop all NaN slices
+* update to check for more than one time step for time groupby methods
 
 0.0.17 (2022-13-09)
 -------------------------

@@ -438,6 +438,10 @@ def grise_polvani_2017(data):
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
 
+    # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
+
     # Step 1. Calculate zonal-mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 

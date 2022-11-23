@@ -172,15 +172,14 @@ def penaortiz_et_al_2013(data):
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
     #  Step 2. Make array of zeros for local wind maxima location algorithm
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
     output = jetstream_algorithms_components.get_empty_local_wind_maxima_data(data)
 
     #  Step 3. Find local wind maxima locations by day
-    if output["time"].size == 1:
-        output = jetstream_algorithms_components.get_local_wind_maxima_by_timeunit(data)
-    else:
-        output = output.groupby("time").map(
-            jetstream_algorithms_components.get_local_wind_maxima_by_timeunit
-        )
+    output = output.groupby("time").map(
+        jetstream_algorithms_components.get_local_wind_maxima_by_timeunit
+    )
 
     #  Step 4. Get number of days per month with local wind maxima
     output = jetstream_algorithms_components.get_number_of_timeunits_per_monthyear_with_local_wind_maxima(

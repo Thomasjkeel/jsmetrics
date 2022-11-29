@@ -28,6 +28,12 @@ All of these can be handled user-side.
         As such each can be used seperately and this allows users to rebuilt aspects of a methodology (e.g. to replace a filtering method)
 
 
+Installation 
+-------------
+.. code-block:: bash
+    
+    pip install jsmetrics
+    
 Documentation
 -------------
 The official documentation is at https://jsmetrics.readthedocs.io/en/latest/  
@@ -106,12 +112,6 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
         also Local Wave Activity (maybe martineu?)
         Gallego
 
-
-Installation 
--------------
-.. code-block:: bash
-    
-    pip install jsmetrics
 
 .. Contributing
 .. ------------

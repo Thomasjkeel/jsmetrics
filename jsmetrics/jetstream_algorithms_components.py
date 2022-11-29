@@ -737,6 +737,8 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ).T.reshape(-1, 2)
             add_coord = True
             for val_to_check in matrix_vals_to_check:
+                if val_to_check[-1] not in self.output_data["lon"]:
+                    continue
                 if (
                     float(
                         self.output_data.sel(lat=val_to_check[0], lon=val_to_check[1])[

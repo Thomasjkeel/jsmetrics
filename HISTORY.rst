@@ -2,7 +2,12 @@
 History
 =======
 
-0.0.18 (2022-21-09)
+0.0.19-alpha (2022-24-09)
+-------------------------
+* Update JetStreamOccurenceAndCentreAlgorithm to skip longitude values outside lon range in data
+
+
+0.0.18 (2022-23-09)
 -------------------------
 * update fitted parabola func for Barnes & Polvani 2015
 * Add Blackport & Fyfe 2022

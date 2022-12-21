@@ -2,12 +2,13 @@
 History
 =======
 
-0.0.19-alpha (2022-24-09)
+0.0.19-alpha (2022-12-21)
 -------------------------
 * Update JetStreamOccurenceAndCentreAlgorithm to skip longitude values outside lon range in data
+* Make changes to work with Shapely version 1.8/2.0. Means changes to Cattiaux et al. 2016
 
 
-0.0.18 (2022-23-09)
+0.0.18 (2022-11-23)
 -------------------------
 * update fitted parabola func for Barnes & Polvani 2015
 * Add Blackport & Fyfe 2022
@@ -15,7 +16,7 @@ History
 * update to check for more than one time step for time groupby methods
 * add test to check all metrics when input is one time step
 
-0.0.17 (2022-13-09)
+0.0.17 (2022-11-13)
 -------------------------
 * add try and except for Grise & Polvani 2017 to account for missing vals
 

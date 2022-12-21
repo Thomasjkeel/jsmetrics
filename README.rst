@@ -133,8 +133,8 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 Project To-Do's
 ---------------
         - WRITE AND CLEAN-UP README
+        - WRITE a 'I would like to calculate... Table with which statistics you can get from which metrics, latitude, speed, width etc.'
         - FINISH verification notebook.
-        - WRITE plan to finish metrics.
         - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
         - TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
                 - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  

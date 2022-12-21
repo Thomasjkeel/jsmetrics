@@ -15,6 +15,7 @@ import numpy as np
 import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
+import scipy.optimize
 from . import data_utils, spatial_utils
 
 # docs

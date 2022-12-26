@@ -16,9 +16,9 @@ written in Python and built from xarray.
 
 The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
-        - time period
-        - time unit (i.e. day, month, DJF)
-        - latitude/longitude resolution
+        - time period,
+        - time unit (i.e. day, month, DJF),
+        - latitude/longitude resolution,
         - latitude/longitude region (where possible),
         - pressure level height,
         All of these can be handled user-side.

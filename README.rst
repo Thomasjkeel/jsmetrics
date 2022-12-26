@@ -137,7 +137,6 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 Project To-Do's
 ---------------
-        - WRITE AND CLEAN-UP README
         - WRITE a 'I would like to calculate... Table with which statistics you can get from which metrics, latitude, speed, width etc.'
         - FINISH verification notebook.
         - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)

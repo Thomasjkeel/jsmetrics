@@ -16,12 +16,12 @@ written in Python and built from xarray.
 
 The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
-- time period
-- time unit (i.e. day, month, DJF)
-- lat/lon resolution
-- latitude/longitude region (where possible),
-- pressure level region
-All of these can be handled user-side.
+        - time period,
+        - time unit (i.e. day, month, DJF),
+        - latitude/longitude resolution,
+        - latitude/longitude region (where possible),
+        - pressure level height,
+        All of these can be handled user-side.
 
 .. 
         ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
@@ -60,16 +60,21 @@ Usage
 
 DISCLAIMER
 -------------
-I have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
-In some cases I have used a different dataset to the one used in the paper they originate from or with different data resolution. 
-Further, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
-This project is very much a work in progress, so contributors are very welcome [TODO]
+We have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
+However, in some cases, we have chosen to exclude or alter parts of the methodology which reduce the resolution of the output (i.e. grouping into season or region) with the hope to preserve the parts of the method that specifically isolate a characteristics of the jet-stream at any inputted scale.
+Again, any further subsetting is passed onto the user.
+*If data input is at a daily resolution, part of the output should also be daily resolution.*  
+
+Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.   
+
+Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
+This project is very much a work in progress, so contributors are very welcome.
 
 You can find details of each metric or algorithm here: `all metrics`_.
 
-Where you can find my working-out:
-- I have included all of my working out in jupyter-notebooks available at: ... [TODO] (warning: these notebooks have not been formatted nicely) 
-- I am currently creating a verification notebook available at: ... [TODO] 
+Where you can find my working-out (coming soon):
+- I am hoping to make available all of my working out in jupyter-notebooks available soon (warning: these notebooks are not formatted) 
+- I am also currently creating a verification notebook. 
 
 
 Metrics & Algorithms
@@ -91,7 +96,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    `Barnes & Polvani 2013 <https://doi.org/10.1175/JCLI-D-12-00536.1>`_            To verify           `Pena-Ortiz et al. 2013 <http://doi.wiley.com/10.1002/jgrd.50305>`_             To verify      
    `Screen & Simmonds 2013 <http://doi.wiley.com/10.1002/grl.50174>`_              In progress*        `Kuang et al. 2014 <http://link.springer.com/10.1007/s00704-013-0994-x>`_       To verify            
    `Barnes & Polvani 2015 <https://doi.org/10.1175/JCLI-D-14-00589.1>`_            To verify           `Francis & Vavrus 2015 <https://doi.org/10.1088/1748-9326/10/1/014005>`_        Complete            
-   `Cattiaux et al. 2016 <https://doi.wiley.com/10.1002/2016GL070309>`_            To verify           `Barnes & Simpson 2017 <https://doi.org/10.1175/JCLI-D-17-0299.1>`_             To verify            
+   `Cattiaux et al. 2016 <https://doi.wiley.com/10.1002/2016GL070309>`_            To verify           `Barnes & Simpson 2017 <https://doi.org/10.1175/JCLI-D-17-0299.1>`_             Complete            
    `Chenoli et al. 2017 <http://link.springer.com/10.1007/s00382-016-3102-y>`_     In progress         `Grise & Polvani 2017 <https://doi.org/10.1175/JCLI-D-16-0849.1>`_              Complete                        
    `Molnos et al. 2017  <https://doi.org/10.5194/esd-8-75-2017>`_                  In progress*        `Adam et al. 2018 <https://doi.org/10.5194/gmd-11-4339-2018>`_                  To start            
    `Bracegirdle et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0320.1>`_           Complete            `Ceppi et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0323.1>`_                 To verify            
@@ -104,7 +109,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 * == help needed
 
-.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
+.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/details_for_all_metrics.py
 .. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 .. 
@@ -132,9 +137,8 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 Project To-Do's
 ---------------
-        - WRITE AND CLEAN-UP README
+        - WRITE a 'I would like to calculate... Table with which statistics you can get from which metrics, latitude, speed, width etc.'
         - FINISH verification notebook.
-        - WRITE plan to finish metrics.
         - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
         - TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
                 - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  

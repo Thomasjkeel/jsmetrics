@@ -18,9 +18,9 @@ The philosophy of this package was to keep the methodology of each metric as clo
 *but* to not limit the method to a given:
         - time period
         - time unit (i.e. day, month, DJF)
-        - lat/lon resolution
+        - latitude/longitude resolution
         - latitude/longitude region (where possible),
-        - pressure level region
+        - pressure level height,
         All of these can be handled user-side.
 
 .. 

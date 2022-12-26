@@ -65,8 +65,9 @@ However, in some cases, we have chosen to exclude or alter parts of the methodol
 Again, any further subsetting is passed onto the user.
 *If data input is at a daily resolution, part of the output should also be daily resolution.*  
 
-Also note that, the data we used to test these metrics may have a different lat/lon resolution to the one the methodology had been developed with. 
-Further, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
+Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.   
+
+Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 This project is very much a work in progress, so contributors are very welcome.
 
 You can find details of each metric or algorithm here: `all metrics`_.

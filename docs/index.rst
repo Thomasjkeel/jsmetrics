@@ -137,3 +137,15 @@ The layout and content of this project and was inspired by xclim (https://github
 which contains other climate indices and metrics.
 
 This package was created with Cookiecutter and the audreyr/cookiecutter-pypackage project template.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   installation
+   usage
+   metrics
+   contributing
+   authors
+   history
+   statement

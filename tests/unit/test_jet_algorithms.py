@@ -14,8 +14,8 @@ import unittest
 import xarray as xr
 import numpy as np
 from jsmetrics import (
-    jetstream_algorithms,
-    jetstream_algorithms_components,
+    jet_core_algorithms,
+    jet_core_algorithms_components,
 )
 from . import set_up_test_uv_data
 
@@ -30,7 +30,7 @@ class TestKoch2006(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jetstream_algorithms.koch_et_al_2006
+        tested_func = jet_core_algorithms.koch_et_al_2006
         result = tested_func(self.data, ws_threshold=8)
         # check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
@@ -39,7 +39,7 @@ class TestKoch2006(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(new_data))
 
     def test_get_all_hPa_list(self):
-        tested_func = jetstream_algorithms_components.get_all_hPa_list
+        tested_func = jet_core_algorithms_components.get_all_hPa_list
         # make sure it returns an array
         self.assertIsInstance(tested_func(self.data), (np.ndarray))
         # make sure it takes errors wrong types
@@ -52,7 +52,7 @@ class TestKoch2006(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(new_data2))
 
     def test_sum_weighted_ws(self):
-        tested_func = jetstream_algorithms_components.get_sum_weighted_ws
+        tested_func = jet_core_algorithms_components.get_sum_weighted_ws
         self.assertRaises(TypeError, lambda: tested_func(self.data, 1))
         new_data = self.data.rename({"plev": "pl"})
         self.assertRaises(KeyError, lambda: tested_func(new_data, [10, 20]))
@@ -61,10 +61,10 @@ class TestKoch2006(unittest.TestCase):
         self.assertGreater(sum_weighted.max(), 0)
 
     def test_weighted_average_ws(self):
-        tested_func = jetstream_algorithms_components.get_weighted_average_ws
+        tested_func = jet_core_algorithms_components.get_weighted_average_ws
 
         self.assertRaises(TypeError, lambda: tested_func(self.data, 1))
-        sum_weighted = jetstream_algorithms_components.get_sum_weighted_ws(
+        sum_weighted = jet_core_algorithms_components.get_sum_weighted_ws(
             self.data, [0, 100]
         )
         weighted_av = tested_func(sum_weighted, np.array([0, 100]))
@@ -81,7 +81,7 @@ class TestSchiemann2009(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jetstream_algorithms.schiemann_et_al_2009
+        tested_func = jet_core_algorithms.schiemann_et_al_2009
         sub_data = self.data.isel(time=slice(0, 1), lon=slice(0, 30))
         result = tested_func(sub_data)
         self.assertTrue(result)
@@ -92,7 +92,7 @@ class TestManney2011(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        test_func = jetstream_algorithms.manney_et_al_2011
+        test_func = jet_core_algorithms.manney_et_al_2011
         # NOTE: this metric is a generator
         subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
         res = test_func(subset_data.sel(plev=25000))
@@ -104,20 +104,20 @@ class TestPenaOrtiz2013(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jetstream_algorithms.penaortiz_et_al_2013
+        tested_func = jet_core_algorithms.penaortiz_et_al_2013
         subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
         res = tested_func(subset_data)
         self.assertTrue("polar_front_jet" in res)
         self.assertEqual(res["subtropical_jet"].max(), 1)
 
     def test_get_empty_local_wind_maxima(self):
-        test_func = jetstream_algorithms_components.get_empty_local_wind_maxima_data
+        test_func = jet_core_algorithms_components.get_empty_local_wind_maxima_data
         empty_local_wind_data = test_func(self.data)
         self.assertEqual(empty_local_wind_data.max(), 0)
         self.assertTrue("local_wind_maxima" in empty_local_wind_data)
 
     def test_get_local_wind_maxima_by_timeunit(self):
-        test_func = jetstream_algorithms_components.get_local_wind_maxima_by_timeunit
+        test_func = jet_core_algorithms_components.get_local_wind_maxima_by_timeunit
         self.assertRaises(ValueError, lambda: test_func(self.data.isel(time=0)))
 
 
@@ -126,7 +126,7 @@ class TestKuang2014(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jetstream_algorithms.kuang_et_al_2014
+        tested_func = jet_core_algorithms.kuang_et_al_2014
         lon_data = self.data.sel(plev=50000).isel(time=slice(0, 2))
         result = tested_func(lon_data)
         self.assertEqual(result["jet_ocurrence1_jet_centre2"].max(), 2)
@@ -141,9 +141,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_repr(self):
-        tested_alg = (
-            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm
-        )
+        tested_alg = jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm
         test_data = self.data.isel(time=0, lon=0)
         jetCoreAlg = tested_alg(test_data)
 
@@ -152,9 +150,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         repr(jetCoreAlg)
 
     def test_ws_thresholds(self):
-        tested_alg = (
-            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm
-        )
+        tested_alg = jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm
         self.assertRaises(ValueError, lambda: tested_alg(self.data))
         test_data = self.data.isel(time=0, lon=0)
         self.assertRaises(ValueError, lambda: tested_alg(test_data, -10, 10))
@@ -163,9 +159,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_alg(test_data, 10, 10))
 
     def test_inner_funcs(self):
-        tested_alg = (
-            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm
-        )
+        tested_alg = jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm
         test_data = self.data.isel(time=0, lon=0)
         result = tested_alg(test_data)
         result.run()
@@ -181,7 +175,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
     def test_classmethod(self):
         tested_alg = (
-            jetstream_algorithms_components.JetStreamCoreIdentificationAlgorithm.run_algorithm
+            jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm.run_algorithm
         )
         test_data = self.data.isel(time=0, lon=0)
         result = tested_alg(test_data)
@@ -193,7 +187,7 @@ class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data().isel(time=slice(0, 1))
         self.tested_alg = (
-            jetstream_algorithms_components.JetStreamOccurenceAndCentreAlgorithm
+            jet_core_algorithms_components.JetStreamOccurenceAndCentreAlgorithm
         )
 
     def test_ws_thresholds(self):

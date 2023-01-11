@@ -18,8 +18,6 @@ __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
-# this is a change
-
 
 def koch_et_al_2006(data, ws_threshold=30):
     """

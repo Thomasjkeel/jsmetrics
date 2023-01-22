@@ -6,9 +6,7 @@
 
 # imports
 import unittest
-
-# from parameterized import parameterized
-from jsmetrics import data_utils
+from jsmetrics.utils import data_utils
 from . import (
     set_up_test_uv_data,
 )

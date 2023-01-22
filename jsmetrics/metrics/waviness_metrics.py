@@ -8,7 +8,8 @@
 
 # imports
 import xarray
-from jsmetrics import spatial_utils, waviness_metrics_components
+from . import waviness_metrics_components
+from jsmetrics.utils import spatial_utils
 from jsmetrics.core.check_data import sort_xarray_data_coords
 
 # docs

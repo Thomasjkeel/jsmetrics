@@ -8,7 +8,7 @@
 
 # imports
 import unittest
-from jsmetrics import windspeed_utils
+from jsmetrics.utils import windspeed_utils
 from . import set_up_test_uv_data
 
 

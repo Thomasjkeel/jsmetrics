@@ -11,9 +11,9 @@
 """
 
 # imports
+from jsmetrics.utils import data_utils, windspeed_utils
 import numpy as np
 import xarray as xr
-from . import data_utils, windspeed_utils
 
 # docs
 __author__ = "Thomas Keel"

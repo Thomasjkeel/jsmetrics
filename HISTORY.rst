@@ -3,8 +3,9 @@ History
 =======
 
 
-0.0.19 (2023-01-22)
+0.1.0 (2023-01-22)
 -------------------------
+* MAJOR UPDATE: re-organise the structure of the package into core, metrics and utils
 * rename jet metrics, waviness and jet core algorithm files
 * add wrappers to check data is xarray and is sorted in descending order (in core/check_data.py)
 * move waviness metrics to new file

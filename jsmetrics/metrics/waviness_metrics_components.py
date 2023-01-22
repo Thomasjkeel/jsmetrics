@@ -11,7 +11,7 @@
 """
 
 # imports
-from jsmetrics import spatial_utils
+from jsmetrics.utils import spatial_utils
 
 
 # docs

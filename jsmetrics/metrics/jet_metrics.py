@@ -13,7 +13,7 @@
 import numpy as np
 import xarray
 from . import jet_metrics_components
-from . import windspeed_utils, spatial_utils
+from jsmetrics.utils import spatial_utils, windspeed_utils
 from jsmetrics.core.check_data import sort_xarray_data_coords
 
 # docs

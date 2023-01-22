@@ -1,6 +1,6 @@
 # imports
 import unittest
-from jsmetrics import waviness_metrics
+from jsmetrics.metrics import waviness_metrics
 from . import set_up_test_uv_data, set_up_test_zg_data
 
 # docs

@@ -16,7 +16,7 @@ import xarray as xr
 import scipy.fftpack
 import scipy.interpolate
 import scipy.optimize
-from jsmetrics import data_utils
+from jsmetrics.utils import data_utils
 
 # docs
 __author__ = "Thomas Keel"

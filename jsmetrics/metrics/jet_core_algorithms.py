@@ -9,7 +9,7 @@
 
 # imports
 from . import jet_core_algorithms_components
-from . import windspeed_utils
+from jsmetrics.utils import windspeed_utils
 from jsmetrics.core.check_data import sort_xarray_data_coords
 
 # docs

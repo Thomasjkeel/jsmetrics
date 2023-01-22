@@ -9,12 +9,12 @@
 
 # imports
 import unittest
+from jsmetrics.metrics import jet_core_algorithms
 
 # from parameterized import parameterized
 import xarray as xr
 import numpy as np
-from jsmetrics import (
-    jet_core_algorithms,
+from jsmetrics.metrics import (
     jet_core_algorithms_components,
 )
 from . import set_up_test_uv_data

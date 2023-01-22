@@ -2,9 +2,13 @@
 History
 =======
 
-0.0.19-beta (2023-01-22)
+
+0.0.19 (2023-01-22)
 -------------------------
 * rename jet metrics, waviness and jet core algorithm files
+* add wrappers to check data is xarray and is sorted in descending order (in core/check_data.py)
+* move waviness metrics to new file
+* Update appropriate tests
 
 
 0.0.19-alpha (2022-12-21)

@@ -30,7 +30,7 @@ Metrics
 * == help needed
 
 
-.. automodule:: jsmetrics.jetstream_metrics
+.. automodule:: jsmetrics.metrics.jet_metrics
    :members:
    :imported-members:
    :undoc-members:
@@ -41,7 +41,7 @@ Metrics
 Metric sub-components
 ---------------------
 
-.. automodule:: jsmetrics.jetstream_metrics_components
+.. automodule:: jsmetrics.metrics.jet_metrics_components
    :members:
    :imported-members:
    :undoc-members:
@@ -65,7 +65,7 @@ Algorithms
 
 * == help needed
 
-.. automodule:: jsmetrics.jetstream_algorithms
+.. automodule:: jsmetrics.metrics.jet_core_algorithms
    :members:
    :imported-members:
    :undoc-members:
@@ -75,7 +75,7 @@ Algorithms
 Algorithm sub-components
 ------------------------
 
-.. automodule:: jsmetrics.jetstream_algorithms_components
+.. automodule:: jsmetrics.metrics.jet_core_algorithms_components
    :members:
    :imported-members:
    :undoc-members:
@@ -88,7 +88,7 @@ Utils
 Data Utils
 ------------------------
 
-.. automodule:: jsmetrics.data_utils
+.. automodule:: jsmetrics.utils.data_utils
    :members:
    :imported-members:
    :undoc-members:
@@ -99,7 +99,7 @@ Data Utils
 Spatial Utils
 ------------------------
 
-.. automodule:: jsmetrics.spatial_utils
+.. automodule:: jsmetrics.utils.spatial_utils
    :members:
    :imported-members:
    :undoc-members:
@@ -110,7 +110,7 @@ Spatial Utils
 Windspeed Utils
 ------------------------
 
-.. automodule:: jsmetrics.windspeed_utils
+.. automodule:: jsmetrics.utils.windspeed_utils
    :members:
    :imported-members:
    :undoc-members:

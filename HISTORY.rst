@@ -3,7 +3,7 @@ History
 =======
 
 
-0.0.19 (2023-01-22)
+0.1.0 (2023-01-22)
 -------------------------
 * MAJOR UPDATE: re-organise the structure of the package into core, metrics and utils
 * rename jet metrics, waviness and jet core algorithm files

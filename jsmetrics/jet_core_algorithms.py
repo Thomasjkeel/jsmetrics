@@ -8,10 +8,9 @@
 """
 
 # imports
-# import numpy as np
-# import xarray
 from . import jet_core_algorithms_components
 from . import windspeed_utils
+from jsmetrics.core.check_data import sort_xarray_data_coords
 
 # docs
 __author__ = "Thomas Keel"
@@ -19,6 +18,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
     """
     Calculates the weighted average windspeed and applies a threshold to identify the jet.
@@ -69,6 +69,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     return weighted_average_ws
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def schiemann_et_al_2009(data):
     """
     An occurrence-based jet climatology. Uses three rules: wind-vector wind-speed is local maxima is above 30 m/s and u-wind is more than 0 m/s.
@@ -103,6 +104,7 @@ def schiemann_et_al_2009(data):
     return output
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     """
     Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
@@ -148,6 +150,7 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     return output
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def penaortiz_et_al_2013(data):
     """
     Will calculate local wind maxima days per monthyear
@@ -191,6 +194,7 @@ def penaortiz_et_al_2013(data):
     return output
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
     """
     Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).

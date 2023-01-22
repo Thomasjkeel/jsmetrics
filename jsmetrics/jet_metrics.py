@@ -14,6 +14,7 @@ import numpy as np
 import xarray
 from . import jet_metrics_components
 from . import windspeed_utils, spatial_utils
+from jsmetrics.core.check_data import sort_xarray_data_coords
 
 # docs
 __author__ = "Thomas Keel"
@@ -21,6 +22,7 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def archer_caldeira_2008(data):
     """
     Calculates the mass-weighted average wind speed, mass flux weighted pressure
@@ -83,6 +85,7 @@ def archer_caldeira_2008(data):
     return output
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     """
     Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woollings et al. (2010).
@@ -149,6 +152,7 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     return output
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     """
     Pressure weighted u-component wind then gets low-pass lanczos filtered (10-day, 41 weights) and 0.01 quadratic function applied
@@ -234,26 +238,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     return output
 
 
-# def screen_and_simmonds_2013(data):
-#     """
-#     Slightly adjusted in Screen and Simmonds 2014
-#     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
-
-#     Parameters
-#     ----------
-#     data : xarray.Dataset
-#         Data containing geopotential height (zg)
-
-#     Returns
-#     ----------
-#     data : xarray.Dataset
-#         Data containing u- and v- component wind speed
-#     """
-#     if isinstance(data, xarray.DataArray):
-#         data = data.to_dataset()
-#     return data
-
-
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_polvani_2015(data):
     """
     Calculates the jet speed and jet position by fitting a parabola around the
@@ -287,91 +272,7 @@ def barnes_polvani_2015(data):
     return output
 
 
-def francis_vavrus_2015(data):
-    """
-    Calculates the Meridional Circulation Index (MCI). When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
-    from the South (North).
-
-    Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing u- and v-component wind
-
-    Returns
-    ----------
-    data : xarray.Dataset
-        Data containing MCI
-    """
-    #  Step 1. calculating Meridional Circulation Index from data
-    data["mci"] = jet_metrics_components.calc_meridional_circulation_index(data)
-
-    #  Step 2. TODO Calculate anomaly from season
-    # maybe TODO: Step 3 Calculate anomaly from season
-    return data
-
-
-# def local_wave_activity(data):
-#     """
-#     Introduced by Huang and Nakamura for Potential Vorticity, but then used by:
-#     Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA
-#     with 500 hPa zg instead of pv
-
-#     Parameters
-#     ----------
-#     data : xarray.Dataset
-#         Data containing geopotential height (zg)
-#     """
-#     return data
-
-
-def cattiaux_et_al_2016(data):
-    """
-    A sinousity metric for upper-air flow.
-    Calculates, for each time unit, the value of the selected isohypse precisely corresponds to the Z500 average over 30–70∘N .
-    Then uses the perimeter of this isohype and around 50 .N to calculate sinuosity
-    Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
-
-    NOTE: Currently takes a moderate amount of time i.e. 2 seconds per 100 time unit with 1 plev on AMD Ryzen 5 3600 6-core processor
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing geopotential height (zg)
-
-    Returns
-    ----------
-    data : xarray.Dataset
-        Data containing sinuosity of zonal mean by each time unit
-    """
-    if isinstance(data, xarray.DataArray):
-        data = data.to_dataset()
-
-    #  Step 1. get zonal average for each timestep
-    if data["time"].size == 1:
-        data = data.expand_dims("time")
-    data["zonal_mean_zg_30Nto70N"] = (
-        data["zg"].sel(lat=slice(30, 70)).groupby("time").mean(...)
-    )
-
-    #  Step 2. Get latitude circle of 50 N
-    circle_50N = spatial_utils.get_latitude_circle_linestring(50, 0, 360)
-
-    #  Step 3. Loop over each time step and calculate sinuosity
-    if data["time"].size == 1:
-        # shrink dims again
-        data = data.isel(time=0)
-        output = jet_metrics_components.get_sinuosity_of_zonal_mean_zg(data, circle_50N)
-    else:
-        output = data.groupby("time").map(
-            lambda row: jet_metrics_components.get_sinuosity_of_zonal_mean_zg(
-                row, circle_50N
-            )
-        )
-    return output
-
-
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_simpson_2017(data):
     """
     "Time series of jet latitude and jet speed are defined as the latitude and speed of the 10-day-averaged
@@ -408,6 +309,7 @@ def barnes_simpson_2017(data):
     return data
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def grise_polvani_2017(data):
     """
     Calculates maximum latitude of jet-stream to 0.01 degree resolution each time unit
@@ -475,6 +377,7 @@ def grise_polvani_2017(data):
     return output
 
 
+# @sort_xarray_data_coords(coords=["lat", "lon"])
 # def molnos_et_al_2017(data):
 #     """
 #     Write function description
@@ -482,6 +385,7 @@ def grise_polvani_2017(data):
 #     return data
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def bracegirdle_et_al_2018(data):
     """
     Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal wind climatology.
@@ -549,6 +453,7 @@ def bracegirdle_et_al_2018(data):
     return output
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def ceppi_et_al_2018(data):
     """
     Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution
@@ -579,13 +484,7 @@ def ceppi_et_al_2018(data):
     return data
 
 
-# def rikus_2018(data):
-#     """
-#     Write function description
-#     """
-#     return data
-
-
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def kerr_et_al_2020(data):
     """
     Described in section 2.4.2 of paper. Defines the latitude of the jet-stream as where the
@@ -618,6 +517,7 @@ def kerr_et_al_2020(data):
     return output
 
 
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def blackport_fyfe_2022(data):
     """
     Described in MATERIALS AND METHODS section of this paper under: 'Metrics and analysis':

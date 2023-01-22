@@ -15,7 +15,7 @@ __status__ = "Development"
 
 import unittest
 import numpy as np
-from jsmetrics import spatial_utils
+from jsmetrics.utils import spatial_utils
 from . import set_up_test_uv_data, set_up_test_zg_data
 
 

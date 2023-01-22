@@ -12,7 +12,7 @@
 # imports
 import numpy as np
 import xarray
-from . import jetstream_metrics_components
+from . import jet_metrics_components
 from . import windspeed_utils, spatial_utils
 
 # docs
@@ -53,16 +53,14 @@ def archer_caldeira_2008(data):
     mon_mean["ws"] = windspeed_utils.get_resultant_wind(mon_mean["ua"], mon_mean["va"])
 
     #  Step 3. Calculate mass weighted average
-    mass_weighted_average = jetstream_metrics_components.calc_mass_weighted_average(
+    mass_weighted_average = jet_metrics_components.calc_mass_weighted_average(
         mon_mean, ws_col="ws"
     )
     mass_flux_weighted_pressure = (
-        jetstream_metrics_components.calc_mass_flux_weighted_pressure(
-            mon_mean, ws_col="ws"
-        )
+        jet_metrics_components.calc_mass_flux_weighted_pressure(mon_mean, ws_col="ws")
     )
     mass_flux_weighted_latitude = (
-        jetstream_metrics_components.calc_mass_flux_weighted_latitude(
+        jet_metrics_components.calc_mass_flux_weighted_latitude(
             mon_mean, lat_min=15, lat_max=75, ws_col="ws"
         )
     )
@@ -112,7 +110,7 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2: Apply n-day lancoz filter
-    lancoz_filtered_mean_data = jetstream_metrics_components.apply_lanczos_filter(
+    lancoz_filtered_mean_data = jet_metrics_components.apply_lanczos_filter(
         zonal_mean["ua"], filter_freq, window_size
     )
 
@@ -120,28 +118,26 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     max_lat_ws = np.array(
         list(
             map(
-                jetstream_metrics_components.get_latitude_and_speed_where_max_ws,
+                jet_metrics_components.get_latitude_and_speed_where_max_ws,
                 lancoz_filtered_mean_data[:],
             )
         )
     )
-    zonal_mean_lat_ws = jetstream_metrics_components.assign_jet_lat_and_speed_to_data(
+    zonal_mean_lat_ws = jet_metrics_components.assign_jet_lat_and_speed_to_data(
         zonal_mean, max_lat_ws
     )
     # Step 4: Make seasonal climatology
-    climatology = jetstream_metrics_components.get_climatology(
-        zonal_mean_lat_ws, "season"
-    )
+    climatology = jet_metrics_components.get_climatology(zonal_mean_lat_ws, "season")
 
     # Step 5: Apply low-freq fourier filter to both max lats and max ws
-    fourier_filtered_lats = jetstream_metrics_components.apply_low_freq_fourier_filter(
+    fourier_filtered_lats = jet_metrics_components.apply_low_freq_fourier_filter(
         climatology["jet_lat"].values, highest_freq_to_keep=2
     )
-    fourier_filtered_ws = jetstream_metrics_components.apply_low_freq_fourier_filter(
+    fourier_filtered_ws = jet_metrics_components.apply_low_freq_fourier_filter(
         climatology["jet_speed"].values, highest_freq_to_keep=2
     )
     time_dim = climatology["jet_speed"].dims[0]
-    output = jetstream_metrics_components.assign_filtered_lats_and_ws_to_data(
+    output = jet_metrics_components.assign_filtered_lats_and_ws_to_data(
         zonal_mean_lat_ws,
         fourier_filtered_lats.real,
         fourier_filtered_ws.real,
@@ -175,11 +171,11 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
         Data containing values for z_lat, z_spd, z_width for jet-stream latitude, speed and width
     """
     #  Step 1. Get pressure-weighted u-component wind
-    pressure_weighted_ua = jetstream_metrics_components.calc_mass_weighted_average(
+    pressure_weighted_ua = jet_metrics_components.calc_mass_weighted_average(
         data, ws_col="ua"
     )
     #  Step 2. Filter pressure-weighted u-component wind with low-pass Lanczos filter
-    filtered_pressure_weighted_ua = jetstream_metrics_components.apply_lanczos_filter(
+    filtered_pressure_weighted_ua = jet_metrics_components.apply_lanczos_filter(
         pressure_weighted_ua,
         filter_freq=filter_freq,
         window_size=window_size,
@@ -192,7 +188,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     all_max_lats_and_ws = np.array(
         list(
             map(
-                jetstream_metrics_components.get_3_latitudes_and_speed_around_max_ws,
+                jet_metrics_components.get_3_latitudes_and_speed_around_max_ws,
                 zonal_mean["ua"],
             )
         )
@@ -206,7 +202,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
             (
                 scaled_max_lat,
                 scaled_ws,
-            ) = jetstream_metrics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
+            ) = jet_metrics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
                 max_lat_and_ws, lat_resolution=0.01
             )
             scaled_max_lats.append(scaled_max_lat)
@@ -219,7 +215,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     max_lats = all_max_lats_and_ws[::, 0, 1]
     jet_widths = list(
         map(
-            lambda zm, la, wa: jetstream_metrics_components.calc_jet_width_for_one_day(
+            lambda zm, la, wa: jet_metrics_components.calc_jet_width_for_one_day(
                 zm, la, wa
             ),
             zonal_mean["ua"],
@@ -281,14 +277,12 @@ def barnes_polvani_2015(data):
 
     # Step 2. Get jet lat and jet speed values
     if zonal_mean["time"].size == 1:
-        output = (
-            jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day(
-                zonal_mean
-            )
+        output = jet_metrics_components.get_jet_lat_and_speed_using_parabola_by_day(
+            zonal_mean
         )
     else:
         output = zonal_mean.groupby("time").map(
-            jetstream_metrics_components.get_jet_lat_and_speed_using_parabola_by_day
+            jet_metrics_components.get_jet_lat_and_speed_using_parabola_by_day
         )
     return output
 
@@ -311,7 +305,7 @@ def francis_vavrus_2015(data):
         Data containing MCI
     """
     #  Step 1. calculating Meridional Circulation Index from data
-    data["mci"] = jetstream_metrics_components.calc_meridional_circulation_index(data)
+    data["mci"] = jet_metrics_components.calc_meridional_circulation_index(data)
 
     #  Step 2. TODO Calculate anomaly from season
     # maybe TODO: Step 3 Calculate anomaly from season
@@ -368,12 +362,10 @@ def cattiaux_et_al_2016(data):
     if data["time"].size == 1:
         # shrink dims again
         data = data.isel(time=0)
-        output = jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
-            data, circle_50N
-        )
+        output = jet_metrics_components.get_sinuosity_of_zonal_mean_zg(data, circle_50N)
     else:
         output = data.groupby("time").map(
-            lambda row: jetstream_metrics_components.get_sinuosity_of_zonal_mean_zg(
+            lambda row: jet_metrics_components.get_sinuosity_of_zonal_mean_zg(
                 row, circle_50N
             )
         )
@@ -411,7 +403,7 @@ def barnes_simpson_2017(data):
     data = data.resample(time="10D").mean()
     #  Drop all NaN slices
     data = data.dropna("time")
-    data = jetstream_metrics_components.calc_latitude_and_speed_where_max_ws(data)
+    data = jet_metrics_components.calc_latitude_and_speed_where_max_ws(data)
     data = data.rename_dims({"time": "10_day_average"})
     return data
 
@@ -449,7 +441,7 @@ def grise_polvani_2017(data):
     all_max_lats_and_ws = np.array(
         list(
             map(
-                jetstream_metrics_components.get_3_latitudes_and_speed_around_max_ws,
+                jet_metrics_components.get_3_latitudes_and_speed_around_max_ws,
                 zonal_mean["ua"],
             )
         )
@@ -463,7 +455,7 @@ def grise_polvani_2017(data):
             (
                 scaled_max_lat,
                 scaled_ws,
-            ) = jetstream_metrics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
+            ) = jet_metrics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
                 max_lat_and_ws, lat_resolution=0.01
             )
         except Exception as e:
@@ -524,8 +516,8 @@ def bracegirdle_et_al_2018(data):
         data = data.expand_dims("time")
 
     #  Step 1. Make seasonal & annual climatologies
-    seasonal_climatology = jetstream_metrics_components.get_climatology(data, "season")
-    annual_climatology = jetstream_metrics_components.get_climatology(data, "year")
+    seasonal_climatology = jet_metrics_components.get_climatology(data, "season")
+    annual_climatology = jet_metrics_components.get_climatology(data, "year")
 
     #  Step 2. Get zonal mean from climatologies
     seasonal_zonal_mean = seasonal_climatology.mean("lon")
@@ -535,13 +527,13 @@ def bracegirdle_et_al_2018(data):
     (
         seasonal_max_lats,
         seasonal_max_ws,
-    ) = jetstream_metrics_components.run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
+    ) = jet_metrics_components.run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
         seasonal_zonal_mean, lat_resolution=0.075, time_col="season"
     )
     (
         annual_max_lats,
         annual_max_ws,
-    ) = jetstream_metrics_components.run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
+    ) = jet_metrics_components.run_cubic_spline_interpolation_for_each_unit_of_climatology_to_get_max_lat_and_ws(
         annual_zonal_mean, lat_resolution=0.075, time_col="year"
     )
 
@@ -581,9 +573,7 @@ def ceppi_et_al_2018(data):
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 3: Assign laitude of jet-stream centroids to main data
-    data[
-        "jet_lat"
-    ] = jetstream_metrics_components.calc_centroid_jet_lat_from_zonal_mean(
+    data["jet_lat"] = jet_metrics_components.calc_centroid_jet_lat_from_zonal_mean(
         zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
     )
     return data
@@ -616,12 +606,14 @@ def kerr_et_al_2020(data):
     if data["plev"].size != 1:
         raise IndexError("Please subset your data to have one pressure level (plev)")
     if data["time"].size == 1:
-        output = jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
-            data
+        output = (
+            jet_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
+                data
+            )
         )
     else:
         output = data.groupby("time").map(
-            jetstream_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
+            jet_metrics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
         )
     return output
 

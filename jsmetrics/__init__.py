@@ -2,14 +2,14 @@
 
 __author__ = """Tom Keel"""
 __email__ = "thomas.keel.18@ucl.ac.uk"
-__version__ = "0.0.19-alpha"
+__version__ = "0.0.19-beta"
 
 from . import (
     data_utils,
-    jetstream_metrics,
-    jetstream_algorithms,
-    jetstream_metrics_components,
-    jetstream_algorithms_components,
+    jet_core_algorithms,
+    jet_core_algorithms_components,
+    jet_metrics,
+    jet_metrics_components,
     windspeed_utils,
     spatial_utils,
 )

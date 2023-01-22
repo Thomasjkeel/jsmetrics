@@ -2,6 +2,11 @@
 History
 =======
 
+0.0.19-beta (2023-01-22)
+-------------------------
+* rename jet metrics, waviness and jet core algorithm files
+
+
 0.0.19-alpha (2022-12-21)
 -------------------------
 * Update JetStreamOccurenceAndCentreAlgorithm to skip longitude values outside lon range in data

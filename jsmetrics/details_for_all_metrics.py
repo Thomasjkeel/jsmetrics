@@ -1,4 +1,4 @@
-from . import jet_core_algorithms, jet_metrics
+from . import jet_core_algorithms, jet_metrics, waviness_metrics
 
 
 # RULES for METRIC_DETAILS dictionary:
@@ -154,7 +154,7 @@ METRIC_DETAILS = {
         "variables": ["ua", "va"],
         "coords": {"plev": [50000, 50000]},
         "plev_units": "Pa",
-        "metric": jet_metrics.francis_vavrus_2015,
+        "metric": waviness_metrics.francis_vavrus_2015,
         "name": "Francis & Vavrus 2015",
         "description": "",
         "doi": "https://doi.org/10.1088/1748-9326/10/1/014005",
@@ -168,7 +168,7 @@ METRIC_DETAILS = {
         "variables": ["zg"],
         "coords": {"plev": [50000, 50000]},
         "plev_units": "Pa",
-        "metric": jet_metrics.cattiaux_et_al_2016,
+        "metric": waviness_metrics.cattiaux_et_al_2016,
         "name": "Cattiaux et al. 2016",
         "description": "",
         "doi": "https://doi.org/10.1002/2016GL070309",

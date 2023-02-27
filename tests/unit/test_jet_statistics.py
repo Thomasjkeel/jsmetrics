@@ -9,7 +9,7 @@
 
 # imports
 import unittest
-from jsmetrics.metrics import jet_metrics, jet_metrics_components
+from jsmetrics.metrics import jet_statistics, jet_statistics_components
 from parameterized import parameterized
 import xarray as xr
 import numpy as np
@@ -125,7 +125,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        result = jet_metrics.archer_caldeira_2008(self.data)
+        result = jet_statistics.archer_caldeira_2008(self.data)
         for col in [
             "mass_weighted_average_ws",
             "mass_flux_weighted_pressure",
@@ -139,7 +139,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
         )
 
     def test_get_mass_weighted_average_windspeed(self):
-        tested_func = jet_metrics.archer_caldeira_2008
+        tested_func = jet_statistics.archer_caldeira_2008
         test_data = self.data.isel(plev=1)
         # should fail because needs two plevs
         self.assertRaises(ValueError, lambda: tested_func(test_data))
@@ -164,7 +164,7 @@ class TestWoollings2010(unittest.TestCase):
         return test_sig
 
     def test_metric(self):
-        tested_func = jet_metrics.woollings_et_al_2010
+        tested_func = jet_statistics.woollings_et_al_2010
         result = tested_func(self.data, filter_freq=1, window_size=2)
         self.assertIsInstance(result, xr.Dataset)
         self.assertEqual(result["ff_jet_lat"][0], 36.25)
@@ -172,7 +172,7 @@ class TestWoollings2010(unittest.TestCase):
         tested_func(self.data["ua"], filter_freq=1, window_size=2)
 
     def test_apply_lancoz_filter(self):
-        tested_func = jet_metrics_components.apply_lanczos_filter
+        tested_func = jet_statistics_components.apply_lanczos_filter
         test_ua = self.data["ua"]
         self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 4))
         self.assertRaises(AssertionError, lambda: tested_func(test_ua, -2, 1))
@@ -189,7 +189,7 @@ class TestWoollings2010(unittest.TestCase):
         self.assertEqual(float(tested_func(test_ua, 2, 4).max()), 99.514892578125)
 
     def test_get_latitude_and_speed_where_max_ws(self):
-        tested_func = jet_metrics_components.get_latitude_and_speed_where_max_ws
+        tested_func = jet_statistics_components.get_latitude_and_speed_where_max_ws
         self.assertRaises(AttributeError, lambda: tested_func(["lol"]))
         tested_data = self.data["ua"].isel(plev=0, lon=0, time=0)
         self.assertEqual(tested_func(tested_data)[0], 81.25)
@@ -201,7 +201,7 @@ class TestWoollings2010(unittest.TestCase):
         self.assertEqual(tested_func(nan_dataset), (np.nan, np.nan))
 
     def test_apply_fourier_filter(self):
-        tested_func = jet_metrics_components.apply_low_freq_fourier_filter
+        tested_func = jet_statistics_components.apply_low_freq_fourier_filter
         res = tested_func(self.test_sig, 2)
         self.assertAlmostEqual(res[10].real, -0.0956296962962675, places=7)
 
@@ -211,7 +211,7 @@ class TestBarnesPolvani2013(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        result = jet_metrics.barnes_polvani_2013(
+        result = jet_statistics.barnes_polvani_2013(
             self.data, filter_freq=1, window_size=2
         )
         self.assertIsInstance(result, xr.Dataset)
@@ -220,7 +220,7 @@ class TestBarnesPolvani2013(unittest.TestCase):
         self.assertEqual(float(result["jet_width"][1]), 17.5)
 
     def test_calc_jet_width_for_one_day(self):
-        test_func = jet_metrics_components.calc_jet_width_for_one_day
+        test_func = jet_statistics_components.calc_jet_width_for_one_day
         self.assertTrue(
             np.isnan(test_func(self.data["ua"].isel(time=0, plev=0), 25, None))
         )
@@ -235,7 +235,7 @@ class TestBarnesPolvani2013(unittest.TestCase):
         )
 
     def test_get_3_latitudes_and_speed_around_max_ws(self):
-        test_func = jet_metrics_components.get_3_latitudes_and_speed_around_max_ws
+        test_func = jet_statistics_components.get_3_latitudes_and_speed_around_max_ws
         test_data = self.data["ua"].isel(time=0, plev=0, lat=slice(0, 2))
         res = test_func(test_data["lat"])
         self.assertEqual(len(res[0]), 3)
@@ -246,7 +246,7 @@ class TestBarnesPolvani2013(unittest.TestCase):
         self.assertTrue(np.isnan(res[0][-1]))
 
     def test_get_3_neighbouring_coord_values(self):
-        test_func = jet_metrics_components.get_3_neighbouring_coord_values
+        test_func = jet_statistics_components.get_3_neighbouring_coord_values
         res = test_func(45, 1)
         self.assertEqual(list(res), [44.0, 45.0, 46.0])
 
@@ -265,7 +265,7 @@ class TestBarnesPolvani2015(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        result = jet_metrics.barnes_polvani_2015(self.data)
+        result = jet_statistics.barnes_polvani_2015(self.data)
         self.assertEqual(round(float(result["jet_lat"].mean()), 5), 43.19160)
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 14.31844)
         self.assertEqual(round(float(result["jet_speed"].min()), 5), 13.52508)
@@ -276,7 +276,7 @@ class TestBarnesSimpson2017(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        test_func = jet_metrics.barnes_simpson_2017
+        test_func = jet_statistics.barnes_simpson_2017
         result = test_func(self.data)
         self.assertEqual(round(float(result["jet_lat"].mean()), 5), 36.25)
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.05004)
@@ -287,8 +287,8 @@ class TestGrisePolvani2017(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        result = jet_metrics.grise_polvani_2017(self.data)
-        jet_metrics.grise_polvani_2017(self.data["ua"])
+        result = jet_statistics.grise_polvani_2017(self.data)
+        jet_statistics.grise_polvani_2017(self.data["ua"])
         self.assertEqual(float(result["jet_lat"].min()), 35.38)
         self.assertEqual(float(result["jet_lat"].max()), 36.41)
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.92644)
@@ -299,7 +299,7 @@ class TestCeppi2018(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        result = jet_metrics.ceppi_et_al_2018(self.data)
+        result = jet_statistics.ceppi_et_al_2018(self.data)
         print(result)
         self.assertEqual(float(result["jet_lat"][0].data), 37.316638365674194)
 
@@ -309,7 +309,7 @@ class TestBracegirdle2018(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        tested_func = jet_metrics.bracegirdle_et_al_2018
+        tested_func = jet_statistics.bracegirdle_et_al_2018
         test_data = self.data.sel(plev=slice(85000, 85000))
         result = tested_func(test_data)
         tested_func(test_data["ua"])
@@ -325,7 +325,7 @@ class TestKerr2020(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        tested_func = jet_metrics.kerr_et_al_2020
+        tested_func = jet_statistics.kerr_et_al_2020
         # Should raise index error as takes only one plev
         self.assertRaises(IndexError, lambda: tested_func(self.data))
         test_data = self.data.sel(plev=50000)

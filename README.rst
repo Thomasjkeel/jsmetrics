@@ -51,8 +51,11 @@ Usage
     # load windspeed data with u- and v- component wind.
     uv_data = xr.open_dataset(filename)
 
+   # run Woollings et al. 2010 metric 
+    w10 = jsmetrics.jet_metrics.woolling_et_al_2010(uv_data)
+
     # run Kuang et al. 2014 metric 
-    k14 = jsmetrics.jetstream_algorithms.kuang_et_al_2014(uv_data)
+    k14 = jsmetrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
 
 .. image:: docs/_static/images/kuang_jet_centers.png
   :width: 360

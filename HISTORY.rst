@@ -3,6 +3,11 @@ History
 =======
 
 
+0.1.1-alpha (2023-03-06)
+-------------------------
+* Add fix for Kuang to run when there is no time dim
+
+
 0.1.0 (2023-01-22)
 -------------------------
 * MAJOR UPDATE: re-organise the structure of the package into core, metrics and utils

@@ -7,6 +7,7 @@ History
 -------------------------
 * Add fix for Kuang to run when there is no time dim
 * Add fix for BP15 to except errors where all nan data
+* Add warning for BS17 when more than 10 days resolution
 
 
 0.1.0 (2023-01-22)

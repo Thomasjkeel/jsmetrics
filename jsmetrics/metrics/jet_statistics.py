@@ -303,11 +303,21 @@ def barnes_simpson_2017(data):
     data = data.mean("lon")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
-    data = data.resample(time="10D").mean()
+    if not data.indexes["time"].is_monotonic:
+        raise IndexError("Data needs to have a montonic index")
+    # Check that data can be resampled into 10 days
+    if not data["time"].size == 1:
+        time_step_in_data = int((data["time"][1] - data["time"][0]).dt.days)
+        if time_step_in_data <= 10:
+            data = data.resample(time="10D").mean()
+            time_step_in_data = 10
+        else:
+            print(
+                f"Warning this method was developed for 10 day average and data has larger time-step than 10 days. Time step is {time_step_in_data} days"
+            )
     #  Drop all NaN slices
     data = data.dropna("time")
     data = jet_statistics_components.calc_latitude_and_speed_where_max_ws(data)
-    data = data.rename_dims({"time": "10_day_average"})
     return data
 
 

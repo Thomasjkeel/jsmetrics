@@ -1139,6 +1139,22 @@ def calc_centroid_jet_lat_from_zonal_mean(zonal_mean, area_by_lat):
     return u_hat_by_lat.sum("lat") / u_hat.sum("lat")
 
 
+def get_latitude_value_in_data_row(data_row, lat_val):
+    """
+    Will return the latitude value of a given data row. Needed to loop through data and external array
+
+    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+
+    Parameters
+    ----------
+    data_row : xarray.DataArray
+        Data row to extract variable from using given latitude
+    lat_val : float or int
+        latitude value to extract from data row
+    """
+    return float(data_row.sel(lat=lat_val))
+
+
 def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row, width_of_pulse=10):
     """
     Get moving average of smoothed_jet_lats for one day. Used in combination with a groupby mapping.

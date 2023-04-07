@@ -300,8 +300,8 @@ class TestCeppi2018(unittest.TestCase):
 
     def test_metric(self):
         result = jet_statistics.ceppi_et_al_2018(self.data)
-        print(result)
         self.assertEqual(float(result["jet_lat"][0].data), 37.316638365674194)
+        self.assertEqual(float(result["jet_speed"][0].data), 22.341136932373047)
 
 
 class TestBracegirdle2018(unittest.TestCase):

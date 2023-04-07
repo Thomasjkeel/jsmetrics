@@ -5,6 +5,7 @@ History
 0.1.1-beta (2023-04-07)
 -------------------------
 * add parameter for Kerr et al. 2020
+* Add Ceppi et al jet speed adaptation from Screen et al. 20220
 
 
 0.1.1-alpha (2023-03-31)

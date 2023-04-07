@@ -13,7 +13,7 @@
 import numpy as np
 import xarray
 from . import jet_statistics_components
-from jsmetrics.utils import spatial_utils, windspeed_utils
+from jsmetrics.utils import data_utils, spatial_utils, windspeed_utils
 from jsmetrics.core.check_data import sort_xarray_data_coords
 
 # docs
@@ -494,6 +494,39 @@ def ceppi_et_al_2018(data):
     # Step 3: Assign laitude of jet-stream centroids to main data
     data["jet_lat"] = jet_statistics_components.calc_centroid_jet_lat_from_zonal_mean(
         zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
+    )
+
+    # Expand time dimension
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
+        zonal_mean = zonal_mean.expand_dims("time")
+
+    # Step 4 (adapted from original methodology): Get nearest latitude actually in data to the one determined by metric
+    nearest_latitudes_to_jet_lat_estimates = np.array(
+        list(
+            map(
+                lambda row: data_utils.find_nearest_value_to_array(
+                    data["lat"], float(row)
+                ),
+                data["jet_lat"],
+            )
+        )
+    )
+
+    # Step 5 (adapted from original methodology): Get speed of associated nearest latitude
+    data["jet_speed"] = (
+        ("time",),
+        np.array(
+            list(
+                map(
+                    lambda data_row, lat_val: jet_statistics_components.get_latitude_value_in_data_row(
+                        data_row, lat_val
+                    ),
+                    zonal_mean["ua"],
+                    nearest_latitudes_to_jet_lat_estimates,
+                )
+            )
+        ),
     )
     return data
 

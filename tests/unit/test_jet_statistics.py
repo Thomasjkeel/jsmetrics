@@ -330,12 +330,10 @@ class TestKerr2020(unittest.TestCase):
         self.assertRaises(IndexError, lambda: tested_func(self.data))
         test_data = self.data.sel(plev=50000)
         result = tested_func(test_data)
-        self.assertEqual(result["jet_lat_by_lon"].isel(time=0).dropna("lon").size, 192)
-        self.assertEqual(float(result["jet_lat_by_lon"].max()), 72.5)
-        self.assertEqual(float(result["smoothed_jet_lats"].max()), 65.0)
-        self.assertEqual(
-            result["smoothed_jet_lats"].isel(time=0).dropna("lon").size, 61
-        )
+        self.assertEqual(result["jet_lat"].isel(time=0).dropna("lon").size, 192)
+        self.assertEqual(float(result["jet_lat"].max()), 72.5)
+        self.assertEqual(float(result["smoothed_jet_lat"].max()), 65.0)
+        self.assertEqual(result["smoothed_jet_lat"].isel(time=0).dropna("lon").size, 61)
 
 
 if __name__ == "__main__":

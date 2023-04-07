@@ -1155,9 +1155,9 @@ def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row, width_of_pulse=1
     smoothed_jet_lat : xarray.Dataset
         Data containing jet-stream position
     """
-    data_row["jet_lat_by_lon"] = get_jet_lat_by_lon(data_row["ua"])
-    data_row["smoothed_jet_lats"] = smooth_jet_lat_across_lon_with_rectangular_pulse(
-        data_row["jet_lat_by_lon"], width_of_pulse=width_of_pulse
+    data_row["jet_lat"] = get_jet_lat_by_lon(data_row["ua"])
+    data_row["smoothed_jet_lat"] = smooth_jet_lat_across_lon_with_rectangular_pulse(
+        data_row["jet_lat"], width_of_pulse=width_of_pulse
     )
     return data_row
 

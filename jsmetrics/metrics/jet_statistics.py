@@ -422,7 +422,7 @@ def bracegirdle_et_al_2018(data):
             data = data.isel(plev=0)
         else:
             print(
-                "this metric was meant to only work on one plev, please subset plev to one value"
+                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
             )
             data = data.mean("plev")
             # raise ValueError("Please subset to one plev value for this metric")
@@ -549,8 +549,16 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     output : xarray.Dataset
         Data containing jet-stream latitude by longitude and smoothed jet_latitude
     """
-    if data["plev"].size != 1:
-        raise IndexError("Please subset your data to have one pressure level (plev)")
+    if "plev" in data.dims:
+        if data["plev"].count() == 1:
+            data = data.isel(plev=0)
+        else:
+            print(
+                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
+            )
+            data = data.mean("plev")
+            # raise ValueError("Please subset to one plev value for this metric")
+
     if data["time"].size == 1:
         output = (
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(

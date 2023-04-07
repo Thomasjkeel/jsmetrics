@@ -102,6 +102,29 @@ def check_variables_in_data(data, req_variables):
             raise KeyError("'%s' is not the data" % (var,))
 
 
+def find_nearest_value_to_array(array, value):
+    """
+    Will find the nearest value to a given array
+    Built for use with xarray
+    adapted from: https://stackoverflow.com/questions/2566412/find-nearest-value-in-numpy-array
+
+    Parameters
+    ----------
+    array : array-like
+        Array to reference
+    value : numeric-like
+        Number to check nearest value in input array
+
+    Returns
+    ----------
+    output : numeric
+        Closest value to input value in input array
+    """
+    array = np.asarray(array)
+    idx = (np.abs(array - value)).argmin()
+    return array[idx]
+
+
 def get_local_maxima(arr, axis=0):
     """
     Uses scipy.signal.argrelextrema to get index location of minimum value in array

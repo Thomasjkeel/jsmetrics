@@ -297,7 +297,7 @@ def barnes_simpson_2017(data):
             data = data.isel(plev=0)
         else:
             print(
-                "this metric was meant to only work on one plev, please subset plev to one value"
+                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
             )
             data = data.mean("plev")
     data = data.mean("lon")

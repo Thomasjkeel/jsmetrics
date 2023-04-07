@@ -1139,7 +1139,7 @@ def calc_centroid_jet_lat_from_zonal_mean(zonal_mean, area_by_lat):
     return u_hat_by_lat.sum("lat") / u_hat.sum("lat")
 
 
-def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row):
+def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row, width_of_pulse=10):
     """
     Get moving average of smoothed_jet_lats for one day. Used in combination with a groupby mapping.
 
@@ -1157,7 +1157,7 @@ def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row):
     """
     data_row["jet_lat_by_lon"] = get_jet_lat_by_lon(data_row["ua"])
     data_row["smoothed_jet_lats"] = smooth_jet_lat_across_lon_with_rectangular_pulse(
-        data_row["jet_lat_by_lon"], width_of_pulse=10
+        data_row["jet_lat_by_lon"], width_of_pulse=width_of_pulse
     )
     return data_row
 

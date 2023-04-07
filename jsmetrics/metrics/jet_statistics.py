@@ -497,7 +497,7 @@ def ceppi_et_al_2018(data):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def kerr_et_al_2020(data):
+def kerr_et_al_2020(data, width_of_pulse=10):
     """
     Described in section 2.4.2 of paper. Defines the latitude of the jet-stream as where the
     maximum zonal winds occur for each longitude for each time unit (i.e. day) before smoothing
@@ -519,12 +519,13 @@ def kerr_et_al_2020(data):
     if data["time"].size == 1:
         output = (
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
-                data
+                data, width_of_pulse
             )
         )
     else:
         output = data.groupby("time").map(
-            jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day
+            jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day,
+            (width_of_pulse,),
         )
     return output
 

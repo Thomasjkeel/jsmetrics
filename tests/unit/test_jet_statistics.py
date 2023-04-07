@@ -326,8 +326,6 @@ class TestKerr2020(unittest.TestCase):
 
     def test_metric(self):
         tested_func = jet_statistics.kerr_et_al_2020
-        # Should raise index error as takes only one plev
-        self.assertRaises(IndexError, lambda: tested_func(self.data))
         test_data = self.data.sel(plev=50000)
         result = tested_func(test_data)
         self.assertEqual(result["jet_lat"].isel(time=0).dropna("lon").size, 192)

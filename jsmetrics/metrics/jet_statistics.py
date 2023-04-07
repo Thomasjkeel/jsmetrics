@@ -469,10 +469,10 @@ def bracegirdle_et_al_2018(data):
 def ceppi_et_al_2018(data):
     """
     Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
-    This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein)
+    This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
     Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
-    "similar methods used in: Chen et al. 2008; Ceppi et al. 2014"
-    Also used in Zappa et al. 2018, Ayres & Screen, 2019 and Screen et al. 2022
+
+    Also used in Zappa et al. 2018, Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014.
 
     Parameters
     ----------

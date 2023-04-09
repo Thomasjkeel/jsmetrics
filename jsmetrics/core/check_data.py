@@ -50,7 +50,7 @@ def sort_xarray_data_coords(coords, ascending=True):
                 assert (
                     coord in data.coords
                 ), f"'{coord}' is not in data. Please check your data and the variable names. Should be like: 'lat', 'lon', 'plev', etc."
-                if data[coord].size == 1:
+                if data[coord].size == 1 and not data[coord].shape == (1,):
                     data = data.expand_dims(
                         coord
                     )  # expand dimensions so the sortby function works if only one in dim

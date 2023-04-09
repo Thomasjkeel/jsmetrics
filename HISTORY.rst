@@ -7,6 +7,7 @@ History
 * add parameter for Kerr et al. 2020
 * Add Ceppi et al jet speed adaptation from Screen et al. 2022
 * Add fix for sort_xarray_data_coords so it works when only one coord value in coordinate (i.e. so each metric can work when only one longitude)
+* Supress warning for quadratic func
 
 
 0.1.1-alpha (2023-03-31)

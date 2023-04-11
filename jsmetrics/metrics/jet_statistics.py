@@ -297,7 +297,7 @@ def barnes_simpson_2017(data):
             data = data.isel(plev=0)
         else:
             print(
-                "this metric was meant to only work on one plev, please subset plev to one value"
+                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
             )
             data = data.mean("plev")
     data = data.mean("lon")
@@ -422,7 +422,7 @@ def bracegirdle_et_al_2018(data):
             data = data.isel(plev=0)
         else:
             print(
-                "this metric was meant to only work on one plev, please subset plev to one value"
+                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
             )
             data = data.mean("plev")
             # raise ValueError("Please subset to one plev value for this metric")
@@ -466,7 +466,7 @@ def bracegirdle_et_al_2018(data):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def ceppi_et_al_2018(data):
+def ceppi_et_al_2018(data, lon_resolution=None):
     """
     Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
     This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
@@ -478,6 +478,8 @@ def ceppi_et_al_2018(data):
     ----------
     data : xarray.Dataset
         Data containing u-component windspeed
+    lon_resolution : numeric
+        Resolution to use for longitude coord if size 1
 
     Returns
     ----------
@@ -485,7 +487,20 @@ def ceppi_et_al_2018(data):
         Data containing centroid latitude of u-wind for each time unit (e.g. each day)
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
-    total_area_m2 = spatial_utils.grid_cell_areas(data["lon"], data["lat"])
+    if not data["lon"].size == 1 and not data["lat"].size == 1:
+        total_area_m2 = spatial_utils.grid_cell_areas(data["lon"], data["lat"])
+    elif lon_resolution and not data["lat"].size == 1 and data["lon"].size == 1:
+        lons_to_use = [float(data["lon"]), float(data["lon"]) + lon_resolution]
+        total_area_m2 = spatial_utils.grid_cell_areas(lons_to_use, data["lat"])
+        total_area_m2 = total_area_m2.mean(axis=1)
+        total_area_m2 = total_area_m2.reshape(-1, 1)
+        if data["lon"].shape == ():
+            data = data.expand_dims("lon")
+    else:
+        raise ValueError(
+            "For this method, your data needs to have at least 2 'lat' values and 'lon' values needs to be more than one unless you set the 'lon_resolution' parameter"
+        )
+
     data["total_area_m2"] = (("lat", "lon"), total_area_m2)
 
     #  Step 2. calculate zonal mean
@@ -549,8 +564,16 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     output : xarray.Dataset
         Data containing jet-stream latitude by longitude and smoothed jet_latitude
     """
-    if data["plev"].size != 1:
-        raise IndexError("Please subset your data to have one pressure level (plev)")
+    if "plev" in data.dims:
+        if data["plev"].count() == 1:
+            data = data.isel(plev=0)
+        else:
+            print(
+                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
+            )
+            data = data.mean("plev")
+            # raise ValueError("Please subset to one plev value for this metric")
+
     if data["time"].size == 1:
         output = (
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(

@@ -299,9 +299,29 @@ class TestCeppi2018(unittest.TestCase):
         self.data = set_up_test_u_data()
 
     def test_metric(self):
-        result = jet_statistics.ceppi_et_al_2018(self.data)
+        tested_func = jet_statistics.ceppi_et_al_2018
+        result = tested_func(self.data)
         self.assertEqual(float(result["jet_lat"][0].data), 37.316638365674194)
         self.assertEqual(float(result["jet_speed"][0].data), 22.341136932373047)
+
+    def test_one_latlon_coord(self):
+        tested_func = jet_statistics.ceppi_et_al_2018
+        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lon=0)))
+        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lat=0)))
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.sel(lat=slice(0, 0)))
+        )
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.sel(lon=slice(0, 0)))
+        )
+        tested_func(self.data.sel(lon=slice(0, 0)), lon_resolution=1.875)
+        tested_func(self.data.sel(lon=0), lon_resolution=1.875)
+        self.assertRaises(
+            ValueError,
+            lambda: tested_func(
+                self.data.sel(lon=slice(0, 0), lat=slice(0, 0)), lon_resolution=1.875
+            ),
+        )
 
 
 class TestBracegirdle2018(unittest.TestCase):
@@ -326,8 +346,6 @@ class TestKerr2020(unittest.TestCase):
 
     def test_metric(self):
         tested_func = jet_statistics.kerr_et_al_2020
-        # Should raise index error as takes only one plev
-        self.assertRaises(IndexError, lambda: tested_func(self.data))
         test_data = self.data.sel(plev=50000)
         result = tested_func(test_data)
         self.assertEqual(result["jet_lat"].isel(time=0).dropna("lon").size, 192)

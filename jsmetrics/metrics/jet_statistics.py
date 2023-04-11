@@ -303,7 +303,7 @@ def barnes_simpson_2017(data):
     data = data.mean("lon")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
-    if not data.indexes["time"].is_monotonic:
+    if not data.indexes["time"].is_monotonic_increasing:
         raise IndexError("Data needs to have a montonic index")
     # Check that data can be resampled into 10 days
     if not data["time"].size == 1:

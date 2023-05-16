@@ -149,7 +149,7 @@ jsmetrics is in active development.
 * If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
 
 .. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
-.. _Contributing Guidelines: https://github.com/Thomasjkeel/jsmetrics/blob/master/.github/CONTRIBUTING.rst
+.. _Contributing Guidelines: https://jsmetrics.readthedocs.io/en/latest/contributing.html
 
 
 .. How to cite this package

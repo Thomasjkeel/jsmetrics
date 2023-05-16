@@ -74,11 +74,11 @@ Gallery
   :align: center
   :alt: STJ and PFJ by metric and longitude
 
-
-.. image:: docs/_static/images/jet_core_algorithm_comparison_NA_5_texas2021.png
+.. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 360
   :align: center
   :alt: Comparison of jet core algorithms during Feb 2021 Texas Cold Wave
+
 
 DISCLAIMER
 -------------

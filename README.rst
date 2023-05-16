@@ -7,7 +7,6 @@ jsmetrics: Jet-stream metrics and algorithms
 
 This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.
-*WORK IN PROGRESS*
 
 .. WRITE WHY JET-STREAM (maybe in blog, maybe in readme) -> heatwaves, beast from the east, climate proxy (put it all down)
 .. At the foundation of studies that look at jet-streams is the metric used to describe or characterise it.
@@ -19,10 +18,10 @@ The philosophy of this package was to keep the methodology of each metric as clo
 - time period,  
 - time unit (i.e. day, month, DJF),  
 - latitude/longitude resolution,  
-- latitude/longitude region (where possible),  
+- region (where possible),  
 - pressure level height.  
 
-All of these can be handled user-side.
+All can be handled user-side.
 
 .. 
         ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
@@ -47,21 +46,21 @@ Usage
 -------------
 .. code-block:: python
 
-    import xarray as xr
-    import jsmetrics
+ import xarray as xr
+ import jsmetrics
 
-    # load windspeed data with u- and v- component wind.
-    uv_data = xr.open_dataset(filename)
+ # load windspeed data with u- and v- component wind.
+ uv_data = xr.open_dataset(filename)
 
-   # run Woollings et al. 2010 metric
-    w10 = jsmetrics.jet_statistics.woolling_et_al_2010(uv_data)
+ # run Woollings et al. 2010 metric
+ w10 = jsmetrics.jet_statistics.woolling_et_al_2010(uv_data)
 
-    print(w10['jet_lat'])
-    print(w10['jet_speed'])
+ print(w10['jet_lat'])
+ print(w10['jet_speed'])
 
-    # run Kuang et al. 2014 metric 
-    k14 = jsmetrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
-    print(k14['jet_center'].sel(time=0))
+ # run Kuang et al. 2014 metric 
+ k14 = jsmetrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
+ print(k14['jet_center'].sel(time=0))
 
 Gallery
 -------------
@@ -69,12 +68,14 @@ Gallery
   :width: 560
   :align: center
   :alt: Jet latitude circbars with errorbars
+
 *Estimation of North Pacific mean jet latitude by month with 1-stdev errorbars. Data is monthly ERA5 700-850 hPa u-wind between 1980-2020.*
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 560
   :align: center
   :alt: Comparison of jet core algorithms during Feb 2021 Texas Cold Wave
+
 *Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 100-500 hPa u-v-wind.*
 
 
@@ -82,6 +83,7 @@ Gallery
   :width: 560
   :align: center
   :alt: STJ and PFJ by metric and longitude
+
 *By latitude estimation of the jet latitude of the subtropical and polar jet stream. Data is monthly ERA5 differenced-250 hPa (orange) and 700-850 hPa (blue) u-wind between 1980-2020.*
 
 
@@ -148,16 +150,14 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 Contributing
 ------------
-jsmetrics is in active development.
+jsmetrics is in active development. 
 
-* If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker
+* If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker`_
 
 * If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
 
 .. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
 .. _Contributing Guidelines: https://jsmetrics.readthedocs.io/en/latest/contributing.html
-
-
 .. How to cite this package
 .. ------------------------
 .. If you wish to cite `jsmetrics` in a research publication, we kindly ask that you use the bibliographical reference information available through `Zenodo`

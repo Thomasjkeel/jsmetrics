@@ -122,16 +122,16 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
         Gallego
 
 
-.. Contributing
-.. ------------
-.. jsmetrics is in active development.
+Contributing
+------------
+jsmetrics is in active development.
 
-.. * If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker`_. There is also a chat room on gitter (|gitter|).
+* If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker
 
-.. * If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
+* If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
 
-.. .. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
-.. .. _Contributing Guidelines: https://github.com/Thomasjkeel/jsmetrics/blob/master/.github/CONTRIBUTING.rst
+.. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
+.. _Contributing Guidelines: https://github.com/Thomasjkeel/jsmetrics/blob/master/.github/CONTRIBUTING.rst
 
 
 .. How to cite this package

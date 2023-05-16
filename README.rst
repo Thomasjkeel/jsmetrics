@@ -63,11 +63,11 @@ Usage
 
 Gallery
 -------------
-
 .. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png
   :width: 560
   :align: center
   :alt: Jet latitude circbars with errorbars
+  *Estimation of North Pacific mean jet latitude by month with 1-stdev errorbars. Data is monthly ERA5 700-850 hPa u-wind between 1980-2020.*
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 560

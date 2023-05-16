@@ -54,7 +54,7 @@ Usage
  uv_data = xr.open_dataset(filename)
 
  # run Woollings et al. 2010 metric
- w10 = jsmetrics.jet_statistics.woolling_et_al_2010(uv_data)
+ w10 = jsmetrics.jet_statistics.woollings_et_al_2010(uv_data)
 
  print(w10['jet_lat'])
  print(w10['jet_speed'])

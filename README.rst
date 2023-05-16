@@ -80,7 +80,7 @@ Gallery
   :width: 560
   :align: center
   :alt: STJ and PFJ by metric and longitude
-*By latitude estimation of the jet latitude of the subtropical and polar jet stream. Data is monthly ERA5 difference-250 and 700-850 hPa u-wind between 1980-2020.*
+*By latitude estimation of the jet latitude of the subtropical and polar jet stream. Data is monthly ERA5 differenced-250 hPa (orange) and 700-850 hPa (blue) u-wind between 1980-2020.*
 
 
 

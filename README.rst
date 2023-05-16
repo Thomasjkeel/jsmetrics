@@ -34,6 +34,8 @@ Installation
 .. code-block:: bash
     
     pip install jsmetrics
+
+Let me know if you have any problems installing this package, as I have not extensively tested for Mac-OS and Windows versions. 
     
 Documentation
 -------------

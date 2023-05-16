@@ -398,7 +398,7 @@ def get_latitude_and_speed_where_max_ws(data_row):
         ).squeeze()
         if max_ws.size > 1:
             print(
-                "'get_latitude_and_speed_where_max_ws method': Warning: more than one max value found, picking the max!"
+                "'get_latitude_and_speed_where_max_ws method': Warning: more than one max value found, picking the first occurence!"
             )
             max_ws = max_ws[0].max()
         lat_at_max = float(max_ws["lat"])

@@ -59,7 +59,7 @@ Usage
  print(w10['jet_lat'])
  print(w10['jet_speed'])
 
- # run Kuang et al. 2014 metric 
+ # run Kuang et al. 2014 metric. NOTE: may take a long time after you have more than 50 time steps.
  k14 = jsmetrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
  print(k14['jet_center'].sel(time=0))
 

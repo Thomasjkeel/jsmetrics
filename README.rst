@@ -51,16 +51,34 @@ Usage
     # load windspeed data with u- and v- component wind.
     uv_data = xr.open_dataset(filename)
 
-   # run Woollings et al. 2010 metric 
-    w10 = jsmetrics.jet_metrics.woolling_et_al_2010(uv_data)
+   # run Woollings et al. 2010 metric
+    w10 = jsmetrics.jet_statistics.woolling_et_al_2010(uv_data)
+
+    print(w10['jet_lat'])
+    print(w10['jet_speed'])
 
     # run Kuang et al. 2014 metric 
     k14 = jsmetrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
+    print(k14['jet_center'].sel(time=0))
 
-.. image:: docs/_static/images/kuang_jet_centers.png
+Gallery
+-------------
+
+.. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png
   :width: 360
   :align: center
-  :alt: Kuang et al. 2014 Jet-core algorithm
+  :alt: Jet latitude circbars with errorbars
+
+.. image:: docs/_static/images/all_jet_lats_stj_pfj_npac_maps_more_metrics.png
+  :width: 360
+  :align: center
+  :alt: STJ and PFJ by metric and longitude
+
+
+.. image:: docs/_static/images/jet_core_algorithm_comparison_NA_5_texas2021.png
+  :width: 360
+  :align: center
+  :alt: Comparison of jet core algorithms during Feb 2021 Texas Cold Wave
 
 DISCLAIMER
 -------------

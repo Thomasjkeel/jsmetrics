@@ -338,7 +338,7 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
     window_cons : xarray.DataArray
         Filtered zonal mean data
     """
-    if window_size <= filter_freq and filter_freq > 0 and window_size > 0:
+    if window_size <= filter_freq or filter_freq <= 0 or window_size <= 0:
         raise ValueError(
             "Lanczos filter frequency cannot be larger than window size and both need to be more than 0"
         )
@@ -371,10 +371,9 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
         )
 
     # add filter day for check if data is outside the filter size
-    if filter_end_date >= end_date:
+    if window_end_date > end_date or filter_end_date > end_date:
         raise ValueError(
-            "Time series is too short to apply %s window for Lanczos filter"
-            % (window_size)
+            f"Time series is too short to apply {window_size} day window for Lanczos filter frequency of {filter_freq} days"
         )
 
     #  As the data may not actually be in day format, it will return the number of values within window in data i.e. if in monthly format but filter window is 60, then actual filter size will be 2

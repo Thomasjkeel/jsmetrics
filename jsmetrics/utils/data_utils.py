@@ -238,7 +238,9 @@ def remove_duplicates(arr):
     return list(v for v, _ in itertools.groupby(arr))
 
 
-def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
+def remove_unwanted_coords_from_data(
+    data, wanted_coords, unwanted_coords=(), show_error=False
+):
     """
     What it says on the tin.
     Built from xarray
@@ -263,9 +265,10 @@ def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
     for rem in unwanted_coords:
         try:
             dims.remove(rem)
-        except Exception:
+        except Exception as e:
             # a little sloppy, but probably okay
-            pass
+            if show_error:
+                print(e)
 
     wanted_coords = set(wanted_coords)
     difference = dims.difference(set(wanted_coords))

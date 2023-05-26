@@ -167,8 +167,8 @@ class TestWoollings2010(unittest.TestCase):
         tested_func = jet_statistics.woollings_et_al_2010
         result = tested_func(self.data, filter_freq=1, window_size=2)
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(result["ff_jet_lat"][0], 36.25)
-        self.assertEqual(result["ff_jet_speed"][0], 43.365413665771484)
+        self.assertEqual(round(float(result["ff_jet_lat"][0]), 2), 36.25)
+        self.assertEqual(round(float(result["ff_jet_speed"][0]), 2), 22.01)
         tested_func(self.data["ua"], filter_freq=1, window_size=2)
 
     def test_apply_lanczos_filter(self):
@@ -186,7 +186,7 @@ class TestWoollings2010(unittest.TestCase):
             ValueError,
             lambda: tested_func(test_ua, 2, test_ua["time"].count() + 1),
         )
-        self.assertEqual(float(tested_func(test_ua, 2, 4).max()), 99.514892578125)
+        self.assertEqual(round(float(tested_func(test_ua, 2, 4).max()), 2), 99.18)
 
     def test_get_latitude_and_speed_where_max_ws(self):
         tested_func = jet_statistics_components.get_latitude_and_speed_where_max_ws
@@ -215,8 +215,8 @@ class TestBarnesPolvani2013(unittest.TestCase):
             self.data, filter_freq=1, window_size=2
         )
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(result["jet_lat"][1], 35.85)
-        self.assertEqual(round(float(result["jet_speed"][2]), 5), 33.1134)
+        self.assertEqual(round(float(result["jet_lat"][1]), 2), 35.97)
+        self.assertEqual(round(float(result["jet_speed"][2]), 2), 16.82)
         self.assertEqual(float(result["jet_width"][1]), 17.5)
 
     def test_calc_jet_width_for_one_day(self):

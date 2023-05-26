@@ -5,7 +5,10 @@
 """
 
 # imports
+import cftime
+from parameterized import parameterized
 import unittest
+import numpy as np
 from jsmetrics.utils import data_utils
 from . import (
     set_up_test_uv_data,
@@ -42,6 +45,53 @@ class TestXarrayDataCheck(unittest.TestCase):
         tested_func(self.data)
         new_data = self.data["ua"].data
         self.assertRaises(TypeError, lambda: tested_func(new_data))
+
+
+class TestAddNumDaysto360Datetime(unittest.TestCase):
+    @parameterized.expand(
+        [
+            (
+                cftime.Datetime360Day(day=1, month=1, year=2000, hour=1),
+                360,
+                cftime.Datetime360Day(day=1, month=1, year=2001, hour=1),
+            ),
+            (
+                cftime.Datetime360Day(day=1, month=1, year=2000, hour=1),
+                30,
+                cftime.Datetime360Day(day=1, month=2, year=2000, hour=1),
+            ),
+            (
+                cftime.Datetime360Day(day=1, month=1, year=2000, hour=1),
+                29,
+                cftime.Datetime360Day(day=30, month=1, year=2000, hour=1),
+            ),
+            (
+                cftime.Datetime360Day(day=1, month=1, year=2000, hour=1),
+                359,
+                cftime.Datetime360Day(day=30, month=12, year=2000, hour=1),
+            ),
+        ]
+    )
+    def test_add_num_days_to360Datetime_expected_vals(
+        self, test_date, days_to_add, expected_new_date
+    ):
+        added_test_date = data_utils.add_num_of_days_to_360Datetime(
+            test_date, num_of_days_to_add=days_to_add
+        )
+        self.assertEqual(added_test_date, expected_new_date)
+
+    def test_errors_raised(self):
+        tested_func = data_utils.add_num_of_days_to_360Datetime
+        test_date = cftime.Datetime360Day(day=1, month=1, year=2000, hour=1)
+        self.assertRaises(
+            AssertionError, lambda: tested_func(np.datetime64("1970-01-11"), 1)
+        )
+        self.assertRaises(
+            AssertionError,
+            lambda: tested_func(cftime.DatetimeAllLeap(day=1, month=1, year=2000), 1),
+        )
+        self.assertRaises(ValueError, lambda: tested_func(test_date, 0))
+        self.assertRaises(ValueError, lambda: tested_func(test_date, -1))
 
 
 class TestLocalMinimaMaxima(unittest.TestCase):

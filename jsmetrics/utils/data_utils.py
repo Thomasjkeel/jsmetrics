@@ -8,6 +8,7 @@
 """
 
 # imports
+import cftime
 import itertools
 import numpy as np
 import xarray as xr
@@ -17,6 +18,45 @@ import scipy.signal
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
+
+
+def add_num_of_days_to_360Datetime(datetime_360day, num_of_days_to_add):
+    assert hasattr(
+        datetime_360day, "calendar"
+    ), "date type inputted is not in cftime format."
+    assert (
+        getattr(datetime_360day, "calendar") == "360_day"
+    ), "input date is not '360_day' format."
+    if num_of_days_to_add <= 0:
+        raise ValueError("Number of days to add to date is not more than 0")
+
+    new_day = ((datetime_360day.day + num_of_days_to_add) - 30) % 30
+    if new_day == 0:
+        new_day = 30
+    num_of_months_to_add = (datetime_360day.day + num_of_days_to_add) / 30
+    if num_of_months_to_add % 1 == 0:
+        num_of_months_to_add = num_of_months_to_add - 1
+    else:
+        num_of_months_to_add = np.floor(num_of_months_to_add)
+    new_month = ((datetime_360day.month + num_of_months_to_add) - 12) % 12
+    if new_month == 0:
+        new_month = 12
+    num_of_years_to_add = (datetime_360day.month + num_of_months_to_add) / 12
+    if num_of_years_to_add % 1 == 0:
+        num_of_years_to_add = num_of_years_to_add - 1
+    else:
+        num_of_years_to_add = np.floor(num_of_years_to_add)
+
+    new_year = datetime_360day.year + num_of_years_to_add
+    new_360day_date = cftime.Datetime360Day(
+        day=new_day,
+        month=new_month,
+        year=new_year,
+        hour=datetime_360day.hour,
+        minute=datetime_360day.minute,
+        second=datetime_360day.second,
+    )
+    return new_360day_date
 
 
 def check_at_least_n_plevs_in_data(data, n_plevs):
@@ -198,7 +238,9 @@ def remove_duplicates(arr):
     return list(v for v, _ in itertools.groupby(arr))
 
 
-def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
+def remove_unwanted_coords_from_data(
+    data, wanted_coords, unwanted_coords=(), show_error=False
+):
     """
     What it says on the tin.
     Built from xarray
@@ -225,7 +267,8 @@ def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
             dims.remove(rem)
         except Exception as e:
             # a little sloppy, but probably okay
-            e
+            if show_error:
+                print(e)
 
     wanted_coords = set(wanted_coords)
     difference = dims.difference(set(wanted_coords))

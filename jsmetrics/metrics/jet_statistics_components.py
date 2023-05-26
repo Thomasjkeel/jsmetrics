@@ -338,31 +338,51 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
     window_cons : xarray.DataArray
         Filtered zonal mean data
     """
+    if window_size <= filter_freq and filter_freq > 0 and window_size > 0:
+        raise ValueError(
+            "Lanczos filter frequency cannot be larger than window size and both need to be more than 0"
+        )
+
     if not xr.infer_freq(dataarray["time"]) == "D":
         print(
             f"Warning: The 'apply_lanczos_filter' function was built to work on a datetime index of freq 'D'. Frequency in data is '{xr.infer_freq(dataarray['time'])}'"
         )
-    start_day = dataarray["time"].astype(np.datetime64)[0]
-    end_day = dataarray["time"].astype(np.datetime64)[-1]
 
-    if (
-        start_day + np.timedelta64(filter_freq, "D") >= end_day
-        or window_size <= filter_freq
-    ):
+    assert isinstance(dataarray, xr.DataArray), "Input data needs to be a data array"
+
+    try:
+        start_date = dataarray["time"].astype(np.datetime64)[0]
+        filter_end_date = start_date + np.timedelta64(
+            filter_freq, "D"
+        )  # add filter end date for check if data is outside the filter size
+        window_end_date = start_date + np.timedelta64(
+            window_size, "D"
+        )  # add window end date for check if data is outside the filter size
+        end_date = dataarray["time"].astype(np.datetime64)[-1]
+    except (ValueError, TypeError):
+        # makes assumption that if times not coerced into numpy datetime then is 360
+        start_date = dataarray["time"].values[0]
+        end_date = dataarray["time"].values[-1]
+        filter_end_date = data_utils.add_num_of_days_to_360Datetime(
+            datetime_360day=start_date, num_of_days_to_add=filter_freq
+        )
+        window_end_date = data_utils.add_num_of_days_to_360Datetime(
+            datetime_360day=start_date, num_of_days_to_add=window_size
+        )
+
+    # add filter day for check if data is outside the filter size
+    if filter_end_date >= end_date:
         raise ValueError(
             "Time series is too short to apply %s window for Lanczos filter"
             % (window_size)
         )
 
-    assert (
-        filter_freq > 0 and window_size > 0
-    ), "both filter_freq and window need to be more than 0"
-    assert isinstance(dataarray, xr.DataArray), "Input data needs to be a data array"
-    actual_window_size = dataarray.sel(
-        time=slice(start_day, start_day + np.timedelta64(window_size, "D"))
-    ).time.size
+    #  As the data may not actually be in day format, it will return the number of values within window in data i.e. if in monthly format but filter window is 60, then actual filter size will be 2
     actual_filter_freq = dataarray.sel(
-        time=slice(start_day, start_day + np.timedelta64(filter_freq, "D"))
+        time=slice(start_date, filter_end_date)
+    ).time.size
+    actual_window_size = dataarray.sel(
+        time=slice(start_date, window_end_date)
     ).time.size
     lanczos_weights = calc_low_pass_weights(actual_window_size, 1 / actual_filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=["window"])

@@ -2,6 +2,11 @@
 History
 =======
 
+0.1.1 (2023-05-25)
+-------------------------
+* Fix Woollings et al. 2010 and filter windows to use day timeunits for window to stop it removing too much data.
+
+
 0.1.1-beta (2023-04-07)
 -------------------------
 * add parameter for Kerr et al. 2020

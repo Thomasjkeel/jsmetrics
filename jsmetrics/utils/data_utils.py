@@ -21,6 +21,9 @@ __status__ = "Development"
 
 
 def add_num_of_days_to_360Datetime(datetime_360day, num_of_days_to_add):
+    assert hasattr(
+        datetime_360day, "calendar"
+    ), "date type inputted is not in cftime format."
     assert (
         getattr(datetime_360day, "calendar") == "360_day"
     ), "input date is not '360_day' format."

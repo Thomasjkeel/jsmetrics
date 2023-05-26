@@ -344,6 +344,7 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
         )
     start_day = dataarray["time"].astype(np.datetime64)[0]
     end_day = dataarray["time"].astype(np.datetime64)[-1]
+
     if (
         start_day + np.timedelta64(filter_freq, "D") >= end_day
         or window_size <= filter_freq
@@ -354,7 +355,7 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
         )
 
     assert (
-        filter_freq >= 0 and window_size >= 0
+        filter_freq > 0 and window_size > 0
     ), "both filter_freq and window need to be more than 0"
     assert isinstance(dataarray, xr.DataArray), "Input data needs to be a data array"
     actual_window_size = dataarray.sel(

@@ -207,7 +207,9 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7974550.svg
         :target:  https://doi.org/10.5281/zenodo.7974550
         :alt: DOI
-
+.. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest
+       :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest
+       :alt: Documentation Status
 .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
         :target: https://pypi.org/project/jsmetrics/
         :alt: Python Package Index Build

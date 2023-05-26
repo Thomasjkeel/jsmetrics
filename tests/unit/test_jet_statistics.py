@@ -175,7 +175,7 @@ class TestWoollings2010(unittest.TestCase):
         tested_func = jet_statistics_components.apply_lanczos_filter
         test_ua = self.data["ua"]
         self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 4))
-        self.assertRaises(AssertionError, lambda: tested_func(test_ua, -2, 1))
+        self.assertRaises(ValueError, lambda: tested_func(test_ua, -2, 1))
         self.assertRaises(ValueError, lambda: tested_func(test_ua, 2, -1))
         self.assertRaises(ValueError, lambda: tested_func(test_ua, 2, 1))
         self.assertRaises(

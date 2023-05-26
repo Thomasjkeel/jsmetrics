@@ -263,9 +263,9 @@ def remove_unwanted_coords_from_data(data, wanted_coords, unwanted_coords=()):
     for rem in unwanted_coords:
         try:
             dims.remove(rem)
-        except Exception as e:
+        except Exception:
             # a little sloppy, but probably okay
-            e
+            pass
 
     wanted_coords = set(wanted_coords)
     difference = dims.difference(set(wanted_coords))

@@ -8,6 +8,7 @@
 """
 
 # imports
+import cftime
 import itertools
 import numpy as np
 import xarray as xr
@@ -17,6 +18,31 @@ import scipy.signal
 __author__ = "Thomas Keel"
 __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
+
+
+def add_num_of_days_to_360Datetime(datetime_360day, num_of_days_to_add):
+    assert (
+        getattr(datetime_360day, "calendar") == "360_day"
+    ), "input date is not '360_day' format."
+    assert num_of_days_to_add > 0, "Number of days needs more than 0"
+    new_day = ((datetime_360day.day + num_of_days_to_add) - 30) % 30
+    if new_day == 0:
+        new_day = 30
+    num_of_months_to_add = np.floor((datetime_360day.day + num_of_days_to_add) / 30)
+    new_month = ((datetime_360day.month + num_of_months_to_add) - 12) % 12
+    if new_month == 0:
+        new_month = 12
+    num_of_years_to_add = np.floor((datetime_360day.month + num_of_months_to_add) / 12)
+    new_year = datetime_360day.year + num_of_years_to_add
+    new_360day_date = cftime.Datetime360Day(
+        day=new_day,
+        month=new_month,
+        year=new_year,
+        hour=datetime_360day.hour,
+        minute=datetime_360day.minute,
+        second=datetime_360day.second,
+    )
+    return new_360day_date
 
 
 def check_at_least_n_plevs_in_data(data, n_plevs):

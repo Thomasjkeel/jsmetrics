@@ -171,7 +171,7 @@ class TestWoollings2010(unittest.TestCase):
         self.assertEqual(result["ff_jet_speed"][0], 43.365413665771484)
         tested_func(self.data["ua"], filter_freq=1, window_size=2)
 
-    def test_apply_lancoz_filter(self):
+    def test_apply_lanczos_filter(self):
         tested_func = jet_statistics_components.apply_lanczos_filter
         test_ua = self.data["ua"]
         self.assertRaises(AssertionError, lambda: tested_func(self.data, 2, 4))

@@ -27,7 +27,9 @@ def add_num_of_days_to_360Datetime(datetime_360day, num_of_days_to_add):
     assert (
         getattr(datetime_360day, "calendar") == "360_day"
     ), "input date is not '360_day' format."
-    assert num_of_days_to_add > 0, "Number of days needs more than 0"
+    if num_of_days_to_add > 0:
+        raise ValueError("Number of days to add to date is not more than 0")
+
     new_day = ((datetime_360day.day + num_of_days_to_add) - 30) % 30
     if new_day == 0:
         new_day = 30

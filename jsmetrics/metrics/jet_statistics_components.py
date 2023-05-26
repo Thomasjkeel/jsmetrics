@@ -338,9 +338,14 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
     window_cons : xarray.DataArray
         Filtered zonal mean data
     """
+    if not xr.infer_freq(dataarray["time"]) == "D":
+        print(
+            f"Warning: The 'apply_lanczos_filter' function was built to work on a datetime index of freq 'D'. Frequency in data is '{xr.infer_freq(dataarray['time'])}'"
+        )
+    start_day = dataarray["time"].astype(np.datetime64)[0]
+    end_day = dataarray["time"].astype(np.datetime64)[-1]
     if (
-        dataarray["time"].count() <= filter_freq
-        or dataarray["time"].count() <= window_size
+        start_day + np.timedelta64(filter_freq, "D") >= end_day
         or window_size <= filter_freq
     ):
         raise ValueError(
@@ -352,8 +357,13 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
         filter_freq >= 0 and window_size >= 0
     ), "both filter_freq and window need to be more than 0"
     assert isinstance(dataarray, xr.DataArray), "Input data needs to be a data array"
-
-    lanczos_weights = calc_low_pass_weights(window_size, 1 / filter_freq)
+    actual_window_size = dataarray.sel(
+        time=slice(start_day, start_day + np.timedelta64(window_size, "D"))
+    ).time.size
+    actual_filter_freq = dataarray.sel(
+        time=slice(start_day, start_day + np.timedelta64(filter_freq, "D"))
+    ).time.size
+    lanczos_weights = calc_low_pass_weights(actual_window_size, 1 / actual_filter_freq)
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=["window"])
     window_cons = (
         dataarray.rolling(time=len(lanczos_weights_arr), center=True)

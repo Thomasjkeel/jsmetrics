@@ -33,11 +33,20 @@ def add_num_of_days_to_360Datetime(datetime_360day, num_of_days_to_add):
     new_day = ((datetime_360day.day + num_of_days_to_add) - 30) % 30
     if new_day == 0:
         new_day = 30
-    num_of_months_to_add = np.floor((datetime_360day.day + num_of_days_to_add) / 30)
+    num_of_months_to_add = (datetime_360day.day + num_of_days_to_add) / 30
+    if num_of_months_to_add % 1 == 0:
+        num_of_months_to_add = num_of_months_to_add - 1
+    else:
+        num_of_months_to_add = np.floor(num_of_months_to_add)
     new_month = ((datetime_360day.month + num_of_months_to_add) - 12) % 12
     if new_month == 0:
         new_month = 12
-    num_of_years_to_add = np.floor((datetime_360day.month + num_of_months_to_add) / 12)
+    num_of_years_to_add = (datetime_360day.month + num_of_months_to_add) / 12
+    if num_of_years_to_add % 1 == 0:
+        num_of_years_to_add = num_of_years_to_add - 1
+    else:
+        num_of_years_to_add = np.floor(num_of_years_to_add)
+
     new_year = datetime_360day.year + num_of_years_to_add
     new_360day_date = cftime.Datetime360Day(
         day=new_day,

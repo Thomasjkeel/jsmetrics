@@ -363,11 +363,23 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
         # makes assumption that if times not coerced into numpy datetime then is 360
         start_date = dataarray["time"].values[0]
         end_date = dataarray["time"].values[-1]
-        filter_end_date = data_utils.add_num_of_days_to_360Datetime(
-            datetime_360day=start_date, num_of_days_to_add=filter_freq
+        if not hasattr(start_date, "calendar"):
+            raise ValueError(
+                f"Error: datetime type inputted ({start_date}) cannot be coerced into numpy.datetime64 and is not in cftime format."
+            )
+        if start_date.calendar == "360_day":
+            datetime_added_func_to_use = data_utils.add_num_of_days_to_360Datetime
+        elif start_date.calendar == "noleap":
+            datetime_added_func_to_use = data_utils.add_num_of_days_to_NoLeapDatetime
+        else:
+            raise ValueError(
+                f"Error: datetime type inputted ({start_date}) cannot be coerced into numpy.datetime64 and is not in cftime format."
+            )
+        filter_end_date = datetime_added_func_to_use(
+            start_date, num_of_days_to_add=filter_freq
         )
-        window_end_date = data_utils.add_num_of_days_to_360Datetime(
-            datetime_360day=start_date, num_of_days_to_add=window_size
+        window_end_date = datetime_added_func_to_use(
+            start_date, num_of_days_to_add=window_size
         )
 
     # add filter day for check if data is outside the filter size

@@ -21,6 +21,29 @@ __status__ = "Development"
 
 
 def add_num_of_days_to_360Datetime(datetime_360day, num_of_days_to_add):
+    """
+    Adds a number of days to cftime.Datetime360Day format
+
+    Parameters
+    ----------
+    datetime_360day : cftime.Datetime360Day
+        Date to add days to
+
+    num_of_days_to_add : int or float
+        Number of days to add to 360 day format
+
+    Returns
+    ----------
+    new_360day_date : cftime.Datetime360Day
+        Date with added number of days
+
+    Raises
+    ----------
+    AssertionError :
+        If not '360_day' format or not a cftime.Datetime object
+    ValueError :
+        If number of days not more than 0
+    """
     assert hasattr(
         datetime_360day, "calendar"
     ), "date type inputted is not in cftime format."
@@ -57,6 +80,46 @@ def add_num_of_days_to_360Datetime(datetime_360day, num_of_days_to_add):
         second=datetime_360day.second,
     )
     return new_360day_date
+
+
+def add_num_of_days_to_NoLeapDatetime(datetime_noleap, num_of_days_to_add):
+    """
+    Adds a number of days to cftime.DatetimeNoLeap format
+
+    Parameters
+    ----------
+    datetime_noleap : cftime.DatetimeNoLeap
+        Date to add days to
+
+    num_of_days_to_add : int or float
+        Number of days to add to noleap day format
+
+    Returns
+    ----------
+    new_noleap_date : cftime.DatetimeNoLeap
+        Date with added number of days
+
+    Raises
+    ----------
+    AssertionError :
+        If not 'noleap' format or not a cftime.Datetime object
+    ValueError :
+        If number of days not more than 0
+    """
+    assert hasattr(
+        datetime_noleap, "calendar"
+    ), "date type inputted is not in cftime format."
+    assert (
+        getattr(datetime_noleap, "calendar") == "noleap"
+    ), "input date is not 'no_leap' format."
+    if num_of_days_to_add <= 0:
+        raise ValueError("Number of days to add to date is not more than 0")
+
+    return cftime.DatetimeNoLeap.fromordinal(
+        cftime.DatetimeNoLeap.toordinal(datetime_noleap) + num_of_days_to_add,
+        calendar="noleap",
+        has_year_zero=True,
+    )
 
 
 def check_at_least_n_plevs_in_data(data, n_plevs):

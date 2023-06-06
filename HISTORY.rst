@@ -3,6 +3,10 @@ History
 =======
 
 
+0.1.2-beta (2023-06-06)
+-------------------------
+* Fix  Barnes & Polvani 2013 to better deal when min max jet lat is at edge data 
+
 0.1.2-alpha (2023-05-27)
 -------------------------
 * Add check for NoLeapDatetime

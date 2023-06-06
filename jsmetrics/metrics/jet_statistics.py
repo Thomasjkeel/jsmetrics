@@ -220,10 +220,10 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
             else:
                 if np.nanmax(max_lat_and_ws[0]) == data["lat"].max():
                     scaled_max_lats.append(np.nanmax(max_lat_and_ws[0]))
-                    scaled_max_lats.append(np.nanmax(max_lat_and_ws[1]))
+                    scaled_max_ws.append(np.nanmax(max_lat_and_ws[1]))
                 elif np.nanmin(max_lat_and_ws[0]) == data["lat"].min():
                     scaled_max_lats.append(np.nanmin(max_lat_and_ws[0]))
-                    scaled_max_lats.append(np.nanmin(max_lat_and_ws[1]))
+                    scaled_max_ws.append(np.nanmin(max_lat_and_ws[1]))
                 else:
                     scaled_max_lats.append(np.nan)
                     scaled_max_ws.append(np.nan)

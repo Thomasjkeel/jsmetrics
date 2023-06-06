@@ -214,8 +214,19 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
             scaled_max_lats.append(scaled_max_lat)
             scaled_max_ws.append(scaled_ws)
         else:
-            scaled_max_lats.append(np.nan)
-            scaled_max_ws.append(np.nan)
+            if np.isnan(max_lat_and_ws).all():
+                scaled_max_lats.append(np.nan)
+                scaled_max_ws.append(np.nan)
+            else:
+                if np.nanmax(max_lat_and_ws[0]) == data["lat"].max():
+                    scaled_max_lats.append(np.nanmax(max_lat_and_ws[0]))
+                    scaled_max_lats.append(np.nanmax(max_lat_and_ws[1]))
+                elif np.nanmin(max_lat_and_ws[0]) == data["lat"].min():
+                    scaled_max_lats.append(np.nanmin(max_lat_and_ws[0]))
+                    scaled_max_lats.append(np.nanmin(max_lat_and_ws[1]))
+                else:
+                    scaled_max_lats.append(np.nan)
+                    scaled_max_ws.append(np.nan)
 
     #  Step 6. Get jet-widths using scaled windspeed and usual jet-lat
     max_lats = all_max_lats_and_ws[::, 0, 1]

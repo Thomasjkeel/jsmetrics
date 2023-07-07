@@ -52,7 +52,11 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
         if i != 0:
             plev_hPa = plev_hPa - all_plevs_hPa[i - 1]
         sum_weighted_ws += (
-            (data.sel(plev=plev)["ua"] ** 2 + data.sel(plev=plev)["va"] ** 2) ** (1 / 2)
+            (
+                data.sel(plev=plev, method="nearest")["ua"] ** 2
+                + data.sel(plev=plev, method="nearest")["va"] ** 2
+            )
+            ** (1 / 2)
         ) * plev_hPa
     return sum_weighted_ws
 
@@ -140,7 +144,7 @@ def get_local_jet_maximas_by_oneday_by_plev(row):
     )
     for lon in row["lon"]:
         for plev in row["plev"]:
-            current = row.sel(lon=lon, plev=plev)
+            current = row.sel(lon=lon, plev=plev, method="nearest")
             current = current.where((abs(current["ws"]) >= 30) & (current["ua"] > 0))
             local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
             if len(local_maxima_lat_inds) > 0:
@@ -180,7 +184,7 @@ def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_thresh
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
     )
     for lon in row["lon"]:
-        current = row.sel(lon=lon)
+        current = row.sel(lon=lon, method="nearest")
         core_alg = JetStreamCoreIdentificationAlgorithm(
             current,
             ws_core_threshold=ws_core_threshold,
@@ -494,7 +498,7 @@ def get_local_wind_maxima_by_timeunit(row):
 
     row = row.transpose("plev", "lat", ...)
     for lon in row["lon"]:
-        current = row.sel(lon=lon)
+        current = row.sel(lon=lon, method="nearest")
         pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(
             current["ws"], 30
         ).data
@@ -716,7 +720,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
         Will return a list of the coordinates for all jet-centre points
         """
         for coord in self._all_coords_arr:
-            coord_ws = float(self.output_data.sel(lat=coord[0], lon=coord[1])["ws"])
+            coord_ws = float(
+                self.output_data.sel(lat=coord[0], lon=coord[1], method="nearest")["ws"]
+            )
             lat_grid_vals = np.arange(
                 coord[0] - self._lat_resolution,
                 coord[0] + self._lat_resolution + 0.01,
@@ -741,9 +747,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
                     continue
                 if (
                     float(
-                        self.output_data.sel(lat=val_to_check[0], lon=val_to_check[1])[
-                            "ws"
-                        ]
+                        self.output_data.sel(
+                            lat=val_to_check[0], lon=val_to_check[1], method="nearest"
+                        )["ws"]
                     )
                     > coord_ws
                 ):

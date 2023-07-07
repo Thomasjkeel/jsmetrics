@@ -244,7 +244,7 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max, ws_col):
     sum_weighted_lat_flux = None
     sum_weighted_ws_by_lat = None
     for lat in sub_data["lat"].data:
-        lat_data = sub_data.sel(lat=lat)
+        lat_data = sub_data.sel(lat=lat, method="nearest")
         lat_sum_weighted_ws = get_mass_weighted_average_wind(lat_data, ws_col)
         if sum_weighted_lat_flux is None:
             sum_weighted_ws_by_lat = lat_sum_weighted_ws
@@ -1197,7 +1197,7 @@ def get_latitude_value_in_data_row(data_row, lat_val):
     lat_val : float or int
         latitude value to extract from data row
     """
-    return float(data_row.sel(lat=lat_val))
+    return float(data_row.sel(lat=lat_val, method="nearest"))
 
 
 def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row, width_of_pulse=10):

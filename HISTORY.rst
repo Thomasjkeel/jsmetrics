@@ -2,6 +2,9 @@
 History
 =======
 
+0.1.3 (2023-07-07)
+-------------------------
+* Add "method='nearest'" to jet statistics and core algorithms for cases when coords cannot be represented within float precision range.
 
 0.1.2 (2023-06-06)
 -------------------------

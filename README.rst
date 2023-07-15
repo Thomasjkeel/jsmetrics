@@ -64,8 +64,10 @@ Usage
  k14 = jsmetrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
  print(k14['jet_center'].sel(time=0))
 
-Gallery
+Examples
 -------------
+Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
+
 .. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png
   :width: 560
   :align: center

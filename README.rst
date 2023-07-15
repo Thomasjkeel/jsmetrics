@@ -5,6 +5,7 @@ jsmetrics: Jet-stream metrics and algorithms
 |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 ------------------------------------------------------------------------------
 **preprint now available here: https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/**   
+**example notebooks: https://github.com/Thomasjkeel/jsmetrics-examples**
 
 This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising jet-streams
 written in Python and built from xarray.

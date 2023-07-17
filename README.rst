@@ -208,8 +208,8 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 
-.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.7974550.svg
-        :target:  https://doi.org/10.5281/zenodo.7974550
+.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8123560.svg
+        :target:  https://doi.org/10.5281/zenodo.8123560
         :alt: DOI
 .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest
        :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest

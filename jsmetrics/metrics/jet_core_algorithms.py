@@ -93,6 +93,8 @@ def schiemann_et_al_2009(data):
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
     #  Step 2. Calculate jet maximas
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         output = jet_core_algorithms_components.get_local_jet_maximas_by_oneday_by_plev(
             data
@@ -133,6 +135,8 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
         data = data.expand_dims("plev")
 
     # Step 1. Run Jet-stream Core Idenfication Algorithm
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         if "time" in data.dims:
             data = data.isel(time=0)
@@ -173,6 +177,8 @@ def penaortiz_et_al_2013(data):
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
     #  Step 2. Make array of zeros for local wind maxima location algorithm
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
     output = jet_core_algorithms_components.get_empty_local_wind_maxima_data(data)

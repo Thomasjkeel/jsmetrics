@@ -104,6 +104,8 @@ def cattiaux_et_al_2016(data):
         data = data.to_dataset()
 
     #  Step 1. get zonal average for each timestep
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         data = data.expand_dims("time")
     data["zonal_mean_zg_30Nto70N"] = (

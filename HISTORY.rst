@@ -2,6 +2,12 @@
 History
 =======
 
+
+0.1.4-alpha (2023-07-21)
+-------------------------
+* add KeyError raise if no time coordinate is passed to various metrics
+
+
 0.1.3 (2023-07-07)
 -------------------------
 * Add "method='nearest'" to jet statistics and core algorithms for cases when coords cannot be represented within float precision range.

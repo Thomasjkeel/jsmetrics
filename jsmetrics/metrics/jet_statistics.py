@@ -42,6 +42,8 @@ def archer_caldeira_2008(data):
         Data containing mass weighted average ws, mass flux weighted pressure and latitude
     """
     #  Step 1. Get monthly means
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         print(
             "Warning: only found one time step, and the time coord is being renamed month."
@@ -312,6 +314,8 @@ def barnes_simpson_2017(data):
             )
             data = data.mean("plev")
     data = data.mean("lon")
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
     if not data.indexes["time"].is_monotonic_increasing:
@@ -356,6 +360,8 @@ def grise_polvani_2017(data):
         data = data.to_dataset()
 
     # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         data = data.expand_dims("time")
 
@@ -439,6 +445,8 @@ def bracegirdle_et_al_2018(data):
             # raise ValueError("Please subset to one plev value for this metric")
 
     # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         data = data.expand_dims("time")
 
@@ -523,6 +531,8 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     )
 
     # Expand time dimension
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
@@ -584,8 +594,9 @@ def kerr_et_al_2020(data, width_of_pulse=10):
             )
             data = data.mean("plev")
             # raise ValueError("Please subset to one plev value for this metric")
-
-    if data["time"].size == 1:
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
+    elif data["time"].size == 1:
         output = (
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
                 data, width_of_pulse

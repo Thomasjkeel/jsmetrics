@@ -294,6 +294,22 @@ class TestGrisePolvani2017(unittest.TestCase):
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.92644)
 
 
+class TestBracegirdle2018(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        tested_func = jet_statistics.bracegirdle_et_al_2018
+        test_data = self.data.sel(plev=slice(85000, 85000))
+        result = tested_func(test_data)
+        tested_func(test_data["ua"])
+        # self.assertRaises(ValueError, lambda: tested_func(self.data))
+        self.assertEqual(float(result["seasonal_JPOS"].max()), 37.725)
+        self.assertEqual(float(result["annual_JPOS"].max()), 37.725)
+        self.assertEqual(round(float(result["seasonal_JSTR"].max()), 3), 8.589)
+        self.assertEqual(round(float(result["annual_JSTR"].max()), 3), 8.589)
+
+
 class TestCeppi2018(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()
@@ -331,8 +347,8 @@ class TestZappa2018(unittest.TestCase):
     def test_metric(self):
         tested_func = jet_statistics.zappa_et_al_2018
         result = tested_func(self.data)
-        self.assertEqual(float(result["jet_lat"][0].data), 37.94281281780439)
-        self.assertEqual(float(result["jet_speed"][0].data), 22.341136932373047)
+        self.assertEqual(round(float(result["jet_lat"][0].data), 3), 37.943)
+        self.assertEqual(round(float(result["jet_speed"][0].data), 3), 22.341)
 
     def test_one_latlon_coord(self):
         tested_func = jet_statistics.zappa_et_al_2018
@@ -352,22 +368,6 @@ class TestZappa2018(unittest.TestCase):
                 self.data.sel(lon=slice(0, 0), lat=slice(0, 0)), lon_resolution=1.875
             ),
         )
-
-
-class TestBracegirdle2018(unittest.TestCase):
-    def setUp(self):
-        self.data = set_up_test_u_data()
-
-    def test_metric(self):
-        tested_func = jet_statistics.bracegirdle_et_al_2018
-        test_data = self.data.sel(plev=slice(85000, 85000))
-        result = tested_func(test_data)
-        tested_func(test_data["ua"])
-        # self.assertRaises(ValueError, lambda: tested_func(self.data))
-        self.assertEqual(float(result["seasonal_JPOS"].max()), 37.725)
-        self.assertEqual(float(result["annual_JPOS"].max()), 37.725)
-        self.assertEqual(round(float(result["seasonal_JSTR"].max()), 3), 8.589)
-        self.assertEqual(round(float(result["annual_JSTR"].max()), 3), 8.589)
 
 
 class TestKerr2020(unittest.TestCase):

@@ -2,6 +2,10 @@
 History
 =======
 
+0.1.4 (2023-08-02)
+-------------------------
+* Add Zappa et al. 2018 metric to package (This method builds on Ceppi et al. 2018)
+
 
 0.1.4-alpha (2023-07-21)
 -------------------------

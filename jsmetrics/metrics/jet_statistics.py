@@ -491,7 +491,7 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
     Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
 
-    Also used in Zappa et al. 2018, Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014.
+    Also see Zappa et al. 2018 method which includes exclusion of <0 m/s u-wind
 
     Parameters
     ----------
@@ -524,6 +524,90 @@ def ceppi_et_al_2018(data, lon_resolution=None):
 
     #  Step 2. calculate zonal mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
+
+    # Step 3: Assign laitude of jet-stream centroids to main data
+    data["jet_lat"] = jet_statistics_components.calc_centroid_jet_lat_from_zonal_mean(
+        zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
+    )
+
+    # Expand time dimension
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
+    if data["time"].size == 1:
+        data = data.expand_dims("time")
+        zonal_mean = zonal_mean.expand_dims("time")
+
+    # Step 4 (adapted from original methodology): Get nearest latitude actually in data to the one determined by metric
+    nearest_latitudes_to_jet_lat_estimates = np.array(
+        list(
+            map(
+                lambda row: data_utils.find_nearest_value_to_array(
+                    data["lat"], float(row)
+                ),
+                data["jet_lat"],
+            )
+        )
+    )
+
+    # Step 5 (adapted from original methodology): Get speed of associated nearest latitude
+    data["jet_speed"] = (
+        ("time",),
+        np.array(
+            list(
+                map(
+                    lambda data_row, lat_val: jet_statistics_components.get_latitude_value_in_data_row(
+                        data_row, lat_val
+                    ),
+                    zonal_mean["ua"],
+                    nearest_latitudes_to_jet_lat_estimates,
+                )
+            )
+        ),
+    )
+    return data
+
+
+def zappa_et_al_2018(data, lon_resolution=None):
+    """
+    Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
+    This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
+    Method from Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
+    Adapted from and very similar to Ceppi et al (2018).
+
+    Also used in Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data containing u-component windspeed
+    lon_resolution : numeric
+        Resolution to use for longitude coord if size 1
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing centroid latitude of u-wind for each time unit (e.g. each day)
+    """
+    #  Step 1. Get area in m2 by latitude/longitude grid cells
+    if not data["lon"].size == 1 and not data["lat"].size == 1:
+        total_area_m2 = spatial_utils.grid_cell_areas(data["lon"], data["lat"])
+    elif lon_resolution and not data["lat"].size == 1 and data["lon"].size == 1:
+        lons_to_use = [float(data["lon"]), float(data["lon"]) + lon_resolution]
+        total_area_m2 = spatial_utils.grid_cell_areas(lons_to_use, data["lat"])
+        total_area_m2 = total_area_m2.mean(axis=1)
+        total_area_m2 = total_area_m2.reshape(-1, 1)
+        if data["lon"].shape == ():
+            data = data.expand_dims("lon")
+    else:
+        raise ValueError(
+            "For this method, your data needs to have at least 2 'lat' values and 'lon' values needs to be more than one unless you set the 'lon_resolution' parameter"
+        )
+
+    data["total_area_m2"] = (("lat", "lon"), total_area_m2)
+
+    #  Step 2. calculate zonal mean and floor ua values to 0
+    zonal_mean = windspeed_utils.get_zonal_mean(data)
+    zonal_mean["ua"] = zonal_mean["ua"].where(lambda x: x > 0, 0)
 
     # Step 3: Assign laitude of jet-stream centroids to main data
     data["jet_lat"] = jet_statistics_components.calc_centroid_jet_lat_from_zonal_mean(

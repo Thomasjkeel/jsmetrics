@@ -134,12 +134,12 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    `Cattiaux et al. 2016 <https://doi.wiley.com/10.1002/2016GL070309>`_            To verify           `Barnes & Simpson 2017 <https://doi.org/10.1175/JCLI-D-17-0299.1>`_             Complete            
    `Chenoli et al. 2017 <http://link.springer.com/10.1007/s00382-016-3102-y>`_     In progress         `Grise & Polvani 2017 <https://doi.org/10.1175/JCLI-D-16-0849.1>`_              Complete                        
    `Molnos et al. 2017  <https://doi.org/10.5194/esd-8-75-2017>`_                  In progress*        `Adam et al. 2018 <https://doi.org/10.5194/gmd-11-4339-2018>`_                  To start            
-   `Bracegirdle et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0320.1>`_           Complete            `Ceppi et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0323.1>`_                 To verify            
+   `Bracegirdle et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0320.1>`_           Complete            `Ceppi et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0323.1>`_                 Complete            
    `Kern et al. 2018 <http://ieeexplore.ieee.org/document/8017585/>`_              To start*           `Rikus 2018 <http://dx.doi.org/10.1007/s00382-015-2560-y>`_                     In progress            
-   `Kern & Westermann 2019 <https://doi.org/10.2312/vmv.20191321>`_                To start            `Kerr et al. 2020 <https://doi.org/10.1029/2020JD032735>`_                      To verify            
-   `Maher et al. 2020 <https://doi.org/10.1007/s00382-019-05084-6>`_               To start            `Winters et al. 2020 <https://doi.org/10.1175/MWR-D-19-0353.1>`_                To start            
-   `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1029/2020JD033668>`_       To start*           `Bosiger et al. 2022 <https://doi.org/10.5194/gmd-15-1079-2022>`_               To start            
-   `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*                        
+   `Zappa et al. 2018 <https://doi.org/10.1029/2019GL083653>`_                     Complete            `Kern & Westermann 2019 <https://doi.org/10.2312/vmv.20191321>`_                To start
+   `Kerr et al. 2020 <https://doi.org/10.1029/2020JD032735>`_                      To verify           `Maher et al. 2020 <https://doi.org/10.1007/s00382-019-05084-6>`_               To start
+   `Winters et al. 2020 <https://doi.org/10.1175/MWR-D-19-0353.1>`_                To start            `Martin 2021 <https://onlinelibrary.wiley.com/doi/10.1029/2020JD033668>`_       To start*        
+   `Bosiger et al. 2022 <https://doi.org/10.5194/gmd-15-1079-2022>`_               To start            `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*                        
    =============================================================================== ==============  ==  =============================================================================== ==============
 
 * == help needed

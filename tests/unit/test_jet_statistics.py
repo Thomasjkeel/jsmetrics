@@ -324,6 +324,36 @@ class TestCeppi2018(unittest.TestCase):
         )
 
 
+class TestZappa2018(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        tested_func = jet_statistics.zappa_et_al_2018
+        result = tested_func(self.data)
+        self.assertEqual(float(result["jet_lat"][0].data), 37.94281281780439)
+        self.assertEqual(float(result["jet_speed"][0].data), 22.341136932373047)
+
+    def test_one_latlon_coord(self):
+        tested_func = jet_statistics.zappa_et_al_2018
+        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lon=0)))
+        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lat=0)))
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.sel(lat=slice(0, 0)))
+        )
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.sel(lon=slice(0, 0)))
+        )
+        tested_func(self.data.sel(lon=slice(0, 0)), lon_resolution=1.875)
+        tested_func(self.data.sel(lon=0), lon_resolution=1.875)
+        self.assertRaises(
+            ValueError,
+            lambda: tested_func(
+                self.data.sel(lon=slice(0, 0), lat=slice(0, 0)), lon_resolution=1.875
+            ),
+        )
+
+
 class TestBracegirdle2018(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()

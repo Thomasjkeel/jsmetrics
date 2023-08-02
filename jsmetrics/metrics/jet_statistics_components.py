@@ -1170,7 +1170,7 @@ def calc_centroid_jet_lat_from_zonal_mean(zonal_mean, area_by_lat):
     Will get the centroid latitude of the u-component wind using:
     jet_lat = integral(60deg, 30deg)(zonal_u**2*lat) dlat / integral(60deg, 30deg)(zonal_u**2) dlat
 
-    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1 & Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
 
     Parameters
     ----------
@@ -1188,7 +1188,7 @@ def get_latitude_value_in_data_row(data_row, lat_val):
     """
     Will return the latitude value of a given data row. Needed to loop through data and external array
 
-    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+    Component of method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1 & Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
 
     Parameters
     ----------

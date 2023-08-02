@@ -2,6 +2,10 @@
 History
 =======
 
+0.1.4 (2023-08-02)
+-------------------------
+* Add new metric to package: Zappa et al. 2018 (This method builds on Ceppi et al. 2018)
+* Raise KeyError if no time coordinate is passed to a given metrics
 
 0.1.4-alpha (2023-07-21)
 -------------------------

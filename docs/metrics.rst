@@ -1,15 +1,15 @@
 ====================
-Metrics & Algorithms
+Statistics & Algorithms
 ====================
 
-See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `issues`_.
+See `all metrics`_ for specifications of each 'Complete' or 'In progress' statistic and algorithm. For progress on their completion see `issues`_.
 
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
 
 
-Metrics
-########
+Jet statistics
+##############
 .. table::
    :align: left
    :widths: auto
@@ -40,8 +40,8 @@ Metrics
    :noindex:
 
 
-Metric sub-components
----------------------
+Jet statistic sub-components
+----------------------------
 
 .. automodule:: jsmetrics.metrics.jet_statistics_components
    :members:
@@ -50,8 +50,9 @@ Metric sub-components
    :show-inheritance:
    :noindex:
 
-Algorithms
-##########
+
+Jet core algorithms
+###################
 
 .. table::
    :align: left
@@ -74,8 +75,8 @@ Algorithms
    :show-inheritance:
    :noindex:
 
-Algorithm sub-components
-------------------------
+Jet core algorithm sub-components
+---------------------------------
 
 .. automodule:: jsmetrics.metrics.jet_core_algorithms_components
    :members:
@@ -84,8 +85,8 @@ Algorithm sub-components
    :show-inheritance:
    :noindex:
 
-Utils
-########
+Utility functions
+#################
 
 Data Utils
 ------------------------

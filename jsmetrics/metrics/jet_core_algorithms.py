@@ -112,23 +112,37 @@ def koch_et_al_2006(data, ws_threshold=30):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def schiemann_et_al_2009(data):
-    """
-    An occurrence-based jet climatology. Uses three rules: wind-vector wind-speed is local maxima is above 30 m/s and u-wind is more than 0 m/s.
+    r"""
+    This method detects jet occurrences, whereby each occurence is detected based
+    on three rules applied to inputted wind speed (V, u, v):
+        1. \|V\| is a local maxima in longitude and altitude plane
+        2. \|V\| > 30 m/s
+        3. \|u\| > 0 m/s.
 
-    Method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
-
-    NOTE: Currently takes a very long time i.e. 8 seconds per time unit (i.e. 8 seconds per day) on AMD Ryzen 5 3600 6-core processor
-    TODO: speed this metric up
+    This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
+    and is described in Section 2 of that study.
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+
+    ws_threshold : int or float
+        Windspeed threshold used to extract jet maxima (default: 30 ms-1)
 
     Returns
     ----------
     output : xr.Dataset
         Data with local jet maximas
+
+    Notes
+    -----
+    While the original method is built on a four dimension slice of wind speed (time, lat, lon, plev),
+    This implementation will work where there is only one plev.
+
+    **SLOW METHOD:** Due to the nature of this method, it currently takes a very long time to run,
+    i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
+
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])

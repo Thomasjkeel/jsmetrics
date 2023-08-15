@@ -45,6 +45,10 @@ def koch_et_al_2006(data, ws_threshold=30):
     weighted_average_ws : xarray.Dataset
         A dataset containing weighted average ws above windspeed threshold
 
+    Notes
+    -----
+    This equation for this method is provided on pg 287.
+
     Examples
     --------
     .. code-block:: python
@@ -60,10 +64,6 @@ def koch_et_al_2006(data, ws_threshold=30):
 
         # Run algorithm:
         koch_outputs = jsmetrics.jet_core_algorithms.koch_et_al_2006(uv_sub, ws_threshold=30)
-
-    Notes
-    -----
-    This equation for this method is provided on pg 287.
 
     """
     if data["plev"].count() < 2:

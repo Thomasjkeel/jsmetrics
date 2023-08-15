@@ -36,14 +36,30 @@ def koch_et_al_2006(data, ws_threshold=30):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and contain the coordinates: 'lon', 'lat', 'plev' and 'time'.
     ws_threshold : int or float
-        Windspeed threshold for jet-stream (default: 30 ms-1)
+        Windspeed threshold used to extract from weighted average (default: 30 ms-1)
 
     Returns
     ----------
     weighted_average_ws : xarray.Dataset
         A dataset containing weighted average ws above windspeed threshold
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to :
+        uv_sub = uv_data.sel(plev=slice())
+
+        # Run algorithm:
+        koch_outputs = jsmetrics.jet_core_algorithms.koch_et_al_2006(uv_sub, ws_threshold=30)
 
     Notes
     -----

@@ -4,7 +4,7 @@ Metrics & Algorithms
 
 See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `issues`_.
 
-.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/jsmetrics/details_for_all_metrics.py
+.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
 
 
@@ -30,7 +30,7 @@ Metrics
 * == help needed
 
 
-.. automodule:: jsmetrics.metrics.jet_metrics
+.. automodule:: jsmetrics.metrics.jet_statistics
    :members:
    :imported-members:
    :undoc-members:
@@ -41,7 +41,7 @@ Metrics
 Metric sub-components
 ---------------------
 
-.. automodule:: jsmetrics.metrics.jet_metrics_components
+.. automodule:: jsmetrics.metrics.jet_statistics_components
    :members:
    :imported-members:
    :undoc-members:

@@ -56,7 +56,7 @@ Usage
 Examples
 -------------
 Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
-Also check out the `basic usage <usage>_`.
+Also check out the :ref:`Examples of Use`
 
 DISCLAIMER
 -------------

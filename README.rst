@@ -144,7 +144,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 
 * == help needed
 
-.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/details_for_all_metrics.py
+.. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 .. 

@@ -11,6 +11,7 @@ History
 -------------------------
 * Begin overhaul of ReadTheDocs documentation
 * Add notes and example to Koch et al. 2006 metric
+* Rename variable returned by K06 to jet_events_ws
 
 
 0.1.4 (2023-08-02)

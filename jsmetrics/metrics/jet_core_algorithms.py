@@ -106,7 +106,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     jet_events = jet_events.fillna(0.0)
 
     # Step 5: turn into dataset
-    jet_event_ds = jet_events.jet_events("jet_event_ws").to_dataset()
+    jet_event_ds = jet_events.rename("jet_event_ws").to_dataset()
     return jet_event_ds
 
 

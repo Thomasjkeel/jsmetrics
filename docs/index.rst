@@ -24,8 +24,8 @@ The philosophy of this package was to keep the methodology of each metric as clo
 All can be handled user-side.
 
 
-Installation 
--------------
+How to Install 
+--------------
 .. code-block:: bash
     
     pip install jsmetrics

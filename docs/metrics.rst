@@ -1,6 +1,6 @@
-====================
+=======================
 Statistics & Algorithms
-====================
+=======================
 
 See `all metrics`_ for specifications of each 'Complete' or 'In progress' statistic and algorithm. For progress on their completion see `issues`_.
 

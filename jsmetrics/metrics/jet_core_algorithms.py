@@ -20,14 +20,18 @@ __status__ = "Development"
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
-    """
+    r"""
     Calculates the weighted average windspeed and applies a threshold to identify the jet.
     The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
 
-    weighted average windspeed = 1/(p2-p1) integral(p2, p1)(u^2+v^2)^(1/2)dp
-    where p1, p2 is min, max pressure level
+    weighted average windspeed is calculated as follows:
 
-    Method from Koch et al (2006) https://doi.org/10.1002/joc.1255
+    .. math::
+        \alpha vel =  \frac{1}{(p2-p1)} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
+
+    where p1, p2 is min, max pressure level.
+
+    This method was first introduced in Koch et al (2006) https://doi.org/10.1002/joc.1255
 
     Parameters
     ----------
@@ -39,7 +43,10 @@ def koch_et_al_2006(data, ws_threshold=30):
     Returns
     ----------
     weighted_average_ws : xarray.Dataset
-        data containing weighted average ws above windspeed threshold
+        A dataset containing weighted average ws above windspeed threshold
+
+    Notes
+    -----
 
     """
     if data["plev"].count() < 2:

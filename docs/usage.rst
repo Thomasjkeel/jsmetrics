@@ -1,6 +1,6 @@
-=====
-Usage
-=====
+===========
+Basic usage
+===========
 
 To use jsmetrics in a project::
 

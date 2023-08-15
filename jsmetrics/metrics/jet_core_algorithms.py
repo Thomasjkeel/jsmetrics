@@ -20,26 +20,66 @@ __status__ = "Development"
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
-    """
-    Calculates the weighted average windspeed and applies a threshold to identify the jet.
-    The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
+    r"""
+    This method follows a two-step procedure used to detect 'jet-event occurences'.
+    The first step is to calculate the weighted average windspeed and then the
+    second step is to apply a windspeed threshold to isolate jet events from that weighted average.
+    The original methodology uses windspeed between 100-400 hPa to calculated the weighted average
+    and 30 meters per second as the windspeed threshold.
 
-    weighted average windspeed = 1/(p2-p1) integral(p2, p1)(u^2+v^2)^(1/2)dp
-    where p1, p2 is min, max pressure level
+    The weighted average windspeed for the jet events is calculated as follows:
 
-    Method from Koch et al (2006) https://doi.org/10.1002/joc.1255
+    .. math::
+        \alpha vel =  \frac{1}{(p2-p1)} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
+
+    where p1, p2 is min, max pressure level.
+
+    This method was first introduced in Koch et al (2006) (https://doi.org/10.1002/joc.1255)
+    and is described in section 2.2.2 of that study. The original methodology provides a third step
+    (to produce a climatology of jet events), but this has been ignored in this implementation.
+    Instead, we have provided an example of how to calculate this after running this method
+    in 'Examples' below.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     ws_threshold : int or float
-        Windspeed threshold for jet-stream (default: 30 ms-1)
+        Windspeed threshold used to extract from weighted average (default: 30 ms-1)
 
     Returns
     ----------
-    weighted_average_ws : xarray.Dataset
-        data containing weighted average ws above windspeed threshold
+    xarray.Dataset
+        A dataset containing weighted average ws above windspeed threshold
+
+    Notes
+    -----
+    This equation for this method is provided on pg 287 of the Koch et al. 2006 paper.
+    In the original paper, they accumulate the jet events into two-class jet typology (described in section 2.2.3
+    of Koch et al. 2006)
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology (100-400 hPa)):
+        uv_sub = uv_data.sel(plev=slice(100, 400))
+
+        # Run algorithm:
+        koch_outputs = jsmetrics.jet_core_algorithms.koch_et_al_2006(uv_sub, ws_threshold=30)
+
+        # Produce climatology of jet occurence events for each season and each month:
+        koch_month_climatology = koch_outputs.groupby("time.month").mean("time")
+        koch_season_climatology = koch_outputs.groupby("time.season").mean("time")
 
     """
     if data["plev"].count() < 2:
@@ -60,34 +100,49 @@ def koch_et_al_2006(data, ws_threshold=30):
         sum_weighted_ws, all_plevs_hPa
     )
 
-    # Step 4: Apply windspeed threshold
-    weighted_average_ws = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
+    # Step 4: Apply windspeed threshold to get jet event dataset
+    jet_events = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
 
-    weighted_average_ws = weighted_average_ws.fillna(0.0)
+    jet_events = jet_events.fillna(0.0)
+
     # Step 5: turn into dataset
-    weighted_average_ws = weighted_average_ws.rename("weighted_average_ws").to_dataset()
-    return weighted_average_ws
+    jet_event_ds = jet_events.rename("jet_events_ws").to_dataset()
+    return jet_event_ds
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def schiemann_et_al_2009(data):
-    """
-    An occurrence-based jet climatology. Uses three rules: wind-vector wind-speed is local maxima is above 30 m/s and u-wind is more than 0 m/s.
+    r"""
+    This method detects jet occurrences, whereby each occurence is detected based
+    on three rules applied to inputted wind speed (V, u, v):
+        1. \|V\| is a local maxima in longitude and altitude plane
+        2. \|V\| > 30 m/s
+        3. \|u\| > 0 m/s.
 
-    Method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
-
-    NOTE: Currently takes a very long time i.e. 8 seconds per time unit (i.e. 8 seconds per day) on AMD Ryzen 5 3600 6-core processor
-    TODO: speed this metric up
+    This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
+    and is described in Section 2 of that study.
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+
+    ws_threshold : int or float
+        Windspeed threshold used to extract jet maxima (default: 30 ms-1)
 
     Returns
     ----------
     output : xr.Dataset
         Data with local jet maximas
+
+    Notes
+    -----
+    While the original method is built on a four dimension slice of wind speed (time, lat, lon, plev),
+    This implementation will work where there is only one plev.
+
+    **Slow method:** Due to the nature of this method, it currently takes a very long time to run,
+    i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
+
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])

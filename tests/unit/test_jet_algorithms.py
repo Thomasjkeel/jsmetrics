@@ -9,7 +9,7 @@
 
 # imports
 import unittest
-from jsmetrics.metrics import jet_core_algorithms
+from jsmetrics import jet_core_algorithms
 
 # from parameterized import parameterized
 import xarray as xr
@@ -34,7 +34,7 @@ class TestKoch2006(unittest.TestCase):
         result = tested_func(self.data, ws_threshold=8)
         # check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(float(result["weighted_average_ws"].max()), 8.775158882141113)
+        self.assertEqual(float(result["jet_events_ws"].max()), 8.775158882141113)
         new_data = self.data.isel(plev=0)
         self.assertRaises(ValueError, lambda: tested_func(new_data))
 

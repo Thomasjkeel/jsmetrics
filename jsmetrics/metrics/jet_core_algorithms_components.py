@@ -22,9 +22,13 @@ __status__ = "Development"
 
 
 def get_sum_weighted_ws(data, all_plevs_hPa):
-    """
+    r"""
     Get sum of weighted windspeed.
-    sum weighted windspeed = integral(p2, p1)(u^2+v^2)^(1/2)dp
+    sum weighted windspeed is calculated as follows:
+
+    .. math::
+        \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
+
     where p1, p2 is min, max pressure level
 
     Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
@@ -62,10 +66,13 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
 
 
 def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
-    """
-    Calculates weighted average wind-speed:
-    weighted average windspeed = 1/(p2-p1) * sum average windspeed
-    where p1, p2 is min, max pressure level
+    r"""
+    Calculates weighted average windspeed as follows:
+
+    .. math::
+        \alpha vel =  \frac{1}{(p2-p1)} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
+
+    where p1, p2 is min, max pressure level.
 
     Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
 
@@ -120,7 +127,7 @@ def get_all_hPa_list(data):
     return plevs
 
 
-def get_local_jet_maximas_by_oneday_by_plev(row):
+def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
     """
     Get local jet maxima for one day.
 
@@ -130,7 +137,9 @@ def get_local_jet_maximas_by_oneday_by_plev(row):
     Parameters
     ----------
     row : xarray.Dataset
-        Data of a sinlge time unit containing windspeed (ws), plev, lat, lon
+        Data of a single time unit containing windspeed (ws), plev, lat, lon
+    ws_threshold : int or float
+        Windspeed threshold used to extract jet events (default: 30 ms-1)
 
     Returns
     ----------
@@ -145,7 +154,9 @@ def get_local_jet_maximas_by_oneday_by_plev(row):
     for lon in row["lon"]:
         for plev in row["plev"]:
             current = row.sel(lon=lon, plev=plev, method="nearest")
-            current = current.where((abs(current["ws"]) >= 30) & (current["ua"] > 0))
+            current = current.where(
+                (abs(current["ws"]) >= ws_threshold) & (current["ua"] > 0)
+            )
             local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
             if len(local_maxima_lat_inds) > 0:
                 for lat_ind in local_maxima_lat_inds:

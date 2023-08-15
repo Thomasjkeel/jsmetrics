@@ -34,9 +34,9 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     where p1, p2 is min, max pressure level.
 
-    This method was first introduced in Koch et al (2006) https://doi.org/10.1002/joc.1255
+    This method was first introduced in Koch et al (2006) (https://doi.org/10.1002/joc.1255)
     and is described in section 2.2.2 of that study. The original methodology provides a third step
-    (calculation of a climatology), but this has been ignored for the implementation in this package.
+    (to produce a climatology of jet events), but this has been ignored in this implementation.
     Instead, we have provided an example of how to calculate this after running this method
     in 'Examples' below.
 
@@ -58,7 +58,9 @@ def koch_et_al_2006(data, ws_threshold=30):
     Notes
     -----
     This equation for this method is provided on pg 287 of the Koch et al. 2006 paper.
-    In the original paper, they accumulate the jet event's produce a jet typology (in section 2.2.3 of Koch et al. 2006)
+    In the original paper, they accumulate the jet events into two-class jet typology (described in section 2.2.3
+    of Koch et al. 2006)
+
     Examples
     --------
     .. code-block:: python
@@ -75,8 +77,9 @@ def koch_et_al_2006(data, ws_threshold=30):
         # Run algorithm:
         koch_outputs = jsmetrics.jet_core_algorithms.koch_et_al_2006(uv_sub, ws_threshold=30)
 
-        # Produce climatology of jet occurence events for each month:
-        koch_climatology = koch_outputs
+        # Produce climatology of jet occurence events for each season and each month:
+        koch_month_climatology = koch_outputs.groupby("time.month").mean("time")
+        koch_season_climatology = koch_outputs.groupby("time.season").mean("time")
 
     """
     if data["plev"].count() < 2:

@@ -152,6 +152,7 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
    statement
    usage
    metrics
+   components
    contributing
    authors
    history

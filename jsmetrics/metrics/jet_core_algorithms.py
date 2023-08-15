@@ -21,6 +21,7 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
     r"""
+    This method is a used to detect 'jet-event occurences' based on .
     Calculates the weighted average windspeed and applies a threshold to identify the jet.
     The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
 
@@ -31,7 +32,8 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     where p1, p2 is min, max pressure level.
 
-    This method was first introduced in Koch et al (2006) https://doi.org/10.1002/joc.1255
+    This method was first introduced in Koch et al (2006) https://doi.org/10.1002/joc.1255 and is described in section 2.2.2 of that study.
+    Please see 'Notes' below for any additional information about the implementation of this method to this package.
 
     Parameters
     ----------
@@ -42,13 +44,14 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     Returns
     ----------
-    weighted_average_ws : xarray.Dataset
+    xarray.Dataset
         A dataset containing weighted average ws above windspeed threshold
 
     Notes
     -----
-    This equation for this method is provided on pg 287. In the original paper, the
-
+    This equation for this method is provided on pg 287 of the Koch et al. 2006 paper.
+    In the original paper, they accumulate the jet event's produce a jet typology
+    Values outside of the threshold are given the value 0.0.
     Examples
     --------
     .. code-block:: python
@@ -88,6 +91,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     weighted_average_ws = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
 
     weighted_average_ws = weighted_average_ws.fillna(0.0)
+
     # Step 5: turn into dataset
     weighted_average_ws = weighted_average_ws.rename("weighted_average_ws").to_dataset()
     return weighted_average_ws

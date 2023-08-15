@@ -21,8 +21,11 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
     r"""
-    This method is a used to detect 'jet-event occurences' based on a calculating a weighted average windspeed and then applying a windspeed threshold to isolate jet events.
-    The original methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
+    This method follows a two-step procedure used to detect 'jet-event occurences'.
+    The first step is to calculate the weighted average windspeed and then the
+    second step is to apply a windspeed threshold to isolate jet events from that weighted average.
+    The original methodology uses windspeed between 100-400 hPa to calculated the weighted average
+    and 30 meters per second as the windspeed threshold.
 
     The weighted average windspeed for the jet events is calculated as follows:
 
@@ -31,9 +34,14 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     where p1, p2 is min, max pressure level.
 
-    This method was first introduced in Koch et al (2006) https://doi.org/10.1002/joc.1255 and is described in section 2.2.2 of that study.
-    The original methodology provides, but instead of including it as part of this method, we have provided an example below of how to calculate this.
-    Please see 'Notes' below for any additional information about the implementation of this method to this package.
+    This method was first introduced in Koch et al (2006) https://doi.org/10.1002/joc.1255
+    and is described in section 2.2.2 of that study. The original methodology provides a third step
+    (calculation of a climatology), but this has been ignored for the implementation in this package.
+    Instead, we have provided an example of how to calculate this after running this method
+    in 'Examples' below.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -50,8 +58,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     Notes
     -----
     This equation for this method is provided on pg 287 of the Koch et al. 2006 paper.
-    In the original paper, they accumulate the jet event's produce a jet typology
-    Values outside of the threshold are given the value 0.0.
+    In the original paper, they accumulate the jet event's produce a jet typology (in section 2.2.3 of Koch et al. 2006)
     Examples
     --------
     .. code-block:: python
@@ -90,14 +97,14 @@ def koch_et_al_2006(data, ws_threshold=30):
         sum_weighted_ws, all_plevs_hPa
     )
 
-    # Step 4: Apply windspeed threshold
-    weighted_average_ws = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
+    # Step 4: Apply windspeed threshold to get jet event dataset
+    jet_events = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
 
-    weighted_average_ws = weighted_average_ws.fillna(0.0)
+    jet_events = jet_events.fillna(0.0)
 
     # Step 5: turn into dataset
-    weighted_average_ws = weighted_average_ws.rename("weighted_average_ws").to_dataset()
-    return weighted_average_ws
+    jet_event_ds = jet_events.jet_events("jet_event_ws").to_dataset()
+    return jet_event_ds
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])

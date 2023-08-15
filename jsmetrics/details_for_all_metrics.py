@@ -21,7 +21,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.koch_et_al_2006,
         "name": "Koch et al. 2006",
-        "description": "",
+        "description": """This method is a used to detect \'jet-event occurences\'
+                         based on a calculating a weighted average windspeed and
+                        then applying a windspeed threshold to isolate jet events""",
         "doi": "https://doi.org/10.1002/joc.1255",
     },
     "ArcherCaldeira2008": {

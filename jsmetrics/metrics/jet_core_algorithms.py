@@ -21,11 +21,10 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
     r"""
-    This method is a used to detect 'jet-event occurences' based on .
-    Calculates the weighted average windspeed and applies a threshold to identify the jet.
-    The actual methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
+    This method is a used to detect 'jet-event occurences' based on a calculating a weighted average windspeed and then applying a windspeed threshold to isolate jet events.
+    The original methodology uses 100-400 hPa and 30 ms^-1 as the windspeed threshold.
 
-    weighted average windspeed is calculated as follows:
+    The weighted average windspeed for the jet events is calculated as follows:
 
     .. math::
         \alpha vel =  \frac{1}{(p2-p1)} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
@@ -33,6 +32,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     where p1, p2 is min, max pressure level.
 
     This method was first introduced in Koch et al (2006) https://doi.org/10.1002/joc.1255 and is described in section 2.2.2 of that study.
+    The original methodology provides, but instead of including it as part of this method, we have provided an example below of how to calculate this.
     Please see 'Notes' below for any additional information about the implementation of this method to this package.
 
     Parameters
@@ -67,6 +67,9 @@ def koch_et_al_2006(data, ws_threshold=30):
 
         # Run algorithm:
         koch_outputs = jsmetrics.jet_core_algorithms.koch_et_al_2006(uv_sub, ws_threshold=30)
+
+        # Produce climatology of jet occurence events for each month:
+        koch_climatology = koch_outputs
 
     """
     if data["plev"].count() < 2:

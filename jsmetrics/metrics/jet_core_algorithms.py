@@ -55,14 +55,15 @@ def koch_et_al_2006(data, ws_threshold=30):
         # Load in dataset with u and v components:
         uv_data = xr.open_dataset('path_to_uv_data')
 
-        # Subset dataset to :
-        uv_sub = uv_data.sel(plev=slice())
+        # Subset dataset to range used in original methodology (100-400 hPa)):
+        uv_sub = uv_data.sel(plev=slice(100, 400))
 
         # Run algorithm:
         koch_outputs = jsmetrics.jet_core_algorithms.koch_et_al_2006(uv_sub, ws_threshold=30)
 
     Notes
     -----
+    This equation for this method is provided on pg 287.
 
     """
     if data["plev"].count() < 2:

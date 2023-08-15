@@ -5,11 +5,11 @@ History
 
 0.1.5 (2023-XX-XX)
 -------------------------
-
+* Complete overhaul of ReadTheDocs documentation
 
 0.1.5-alpha (2023-08-15)
 -------------------------
-* Overhaul ReadTheDocs documentation
+* Begin overhaul of ReadTheDocs documentation
 * Add notes and example to Koch et al. 2006 metric
 
 

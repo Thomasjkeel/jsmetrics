@@ -62,10 +62,13 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
 
 
 def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
-    """
-    Calculates weighted average wind-speed:
-    weighted average windspeed = 1/(p2-p1) * sum average windspeed
-    where p1, p2 is min, max pressure level
+    r"""
+    Calculates weighted average windspeed as follows:
+
+    .. math::
+        \alpha vel =  \frac{1}{(p2-p1)} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
+
+    where p1, p2 is min, max pressure level.
 
     Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255
 

@@ -106,7 +106,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     jet_events = jet_events.fillna(0.0)
 
     # Step 5: turn into dataset
-    jet_event_ds = jet_events.rename("jet_event_ws").to_dataset()
+    jet_event_ds = jet_events.rename("jet_events_ws").to_dataset()
     return jet_event_ds
 
 
@@ -140,7 +140,7 @@ def schiemann_et_al_2009(data):
     While the original method is built on a four dimension slice of wind speed (time, lat, lon, plev),
     This implementation will work where there is only one plev.
 
-    **SLOW METHOD:** Due to the nature of this method, it currently takes a very long time to run,
+    **Slow method:** Due to the nature of this method, it currently takes a very long time to run,
     i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
 
     """

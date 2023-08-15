@@ -149,9 +149,9 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
    :caption: Contents:
 
    installation
+   statement
    usage
    metrics
    contributing
    authors
    history
-   statement

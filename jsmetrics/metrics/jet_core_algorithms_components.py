@@ -22,9 +22,13 @@ __status__ = "Development"
 
 
 def get_sum_weighted_ws(data, all_plevs_hPa):
-    """
+    r"""
     Get sum of weighted windspeed.
-    sum weighted windspeed = integral(p2, p1)(u^2+v^2)^(1/2)dp
+    sum weighted windspeed is calculated as follows:
+
+    .. math::
+        \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
+
     where p1, p2 is min, max pressure level
 
     Component of method from Koch et al (2006) https://doi.org/10.1002/joc.1255

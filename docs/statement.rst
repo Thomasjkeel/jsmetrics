@@ -19,9 +19,9 @@ Quick help
    ======================================================= ===============================================
  
 
-Built from sub-components
-----------------------------
-All statistics and algorithms in this package are built ontop of various one-purpose functions which we refer to as 'sub-components'. 
-These sub-component functions should have one role (e.g. to calculate atmospheric mass at a given atmospheric level), and should allow yet to be added metrics an easier implementation.
+.. Built from sub-components
+.. ----------------------------
+.. All statistics and algorithms in this package are built ontop of various one-purpose functions which we refer to as 'sub-components'. 
+.. These sub-component functions should have one role (e.g. to calculate atmospheric mass at a given atmospheric level), and should allow yet to be added metrics an easier implementation.
  
 

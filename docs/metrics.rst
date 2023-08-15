@@ -12,6 +12,9 @@ See the :ref:`Metric sub-components` for more detail about the implementation of
 
 Jet statistics
 ##############
+
+**Overview table:**
+
 .. table::
    :align: left
    :widths: auto
@@ -33,6 +36,7 @@ Jet statistics
 
 * == help needed
 
+**Documentation:**
 
 .. automodule:: jsmetrics.metrics.jet_statistics
    :members:
@@ -44,6 +48,8 @@ Jet statistics
 
 Jet core algorithms
 ###################
+
+**Overview table:**
 
 .. table::
    :align: left
@@ -58,6 +64,8 @@ Jet core algorithms
    =============================================================================== ==============  ==  =============================================================================== ==============
 
 * == help needed
+
+**Documentation:**
 
 .. automodule:: jsmetrics.metrics.jet_core_algorithms
    :members:

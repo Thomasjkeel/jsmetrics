@@ -36,7 +36,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     Parameters
     ----------
     data : xarray.Dataset
-        Data which should containing the variables: 'ua' and 'va', and contain the coordinates: 'lon', 'lat', 'plev' and 'time'.
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     ws_threshold : int or float
         Windspeed threshold used to extract from weighted average (default: 30 ms-1)
 
@@ -47,7 +47,7 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     Notes
     -----
-    This equation for this method is provided on pg 287.
+    This equation for this method is provided on pg 287. In the original paper, the
 
     Examples
     --------

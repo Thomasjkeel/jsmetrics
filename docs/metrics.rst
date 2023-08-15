@@ -7,7 +7,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' statis
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
 
-See the :ref:`Sub-components API reference` for more information about the implementation of the metrics included in this package.
+See the :ref:`Metric sub-components` for more detail about the implementation of the metrics included in this package.
 
 
 Jet statistics
@@ -60,41 +60,6 @@ Jet core algorithms
 * == help needed
 
 .. automodule:: jsmetrics.metrics.jet_core_algorithms
-   :members:
-   :imported-members:
-   :undoc-members:
-   :show-inheritance:
-   :noindex:
-
-Utility functions
-#################
-
-Data Utils
-------------------------
-
-.. automodule:: jsmetrics.utils.data_utils
-   :members:
-   :imported-members:
-   :undoc-members:
-   :show-inheritance:
-   :noindex:
-
-
-Spatial Utils
-------------------------
-
-.. automodule:: jsmetrics.utils.spatial_utils
-   :members:
-   :imported-members:
-   :undoc-members:
-   :show-inheritance:
-   :noindex:
-
-
-Windspeed Utils
-------------------------
-
-.. automodule:: jsmetrics.utils.windspeed_utils
    :members:
    :imported-members:
    :undoc-members:

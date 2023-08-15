@@ -1,6 +1,9 @@
-============================
-Sub-components API reference
-============================
+=============
+API reference
+=============
+
+Metric sub-components
+#####################
 
 What are the sub-components?
 ----------------------------
@@ -24,6 +27,44 @@ Jet core algorithm sub-components
 ---------------------------------
 
 .. automodule:: jsmetrics.metrics.jet_core_algorithms_components
+   :members:
+   :imported-members:
+   :undoc-members:
+   :show-inheritance:
+   :noindex:
+
+
+Utility functions
+#################
+All functions used in package that provide generic and non-jetstream utility (such as for xarray compatibility)
+are listed here instead of as part of metric sub-components
+
+Data Utils
+------------------------
+
+.. automodule:: jsmetrics.utils.data_utils
+   :members:
+   :imported-members:
+   :undoc-members:
+   :show-inheritance:
+   :noindex:
+
+
+Spatial Utils
+------------------------
+
+.. automodule:: jsmetrics.utils.spatial_utils
+   :members:
+   :imported-members:
+   :undoc-members:
+   :show-inheritance:
+   :noindex:
+
+
+Windspeed Utils
+------------------------
+
+.. automodule:: jsmetrics.utils.windspeed_utils
    :members:
    :imported-members:
    :undoc-members:

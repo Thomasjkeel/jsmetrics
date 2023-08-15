@@ -7,7 +7,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' statis
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
 
-See the :ref:`Sub-components API reference` for more information about the implementation of the metrics included in this package
+See the :ref:`Sub-components API reference` for more information about the implementation of the metrics included in this package.
 
 
 Jet statistics

@@ -164,10 +164,10 @@ def schiemann_et_al_2009(data, ws_threshold=30):
         schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
 
         # Produce a jet occurence count across all pressure levels
-        schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
+        schiemann_jet_counts_all_levels = schiemann_outputs['jet_occurence'].sum(('time', 'plev'))
 
-        # Use the jet occurence values as a mask to extract the jet occurence windspeeds
-        schiemann_jet_ws = schiemann.where(schiemann['jet_occurence'] > 0)['ws']
+        # Use the jet occurence values as a mask to extract the jet windspeeds
+        schiemann_jet_ws = schiemann_outputs.where(schiemann_outputs['jet_occurence'] > 0)['ws']
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
@@ -260,8 +260,11 @@ def penaortiz_et_al_2013(data):
         3. subtropical_jet
     Each output is in a monthyear frequency.
 
-    Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+    This method was first introduced in Pena-Ortiz et al. (2013) (https://doi.org/10.1002/jgrd.50305) and
+    is described in section 2 of that study.
 
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -369,6 +372,15 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
         # Run algorithm:
         kuang_outputs = jsmetrics.kuang_et_al_2014(uv_sub, occurence_ws_threshold=30)
+
+        # Extract only jet centers
+        kuang_jet_centers = kuang_outputs.where(kuang_outputs['jet_ocurrence1_jet_centre2']==2)
+
+        # Produce a count of jet centers across all pressure levels
+        kuang_jet_centers_counts_all_levels = kuang_jet_centers.sum(('time', 'plev'))
+
+        # Use the jet occurence values as a mask to extract the jet windspeeds
+        kuang_jet_ws = kuang_outputs.where(kuang_outputs['jet_ocurrence1_jet_centre2'] > 0)['ws']
 
     """
     if "plev" in data.dims:

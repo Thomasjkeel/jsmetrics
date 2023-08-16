@@ -30,7 +30,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     The weighted average windspeed for the jet events is calculated as follows:
 
     .. math::
-        \alpha vel =  \frac{1}{(p2-p1)} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
+        \alpha vel =  \frac{1}{p2-p1} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
 
     where p1, p2 is min, max pressure level.
 

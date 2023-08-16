@@ -12,6 +12,7 @@ History
 -------------------------
 * Update Schiemann method with new variable name (jet occurence), docstring and changes to sub-component function names
 * Add ws_threshold parameter to Schiemann
+* Update methods that work on one time unit of data and add squeeze method to properly deal if time not in dims
 
 
 0.1.5-alpha (2023-08-15)

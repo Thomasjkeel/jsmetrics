@@ -7,9 +7,11 @@ History
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
 
+
 0.1.5-beta (2023-08-16)
 -------------------------
 * Update Schiemann method with new variable name (jet occurence), docstring and changes to sub-component function names
+* Add ws_threshold parameter to Schiemann
 
 0.1.5-alpha (2023-08-15)
 -------------------------

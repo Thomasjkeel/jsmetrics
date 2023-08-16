@@ -113,7 +113,7 @@ def koch_et_al_2006(data, ws_threshold=30):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def schiemann_et_al_2009(data, ws_threshold=30):
     r"""
-    This method detects jet occurrences, whereby each jet occurence J(t, x, y, p) is detected based
+    This method detects jet occurrences, whereby each jet occurence is detected based
     on three rules applied to inputted wind speed (V = [u, v]):
         1. \|V\| is a local maxima in latitude and altitude plane
         2. \|V\| ≥ 30 m/s
@@ -143,6 +143,27 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     **Slow method:** Due to the nature of this method, it currently takes a very long time to run,
     i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
 
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology (100-500 hPa & 16.7-58.25 N, 42.5-220.5 E)):
+        uv_sub = uv_data.sel(plev=slice(100, 500), lat=slice(16.7, 58.25), lon=slice(42.5, 220.5))
+
+        # Run algorithm:
+        schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
+
+        # Produce a jet occurence count across all pressure levels
+        schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
+
+        # Use the jet occurence values as a mask to extract the jet occurence windspeeds
+        schiemann_jet_ws = schiemann.where(schiemann['jet_occurence'] > 0)['ws']
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])

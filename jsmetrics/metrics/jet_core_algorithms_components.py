@@ -129,8 +129,8 @@ def get_all_hPa_list(data):
 
 def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
     r"""
-    Each jet occurence J(t, x, y, p) is detected based
-    on three rules applied to inputted wind speed (V = [u, v]):
+    Each jet occurence is detected based on three rules applied to inputted
+    wind speed (V = [u, v]):
         1. \|V\| is a local maxima in latitude and altitude plane
         2. \|V\| ≥ 30 m/s
         3. \|u\| ≥ 0 m/s.

@@ -138,7 +138,7 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     Notes
     -----
     While the original method is built on a four dimension slice of wind speed (time, lat, lon, plev),
-    This implementation will work where there is only one plev.
+    This implementation will work where there is only one pressure level, so a 3-d slice (time, lat, lon).
 
     **Slow method:** Due to the nature of this method, it currently takes a very long time to run,
     i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.

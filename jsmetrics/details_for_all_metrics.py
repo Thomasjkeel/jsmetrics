@@ -27,8 +27,8 @@ METRIC_DETAILS = {
                         the weighted average. Note that the original method also includes
                         a third step (production of a climatology), but we instead provide
                         an example of how to calculate this third step in the 'Examples'
-                        section of the methods docstring. For more information see 'Notes' for this method available
-                        on the ReadTheDocs for jsmetrics""",
+                        section of the methods docstring. For more information see
+                        'Notes' for this method available on the ReadTheDocs for jsmetrics""",
         "doi": "https://doi.org/10.1002/joc.1255",
     },
     "ArcherCaldeira2008": {
@@ -46,7 +46,14 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.schiemann_et_al_2009,
         "name": "Schiemann et al 2009",
-        "description": "",
+        "description": "This method detects jet occurrences, whereby each jet occurence is\
+                        detected based on three rules applied to inputted wind speed. These\
+                        rules are based on whether input windspeed is a local maxima\
+                        (in y and z dimension), and applying various thresholds.\
+                        Originally the threshold is >= 30 ms for wind vector and \
+                        >= 0 ms for input u-wind. This method is described in section 2\
+                        of that study. For more information see 'Notes' for this\
+                        method available on the ReadTheDocs for jsmetrics",
         "doi": "https://doi.org/10.1175/2008JCLI2625.1",
     },
     "Woollings2010_NorthAtlantic": {

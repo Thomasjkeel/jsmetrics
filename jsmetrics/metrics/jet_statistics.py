@@ -111,6 +111,9 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 
     Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
 
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package including how to express the outputs of this method in relation to its season cycle.
+
     Parameters
     ----------
     data : xarray.Dataset
@@ -127,6 +130,8 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 
     Notes
     -----
+    In the original paper, a further step (Step 6) is carried out to express the values of jet latitude
+    and jet speed anomalies from the seasonal cycle
 
     Examples
     --------
@@ -134,6 +139,8 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 
         import jsmetrics
         import xarray as xr
+
+        # Calculate jet latitude and jet speed anomalies from the seasonal cycle
 
     """
     if isinstance(data, xarray.DataArray):
@@ -175,8 +182,6 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         fourier_filtered_ws.real,
         dim=time_dim,
     )
-
-    # Step 6: Calculate jet latitude and jet speed anomalies from the seasonal cycle
 
     return output
 

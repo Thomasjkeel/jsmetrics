@@ -151,7 +151,8 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
-        data = data.squeeze("time")
+        if "time" in data.dims:
+            data = data.squeeze("time")
         output = jet_core_algorithms_components.get_local_jet_maximas_by_oneday_by_plev(
             data, ws_threshold=ws_threshold
         )
@@ -293,7 +294,8 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
         )
     else:
         if data["time"].size == 1:
-            data = data.squeeze("time")
+            if "time" in data.dims:
+                data = data.squeeze("time")
             output = jet_core_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day(
                 data, occurence_ws_threshold
             )

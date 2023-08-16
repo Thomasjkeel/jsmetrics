@@ -109,7 +109,8 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woollings et al. (2010).
     Will calculate this metric based on data (regardless of pressure level of time span etc.).
 
-    Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
+    This method was first introduce in Woollings et al (2010) (http://dx.doi.org/10.1002/qj.625) and
+    is described in section 2 of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package including how to express the outputs of this method in relation to its season cycle.

@@ -2,7 +2,7 @@
 Examples of Use
 ===============
 
-To use jsmetrics in a project::
+To use jsmetrics in a project:
 
 
 .. code-block:: python

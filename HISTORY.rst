@@ -5,7 +5,16 @@ History
 
 0.1.5 (2023-XX-XX)
 -------------------------
-* Complete overhaul of ReadTheDocs documentation
+* Overhaul the ReadTheDocs documentation in the package
+    * add examples and notes to each metric in package  
+
+
+0.1.5-beta (2023-08-16)
+-------------------------
+* Update Schiemann method with new variable name (jet occurence), docstring and changes to sub-component function names
+* Add ws_threshold parameter to Schiemann
+* Update methods that work on one time unit of data and add squeeze method to properly deal if time not in dims
+* Add basic outline of jet core algorithm docstrings
 
 0.1.5-alpha (2023-08-15)
 -------------------------

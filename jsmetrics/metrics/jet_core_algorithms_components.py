@@ -36,7 +36,7 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     all_plevs_hPa : array-like
         list of hPa unit pressure levels
 
@@ -121,17 +121,22 @@ def get_all_hPa_list(data):
     ):
         raise ValueError("Plev units need to be mbar, millibars, Pa or hPa")
 
-    plevs = np.array([plev for plev in data["plev"]])
+    plevs = np.array([plev for plev in data["plev"]], dtype="float")
     if data["plev"].units == "Pa":
         plevs = plevs / 100
     return plevs
 
 
-def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
-    """
-    Get local jet maxima for one day.
+def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
+    r"""
+    Each jet occurence is detected based on three rules applied to inputted
+    wind speed (V = [u, v]):
+        1. \|V\| is a local maxima in latitude and altitude plane
+        2. \|V\| ≥ 30 m/s
+        3. \|u\| ≥ 0 m/s.
 
     Component of method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
+
     NOTE: will only work if 1 day is the resolution
 
     Parameters
@@ -144,10 +149,10 @@ def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
     Returns
     ----------
     row : xarray.Dataset
-        Data of a sinlge time unit with value for jet-maxima (1 == maxima, 0 == none)
+        Data of a single time unit with value for jet-maxima (1 == maxima, 0 == none)
 
     """
-    row["jet_maxima"] = (
+    row["jet_occurence"] = (
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
     )
@@ -160,7 +165,7 @@ def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
             local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
             if len(local_maxima_lat_inds) > 0:
                 for lat_ind in local_maxima_lat_inds:
-                    row["jet_maxima"].loc[
+                    row["jet_occurence"].loc[
                         dict(
                             lat=current["lat"].data[lat_ind],
                             lon=lon,
@@ -179,7 +184,8 @@ def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_thresh
     Parameters
     ----------
     row : xarray.Dataset
-        Data of single time unit containing u- and v-component wind
+        Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
+
     ws_core_threshold : int or float
         Threshold used for jet-stream core point
     ws_boundary_threshold : int or float
@@ -229,7 +235,7 @@ class JetStreamCoreIdentificationAlgorithm:
         Parameters
         ----------
         data : xarray.Dataset
-            Data of single time unit containing u- and v-component wind
+            Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
         ws_core_threshold : int or float
             Threshold used for jet-stream core point (default=40)
         ws_boundary_threshold : int or float
@@ -449,7 +455,10 @@ def get_empty_local_wind_maxima_data(
     Parameters
     ----------
     data : xarray.Dataset
-        Input data with (time, plev, lat, lon) dimensions
+        Data which should containing the variables: 'ua' and 'va', and the expected dims e.g.: 'lon', 'lat', 'plev' and 'time'.
+
+    expected_dims : tuple
+        Expected dimensions of input data (default: "time", "plev", "lat", "lon")
 
     Returns
     ----------
@@ -476,7 +485,7 @@ def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold=30):
     Parameters
     ----------
     ws_slice : xarray.Dataset
-        Data slice of windspeed that has only lat and lon dims
+        Data slice of windspeed that has only 'lat' and 'lon' dims
 
     ws_threshold : int or float
         windspeed threshold to apply (default=30 ms-1)
@@ -497,7 +506,7 @@ def get_local_wind_maxima_by_timeunit(row):
     Parameters
     ----------
     row : xarray.Dataset
-        Data of a single time unit containing windspeed (ws)
+        Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
 
     Returns
     ----------
@@ -606,7 +615,7 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
     Parameters
     ----------
     row : xarray.Dataset
-        Single time-unit of dataset containing u- and v-component wind
+        Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
     occurence_ws_threshold : int or float
         Threshold used to identify a jet-stream occurence point
 
@@ -632,7 +641,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
         Parameters
         ----------
         data : xarray.Dataset
-            Single time-unit of dataset containing u- and v-component wind. Needs to be 2-dimensions (lat, lon)
+           Data of single time unit containing the variables: 'ua' and 'va', and the only the coordinates: 'lon', 'lat'
         occurence_ws_threshold : int or float
             Threshold used to identify a jet-stream occurence point
         """

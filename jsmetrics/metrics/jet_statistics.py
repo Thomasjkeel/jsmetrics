@@ -24,12 +24,14 @@ __status__ = "Development"
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def archer_caldeira_2008(data):
-    """
-    Calculates the mass-weighted average wind speed, mass flux weighted pressure
-    and mass flux weighted latitude. This method has some similarities to method
-    used in Koch et al. 2006. In paper, 100-400 hPa is used.
+    r"""
+    This method calculates three mass-weighted variables:
+        1. weighted-average wind speed,
+        2. mass flux weighted pressure,
+        3. mass flux weighted latitude.
 
-    Method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    This method was originally introduce in Archer & Caldiera (2008) (https://doi.org/10.1029/2008GL033614)
+    and is described in Section 3 of that study.
 
     Parameters
     ----------
@@ -40,6 +42,18 @@ def archer_caldeira_2008(data):
     ----------
     output : xarray.Dataset
         Data containing mass weighted average ws, mass flux weighted pressure and latitude
+
+    Notes
+    -----
+    This method has some similarities to method used in Koch et al. 2006.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     #  Step 1. Get monthly means
     if "time" not in data.coords:
@@ -91,11 +105,15 @@ def archer_caldeira_2008(data):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def woollings_et_al_2010(data, filter_freq=10, window_size=61):
-    """
+    r"""
     Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woollings et al. (2010).
     Will calculate this metric based on data (regardless of pressure level of time span etc.).
 
-    Method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
+    This method was first introduce in Woollings et al (2010) (http://dx.doi.org/10.1002/qj.625) and
+    is described in section 2 of that study.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package including how to express the outputs of this method in relation to its season cycle.
 
     Parameters
     ----------
@@ -110,6 +128,21 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     ----------
     fourier_filtered_data : xarray.Dataset
         Data containing maximum latitudes and maximum windspeed at those lats and fourier-filtered versions of those two variables
+
+    Notes
+    -----
+    In the original paper, a further step (Step 6) is carried out to express the values of jet latitude
+    and jet speed anomalies from the seasonal cycle
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Calculate jet latitude and jet speed anomalies from the seasonal cycle
+
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -151,14 +184,12 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         dim=time_dim,
     )
 
-    # Step 6: Calculate jet latitude and jet speed anomalies from the seasonal cycle
-
     return output
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_polvani_2013(data, filter_freq=10, window_size=41):
-    """
+    r"""
     Pressure weighted u-component wind then gets low-pass lanczos filtered (10-day, 41 weights) and 0.01 quadratic function applied
     for jet-lat and speed. "We define the jet width as the full width at half of the maximum jet speed".
 
@@ -177,6 +208,17 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     ----------
     output : xarray.Dataset
         Data containing values for z_lat, z_spd, z_width for jet-stream latitude, speed and width
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     #  Step 1. Get pressure-weighted u-component wind
     pressure_weighted_ua = jet_statistics_components.calc_mass_weighted_average(
@@ -255,7 +297,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_polvani_2015(data):
-    """
+    r"""
     Calculates the jet speed and jet position by fitting a parabola around the
     maximum of zonally average wind and taking the maximum magnitude and position
     to be the jet speed and jet latitude respectively.
@@ -271,12 +313,25 @@ def barnes_polvani_2015(data):
     ----------
     output : xarray.Dataset
         Data containing jet-stream position and jet-speed
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     # Step 1. Get zonal mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 2. Get jet lat and jet speed values
     if zonal_mean["time"].size == 1:
+        if "time" in zonal_mean.dims:
+            zonal_mean = zonal_mean.squeeze("time")
         output = jet_statistics_components.get_jet_lat_and_speed_using_parabola_by_day(
             zonal_mean
         )
@@ -289,7 +344,7 @@ def barnes_polvani_2015(data):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_simpson_2017(data):
-    """
+    r"""
     "Time series of jet latitude and jet speed are defined as the latitude and speed of the 10-day-averaged
      maximum 700-hPa zonal winds averaged over the longitudinal sector of interest"
 
@@ -304,6 +359,17 @@ def barnes_simpson_2017(data):
      ----------
      output : xarray.Dataset
          Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     if "plev" in data.dims:
         if data["plev"].count() == 1:
@@ -338,7 +404,7 @@ def barnes_simpson_2017(data):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def grise_polvani_2017(data):
-    """
+    r"""
     Calculates maximum latitude of jet-stream to 0.01 degree resolution each time unit
     Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
@@ -355,6 +421,17 @@ def grise_polvani_2017(data):
     ----------
     output : xarray.Dataset
         Data containing max latitudes per time unit scaled to 0.01 resolution
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -362,7 +439,7 @@ def grise_polvani_2017(data):
     # Step 0: Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
     # Step 1. Calculate zonal-mean
@@ -406,17 +483,9 @@ def grise_polvani_2017(data):
     return output
 
 
-# @sort_xarray_data_coords(coords=["lat", "lon"])
-# def molnos_et_al_2017(data):
-#     """
-#     Write function description
-#     """
-#     return data
-
-
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def bracegirdle_et_al_2018(data):
-    """
+    r"""
     Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal wind climatology.
     Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
 
@@ -431,6 +500,17 @@ def bracegirdle_et_al_2018(data):
     ----------
     output : xarray.Dataset
         Data containing seasonal and annual jet-stream position and strength (ms-1)
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -447,7 +527,7 @@ def bracegirdle_et_al_2018(data):
     # Step 0: Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
     #  Step 1. Make seasonal & annual climatologies
@@ -486,7 +566,7 @@ def bracegirdle_et_al_2018(data):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def ceppi_et_al_2018(data, lon_resolution=None):
-    """
+    r"""
     Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
     This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
     Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
@@ -504,6 +584,17 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     ----------
     output : xarray.Dataset
         Data containing centroid latitude of u-wind for each time unit (e.g. each day)
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:
@@ -533,7 +624,7 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     # Expand time dimension
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
 
@@ -568,7 +659,7 @@ def ceppi_et_al_2018(data, lon_resolution=None):
 
 
 def zappa_et_al_2018(data, lon_resolution=None):
-    """
+    r"""
     Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
     This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
     Method from Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
@@ -587,6 +678,17 @@ def zappa_et_al_2018(data, lon_resolution=None):
     ----------
     output : xarray.Dataset
         Data containing centroid latitude of u-wind for each time unit (e.g. each day)
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:
@@ -617,7 +719,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
     # Expand time dimension
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
 
@@ -653,7 +755,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def kerr_et_al_2020(data, width_of_pulse=10):
-    """
+    r"""
     Described in section 2.4.2 of paper. Defines the latitude of the jet-stream as where the
     maximum zonal winds occur for each longitude for each time unit (i.e. day) before smoothing
     with a rectangular pulse (of width 10 degrees) to get a moving average.
@@ -668,6 +770,17 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     ----------
     output : xarray.Dataset
         Data containing jet-stream latitude by longitude and smoothed jet_latitude
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     if "plev" in data.dims:
         if data["plev"].count() == 1:
@@ -681,6 +794,8 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     elif data["time"].size == 1:
+        if "time" in data.dims:
+            data = data.squeeze("time")
         output = (
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
                 data, width_of_pulse
@@ -691,30 +806,4 @@ def kerr_et_al_2020(data, width_of_pulse=10):
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day,
             (width_of_pulse,),
         )
-    return output
-
-
-@sort_xarray_data_coords(coords=["lat", "lon"])
-def blackport_fyfe_2022(data):
-    """
-    Described in MATERIALS AND METHODS section of this paper under: 'Metrics and analysis':
-    The speed and latitude of the North Atlantic jet stream are calculated similar to a previous analysis (Barnes & Polvani 2015),
-    with some minor differences. At each longitude between 60°W and 0°, we fit a parabola around the seasonal averaged,
-    maximum U700 speeds found between 15°N and 75°N. The parabola is fit around the two points on either side of the maximum (five points in total).
-    The maximum of the resulting function is the jet speed, and the latitude of this maximum is the jet latitude. If the maximum speed occurs
-    at the northern or southern edge, then the speed and latitude are ignored for that longitude.
-
-    Method from Blackport & Fyfe (2022) https://www.science.org/doi/10.1126/sciadv.abn3112
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data containing u-component windspeed at one plev
-
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data containing jet-stream latitude by longitude and smoothed jet_latitude
-    """
-    output = data
     return output

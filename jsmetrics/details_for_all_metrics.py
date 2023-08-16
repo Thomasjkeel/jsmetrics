@@ -173,11 +173,6 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "https://doi.org/10.1088/1748-9326/10/1/014005",
     },
-    # "LocalWaveActivity":
-    #     {"variables": ["zg"], "coords":{"plev": [50000, 50000]},
-    #       "metric": jetstream_metrics.local_wave_activity,
-    #       "description": "First introduced by Huang & Nakamura 2015, then
-    #                 modified by Chen et al. 2015 and Martineau et al. 2017"},
     "Cattiaux2016": {
         "variables": ["zg"],
         "coords": {"plev": [50000, 50000]},
@@ -187,15 +182,6 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "https://doi.org/10.1002/2016GL070309",
     },
-    # "Chenoli2017_SouthernHemisphere": {
-    #     "variables": ["ua"],
-    #     "coords": {"plev": [10000, 30000], "lat": [-40, -20], "lon": [70, 290]},
-    #     "plev_units": "Pa",
-    #     "metric": jetstream_metrics.chenoli_et_al_2017 Southern Hemisphere,
-    #     "name": "Chenoli et al. 2017",
-    #     "description": "",
-    #     "doi": "https://doi.org/10.1007/s00382-016-3102-y",
-    # },
     "BarnesSimpson2017_NorthAtlantic": {
         "variables": ["ua"],
         "coords": {"plev": [70000, 70000], "lat": [1, 90], "lon": [280, 350]},
@@ -223,10 +209,6 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "https://journals.ametsoc.org/doi/10.1175/JCLI-D-16-0849.1",
     },
-    # "Molnos2017":
-    #     {"variables": ["ua", "va"], "coords":{"plev":[50000, 15000]},
-    #      "metric": jetstream_metrics.molnos_et_al_2017,
-    #      "description": "Molnos et al 2017"},
     "Bracegirdle2018_SouthernHemisphere": {
         "variables": ["ua"],
         "coords": {"plev": [85000, 85000], "lat": [-75, -10]},
@@ -263,14 +245,6 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
-    # "Kern2018":
-    #     {"variables": ["ua", "va"], "coords":{"plev": [0, 100000]}, "plev_units": "Pa",
-    #      "metric": jetstream_metrics.kern_et_al_2018,
-    #      "description": "Kern 2018"},
-    # "Rikus2018":
-    #     {"variables": ["ua"], "coords":{"plev": [0, 100000]}, "plev_units": "Pa",
-    #      "metric": jetstream_metrics.rikus_2018,
-    #      "description": "Rikus 2018"},
     "Zappa2018_NorthAtlantic": {
         "variables": ["ua"],
         "coords": {"plev": [85000, 85000], "lat": [20, 70], "lon": [300, 360]},
@@ -298,13 +272,13 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "10.1029/2020JD032735",
     },
-    "BlackportFyfe2022_NorthAtlantic": {
-        "variables": ["ua"],
-        "coords": {"plev": [70000, 70000], "lat": [15, 75], "lon": [300, 360]},
-        "plev_units": "Pa",
-        "metric": jet_statistics.blackport_fyfe_2022,
-        "name": "Blackport & Fyfe 2022",
-        "description": "",
-        "doi": "10.1126/sciadv.abn3112",
-    },
+    # "BlackportFyfe2022_NorthAtlantic": {
+    #     "variables": ["ua"],
+    #     "coords": {"plev": [70000, 70000], "lat": [15, 75], "lon": [300, 360]},
+    #     "plev_units": "Pa",
+    #     "metric": jet_statistics.blackport_fyfe_2022,
+    #     "name": "Blackport & Fyfe 2022",
+    #     "description": "",
+    #     "doi": "10.1126/sciadv.abn3112",
+    # },
 }

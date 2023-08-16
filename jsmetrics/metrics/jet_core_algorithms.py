@@ -297,6 +297,18 @@ def penaortiz_et_al_2013(data):
         # Run algorithm:
         pena_outputs = jsmetrics.penaortiz_et_al_2013(uv_sub)
 
+        # Produce a count of polar front jet values across all pressure levels
+        pena_pfj_counts_all_levels = pena_outputs['polar_front_jet'].sum(('monthyear', 'plev'))
+
+        # Use the polar front jet values as a mask to extract the jet windspeeds
+        uv_sub["ws_by_monthyear"] = (
+            data["ws"]
+            .resample(time="MS")
+            .sum()
+            .rename({"time": "monthyear"})
+        )
+        pena_pfj_ws = pena_outputs.where(pena_outputs['polar_front_jet'] > 0)['ws_by_monthyear']
+
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])

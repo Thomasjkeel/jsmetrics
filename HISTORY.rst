@@ -13,6 +13,7 @@ History
 * Update Schiemann method with new variable name (jet occurence), docstring and changes to sub-component function names
 * Add ws_threshold parameter to Schiemann
 
+
 0.1.5-alpha (2023-08-15)
 -------------------------
 * Begin overhaul of ReadTheDocs documentation

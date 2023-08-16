@@ -5,7 +5,7 @@ History
 
 0.1.5 (2023-XX-XX)
 -------------------------
-* Complete overhaul of ReadTheDocs documentation
+* Overhaul the ReadTheDocs documentation in the package
 
 0.1.5-alpha (2023-08-15)
 -------------------------

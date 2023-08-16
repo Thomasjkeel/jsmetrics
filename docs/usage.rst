@@ -4,23 +4,44 @@ Examples of Use
 
 To use jsmetrics in a project::
 
+
 .. code-block:: python
 
- import xarray as xr
- import jsmetrics
+    import jsmetrics
+    import xarray as xr
 
- # load windspeed data with u- and v- component wind.
- uv_data = xr.open_dataset(filename)
+    # Load in dataset with u and v components:
+    uv_data = xr.open_dataset('path_to_uv_data')
 
- # run Woollings et al. 2010 metric
- w10 = jsmetrics.metrics.jet_statistics.woollings_et_al_2010(uv_data)
+    # Subset dataset to range used in original methodology (100-500 hPa & 16.7-58.25 N, 42.5-220.5 E)):
+    uv_sub = uv_data.sel(plev=slice(100, 500), lat=slice(16.7, 58.25), lon=slice(42.5, 220.5))
 
- print(w10['jet_lat'])
- print(w10['jet_speed'])
+    # Run algorithm:
+    schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
 
- # run Kuang et al. 2014 metric. NOTE: may take a long time after you have more than 50 time steps.
- k14 = jsmetrics.metrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
- print(k14['jet_center'].sel(time=0))
+    # Produce a jet occurence count across all pressure levels
+    schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
+
+    # Use the jet occurence values as a mask to extract the jet occurence windspeeds
+    schiemann_jet_ws = schiemann.where(schiemann['jet_occurence'] > 0)['ws']
+
+.. code-block:: python
+
+    import xarray as xr
+    import jsmetrics
+
+    # load windspeed data with u- and v- component wind.
+    uv_data = xr.open_dataset(filename)
+
+    # run Woollings et al. 2010 metric
+    w10 = jsmetrics.metrics.jet_statistics.woollings_et_al_2010(uv_data)
+
+    print(w10['jet_lat'])
+    print(w10['jet_speed'])
+
+    # run Kuang et al. 2014 metric. NOTE: may take a long time after you have more than 50 time steps.
+    k14 = jsmetrics.metrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
+    print(k14['jet_center'].sel(time=0))
 
 
 .. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png

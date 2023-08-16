@@ -25,6 +25,7 @@ To use jsmetrics in a project::
     # Use the jet occurence values as a mask to extract the jet occurence windspeeds
     schiemann_jet_ws = schiemann.where(schiemann['jet_occurence'] > 0)['ws']
 
+
 .. code-block:: python
 
     import xarray as xr

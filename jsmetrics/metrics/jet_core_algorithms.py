@@ -122,6 +122,10 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.
 
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
+
+
     Parameters
     ----------
     data : xarray.Dataset
@@ -189,7 +193,7 @@ def schiemann_et_al_2009(data, ws_threshold=30):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
-    """
+    r"""
     Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
     Paper uses 100-400 hPa.
 
@@ -211,6 +215,17 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     ----------
     output : xarray.Dataset
         Data containing jet-cores (ID number relates to each unique core)
+
+    Notes
+    -----
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
     """
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
@@ -237,12 +252,16 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def penaortiz_et_al_2013(data):
-    """
-    Will calculate local wind maxima days per monthyear
+    r"""
+    This method follows a two step procedure for calculate local wind maxima days.
+    This method returns 3 outputted variables:
+        1. local_wind_maxima
+        2. polar_front_jet
+        3. subtropical_jet
+    Each output is in a monthyear frequency.
 
     Method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
-    NOTE: Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Parameters
     ----------
@@ -253,6 +272,28 @@ def penaortiz_et_al_2013(data):
     ----------
     output : xarray.Dataset
         Data containing number of days per month with local wind maxima
+
+    Notes
+    -----
+    Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day)
+    on AMD Ryzen 5 3600 6-core processor
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology (100-400 hPa)):
+        uv_sub = uv_data.sel(plev=slice(100, 400))
+
+        # Run algorithm:
+        pena_outputs = jsmetrics.penaortiz_et_al_2013(uv_sub)
+
     """
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
@@ -283,12 +324,19 @@ def penaortiz_et_al_2013(data):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
-    """
-    Looks to get event-based jet occurrence and jet center occurrence of JS (1 is occurence, 2 is core).
+    r"""
+    This method produces an event-based jet occurrence and jet center occurrence of JS.
+    The outputs of this method will produce categorical values of three types:
+        0. is not determined to be part of the jet
+        1. is a jet occurence
+        2. is jet core (upgraded from a jet occurence)
 
-    Method from Kuang et al (2014) https://doi.org/10.1007/s00704-013-0994-x
+    This method was first introduced in Kuang et al (2014) (https://doi.org/10.1007/s00704-013-0994-x) and
+    is described in section 2 of that study.
 
-    NOTE: Currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
+
 
     Parameters
     ----------
@@ -300,7 +348,28 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing jet-occurence and jet-centres (1 is occurence, 2 is core)
+        Data containing jet-occurence and jet-centres (1 is occurence, 2 is core, 0 is no jet)
+
+    Notes
+    -----
+    Currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology (200 hPa)):
+        uv_sub = uv_data.sel(plev=slice(200, 200))
+
+        # Run algorithm:
+        kuang_outputs = jsmetrics.kuang_et_al_2014(uv_sub, occurence_ws_threshold=30)
+
     """
     if "plev" in data.dims:
         if data["plev"].count() == 1:

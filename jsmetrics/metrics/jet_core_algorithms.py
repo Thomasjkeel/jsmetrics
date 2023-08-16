@@ -241,6 +241,12 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
         # Run algorithm:
         manney_outputs = jsmetrics.jet_core_algorithms.manney_et_al_2011(uv_sub, ws_core_threshold=40, ws_boundary_threshold=30)
 
+        # Produce a jet occurence count across all pressure levels
+        manney_jet_counts_all_levels = manney_outputs['jet_core_id'].sum(('time', 'plev'))
+
+        # Use the jet occurence values as a mask to extract the jet windspeeds
+        manney_jet_ws = manney_outputs.where(manney_outputs['jet_core_id'] > 0)['ws']
+
     """
     if "plev" not in data.dims:
         data = data.expand_dims("plev")

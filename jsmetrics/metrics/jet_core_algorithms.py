@@ -194,18 +194,22 @@ def schiemann_et_al_2009(data, ws_threshold=30):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     r"""
-    Looks to get seperate jet cores based on boundary and threshold. Core are discovered where 8-cells are above boundary threshold
-    Paper uses 100-400 hPa.
+    This method seperates jet cores based on boundary and windspeed threshold.
+    Core are discovered where 8-cells are above boundary threshold
 
-    Method from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
-    Also see Manney et al. 2011, 2014, 2017 and Manney & Hegglin 2018
+    This method is also known as JETPAC and is available online (add link).
 
-    NOTE: Currently takes a long time i.e. 7.6 seconds per time unit with 8 plevs (i.e. 7.6 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
+    and is described in Section 3.1 of that study.
+
+    There is an update to this method introduced in Manney & Hegglin 2018 to include physically based method to extract the
+    subtropical jet is identified (and thus distinguished from polar jets).
+
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     ws_core_threshold : int or float
         Threshold used for jet-stream core point (default=40)
     ws_boundary_threshold : int or float
@@ -214,10 +218,12 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing jet-cores (ID number relates to each unique core)
+        Data containing the variable 'jet-core_id' (ID number relates to each unique core)
 
     Notes
     -----
+    **Slow method**: currently takes a long time i.e. 7.6 seconds per time unit with 8 plevs
+    (i.e. 7.6 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Examples
     --------
@@ -225,6 +231,15 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
         import jsmetrics
         import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology (100-400 hPa)):
+        uv_sub = uv_data.sel(plev=slice(100, 400))
+
+        # Run algorithm:
+        manney_outputs = jsmetrics.jet_core_algorithms.manney_et_al_2011(uv_sub, ws_core_threshold=40, ws_boundary_threshold=30)
 
     """
     if "plev" not in data.dims:
@@ -269,7 +284,7 @@ def penaortiz_et_al_2013(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
     Returns
     ----------
@@ -356,7 +371,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     occurence_ws_threshold : int or float
         Threshold used to identify a jet-stream occurence point (default=30)
 

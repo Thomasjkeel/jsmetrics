@@ -111,13 +111,13 @@ def koch_et_al_2006(data, ws_threshold=30):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def schiemann_et_al_2009(data):
+def schiemann_et_al_2009(data, ws_threshold=30):
     r"""
-    This method detects jet occurrences, whereby each occurence is detected based
-    on three rules applied to inputted wind speed (V, u, v):
-        1. \|V\| is a local maxima in longitude and altitude plane
-        2. \|V\| > 30 m/s
-        3. \|u\| > 0 m/s.
+    This method detects jet occurrences, whereby each jet occurence J(t, x, y, p) is detected based
+    on three rules applied to inputted wind speed (V = [u, v]):
+        1. \|V\| is a local maxima in latitude and altitude plane
+        2. \|V\| ≥ 30 m/s
+        3. \|u\| ≥ 0 m/s.
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.
@@ -147,16 +147,17 @@ def schiemann_et_al_2009(data):
     #  Step 1. Calculate wind vector
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
-    #  Step 2. Calculate jet maximas
+    #  Step 2. Calculate jet occurences
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         output = jet_core_algorithms_components.get_local_jet_maximas_by_oneday_by_plev(
-            data
+            data, ws_threshold=ws_threshold
         )
     else:
         output = data.groupby("time").map(
-            jet_core_algorithms_components.get_local_jet_maximas_by_oneday_by_plev
+            jet_core_algorithms_components.get_local_jet_maximas_by_oneday_by_plev,
+            (ws_threshold,),
         )
     return output
 

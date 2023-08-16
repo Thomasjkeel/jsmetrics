@@ -121,17 +121,22 @@ def get_all_hPa_list(data):
     ):
         raise ValueError("Plev units need to be mbar, millibars, Pa or hPa")
 
-    plevs = np.array([plev for plev in data["plev"]])
+    plevs = np.array([plev for plev in data["plev"]], dtype="float")
     if data["plev"].units == "Pa":
         plevs = plevs / 100
     return plevs
 
 
 def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
-    """
-    Get local jet maxima for one day.
+    r"""
+    Each jet occurence J(t, x, y, p) is detected based
+    on three rules applied to inputted wind speed (V = [u, v]):
+        1. \|V\| is a local maxima in latitude and altitude plane
+        2. \|V\| ≥ 30 m/s
+        3. \|u\| ≥ 0 m/s.
 
     Component of method from Schiemann et al 2009 https://doi.org/10.1175/2008JCLI2625.1
+
     NOTE: will only work if 1 day is the resolution
 
     Parameters
@@ -144,10 +149,10 @@ def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
     Returns
     ----------
     row : xarray.Dataset
-        Data of a sinlge time unit with value for jet-maxima (1 == maxima, 0 == none)
+        Data of a single time unit with value for jet-maxima (1 == maxima, 0 == none)
 
     """
-    row["jet_maxima"] = (
+    row["jet_occurence"] = (
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
     )
@@ -160,7 +165,7 @@ def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
             local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
             if len(local_maxima_lat_inds) > 0:
                 for lat_ind in local_maxima_lat_inds:
-                    row["jet_maxima"].loc[
+                    row["jet_occurence"].loc[
                         dict(
                             lat=current["lat"].data[lat_ind],
                             lon=lon,

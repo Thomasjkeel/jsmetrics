@@ -6,6 +6,7 @@ History
 0.1.5 (2023-XX-XX)
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
+    * add examples and notes to each metric in package  
 
 
 0.1.5-beta (2023-08-16)

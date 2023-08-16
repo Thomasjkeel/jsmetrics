@@ -127,7 +127,7 @@ def get_all_hPa_list(data):
     return plevs
 
 
-def get_local_jet_maximas_by_oneday_by_plev(row, ws_threshold=30):
+def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
     r"""
     Each jet occurence J(t, x, y, p) is detected based
     on three rules applied to inputted wind speed (V = [u, v]):

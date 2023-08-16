@@ -277,6 +277,8 @@ def barnes_polvani_2015(data):
 
     # Step 2. Get jet lat and jet speed values
     if zonal_mean["time"].size == 1:
+        if "time" in zonal_mean.dims:
+            zonal_mean = zonal_mean.squeeze("time")
         output = jet_statistics_components.get_jet_lat_and_speed_using_parabola_by_day(
             zonal_mean
         )
@@ -362,7 +364,7 @@ def grise_polvani_2017(data):
     # Step 0: Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
     # Step 1. Calculate zonal-mean
@@ -447,7 +449,7 @@ def bracegirdle_et_al_2018(data):
     # Step 0: Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
     #  Step 1. Make seasonal & annual climatologies
@@ -533,7 +535,7 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     # Expand time dimension
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
 
@@ -617,7 +619,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
     # Expand time dimension
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1:
+    if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
 
@@ -681,6 +683,8 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     elif data["time"].size == 1:
+        if "time" in data.dims:
+            data = data.squeeze("time")
         output = (
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
                 data, width_of_pulse

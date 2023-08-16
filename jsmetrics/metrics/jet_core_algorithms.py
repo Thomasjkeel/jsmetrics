@@ -152,7 +152,7 @@ def schiemann_et_al_2009(data, ws_threshold=30):
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         output = jet_core_algorithms_components.get_local_jet_maximas_by_oneday_by_plev(
-            data, ws_threshold=ws_threshold
+            data.squeeze(), ws_threshold=ws_threshold
         )
     else:
         output = data.groupby("time").map(

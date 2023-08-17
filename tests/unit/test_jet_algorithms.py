@@ -138,6 +138,18 @@ class TestKuang2014(unittest.TestCase):
         tested_func(plev_data)
 
 
+class TestJetCoreIdentificationAlgorithm(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_uv_data()
+
+    def test_metric(self):
+        test_func = jet_core_algorithms.jet_core_identification_algorithm
+        # NOTE: this metric is a generator
+        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
+        res = test_func(subset_data.sel(plev=25000))
+        self.assertEqual(res["jet_core_id"].max(), 2)
+
+
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()

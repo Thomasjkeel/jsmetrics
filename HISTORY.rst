@@ -7,6 +7,13 @@ History
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
     * add examples and notes to each metric in package  
+* Improve Manney et al. 2011 implementation
+
+0.1.5-gamma (2023-08-16)
+-------------------------
+* Start to correct Manney 2011 method
+* Move old method to new metric: 'jet_core_identification_algorithm'
+* Update docs for Manney 2011 and sub-components
 
 
 0.1.5-beta (2023-08-16)

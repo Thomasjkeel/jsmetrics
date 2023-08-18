@@ -191,10 +191,10 @@ def run_jet_core_and_region_algorithm_on_one_day(
     not drop below a threshold (see 'ws_drop_threshold'). This function runs this method on a single time unit.
 
     This method returns four outputs
-        1. 'jet_core_mask' – Regions within each latitude/altitude that are local maxima which are above the 'jet_core_ws_threshold'
-        2. 'jet_region_mask' – Regions above, below, left and right of the jet core above the 'jet_boundary_ws_threshold'
-        3. 'jet_region_above_ws_threshold_mask' – All contigious regions emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
-        4. 'ws' – Wind speed calculated from 'ua', 'va' inputs.
+        1. 'jet_core_mask' -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
+        2. 'jet_region_mask' -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
+        3. 'jet_region_above_ws_threshold_mask' -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
+        4. 'ws' -- Wind speed calculated from 'ua', 'va' inputs.
 
     Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
 

@@ -202,9 +202,11 @@ def manney_et_al_2011(
 ):
     r"""
     This method detects jet cores and defines a boundary region beside those cores based on two windspeed thresholds.
-    Two additional checks are applied after initial detection of cores to check whether cores within the same windspeed region (default is 30 m/s set by'jet_boundary_ws_threshold')
-    are part of the same feature. This is achieved by checking whether regions with multiple jet cores are more than a certain distance apart
-    (default is 15 degrees set by 'jet_core_lat_distance') and the windspeed between two cores does not drop below a threshold (default is 25 m/s set by 'ws_drop_threshold')
+    Two additional checks are applied after initial detection of cores to check whether cores within the same windspeed region
+    are part of the same feature (default is 30 m/s, see 'jet_boundary_ws_threshold').
+    This is achieved by checking whether regions with multiple jet cores are more than a certain distance apart
+    (default is 15 degrees, see 'jet_core_lat_distance') and the windspeed between two cores does not drop below a threshold
+    (default is 25 m/s, see 'ws_drop_threshold')
 
     This method returns four outputs
         1. 'jet_core_mask' -- Regions within each latitude/altitude that are local maxima which are above the 'jet_core_ws_threshold'

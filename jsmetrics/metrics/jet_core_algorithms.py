@@ -248,7 +248,6 @@ def manney_et_al_2011(
     Also, 'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
     encompass jet cores.
 
-
     Examples
     --------
     .. code-block:: python

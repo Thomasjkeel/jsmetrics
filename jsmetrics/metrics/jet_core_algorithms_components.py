@@ -175,11 +175,62 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
     return row
 
 
+def run_jet_core_and_region_algorithm_on_one_day(
+    row,
+    jet_core_ws_threshold,
+    jet_boundary_ws_threshold,
+    jet_core_plev_limit,
+    ws_drop_threshold,
+    jet_core_lat_distance,
+):
+    """
+    This method detects jet cores and defines a boundary region beside those cores based on two windspeed thresholds.
+    Two additional checks are applied after initial detection of cores to check whether cores within the same windspeed region (default is 30 m/s set by'jet_boundary_ws_threshold')
+    are part of the same feature. This is achieved by checking whether regions with multiple jet cores are more than a certain distance apart
+    (default is 15 degrees set by 'jet_core_lat_distance') and the windspeed between two cores does not drop below a threshold (default is 25 m/s set by 'ws_drop_threshold')
+    This function runs this method on a single time unit.
+
+    This method returns four outputs
+        1. 'jet_core_mask' – Regions within each latitude/altitude that are local maxima which are above the 'jet_core_ws_threshold'
+        2. 'jet_region_mask' – Regions above, below, left and right of the jet core above the 'jet_boundary_ws_threshold'
+        3. 'jet_region_above_ws_threshold_mask' – All contigious regions emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
+        4. 'ws' – Wind speed calculated from 'ua', 'va' inputs.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
+    jet_core_ws_threshold : int or float
+        Threshold used for jet-stream core point (default=40 m/s)
+    jet_boundary_ws_threshold : int or float
+        Threshold for jet-stream boundary point (default=30 m/s)
+    jet_core_plev_limit: tuple or array
+        Sequence of two values relating to the pressure level limit of the jet cores (default: (100, 400))
+    ws_drop_threshold : int or float
+        Threshold for drop in windspeed along the line between cores (default: 25 m/s)
+    jet_core_lat_distance : int or float
+        Threshold for maximum distance between cores to be counted the same (default: 15 degrees)
+
+    Returns
+    ----------
+    row : xarray.Dataset
+        Data for one time unit containing four new variables (ws, jet_core_mask, jet_region_mask, jet_region_above_ws_threshold_mask)
+    """
+
+    # jet_core_ws_threshold, jet_boundary_ws_threshold, ws_drop_threshold,
+    # jet_core_plev_limit, jet_core_lat_distance
+    return row
+
+
 def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_threshold):
     """
     Runs JetStreamCoreIdentificationAlgorithm method on a single time unit.
 
-    Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+    Component of method of jet_core_identification_algorithm in jsmetrics and is inspired by
+    the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
+    which is described in Section 3.1 of that study.
 
     Parameters
     ----------
@@ -216,7 +267,9 @@ class JetStreamCoreIdentificationAlgorithm:
     """
     Jet-stream core identification algorithm.
 
-    Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+    Component of method of jet_core_identification_algorithm in jsmetrics and is inspired by
+    the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
+    which is described in Section 3.1 of that study.
 
     Methods
     -------

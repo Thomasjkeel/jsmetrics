@@ -67,7 +67,7 @@ METRIC_DETAILS = {
     },
     "Manney2011": {
         "variables": ["ua", "va"],
-        "coords": {"plev": [10000, 40000]},
+        "coords": {"plev": [10000, 100000]},
         "plev_units": "Pa",
         "metric": jet_core_algorithms.manney_et_al_2011,
         "name": "Manney et al. 2011",

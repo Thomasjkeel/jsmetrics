@@ -11,7 +11,7 @@ History
 
 0.1.5-gamma (2023-08-16)
 -------------------------
-* Start to correct Manney 2011 method
+* Correct Manney 2011 method
 * Move old method to new metric: 'jet_core_identification_algorithm'
 * Update docs for Manney 2011 and sub-components
 

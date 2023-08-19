@@ -194,9 +194,9 @@ def schiemann_et_al_2009(data, ws_threshold=30):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def manney_et_al_2011(
     data,
+    jet_core_plev_limit,
     jet_core_ws_threshold=40,
     jet_boundary_ws_threshold=30,
-    jet_core_plev_limit=(100, 400),
     ws_drop_threshold=25,
     jet_core_lat_distance=15,
 ):
@@ -226,12 +226,12 @@ def manney_et_al_2011(
     ----------
     data : xarray.Dataset
         Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+    jet_core_plev_limit: tuple or array
+        Sequence of two values relating to the pressure level limit of the jet cores (original paper uses 100hPa 400 hPa)
     jet_core_ws_threshold : int or float
         Threshold used for jet-stream core point (default=40 m/s)
     jet_boundary_ws_threshold : int or float
         Threshold for jet-stream boundary point (default=30 m/s)
-    jet_core_plev_limit: tuple or array
-        Sequence of two values relating to the pressure level limit of the jet cores (default: (100, 400))
     ws_drop_threshold : int or float
         Threshold for drop in windspeed along the line between cores (default: 25 m/s)
     jet_core_lat_distance : int or float
@@ -273,6 +273,11 @@ def manney_et_al_2011(
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
 
+    if not jet_core_plev_limit:
+        raise KeyError(
+            "Please provide a pressure level limit for jet cores returned by this metric. As an example the original methodology used 100-400 hPa as a limit (to replicate this, pass the parameter jet_core_plev_limit=(100, 400))"
+        )
+
     # Step 1. Calculate wind speed from ua and va components.
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
@@ -285,9 +290,9 @@ def manney_et_al_2011(
         output = (
             jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day(
                 data,
+                jet_core_plev_limit,
                 jet_core_ws_threshold,
                 jet_boundary_ws_threshold,
-                jet_core_plev_limit,
                 ws_drop_threshold,
                 jet_core_lat_distance,
             )
@@ -296,9 +301,9 @@ def manney_et_al_2011(
         output = data.groupby("time").map(
             jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day,
             (
+                jet_core_plev_limit,
                 jet_core_ws_threshold,
                 jet_boundary_ws_threshold,
-                jet_core_plev_limit,
                 ws_drop_threshold,
                 jet_core_lat_distance,
             ),

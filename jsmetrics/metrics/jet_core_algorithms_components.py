@@ -178,9 +178,9 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
 
 def run_jet_core_and_region_algorithm_on_one_day(
     row,
+    jet_core_plev_limit,
     jet_core_ws_threshold,
     jet_boundary_ws_threshold,
-    jet_core_plev_limit,
     ws_drop_threshold,
     jet_core_lat_distance,
 ):
@@ -203,12 +203,12 @@ def run_jet_core_and_region_algorithm_on_one_day(
     ----------
     row : xarray.Dataset
         Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
-    jet_core_ws_threshold : int or float
-        Threshold used for jet-stream core point (default=40 m/s)
-    jet_boundary_ws_threshold : int or float
-        Threshold for jet-stream boundary point (default=30 m/s)
     jet_core_plev_limit: tuple or array
-        Sequence of two values relating to the pressure level limit of the jet cores (default: (100, 400))
+        Sequence of two values relating to the pressure level limit of the jet cores (original paper uses (100, 400) hPa)
+    jet_core_ws_threshold : int or float
+        Threshold used for jet-stream core point
+    jet_boundary_ws_threshold : int or float
+        Threshold for jet-stream boundary point
     ws_drop_threshold : int or float
         Threshold for drop in windspeed along the line between cores (default: 25 m/s)
     jet_core_lat_distance : int or float

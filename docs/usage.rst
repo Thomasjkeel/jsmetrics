@@ -49,7 +49,7 @@ within the boundaries of the detected jet.
 
 
 ...to produce a count of jet cores:
---------------------------------
+------------------------------------
 If you want to look at the frequency of jet locations and produce a map.
 
 .. code-block:: python

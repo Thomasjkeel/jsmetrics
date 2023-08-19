@@ -67,11 +67,16 @@ METRIC_DETAILS = {
     },
     "Manney2011": {
         "variables": ["ua", "va"],
-        "coords": {"plev": [10000, 40000]},
+        "coords": {"plev": [10000, 100000]},
         "plev_units": "Pa",
         "metric": jet_core_algorithms.manney_et_al_2011,
         "name": "Manney et al. 2011",
-        "description": "",
+        "description": "This method detects jet cores and defines a boundary region\
+                        beside those cores based on two windspeed thresholds.\
+                        Two additional checks are applied after initial detection\
+                        of cores to check whether cores within the same windspeed region\
+                        are part of the same feature (see docstring for this method for\
+                        more information).",
         "doi": "https://doi.org/10.5194/acp-11-6115-2011",
     },
     "BarnesPolvani2013_NorthAtlantic": {

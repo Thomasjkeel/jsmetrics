@@ -96,9 +96,22 @@ class TestManney2011(unittest.TestCase):
     def test_metric(self):
         test_func = jet_core_algorithms.manney_et_al_2011
         # NOTE: this metric is a generator
-        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
-        res = test_func(subset_data.sel(plev=25000))
-        self.assertEqual(res["jet_core_id"].max(), 2)
+        subset_data = self.data.sel(plev=slice(50000, 10000)).isel(
+            time=slice(0, 1), lon=slice(0, 100)
+        )
+        res = test_func(subset_data, jet_core_plev_limit=(10000, 40000))
+        self.assertEqual(int(res["jet_core_mask"].astype(int).max()), 1)
+        self.assertEqual(int(res["jet_region_mask"].astype(int).max()), 1)
+        self.assertEqual(
+            int(res["jet_core_mask"].isel(lon=0).where(lambda x: x).count()), 1
+        )
+
+        res = test_func(
+            subset_data, jet_core_plev_limit=(10000, 40000), jet_core_ws_threshold=10
+        )
+        self.assertEqual(
+            int(res["jet_core_mask"].isel(lon=0).where(lambda x: x).count()), 4
+        )
 
 
 class TestPenaOrtiz2013(unittest.TestCase):
@@ -136,6 +149,18 @@ class TestKuang2014(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(lon_data))
         plev_data = self.data.sel(plev=slice(25000, 25000)).isel(time=slice(0, 2))
         tested_func(plev_data)
+
+
+class TestJetCoreIdentificationAlgorithm(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_uv_data()
+
+    def test_metric(self):
+        test_func = jet_core_algorithms.jet_core_identification_algorithm
+        # NOTE: this metric is a generator
+        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
+        res = test_func(subset_data.sel(plev=25000))
+        self.assertEqual(res["jet_core_id"].max(), 2)
 
 
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):

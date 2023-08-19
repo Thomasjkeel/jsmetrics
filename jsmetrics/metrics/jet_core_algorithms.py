@@ -192,17 +192,33 @@ def schiemann_et_al_2009(data, ws_threshold=30):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
+def manney_et_al_2011(
+    data,
+    jet_core_plev_limit,
+    jet_core_ws_threshold=40,
+    jet_boundary_ws_threshold=30,
+    ws_drop_threshold=25,
+    jet_core_lat_distance=15,
+):
     r"""
-    This method seperates jet cores based on boundary and windspeed threshold.
-    Core are discovered where 8-cells are above boundary threshold
+    This method detects jet cores and defines a boundary region beside those cores based on two windspeed thresholds.
+    Two additional checks are applied after initial detection of cores to check whether cores within the same windspeed region
+    are part of the same feature (default is 30 m/s, see 'jet_boundary_ws_threshold').
+    These two checks are achieved by checking whether regions with multiple jet cores are more than a certain distance apart
+    (default is 15 degrees, see 'jet_core_lat_distance') and the windspeed between two cores does not drop below a threshold
+    (default is 25 m/s, see 'ws_drop_threshold')
 
-    This method is also known as JETPAC and is available online (add link).
+    This method returns four outputs
+        1. 'jet_core_mask' -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
+        2. 'jet_region_mask' -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
+        3. 'jet_region_above_ws_threshold_mask' -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
+        4. 'ws' -- Wind speed calculated from 'ua', 'va' inputs.
 
     This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
-    and is described in Section 3.1 of that study.
+    and is described in Section 3.1 of that study. This method is also known as JETPAC, and available in its
+    original form from NASA JPL.
 
-    There is an update to this method introduced in Manney & Hegglin 2018 to include physically based method to extract the
+    There is an update to this method introduced in Manney & Hegglin 2018 to include physically-based method to extract the
     subtropical jet is identified (and thus distinguished from polar jets).
 
 
@@ -210,10 +226,16 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
     ----------
     data : xarray.Dataset
         Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
-    ws_core_threshold : int or float
-        Threshold used for jet-stream core point (default=40)
-    ws_boundary_threshold : int or float
-        Threshold for jet-stream boundary point (default=30)
+    jet_core_plev_limit: tuple or array
+        Sequence of two values relating to the pressure level limit of the jet cores (original paper uses 100hPa 400 hPa)
+    jet_core_ws_threshold : int or float
+        Threshold used for jet-stream core point (default=40 m/s)
+    jet_boundary_ws_threshold : int or float
+        Threshold for jet-stream boundary point (default=30 m/s)
+    ws_drop_threshold : int or float
+        Threshold for drop in windspeed along the line between cores (default: 25 m/s)
+    jet_core_lat_distance : int or float
+        Threshold for maximum distance between cores to be counted the same (default: 15 degrees)
 
     Returns
     ----------
@@ -222,8 +244,11 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
 
     Notes
     -----
-    **Slow method**: currently takes a long time i.e. 7.6 seconds per time unit with 8 plevs
-    (i.e. 7.6 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    The implementation of this method varies slightly from the original, in that this method will return
+    variables that have 0, 1+ values, so that the user can use these as a mask on other variables such as windspeed
+    (see 'Examples' for demonstration of how to use the mask).
+    Also, 'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
+    encompass jet cores.
 
     Examples
     --------
@@ -235,37 +260,52 @@ def manney_et_al_2011(data, ws_core_threshold=40, ws_boundary_threshold=30):
         # Load in dataset with u and v components:
         uv_data = xr.open_dataset('path_to_uv_data')
 
-        # Subset dataset to range used in original methodology (100-400 hPa)):
-        uv_sub = uv_data.sel(plev=slice(100, 400))
+        # Subset dataset to range appropriate for original methodology (100-1000 hPa)):
+        uv_sub = uv_data.sel(plev=slice(100, 1900))
 
         # Run algorithm:
-        manney_outputs = jsmetrics.jet_core_algorithms.manney_et_al_2011(uv_sub, ws_core_threshold=40, ws_boundary_threshold=30)
+        manney_outputs = jsmetrics.jet_core_algorithms.manney_et_al_2011(uv_sub, ws_core_threshold=40, ws_boundary_threshold=30, jet_core_plev_limit=(100, 400))
 
-        # Produce a jet occurence count across all pressure levels
-        manney_jet_counts_all_levels = manney_outputs['jet_core_id'].sum(('time', 'plev'))
-
-        # Use the jet occurence values as a mask to extract the jet windspeeds
-        manney_jet_ws = manney_outputs.where(manney_outputs['jet_core_id'] > 0)['ws']
+        # Use the jet core mask to extract the jet windspeeds
+        manney_jet_ws = manney_outputs.where(manney_outputs['jet_core_mask'])['ws']
 
     """
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
 
-    # Step 1. Run Jet-stream Core Idenfication Algorithm
+    if not jet_core_plev_limit:
+        raise KeyError(
+            "Please provide a pressure level limit for jet cores returned by this metric. As an example the original methodology used 100-400 hPa as a limit (to replicate this, pass the parameter jet_core_plev_limit=(100, 400))"
+        )
+
+    # Step 1. Calculate wind speed from ua and va components.
+    data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
+
+    # Step 2. Run Algorithm
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
         if "time" in data.dims:
             data = data.squeeze("time")
-        output = jet_core_algorithms_components.run_jet_core_algorithm_on_one_day(
-            data, ws_core_threshold, ws_boundary_threshold
+        output = (
+            jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day(
+                data,
+                jet_core_plev_limit,
+                jet_core_ws_threshold,
+                jet_boundary_ws_threshold,
+                ws_drop_threshold,
+                jet_core_lat_distance,
+            )
         )
     else:
         output = data.groupby("time").map(
-            jet_core_algorithms_components.run_jet_core_algorithm_on_one_day,
+            jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day,
             (
-                ws_core_threshold,
-                ws_boundary_threshold,
+                jet_core_plev_limit,
+                jet_core_ws_threshold,
+                jet_boundary_ws_threshold,
+                ws_drop_threshold,
+                jet_core_lat_distance,
             ),
         )
     return output
@@ -441,4 +481,74 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
                 jet_core_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day,
                 (occurence_ws_threshold,),
             )
+    return output
+
+
+@sort_xarray_data_coords(coords=["lat", "lon"])
+def jet_core_identification_algorithm(
+    data, ws_core_threshold=40, ws_boundary_threshold=30
+):
+    r"""
+    This method seperates jet cores based on boundary and windspeed threshold.
+    Core are discovered where 8-cells are above boundary threshold
+
+    This method is inspired by the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
+    which is described in Section 3.1 of that study.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+    ws_core_threshold : int or float
+        Threshold used for jet-stream core point (default=40)
+    ws_boundary_threshold : int or float
+        Threshold for jet-stream boundary point (default=30)
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing the variable 'jet-core_id' (ID number relates to each unique core)
+
+    Notes
+    -----
+    **Slow method**: currently takes a long time i.e. 7.6 seconds per time unit with 8 plevs
+    (i.e. 7.6 seconds per day) on AMD Ryzen 5 3600 6-core processor
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology (100-400 hPa)):
+        uv_sub = uv_data.sel(plev=slice(100, 400))
+
+        # Run algorithm:
+        jca_outputs = jsmetrics.jet_core_algorithms.jet_core_identification_algorithm(uv_sub, ws_core_threshold=40, ws_boundary_threshold=30)
+
+    """
+    if "plev" not in data.dims:
+        data = data.expand_dims("plev")
+
+    # Step 1. Run Jet-stream Core Idenfication Algorithm
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
+    if data["time"].size == 1:
+        if "time" in data.dims:
+            data = data.squeeze("time")
+        output = jet_core_algorithms_components.run_jet_core_algorithm_on_one_day(
+            data, ws_core_threshold, ws_boundary_threshold
+        )
+    else:
+        output = data.groupby("time").map(
+            jet_core_algorithms_components.run_jet_core_algorithm_on_one_day,
+            (
+                ws_core_threshold,
+                ws_boundary_threshold,
+            ),
+        )
     return output

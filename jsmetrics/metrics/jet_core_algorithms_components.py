@@ -1113,6 +1113,7 @@ class JetStreamOccurenceAndCentreAlgorithm:
         Calculates jet-stream centres based on if one jet-stream occurence grid
         is surrounded by 8 cells of jet-stream occurence (default is 30 m/s)
         """
+        # to fix: there's got to be a quicker way
         for centre in self._jet_centres:
             self.output_data["jet_ocurrence1_jet_centre2"].loc[
                 dict(lat=centre[0], lon=centre[1])

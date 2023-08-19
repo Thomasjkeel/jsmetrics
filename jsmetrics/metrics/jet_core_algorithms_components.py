@@ -13,6 +13,7 @@
 # imports
 from jsmetrics.utils import data_utils, windspeed_utils
 import numpy as np
+import scipy.ndimage
 import xarray as xr
 
 # docs
@@ -219,282 +220,522 @@ def run_jet_core_and_region_algorithm_on_one_day(
         Data for one time unit containing four new variables (ws, jet_core_mask, jet_region_mask, jet_region_above_ws_threshold_mask)
     """
 
-    # jet_core_ws_threshold, jet_boundary_ws_threshold, ws_drop_threshold,
-    # jet_core_plev_limit, jet_core_lat_distance
+    # Step 1. Get potential cores (to later subset) using the wind speed thresholds and jet core pressure level limit.
+    row["potential_jet_cores"] = row["ws"].where(
+        lambda val: (val >= jet_core_ws_threshold)
+        & (val.plev >= min(jet_core_plev_limit))
+        & (val.plev <= max(jet_core_plev_limit)),
+        0,
+    )
+    row["potential_jet_regions"] = row["ws"].where(
+        lambda val: val >= jet_boundary_ws_threshold, 0
+    )
+
+    # Step 2. Get local maximas at each longitude
+    local_maximas_dict = {}
+    for ind, lon in enumerate(row["lon"]):
+        pot_core_one_lon = row["potential_jet_cores"].sel(lon=lon)
+        local_maximas = find_local_maxima_in_2d_dataarray(pot_core_one_lon)
+        local_maximas_dict[float(lon)] = local_maximas
+
+    # Step 3. Loop through the local maximas and make an mask of initial jet cores (not official as some may be in same region, see check in Step X)
+    mask_shape = row["ws"].isel(lon=0).shape
+    initial_jet_core_masks = np.array([])
+    for ind, local_maximas in enumerate(local_maximas_dict.values()):
+        initial_jet_core_mask = create_mask_using_local_maximas(
+            mask_shape=mask_shape, local_maximas=local_maximas
+        )
+        if ind == 0:
+            initial_jet_core_masks = initial_jet_core_mask
+            continue
+        initial_jet_core_masks = np.dstack(
+            [initial_jet_core_masks, initial_jet_core_mask]
+        )
+
+    # Step 4. Loop through contigious regions (here known as jet region contours) and check if a jet core is within them
+    jet_region_contour_masks = np.array([])
+    for ind, lon in enumerate(row.lon):
+        jet_region_contour_mask = get_jet_region_contour_mask(
+            row["potential_jet_regions"].sel(lon=lon), local_maximas_dict[float(lon)]
+        )
+        if ind == 0:
+            jet_region_contour_masks = jet_region_contour_mask
+            continue
+        jet_region_contour_masks = np.dstack(
+            [jet_region_contour_masks, jet_region_contour_mask]
+        )
+
+    # Step 5. Get the jet region around each local maxima only including above, below, left and right of maxima.
+    jet_region_masks = np.array([])  # initialise jet region array
+    for ind, lon in enumerate(row.lon):
+        jet_region_contour_mask_one_lon = jet_region_contour_masks[::, ::, ind]
+        jet_region_mask = np.zeros_like(
+            jet_region_contour_mask_one_lon
+        )  # create empty mask
+
+        current_local_maximas = local_maximas_dict[float(lon)]
+        for local_maxima in current_local_maximas:
+            refined_result = refine_jet_region_to_leftright_and_abovebelow(
+                jet_region_contour_mask_one_lon, local_maxima[0], local_maxima[1]
+            )
+            jet_region_mask += refined_result
+        if ind == 0:
+            jet_region_masks = jet_region_mask
+            continue
+        jet_region_masks = np.dstack([jet_region_masks, jet_region_mask])
+
+    # Step 6. Remove old jet regions and define two outputs (jet_region, region_above_ws_threshold)
+    row = row.drop("potential_jet_regions")
+    row["jet_region_mask"] = (("plev", "lat", "lon"), np.clip(jet_region_masks, 0, 1))
+    row["jet_region_contour_mask"] = (("plev", "lat", "lon"), jet_region_contour_masks)
+
+    # Step 7. Run checks on jet cores, to check if they are part of the same jet feature
+    jet_core_masks = run_checks_on_jet_cores_and_return_jet_cores(
+        row,
+        initial_jet_core_masks,
+        local_maximas_dict,
+        jet_core_lat_distance,
+        ws_drop_threshold,
+    )
+
+    # Step 8. Remove old and add actual jet core mask
+    row = row.drop("potential_jet_cores")
+    row["jet_core_mask"] = (("plev", "lat", "lon"), jet_core_masks)
     return row
 
 
-def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_threshold):
+def find_local_maxima_in_2d_dataarray(arr):
     """
-    Runs JetStreamCoreIdentificationAlgorithm method on a single time unit.
+    Find indices of local maximas within a 2-D array. Should return two values which relate to the position of local maximas (if any).
 
-    Component of method of jet_core_identification_algorithm in jsmetrics and is inspired by
-    the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
-    which is described in Section 3.1 of that study.
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    arr : xr.DataArray
+        A 2-D array with numeric values (i.e. dtypes float or int)
+
+    Returns
+    ----------
+    local_maxima : xr.DataArray
+        A 2-D array with values relating to the index of the local maximas
+
+    Examples
+    ----------
+    .. code-block:: python
+
+        import numpy as np
+        import xarray as xr
+
+        # Example array
+        data = np.array([
+            [1, 2, 3, 4, 5],
+            [2, 3, 4, 5, 4],
+            [3, 4, 5, 6, 7],
+            [4, 5, 6, 7, 6],
+            [5, 6, 7, 8, 9]
+        ])
+
+        # Convert NumPy array to xarray DataArray
+        data_array = xr.DataArray(data)
+
+        local_maxima_indices = find_local_maxima_in_2d_dataarray(data_array)
+
+        for i, j in local_maxima_indices:
+            print(f"Local maximum at ({i}, {j}): {data_array[i, j]}")
+
+    """
+    # Calculate neighbors for all interior points
+    neighbors = np.stack(
+        [
+            arr[:-2, 1:-1],  # Above
+            arr[2:, 1:-1],  # Below
+            arr[1:-1, :-2],  # Left
+            arr[1:-1, 2:],  # Right
+        ],
+        axis=-1,
+    )
+
+    # Find local maximas
+    interior_maxima = arr[1:-1, 1:-1] > np.max(neighbors, axis=-1)
+    interior_indices = np.transpose(np.where(interior_maxima))
+
+    # Adjust indices to account for offset
+    adjusted_indices = interior_indices + np.array([1, 1])
+
+    return np.array(adjusted_indices)
+
+
+def create_mask_using_local_maximas(local_maximas, mask_shape):
+    """
+    Will create a mask with the same dimensions as the inputted mask_shape
+    and only the local maxima as value 1. All other values will be 0.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    local_maximas : np.array
+        An array containing values relating to the index of the local maximas in a mask with shape: mask_shape
+
+    mask_shape : tuple
+        Values to create a mask of given shape from.
+
+    Returns
+    ----------
+    mask : np.array
+        An array with shape: mask_shape with only the indexes of the local maximas as 1 All other values will 0.
+
+    """
+    empty_mask = np.zeros(mask_shape)
+
+    for i, j in local_maximas:
+        empty_mask[i, j] = 1
+    return empty_mask
+
+
+def run_checks_on_jet_cores_and_return_jet_cores(
+    row,
+    initial_jet_core_masks,
+    local_maximas_dict,
+    jet_core_lat_distance,
+    ws_drop_threshold,
+):
+    """
+    This method runs two checks on the jet cores to check whether there are regions with multiple jet cores.
+    Firstly, it checks whether regions with multiple jet cores are more than a certain distance apart
+    (default is 15 degrees, see 'jet_core_lat_distance'), and hence seperate cores.
+    Secondly, it will check whether the windspeed between two cores drops below a threshold
+    (default is 25 m/s, see 'ws_drop_threshold'), if so it will remove the latter core.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
 
     Parameters
     ----------
     row : xarray.Dataset
-        Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
-
-    ws_core_threshold : int or float
-        Threshold used for jet-stream core point
-    ws_boundary_threshold : int or float
-        Threshold for jet-stream boundary point
+        Data of single time unit containing the variables: 'jet_region_contour_mask', and the coordinates: 'lon', 'lat', 'plev'
+    initial_jet_core_masks :
+        Initial mask of jet cores to check.
+    ws_drop_threshold : int or float
+        Threshold for drop in windspeed along the line between cores (default: 25 m/s)
+    jet_core_lat_distance : int or float
+        Threshold for maximum distance between cores to be counted the same (default: 15 degrees)
 
     Returns
     ----------
-    row : xarray.Dataset
-        Data for one time unit containing jet-cores (ID number relates to each unique core)
+    jet_core_masks : numpy.array
+        Final jet cores mask of shape of 'initial_jet_core_masks'.
+
     """
-    row["jet_core_id"] = (
-        ("plev", "lat", "lon"),
-        np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
-    )
-    for lon in row["lon"]:
-        current = row.sel(lon=lon, method="nearest")
-        core_alg = JetStreamCoreIdentificationAlgorithm(
-            current,
-            ws_core_threshold=ws_core_threshold,
-            ws_boundary_threshold=ws_boundary_threshold,
+    jet_core_masks = np.copy(initial_jet_core_masks)
+    for lon_ind, lon in enumerate(row.lon):
+        jet_region_contour_one_lon = row["jet_region_contour_mask"].sel(lon=lon)
+        ws_one_lon = row["ws"].sel(lon=lon)
+        current_local_maximas = local_maximas_dict[float(lon)]
+
+        core_and_location = []
+        for core_ind, local_maxima in enumerate(current_local_maximas):
+            region_within = jet_region_contour_one_lon[
+                local_maxima[0], local_maxima[1]
+            ]  # this is the region contour that the jet core is found within
+            core_and_location.append([core_ind, float(region_within)])
+        core_and_location = np.array(core_and_location)
+
+        if len(core_and_location) == 0:
+            # no cores found
+            continue
+
+        region_ind, num_cores_in_region = np.unique(
+            core_and_location[::, 1], return_counts=True
         )
-        core_alg.run()
-        row["jet_core_id"].loc[dict(lon=lon)] = core_alg.output_data["core_id"]
-    return row
+        multi_core_regions = region_ind[num_cores_in_region > 1]
 
+        if len(multi_core_regions) == 0:
+            # no multi-core regions found
+            continue
 
-class JetStreamCoreIdentificationAlgorithm:
-    """
-    Jet-stream core identification algorithm.
+        for multi_core_region in multi_core_regions:
+            # get all the local maxima within regions of multi cores
+            local_maxima_inds = core_and_location[::, 0][
+                core_and_location[::, 1] == multi_core_region
+            ]
 
-    Component of method of jet_core_identification_algorithm in jsmetrics and is inspired by
-    the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
-    which is described in Section 3.1 of that study.
+            # Check 1. Test if cores are more than 15 degrees away
+            previous_lat = None
+            for local_maxima_ind in local_maxima_inds:
+                local_maxima = current_local_maximas[int(local_maxima_ind)]
+                if not previous_lat:
+                    # set previous latitude to check for latitude distance in next
+                    previous_lat = local_maxima[1]
+                else:
+                    current_lat = local_maxima[1]
+                    if (
+                        abs(row["lat"][previous_lat] - row["lat"][current_lat])
+                        > jet_core_lat_distance
+                    ):
+                        previous_lat = current_lat
+                        continue
 
-    Methods
-    -------
-    run:
-        run algorithm
-    run_algorithm:
-        class method for running algorithm
-    """
-
-    def __init__(self, data, ws_core_threshold=40, ws_boundary_threshold=30):
-        """
-        Input will need to be longitudinal slice of windspeed values.
-
-        Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
-
-        Parameters
-        ----------
-        data : xarray.Dataset
-            Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
-        ws_core_threshold : int or float
-            Threshold used for jet-stream core point (default=40)
-        ws_boundary_threshold : int or float
-            Threshold for jet-stream boundary point (default=30)
-        """
-        try:
-            assert (
-                ws_core_threshold > ws_boundary_threshold
-                and ws_core_threshold > 0
-                and ws_boundary_threshold > 0
+            # Check 2. Test if cores have ws drop between them
+            multi_core_region_ws = ws_one_lon.where(
+                jet_region_contour_one_lon == multi_core_region
             )
-        except Exception as e:
-            raise ValueError(
-                "Windspeed core threshold needs to be more than boundary\
-                    threshold and both need to be more than 0"
-            ) from e
-        # Transpose data
-        data = data.transpose(*(..., "lat", "plev"))
 
-        # Step 1. make windspeed slice
-        self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)
-
-        # Step 2. Get core and potential boundary points
-        self._labelled_data = self._lat_ws_slice.label_slice(
-            self._lat_ws_slice["ws"] < ws_core_threshold, "Core"
-        )
-        self._labelled_data = self._labelled_data.where(
-            (self._lat_ws_slice["ws"] < ws_boundary_threshold)
-            | (self._lat_ws_slice["ws"] > ws_core_threshold),
-            other="Potential Boundary",
-        )
-
-        # Step 3. Get indexes of jet-stream cores and potential boundaries
-        (
-            self._initial_core_ids,
-            self._pot_boundary_ids,
-        ) = self._get_indexes_of_core_and_boundaries()
-
-        # Step 4. Set variables needed to keep track of
-        self._current_core_lat = -1
-        self._currently_a_core = None
-        self.algorithm_has_run = False
-
-    def __repr__(self):
-        """
-        Representation of the class. Have it return the labelled data
-        """
-        if not self.algorithm_has_run:
-            print(
-                "A total of %d initial Jet-stream cores have been found\
-                 in the wind-speed slice"
-                % (self._labelled_data["ws"].where(lambda x: x == "Core").count())
-            )
-            print(
-                "A total of %d potential Jet-stream boundaries have been found\
-                 in the wind-speed slice"
-                % (
-                    self._labelled_data["ws"]
-                    .where(lambda x: x == "Potential Boundary")
-                    .count()
-                )
-            )
-            return repr(self._labelled_data)
-        else:
-            print("A total of %d cores have been discovered" % (self.num_of_cores))
-            return repr(self.output_data)
-
-    @classmethod
-    def run_algorithm(cls, data, ws_core_threshold=40, ws_boundary_threshold=30):
-        """
-        Class method for running algorithm
-        """
-        js_algorithm = cls(
-            data,
-            ws_core_threshold=ws_core_threshold,
-            ws_boundary_threshold=ws_boundary_threshold,
-        )
-
-        js_algorithm.run()
-        return js_algorithm
-
-    def run(self):
-        """
-        Runs algorithm.
-        """
-        self.final_jet_cores = self._get_jet_core_boundary()
-        self.output_data = self._add_cores_to_data()
-        self.algorithm_has_run = True
-
-    def _get_indexes_of_core_and_boundaries(self):
-        """
-        Will return the indexes in the ws data that ARE jet-stream cores
-        and COULD BE jet-stream core boundaries
-        """
-        pot_boundary_ids = np.where(self._labelled_data["ws"] == "Potential Boundary")
-        initial_core_ids = np.where(self._labelled_data["ws"] == "Core")
-        pot_boundary_ids = np.stack(pot_boundary_ids, axis=-1)
-        initial_core_ids = np.stack(initial_core_ids, axis=-1)
-        return initial_core_ids, pot_boundary_ids
-
-    @staticmethod
-    def _get_indexes_to_check(pot_boundary):
-        """
-        Will return an array of indexes to check for potential boundaries
-        or jetstream cores.
-        """
-        vals_to_check = []
-        if pot_boundary[0] != 0:
-            vals_to_check.append([pot_boundary[0] - 1, pot_boundary[1]])
-        vals_to_check.append([pot_boundary[0] + 1, pot_boundary[1]])
-        if pot_boundary[1] != 0:
-            vals_to_check.append([pot_boundary[0], pot_boundary[1] - 1])
-        vals_to_check.append([pot_boundary[0], pot_boundary[1] + 1])
-        return vals_to_check
-
-    def _get_pot_jetcore_area(self, vals, area, core_found=False):
-        """
-        Recursive function that will return the IDs of a jet core boundary
-        i.e. above 30 m/s surrounding a core of 40 m/s
-        Will check one an area of potential boundaries contains a core
-        and thus can be called boundaries.
-        """
-        vals_copy = vals.copy()
-        for val in vals:
-            if val in area:
-                continue
-            if val in self._initial_core_ids.tolist():
-                core_found = True
-                # look for a new core if it is more than 15 degrees away
-                if (
-                    val[1] - self._current_core_lat > 15
-                    and val[1] > self._current_core_lat
-                ):
-                    #  print('THIS IS A NEW CORE')
-                    self._current_core_lat = val[1]
-                area.append(val)
-                new_vals = self._get_indexes_to_check(val)
-                vals_copy.extend(new_vals)
-                vals_copy = data_utils.remove_duplicates(vals_copy)
-                return self._get_pot_jetcore_area(
-                    vals_copy, area=area, core_found=core_found
-                )
-
-            elif val in self._pot_boundary_ids.tolist():
-                area.append(val)
-                new_vals = self._get_indexes_to_check(val)
-                vals_copy.extend(new_vals)
-                vals_copy = data_utils.remove_duplicates(vals_copy)
-                return self._get_pot_jetcore_area(
-                    vals_copy, area=area, core_found=core_found
-                )
-            else:
-                vals_copy.remove(val)
-                continue
-
-        # reset current core variables
-        self._current_core_lat = -1
-        self._currently_a_core = None
-        return area, core_found
-
-    def _get_jet_core_boundary(self):
-        """
-        Recursive function that will return the IDs of all jet core boundaries
-        i.e. above 30 m/s surrounding a core of 40 m/s
-        Will check if an area of potential boundaries contains a core
-        and thus can be called boundaries.
-        """
-        already_covered = []
-        js_core_indexes = []
-        id_number = 0
-        for pot_boundary in self._pot_boundary_ids:
-            if pot_boundary.tolist() in already_covered:
-                continue
-            vals_to_check = self._get_indexes_to_check(pot_boundary)
-            area, core_found = self._get_pot_jetcore_area(vals_to_check, area=[])
-            already_covered.extend(area)
-            already_covered = data_utils.remove_duplicates(already_covered)
-            # add area to js_core_indexes if part of core
-            if core_found:
-                id_number += 1
-                js_core_indexes.extend([{"id": id_number, "index_of_area": area}])
-        self.num_of_cores = id_number
-        return js_core_indexes
-
-    def _add_cores_to_data(self):
-        """
-        Add cores to data.
-        """
-        self._lat_ws_slice.values["core_id"] = (
-            ("plev", "lat"),
-            np.zeros(
-                (
-                    self._lat_ws_slice.values["plev"].size,
-                    self._lat_ws_slice.values["lat"].size,
-                )
-            ),
-        )
-        for jet_core in self.final_jet_cores:
-            for lat, plev in jet_core["index_of_area"]:
-                self._lat_ws_slice.values["core_id"].loc[
-                    dict(
-                        lat=self._lat_ws_slice.values["lat"].data[lat],
-                        plev=self._lat_ws_slice.values["plev"].data[plev],
+            for multi_core_region in multi_core_regions:
+                # get all the local maxima within regions of multi cores
+                local_maxima_inds = core_and_location[::, 0][
+                    core_and_location[::, 1] == multi_core_region
+                ]
+                previous_local_maxima = None
+                for ind, local_maxima_ind in enumerate(local_maxima_inds):
+                    current_local_maxima = current_local_maximas[int(local_maxima_ind)]
+                    if ind == 0:
+                        previous_local_maxima = current_local_maxima
+                        continue
+                    windspeeds_between_cores = (
+                        get_values_along_a_line_between_two_coordinates(
+                            multi_core_region_ws,
+                            start_point=previous_local_maxima,
+                            end_point=current_local_maxima,
+                        )
                     )
-                ] = jet_core["id"]
-        return self._lat_ws_slice.values
+                    if not has_ws_drop_between_cores(
+                        windspeeds_between_cores, ws_drop_threshold=ws_drop_threshold
+                    ):
+                        # Set to 0 as the cores detected in this region are part of the same feature
+                        jet_core_masks[
+                            current_local_maxima[0], current_local_maxima[1], lon_ind
+                        ] = 0
+    return jet_core_masks
+
+
+def get_jet_region_contour_mask(potential_jet_regions, local_maximas):
+    """
+    Will create a mask based on regions (above ws_threshold) around the jet cores that are
+    contiguous.
+    The mask will contain categorical values (e.g. 1, 2) for each cluster of jet regions
+    contain a jet core. All other values will be 0 (i.e not a jet core or jet region)
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    potential_jet_regions : xr.DataArray
+        Windspeeds of regions above the jet region threshold
+
+    local_maximas : np.array
+        An array containing values relating to the index of the local maximas (should be the same shape as input: potential_jet_regions)
+
+    Returns
+    ----------
+    jet_region_contour_mask : np.array
+        A 2-D array with shape: mask_shape with only the indexes of the local maximas as 1 All other values will 0.
+
+    """
+    potential_jet_regions_mask, _ = scipy.ndimage.label(potential_jet_regions)
+    actual_jet_region_nums = get_jet_region_numbers(
+        local_maximas, potential_jet_regions_mask
+    )
+    jet_region_contour_mask = subset_jet_region_mask_to_regions_with_cores(
+        potential_jet_regions_mask, actual_jet_region_nums
+    )
+
+    # Refine jet regions to new values (i.e. if labels have been removed this resets them)
+    jet_region_contour_mask, _ = scipy.ndimage.label(jet_region_contour_mask)
+    return jet_region_contour_mask
+
+
+def get_jet_region_numbers(local_maximas, potential_jet_regions_mask):
+    """
+    Will only return clusters ID numbers of jet regions with an actual jet core in them.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    local_maximas : np.array
+        An array containing values relating to the index of the local maximas (should be the same shape as input: potential_jet_regions)
+
+    potential_jet_regions_mask : numpy.array
+        Array of jet regions clusters as returned by scipy.ndimage.label
+
+    Returns
+    ----------
+    actual_jet_region_nums : list
+        A list of cluster ID numbers with local maximas in them
+
+    """
+    actual_jet_region_nums = []
+    for i, j in local_maximas:
+        valid_region = potential_jet_regions_mask[i, j]
+        if valid_region not in actual_jet_region_nums:
+            actual_jet_region_nums.append(valid_region)
+    return actual_jet_region_nums
+
+
+def subset_jet_region_mask_to_regions_with_cores(
+    potential_jet_regions_mask, actual_jet_region_nums
+):
+    """
+    Will subset jet region mask to only those with an actual jet core in them.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    potential_jet_regions_mask : numpy.array
+        Array of jet regions clusters as returned by scipy.ndimage.label
+
+    actual_jet_region_nums : list
+        A list of cluster ID numbers with local maximas in them
+
+    Returns
+    ----------
+    potential_jet_regions_mask : numpy.array
+        Subset version of jet regions mask containing only jet region clusters with local maxima in them
+
+    """
+    for reg_num in np.unique(potential_jet_regions_mask):
+        if reg_num not in actual_jet_region_nums:
+            potential_jet_regions_mask[potential_jet_regions_mask == reg_num] = 0
+    return potential_jet_regions_mask
+
+
+def refine_jet_region_to_leftright_and_abovebelow(array, x, y):
+    """
+    This method will remove all values not left, right, above or below the input
+    x, y coordinates in a 2-D array.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    array : np.array
+        A 2-D array with numeric values relating to the jet region (i.e. dtypes float or int)
+    x : int
+        x-coordinate of a local maxima to subset jet region by
+    y: int
+        y-coordinate of a local maxima to subset input array by
+
+    Returns
+    ----------
+    refined_array : np.array
+        New 2-D array with values only around x and y coordinates
+
+    """
+    rows, cols = array.shape
+    refined_array = np.zeros_like(array)
+
+    if 0 <= x < rows and 0 <= y < cols and array[x, y] != 0:
+        # Refine the current cluster
+        refined_array[x, y] = array[x, y]
+        left_col = y - 1
+        while left_col >= 0 and array[x, left_col] != 0:
+            refined_array[x, left_col] = array[x, left_col]
+            left_col -= 1
+
+        right_col = y + 1
+        while right_col < cols and array[x, right_col] != 0:
+            refined_array[x, right_col] = array[x, right_col]
+            right_col += 1
+
+        up_row = x - 1
+        while up_row >= 0 and array[up_row, y] != 0:
+            refined_array[up_row, y] = array[up_row, y]
+            up_row -= 1
+
+        down_row = x + 1
+        while down_row < rows and array[down_row, y] != 0:
+            refined_array[down_row, y] = array[down_row, y]
+            down_row += 1
+
+    return refined_array
+
+
+def get_values_along_a_line_between_two_coordinates(data, start_point, end_point):
+    """
+    Get all values along a shortest path between two coordinates in a 2-D numpy array.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    arr : np.array
+        A 2-D array with numeric values (i.e. dtypes float or int)
+
+    Returns
+    ----------
+    local_maxima : np.array
+        A 2-D array with values relating to the index of the local maximas
+
+    Examples
+    ----------
+    .. code-block:: python
+
+        import numpy as np
+
+        # Example array
+        data = np.array([
+            [1, 2, 3, 4, 5],
+            [2, 3, 4, 5, 4],
+            [3, 4, 5, 6, 7],
+            [4, 5, 6, 7, 6],
+            [5, 6, 7, 8, 9]
+        ])
+
+        local_maxima_indices = find_local_maxima(data)
+
+        for i, j in local_maxima_indices:
+            print(f"Local maximum at ({i}, {j}): {data[i, j]}")
+
+    """
+    # Calculate the differences in coordinates
+    dx = end_point[1] - start_point[1]
+    dy = end_point[0] - start_point[0]
+
+    # Calculate the number of steps required for the line
+    num_steps = max(abs(dx), abs(dy))
+
+    # Calculate the step sizes for each coordinate
+    x_step = dx / num_steps
+    y_step = dy / num_steps
+
+    # Initialize lists to store the coordinates along the path
+    path_coordinates = []
+    for step in range(num_steps + 1):
+        row = int(round(start_point[0] + step * y_step))
+        col = int(round(start_point[1] + step * x_step))
+        path_coordinates.append((row, col))
+
+    # Extract values along the path
+    values_along_path = [float(data[row, col]) for row, col in path_coordinates]
+
+    return values_along_path
+
+
+def has_ws_drop_between_cores(ws_between_cores, ws_drop_threshold):
+    """
+    Will check for a windspeed drop of a given threshold between cores
+
+    Parameters
+    ----------
+    ws_between_cores : np.array
+        A 1-D array with windspeed between two cores as determined by 'get_values_along_a_line_between_two_coordinates'
+    ws_drop_threshold : int or float
+        Windspeed threshold to check
+
+    Returns
+    ----------
+    out : boolean
+        True if windspeeds input have a drop greater than 'ws_drop_threshold'
+
+    """
+    if any(ws_between_cores[0] - np.array(ws_between_cores) > ws_drop_threshold):
+        return True
+    elif any(ws_between_cores[-1] - np.array(ws_between_cores) > ws_drop_threshold):
+        return True
+    else:
+        return False
 
 
 def get_empty_local_wind_maxima_data(
@@ -842,3 +1083,279 @@ class JetStreamOccurenceAndCentreAlgorithm:
         self.output_data["jet_ocurrence1_jet_centre2"] = self.output_data[
             "jet_ocurrence1_jet_centre2"
         ].where(lambda x: ((x == 0) | (x == 2)), 1)
+
+
+def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_threshold):
+    """
+    Runs JetStreamCoreIdentificationAlgorithm method on a single time unit.
+
+    Component of method of jet_core_identification_algorithm in jsmetrics and is inspired by
+    the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
+    which is described in Section 3.1 of that study.
+
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
+
+    ws_core_threshold : int or float
+        Threshold used for jet-stream core point
+    ws_boundary_threshold : int or float
+        Threshold for jet-stream boundary point
+
+    Returns
+    ----------
+    row : xarray.Dataset
+        Data for one time unit containing jet-cores (ID number relates to each unique core)
+    """
+    row["jet_core_id"] = (
+        ("plev", "lat", "lon"),
+        np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
+    )
+    for lon in row["lon"]:
+        current = row.sel(lon=lon, method="nearest")
+        core_alg = JetStreamCoreIdentificationAlgorithm(
+            current,
+            ws_core_threshold=ws_core_threshold,
+            ws_boundary_threshold=ws_boundary_threshold,
+        )
+        core_alg.run()
+        row["jet_core_id"].loc[dict(lon=lon)] = core_alg.output_data["core_id"]
+    return row
+
+
+class JetStreamCoreIdentificationAlgorithm:
+    """
+    Jet-stream core identification algorithm.
+
+    Component of method of jet_core_identification_algorithm in jsmetrics and is inspired by
+    the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
+    which is described in Section 3.1 of that study.
+
+    Methods
+    -------
+    run:
+        run algorithm
+    run_algorithm:
+        class method for running algorithm
+    """
+
+    def __init__(self, data, ws_core_threshold=40, ws_boundary_threshold=30):
+        """
+        Input will need to be longitudinal slice of windspeed values.
+
+        Component of method of jet_core_identification_algorithm in jsmetrics and is inspired by
+        the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
+        which is described in Section 3.1 of that study.
+
+
+        Parameters
+        ----------
+        data : xarray.Dataset
+            Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
+        ws_core_threshold : int or float
+            Threshold used for jet-stream core point (default=40)
+        ws_boundary_threshold : int or float
+            Threshold for jet-stream boundary point (default=30)
+        """
+        try:
+            assert (
+                ws_core_threshold > ws_boundary_threshold
+                and ws_core_threshold > 0
+                and ws_boundary_threshold > 0
+            )
+        except Exception as e:
+            raise ValueError(
+                "Windspeed core threshold needs to be more than boundary\
+                    threshold and both need to be more than 0"
+            ) from e
+        # Transpose data
+        data = data.transpose(*(..., "lat", "plev"))
+
+        # Step 1. make windspeed slice
+        self._lat_ws_slice = windspeed_utils.LatitudeWindSpeedSlice(data)
+
+        # Step 2. Get core and potential boundary points
+        self._labelled_data = self._lat_ws_slice.label_slice(
+            self._lat_ws_slice["ws"] < ws_core_threshold, "Core"
+        )
+        self._labelled_data = self._labelled_data.where(
+            (self._lat_ws_slice["ws"] < ws_boundary_threshold)
+            | (self._lat_ws_slice["ws"] > ws_core_threshold),
+            other="Potential Boundary",
+        )
+
+        # Step 3. Get indexes of jet-stream cores and potential boundaries
+        (
+            self._initial_core_ids,
+            self._pot_boundary_ids,
+        ) = self._get_indexes_of_core_and_boundaries()
+
+        # Step 4. Set variables needed to keep track of
+        self._current_core_lat = -1
+        self._currently_a_core = None
+        self.algorithm_has_run = False
+
+    def __repr__(self):
+        """
+        Representation of the class. Have it return the labelled data
+        """
+        if not self.algorithm_has_run:
+            print(
+                "A total of %d initial Jet-stream cores have been found\
+                 in the wind-speed slice"
+                % (self._labelled_data["ws"].where(lambda x: x == "Core").count())
+            )
+            print(
+                "A total of %d potential Jet-stream boundaries have been found\
+                 in the wind-speed slice"
+                % (
+                    self._labelled_data["ws"]
+                    .where(lambda x: x == "Potential Boundary")
+                    .count()
+                )
+            )
+            return repr(self._labelled_data)
+        else:
+            print("A total of %d cores have been discovered" % (self.num_of_cores))
+            return repr(self.output_data)
+
+    @classmethod
+    def run_algorithm(cls, data, ws_core_threshold=40, ws_boundary_threshold=30):
+        """
+        Class method for running algorithm
+        """
+        js_algorithm = cls(
+            data,
+            ws_core_threshold=ws_core_threshold,
+            ws_boundary_threshold=ws_boundary_threshold,
+        )
+
+        js_algorithm.run()
+        return js_algorithm
+
+    def run(self):
+        """
+        Runs algorithm.
+        """
+        self.final_jet_cores = self._get_jet_core_boundary()
+        self.output_data = self._add_cores_to_data()
+        self.algorithm_has_run = True
+
+    def _get_indexes_of_core_and_boundaries(self):
+        """
+        Will return the indexes in the ws data that ARE jet-stream cores
+        and COULD BE jet-stream core boundaries
+        """
+        pot_boundary_ids = np.where(self._labelled_data["ws"] == "Potential Boundary")
+        initial_core_ids = np.where(self._labelled_data["ws"] == "Core")
+        pot_boundary_ids = np.stack(pot_boundary_ids, axis=-1)
+        initial_core_ids = np.stack(initial_core_ids, axis=-1)
+        return initial_core_ids, pot_boundary_ids
+
+    @staticmethod
+    def _get_indexes_to_check(pot_boundary):
+        """
+        Will return an array of indexes to check for potential boundaries
+        or jetstream cores.
+        """
+        vals_to_check = []
+        if pot_boundary[0] != 0:
+            vals_to_check.append([pot_boundary[0] - 1, pot_boundary[1]])
+        vals_to_check.append([pot_boundary[0] + 1, pot_boundary[1]])
+        if pot_boundary[1] != 0:
+            vals_to_check.append([pot_boundary[0], pot_boundary[1] - 1])
+        vals_to_check.append([pot_boundary[0], pot_boundary[1] + 1])
+        return vals_to_check
+
+    def _get_pot_jetcore_area(self, vals, area, core_found=False):
+        """
+        Recursive function that will return the IDs of a jet core boundary
+        i.e. above 30 m/s surrounding a core of 40 m/s
+        Will check one an area of potential boundaries contains a core
+        and thus can be called boundaries.
+        """
+        vals_copy = vals.copy()
+        for val in vals:
+            if val in area:
+                continue
+            if val in self._initial_core_ids.tolist():
+                core_found = True
+                # look for a new core if it is more than 15 degrees away
+                if (
+                    val[1] - self._current_core_lat > 15
+                    and val[1] > self._current_core_lat
+                ):
+                    #  print('THIS IS A NEW CORE')
+                    self._current_core_lat = val[1]
+                area.append(val)
+                new_vals = self._get_indexes_to_check(val)
+                vals_copy.extend(new_vals)
+                vals_copy = data_utils.remove_duplicates(vals_copy)
+                return self._get_pot_jetcore_area(
+                    vals_copy, area=area, core_found=core_found
+                )
+
+            elif val in self._pot_boundary_ids.tolist():
+                area.append(val)
+                new_vals = self._get_indexes_to_check(val)
+                vals_copy.extend(new_vals)
+                vals_copy = data_utils.remove_duplicates(vals_copy)
+                return self._get_pot_jetcore_area(
+                    vals_copy, area=area, core_found=core_found
+                )
+            else:
+                vals_copy.remove(val)
+                continue
+
+        # reset current core variables
+        self._current_core_lat = -1
+        self._currently_a_core = None
+        return area, core_found
+
+    def _get_jet_core_boundary(self):
+        """
+        Recursive function that will return the IDs of all jet core boundaries
+        i.e. above 30 m/s surrounding a core of 40 m/s
+        Will check if an area of potential boundaries contains a core
+        and thus can be called boundaries.
+        """
+        already_covered = []
+        js_core_indexes = []
+        id_number = 0
+        for pot_boundary in self._pot_boundary_ids:
+            if pot_boundary.tolist() in already_covered:
+                continue
+            vals_to_check = self._get_indexes_to_check(pot_boundary)
+            area, core_found = self._get_pot_jetcore_area(vals_to_check, area=[])
+            already_covered.extend(area)
+            already_covered = data_utils.remove_duplicates(already_covered)
+            # add area to js_core_indexes if part of core
+            if core_found:
+                id_number += 1
+                js_core_indexes.extend([{"id": id_number, "index_of_area": area}])
+        self.num_of_cores = id_number
+        return js_core_indexes
+
+    def _add_cores_to_data(self):
+        """
+        Add cores to data.
+        """
+        self._lat_ws_slice.values["core_id"] = (
+            ("plev", "lat"),
+            np.zeros(
+                (
+                    self._lat_ws_slice.values["plev"].size,
+                    self._lat_ws_slice.values["lat"].size,
+                )
+            ),
+        )
+        for jet_core in self.final_jet_cores:
+            for lat, plev in jet_core["index_of_area"]:
+                self._lat_ws_slice.values["core_id"].loc[
+                    dict(
+                        lat=self._lat_ws_slice.values["lat"].data[lat],
+                        plev=self._lat_ws_slice.values["plev"].data[plev],
+                    )
+                ] = jet_core["id"]
+        return self._lat_ws_slice.values

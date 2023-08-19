@@ -109,14 +109,14 @@ class TestMetricsOnOneDay(unittest.TestCase):
                     self.metric_details[metric_name]["metric"](uvdata)
                 except ValueError:
                     continue
-            if "Manney2011" in metric_name:
+            elif "Manney2011" in metric_name:
                 self.metric_details[metric_name]["metric"](
                     uvdata, jet_core_plev_limit=(10000, 40000)
                 )
-            if "Kuang2014" in metric_name or "Kerr2020" in metric_name:
+            elif "Kuang2014" in metric_name or "Kerr2020" in metric_name:
                 self.metric_details[metric_name]["metric"](uvdata.isel(plev=0))
                 continue
-            if "zg" in self.metric_details[metric_name]["variables"]:
+            elif "zg" in self.metric_details[metric_name]["variables"]:
                 self.metric_details[metric_name]["metric"](zgdata.isel(plev=0))
             else:
                 self.metric_details[metric_name]["metric"](uvdata)

@@ -273,7 +273,10 @@ def manney_et_al_2011(
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
 
-    # Step 1. Run Algorithm
+    # Step 1. Calculate wind speed from ua and va components.
+    data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
+
+    # Step 2. Run Algorithm
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
@@ -284,8 +287,8 @@ def manney_et_al_2011(
                 data,
                 jet_core_ws_threshold,
                 jet_boundary_ws_threshold,
-                ws_drop_threshold,
                 jet_core_plev_limit,
+                ws_drop_threshold,
                 jet_core_lat_distance,
             )
         )
@@ -295,8 +298,8 @@ def manney_et_al_2011(
             (
                 jet_core_ws_threshold,
                 jet_boundary_ws_threshold,
-                ws_drop_threshold,
                 jet_core_plev_limit,
+                ws_drop_threshold,
                 jet_core_lat_distance,
             ),
         )

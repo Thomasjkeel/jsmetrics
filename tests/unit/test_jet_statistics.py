@@ -120,8 +120,6 @@ class TestMetricsOnOneDay(unittest.TestCase):
                 self.metric_details[metric_name]["metric"](zgdata.isel(plev=0))
             else:
                 self.metric_details[metric_name]["metric"](uvdata)
-            # except Exception as e:
-            #     print(metric_name, e)
 
 
 class TestArcherCaldeira2008(unittest.TestCase):

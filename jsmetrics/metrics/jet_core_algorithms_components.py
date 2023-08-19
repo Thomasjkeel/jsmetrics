@@ -232,67 +232,41 @@ def run_jet_core_and_region_algorithm_on_one_day(
     )
 
     # Step 2. Get local maximas at each longitude
-    local_maximas_dict = {}
-    for ind, lon in enumerate(row["lon"]):
-        pot_core_one_lon = row["potential_jet_cores"].sel(lon=lon)
-        local_maximas = find_local_maxima_in_2d_dataarray(pot_core_one_lon)
-        local_maximas_dict[float(lon)] = local_maximas
+    local_maximas_dict = get_local_maximas_at_each_longitude(row)
 
     # Step 3. Loop through the local maximas and make an mask of initial jet cores (not official as some may be in same region, see check in Step X)
     mask_shape = row["ws"].isel(lon=0).shape
-    initial_jet_core_masks = np.array([])
-    for ind, local_maximas in enumerate(local_maximas_dict.values()):
-        initial_jet_core_mask = create_mask_using_local_maximas(
-            mask_shape=mask_shape, local_maximas=local_maximas
-        )
-        if ind == 0:
-            initial_jet_core_masks = initial_jet_core_mask
-            continue
-        initial_jet_core_masks = np.dstack(
-            [initial_jet_core_masks, initial_jet_core_mask]
-        )
+    all_jet_core_mask = get_all_jet_core_mask(
+        local_maximas_dict=local_maximas_dict, mask_shape=mask_shape
+    )
 
     # Step 4. Loop through contigious regions (here known as jet region contours) and check if a jet core is within them
-    jet_region_contour_masks = np.array([])
-    for ind, lon in enumerate(row.lon):
-        jet_region_contour_mask = get_jet_region_contour_mask(
-            row["potential_jet_regions"].sel(lon=lon), local_maximas_dict[float(lon)]
-        )
-        if ind == 0:
-            jet_region_contour_masks = jet_region_contour_mask
-            continue
-        jet_region_contour_masks = np.dstack(
-            [jet_region_contour_masks, jet_region_contour_mask]
-        )
+    all_jet_region_contour_mask = get_all_jet_region_contour_mask(
+        row, local_maximas_dict=local_maximas_dict
+    )
 
     # Step 5. Get the jet region around each local maxima only including above, below, left and right of maxima.
-    jet_region_masks = np.array([])  # initialise jet region array
-    for ind, lon in enumerate(row.lon):
-        jet_region_contour_mask_one_lon = jet_region_contour_masks[::, ::, ind]
-        jet_region_mask = np.zeros_like(
-            jet_region_contour_mask_one_lon
-        )  # create empty mask
-
-        current_local_maximas = local_maximas_dict[float(lon)]
-        for local_maxima in current_local_maximas:
-            refined_result = refine_jet_region_to_leftright_and_abovebelow(
-                jet_region_contour_mask_one_lon, local_maxima[0], local_maxima[1]
-            )
-            jet_region_mask += refined_result
-        if ind == 0:
-            jet_region_masks = jet_region_mask
-            continue
-        jet_region_masks = np.dstack([jet_region_masks, jet_region_mask])
+    all_jet_regions_mask = get_all_jet_regions_mask(
+        row,
+        all_jet_region_contour_mask=all_jet_region_contour_mask,
+        local_maximas_dict=local_maximas_dict,
+    )
 
     # Step 6. Remove old jet regions and define two outputs (jet_region, region_above_ws_threshold)
     row = row.drop("potential_jet_regions")
-    row["jet_region_mask"] = (("plev", "lat", "lon"), np.clip(jet_region_masks, 0, 1))
-    row["jet_region_contour_mask"] = (("plev", "lat", "lon"), jet_region_contour_masks)
+    row["jet_region_mask"] = (
+        ("plev", "lat", "lon"),
+        np.clip(all_jet_regions_mask, 0, 1),
+    )
+    row["jet_region_contour_mask"] = (
+        ("plev", "lat", "lon"),
+        all_jet_region_contour_mask,
+    )
 
     # Step 7. Run checks on jet cores, to check if they are part of the same jet feature
     jet_core_masks = run_checks_on_jet_cores_and_return_jet_cores(
         row,
-        initial_jet_core_masks,
+        all_jet_core_mask,
         local_maximas_dict,
         jet_core_lat_distance,
         ws_drop_threshold,
@@ -302,6 +276,29 @@ def run_jet_core_and_region_algorithm_on_one_day(
     row = row.drop("potential_jet_cores")
     row["jet_core_mask"] = (("plev", "lat", "lon"), jet_core_masks)
     return row
+
+
+def get_local_maximas_at_each_longitude(row):
+    """
+    Runs 'find_local_maxima_in_2d_dataarray' on each longitude (see docs for find_local_maxima_in_2d_dataarray for more information)
+
+    Parameters
+    ----------
+    row : xr.DataArray
+        Data of single time unit containing the variables: 'potential_jet_cores', and the coordinates: 'lon', 'lat', 'plev'
+
+    Returns
+    ----------
+    local_maximas_dict : dict
+        Keys are longitude coordinates, values are local maxima locations
+
+    """
+    local_maximas_dict = {}
+    for _, lon in enumerate(row["lon"]):
+        pot_core_one_lon = row["potential_jet_cores"].sel(lon=lon)
+        local_maximas = find_local_maxima_in_2d_dataarray(pot_core_one_lon)
+        local_maximas_dict[float(lon)] = local_maximas
+    return local_maximas_dict
 
 
 def find_local_maxima_in_2d_dataarray(arr):
@@ -366,6 +363,38 @@ def find_local_maxima_in_2d_dataarray(arr):
     return np.array(adjusted_indices)
 
 
+def get_all_jet_core_mask(local_maximas_dict, mask_shape):
+    """
+    Runs 'create_mask_using_local_maximas' using each
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    local_maximas_dict : dict
+        Keys are longitude coordinates, values are local maxima locations
+
+    mask_shape : tuple
+        Values to create a mask of given shape from
+        .
+    Returns
+    ----------
+    all_jet_core_mask : numpy.array
+        Mask of the jet cores
+
+    """
+    all_jet_core_mask = np.array([])
+    for ind, local_maximas in enumerate(local_maximas_dict.values()):
+        current_jet_core_mask = create_mask_using_local_maximas(
+            local_maximas=local_maximas, mask_shape=mask_shape
+        )
+        if ind == 0:
+            all_jet_core_mask = current_jet_core_mask
+            continue
+        all_jet_core_mask = np.dstack([all_jet_core_mask, current_jet_core_mask])
+    return all_jet_core_mask
+
+
 def create_mask_using_local_maximas(local_maximas, mask_shape):
     """
     Will create a mask with the same dimensions as the inputted mask_shape
@@ -394,119 +423,38 @@ def create_mask_using_local_maximas(local_maximas, mask_shape):
     return empty_mask
 
 
-def run_checks_on_jet_cores_and_return_jet_cores(
-    row,
-    initial_jet_core_masks,
-    local_maximas_dict,
-    jet_core_lat_distance,
-    ws_drop_threshold,
-):
+def get_all_jet_region_contour_mask(row, local_maximas_dict):
     """
-    This method runs two checks on the jet cores to check whether there are regions with multiple jet cores.
-    Firstly, it checks whether regions with multiple jet cores are more than a certain distance apart
-    (default is 15 degrees, see 'jet_core_lat_distance'), and hence seperate cores.
-    Secondly, it will check whether the windspeed between two cores drops below a threshold
-    (default is 25 m/s, see 'ws_drop_threshold'), if so it will remove the latter core.
+    Runs 'get_jet_region_contour_mask' on each longitude in data with one time step
 
     Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
 
     Parameters
     ----------
-    row : xarray.Dataset
-        Data of single time unit containing the variables: 'jet_region_contour_mask', and the coordinates: 'lon', 'lat', 'plev'
-    initial_jet_core_masks :
-        Initial mask of jet cores to check.
-    ws_drop_threshold : int or float
-        Threshold for drop in windspeed along the line between cores (default: 25 m/s)
-    jet_core_lat_distance : int or float
-        Threshold for maximum distance between cores to be counted the same (default: 15 degrees)
+    row : xr.DataArray
+        Data of single time unit containing the variables: 'potential_jet_cores', and the coordinates: 'lon', 'lat', 'plev'
+
+    local_maximas : np.array
+        An array containing values relating to the index of the local maximas in a mask with shape: mask_shape
 
     Returns
     ----------
-    jet_core_masks : numpy.array
-        Final jet cores mask of shape of 'initial_jet_core_masks'.
+    all_jet_region_contour_mask : np.array
+        A 3-D array the indexes (lat, plev) of the local maximas for each longitude as 1 All other values will 0.
 
     """
-    jet_core_masks = np.copy(initial_jet_core_masks)
-    for lon_ind, lon in enumerate(row.lon):
-        jet_region_contour_one_lon = row["jet_region_contour_mask"].sel(lon=lon)
-        ws_one_lon = row["ws"].sel(lon=lon)
-        current_local_maximas = local_maximas_dict[float(lon)]
-
-        core_and_location = []
-        for core_ind, local_maxima in enumerate(current_local_maximas):
-            region_within = jet_region_contour_one_lon[
-                local_maxima[0], local_maxima[1]
-            ]  # this is the region contour that the jet core is found within
-            core_and_location.append([core_ind, float(region_within)])
-        core_and_location = np.array(core_and_location)
-
-        if len(core_and_location) == 0:
-            # no cores found
-            continue
-
-        region_ind, num_cores_in_region = np.unique(
-            core_and_location[::, 1], return_counts=True
+    all_jet_region_contour_mask = np.array([])
+    for ind, lon in enumerate(row.lon):
+        current_jet_region_contour_mask = get_jet_region_contour_mask(
+            row["potential_jet_regions"].sel(lon=lon), local_maximas_dict[float(lon)]
         )
-        multi_core_regions = region_ind[num_cores_in_region > 1]
-
-        if len(multi_core_regions) == 0:
-            # no multi-core regions found
+        if ind == 0:
+            all_jet_region_contour_mask = current_jet_region_contour_mask
             continue
-
-        for multi_core_region in multi_core_regions:
-            # get all the local maxima within regions of multi cores
-            local_maxima_inds = core_and_location[::, 0][
-                core_and_location[::, 1] == multi_core_region
-            ]
-
-            # Check 1. Test if cores are more than 15 degrees away
-            previous_lat = None
-            for local_maxima_ind in local_maxima_inds:
-                local_maxima = current_local_maximas[int(local_maxima_ind)]
-                if not previous_lat:
-                    # set previous latitude to check for latitude distance in next
-                    previous_lat = local_maxima[1]
-                else:
-                    current_lat = local_maxima[1]
-                    if (
-                        abs(row["lat"][previous_lat] - row["lat"][current_lat])
-                        > jet_core_lat_distance
-                    ):
-                        previous_lat = current_lat
-                        continue
-
-            # Check 2. Test if cores have ws drop between them
-            multi_core_region_ws = ws_one_lon.where(
-                jet_region_contour_one_lon == multi_core_region
-            )
-
-            for multi_core_region in multi_core_regions:
-                # get all the local maxima within regions of multi cores
-                local_maxima_inds = core_and_location[::, 0][
-                    core_and_location[::, 1] == multi_core_region
-                ]
-                previous_local_maxima = None
-                for ind, local_maxima_ind in enumerate(local_maxima_inds):
-                    current_local_maxima = current_local_maximas[int(local_maxima_ind)]
-                    if ind == 0:
-                        previous_local_maxima = current_local_maxima
-                        continue
-                    windspeeds_between_cores = (
-                        get_values_along_a_line_between_two_coordinates(
-                            multi_core_region_ws,
-                            start_point=previous_local_maxima,
-                            end_point=current_local_maxima,
-                        )
-                    )
-                    if not has_ws_drop_between_cores(
-                        windspeeds_between_cores, ws_drop_threshold=ws_drop_threshold
-                    ):
-                        # Set to 0 as the cores detected in this region are part of the same feature
-                        jet_core_masks[
-                            current_local_maxima[0], current_local_maxima[1], lon_ind
-                        ] = 0
-    return jet_core_masks
+        all_jet_region_contour_mask = np.dstack(
+            [all_jet_region_contour_mask, current_jet_region_contour_mask]
+        )
+    return all_jet_region_contour_mask
 
 
 def get_jet_region_contour_mask(potential_jet_regions, local_maximas):
@@ -599,6 +547,56 @@ def subset_jet_region_mask_to_regions_with_cores(
         if reg_num not in actual_jet_region_nums:
             potential_jet_regions_mask[potential_jet_regions_mask == reg_num] = 0
     return potential_jet_regions_mask
+
+
+def get_all_jet_regions_mask(row, all_jet_region_contour_mask, local_maximas_dict):
+    """
+    Get all jet regions mask by looping over each longitude in row.
+    See also docs of 'refine_jet_region_to_leftright_and_abovebelow'
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    row : xr.DataArray
+        Data of single time unit containing the coordinates: 'lon'
+
+    all_jet_region_contour_mask : np.array
+        A 3-D array the indexes (lat, plev) of the local maximas for each longitude as 1 All other values will 0.
+
+    local_maximas_dict : dict
+        Keys are longitude coordinates, values are local maxima locations
+
+    Returns
+    ----------
+    all_jet_regions_mask : np.array
+        A refined version of the inputted 'all_jet_region_contour_mask' of the local maximas for each longitude as 1 All other values will 0.
+
+    """
+    all_jet_regions_mask = np.array([])  # initialise jet region array
+    for ind, lon in enumerate(row.lon):
+        current_jet_region_contour_mask_one_lon = all_jet_region_contour_mask[
+            ::, ::, ind
+        ]
+        current_jet_region_mask = np.zeros_like(
+            current_jet_region_contour_mask_one_lon
+        )  # create empty mask
+
+        current_local_maximas = local_maximas_dict[float(lon)]
+        for local_maxima in current_local_maximas:
+            refined_result = refine_jet_region_to_leftright_and_abovebelow(
+                current_jet_region_contour_mask_one_lon,
+                local_maxima[0],
+                local_maxima[1],
+            )
+            current_jet_region_mask += refined_result
+        if ind == 0:
+            all_jet_regions_mask = current_jet_region_mask
+            continue
+        all_jet_regions_mask = np.dstack(
+            [all_jet_regions_mask, current_jet_region_mask]
+        )
+    return all_jet_regions_mask
 
 
 def refine_jet_region_to_leftright_and_abovebelow(array, x, y):
@@ -736,6 +734,121 @@ def has_ws_drop_between_cores(ws_between_cores, ws_drop_threshold):
         return True
     else:
         return False
+
+
+def run_checks_on_jet_cores_and_return_jet_cores(
+    row,
+    initial_jet_core_masks,
+    local_maximas_dict,
+    jet_core_lat_distance,
+    ws_drop_threshold,
+):
+    """
+    This method runs two checks on the jet cores to check whether there are regions with multiple jet cores.
+    Firstly, it checks whether regions with multiple jet cores are more than a certain distance apart
+    (default is 15 degrees, see 'jet_core_lat_distance'), and hence seperate cores.
+    Secondly, it will check whether the windspeed between two cores drops below a threshold
+    (default is 25 m/s, see 'ws_drop_threshold'), if so it will remove the latter core.
+
+    Component of method of algorithm originally introduced in Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+
+    Parameters
+    ----------
+    row : xarray.Dataset
+        Data of single time unit containing the variables: 'jet_region_contour_mask', and the coordinates: 'lon', 'lat', 'plev'
+    initial_jet_core_masks :
+        Initial mask of jet cores to check.
+    ws_drop_threshold : int or float
+        Threshold for drop in windspeed along the line between cores (default: 25 m/s)
+    jet_core_lat_distance : int or float
+        Threshold for maximum distance between cores to be counted the same (default: 15 degrees)
+
+    Returns
+    ----------
+    jet_core_masks : numpy.array
+        Final jet cores mask of shape of 'initial_jet_core_masks'.
+
+    """
+    jet_core_masks = np.copy(initial_jet_core_masks)
+    for lon_ind, lon in enumerate(row.lon):
+        jet_region_contour_one_lon = row["jet_region_contour_mask"].sel(lon=lon)
+        ws_one_lon = row["ws"].sel(lon=lon)
+        current_local_maximas = local_maximas_dict[float(lon)]
+
+        core_and_location = []
+        for core_ind, local_maxima in enumerate(current_local_maximas):
+            region_within = jet_region_contour_one_lon[
+                local_maxima[0], local_maxima[1]
+            ]  # this is the region contour that the jet core is found within
+            core_and_location.append([core_ind, float(region_within)])
+        core_and_location = np.array(core_and_location)
+
+        if len(core_and_location) == 0:
+            # no cores found
+            continue
+
+        region_ind, num_cores_in_region = np.unique(
+            core_and_location[::, 1], return_counts=True
+        )
+        multi_core_regions = region_ind[num_cores_in_region > 1]
+
+        if len(multi_core_regions) == 0:
+            # no multi-core regions found
+            continue
+
+        for multi_core_region in multi_core_regions:
+            # get all the local maxima within regions of multi cores
+            local_maxima_inds = core_and_location[::, 0][
+                core_and_location[::, 1] == multi_core_region
+            ]
+
+            # Check 1. Test if cores are more than 15 degrees away
+            previous_lat = None
+            for local_maxima_ind in local_maxima_inds:
+                local_maxima = current_local_maximas[int(local_maxima_ind)]
+                if not previous_lat:
+                    # set previous latitude to check for latitude distance in next
+                    previous_lat = local_maxima[1]
+                else:
+                    current_lat = local_maxima[1]
+                    if (
+                        abs(row["lat"][previous_lat] - row["lat"][current_lat])
+                        > jet_core_lat_distance
+                    ):
+                        previous_lat = current_lat
+                        continue
+
+            # Check 2. Test if cores have ws drop between them
+            multi_core_region_ws = ws_one_lon.where(
+                jet_region_contour_one_lon == multi_core_region
+            )
+
+            for multi_core_region in multi_core_regions:
+                # get all the local maxima within regions of multi cores
+                local_maxima_inds = core_and_location[::, 0][
+                    core_and_location[::, 1] == multi_core_region
+                ]
+                previous_local_maxima = None
+                for ind, local_maxima_ind in enumerate(local_maxima_inds):
+                    current_local_maxima = current_local_maximas[int(local_maxima_ind)]
+                    if ind == 0:
+                        previous_local_maxima = current_local_maxima
+                        continue
+                    windspeeds_between_cores = (
+                        get_values_along_a_line_between_two_coordinates(
+                            multi_core_region_ws,
+                            start_point=previous_local_maxima,
+                            end_point=current_local_maxima,
+                        )
+                    )
+                    if not has_ws_drop_between_cores(
+                        windspeeds_between_cores, ws_drop_threshold=ws_drop_threshold
+                    ):
+                        # Set to 0 as the cores detected in this region are part of the same feature
+                        jet_core_masks[
+                            current_local_maxima[0], current_local_maxima[1], lon_ind
+                        ] = 0
+    return jet_core_masks
 
 
 def get_empty_local_wind_maxima_data(

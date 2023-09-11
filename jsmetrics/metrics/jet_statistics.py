@@ -62,7 +62,7 @@ def archer_caldeira_2008(data):
     -----
     While the initial methodology provides limits for pressure level (100-400 hPa), here the mass weighted outputs
     will be calculated for any pressure levels passed into the method.
-    The latitude calculation is limited to 15-75 degrees North, however (as this was meant for Northern Hemisphere),
+    The latitude calculation is limited to 15-70N (as this was meant for Northern Hemisphere),
     but you may find it easy enough to edit this method to calculate outputs for a different region.
 
     Examples
@@ -75,8 +75,8 @@ def archer_caldeira_2008(data):
         # Load in dataset with u and v components:
         uv_data = xr.open_dataset('path_to_uv_data')
 
-        # Subset dataset to range used in original methodology (100-500 hPa & 15-75 N)):
-        uv_sub = uv_data.sel(plev=slice(100, 400), lat=slice(15, 75))
+        # Subset dataset to range used in original methodology (100-500 hPa & 15-70 N)):
+        uv_sub = uv_data.sel(plev=slice(100, 400), lat=slice(15, 70))
 
         # Run algorithm:
         archer_outputs = jsmetrics.jet_statistcs.archer_caldiera_2008(uv_sub)

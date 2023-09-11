@@ -25,10 +25,25 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def archer_caldeira_2008(data):
     r"""
-    This method calculates three mass-weighted variables:
-        1. weighted-average wind speed,
-        2. mass flux weighted pressure,
-        3. mass flux weighted latitude.
+    This method defines three jet stream properties via integrated quantities (windspeed, pressure and latitude)
+    The method returns three outputs:
+        1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:
+         .. math::
+            WS_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k}}
+        where :math:`u_{i,j,k}` and :math:`v_{i,j,k}` are the monthly-average horizontal wind components at grid point (i,j,k), and :math:`m_{k}` is the mass at level `k`.
+
+        2. **mass flux weighted pressure** -- the average pressure of flows by the tropopause (:math:`P`), calculated by:
+         .. math::
+            P_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \times p_k}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
+        where :math:`p_k` is the pressure at level :math:`k`.
+
+        3. **mass flux weighted latitude** -- Latitude of the Northern Hemisphere jet (:math:`L^{NH}`), calculated by:
+         .. math::
+            L_{i}^{NH} =  \frac{\sum\limits_{j=15N}^{j=70N} \left[\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \right] \times \phi_{i,j}}{\sum\limits_{j=15N}^{j=70N} \sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
+        where :math:`\phi_{i,j}` is the grid cell latitude.
+
+    **Note:** this method does not explicitly limit inputted wind to 100-400 hPa, see 'Notes' for more information about the implementation of this method
+    to this package.
 
     This method was originally introduce in Archer & Caldiera (2008) (https://doi.org/10.1029/2008GL033614)
     and is described in Section 3 of that study.
@@ -45,7 +60,10 @@ def archer_caldeira_2008(data):
 
     Notes
     -----
-    This method has some similarities to method used in Koch et al. 2006.
+    While the initial methodology provides limits for pressure level (100-400 hPa), here the mass weighted outputs
+    will be calculated for any pressure levels passed into the method.
+    The latitude calculation is limited to 15-75 however (as this was meant for Northern Hemisphere), but you may
+    find it easy enough to edit this method to calculate outputs for a different region.
 
     Examples
     --------
@@ -53,6 +71,23 @@ def archer_caldeira_2008(data):
 
         import jsmetrics
         import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology (100-500 hPa & 15-75 N)):
+        uv_sub = uv_data.sel(plev=slice(100, 400), lat=slice(15, 75))
+
+        # Run algorithm:
+        archer_outputs = jsmetrics.jet_statistcs.archer_caldiera_2008(uv_sub)
+
+
+
+        # Produce a jet occurence count across all pressure levels
+        schiemann_jet_counts_all_levels = schiemann_outputs['jet_occurence'].sum(('time', 'plev'))
+
+        # Use the jet occurence values as a mask to extract the jet windspeeds
+        schiemann_jet_ws = schiemann_outputs.where(schiemann_outputs['jet_occurence'] > 0)['ws']
 
     """
     #  Step 1. Get monthly means

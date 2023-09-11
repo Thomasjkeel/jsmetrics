@@ -26,18 +26,16 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
     r"""
-    This method follows a two-step procedure used to detect 'jet-event occurences'.
-    The first step is to calculate the weighted average windspeed and then the
-    second step is to apply a windspeed threshold to isolate jet events from that weighted average.
-    The original methodology uses windspeed between 100-400 hPa to calculated the weighted average
-    and 30 meters per second as the windspeed threshold.
-
+    This method follows a two-step procedure used to detect jet-event occurences (here: 'jet_events_ws').
     The weighted average windspeed for the jet events is calculated as follows:
 
     .. math::
         \alpha vel =  \frac{1}{p2-p1} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
 
     where :math:`p1`, :math:`p2` is min, max pressure level.
+
+    The first step is to calculate the weighted average windspeed and then the second step is to apply a
+    windspeed threshold to isolate jet events from that weighted average.
 
     This method was first introduced in Koch et al (2006) (https://doi.org/10.1002/joc.1255)
     and is described in section 2.2.2 of that study. The original methodology provides a third step
@@ -57,11 +55,14 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     Returns
     ----------
-    xarray.Dataset
-        A dataset containing weighted average ws above windspeed threshold
+    output : xr.Dataset
+        Data containing the outpyt variable 'jet_events_ws'
 
     Notes
     -----
+    The original methodology uses windspeed between 100-400 hPa to calculated the weighted average
+    and 30 meters per second as the windspeed threshold.
+
     This equation for this method is provided on pg 287 of the Koch et al. 2006 paper.
     In the original paper, they accumulate the jet events into two-class jet typology (described in section 2.2.3
     of Koch et al. 2006)
@@ -142,7 +143,7 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     Returns
     ----------
     output : xr.Dataset
-        Data with local jet maximas
+        Data containing the two output variables: 'ws' and 'jet_occurence'
 
     Notes
     -----
@@ -245,7 +246,7 @@ def manney_et_al_2011(
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the variable 'jet-core_id' (ID number relates to each unique core)
+        Data containing the four output variables: 'ws', 'jet_region_mask', 'jet_region_contour_mask', and 'jet_core_mask'
 
     Notes
     -----
@@ -345,7 +346,7 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing number of days per month with local wind maxima
+        Data containing the four output variables: 'local_wind_maxima', 'local_wind_maxima_by_monthyear', 'polar_front_jet', and 'subtropical_jet'
 
     Notes
     -----

@@ -7,6 +7,7 @@ History
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
     * add examples and notes to each metric in package  
+* Add ws_threshold parameter to Pena-Ortiz method
 
 0.1.6-alpha (2023-08-19)
 -------------------------

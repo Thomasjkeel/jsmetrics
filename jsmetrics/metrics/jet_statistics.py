@@ -156,7 +156,6 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     ----------
     data : xarray.Dataset
         Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
-
     filter_freq : int
         number of days in filter (default=10 days)
     window_size : int
@@ -165,7 +164,7 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the two output variables:
+        Data containing the four output variables: 'jet_lat', 'jet_speed', 'ff_jet_lat' and 'ff_jet_speed'
 
     Notes
     -----
@@ -182,10 +181,10 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology (700-850 hPa & 20-70 N, 300-360 W)):
-        ua_sub = ua.sel(lon=slice(300, 360), lat=slice(20, 70), plev=slice(700, 850))
+        # Subset dataset to range used in original methodology (700-925 hPa & 20-70 N, 300-360 W)):
+        ua_sub = ua.sel(plev=slice(700, 925), lat=slice(20, 70), lon=slice(300, 360))
 
-        # Run statistic:
+        # Run statistic with a filter frequency and window size used in the original methodology:
         w10 = jsmetrics.jet_statistics.woollings_et_al_2010(ua_sub, filter_freq=10, window_size=61)
 
         # Express jet latitude and speed as anomalies from smoothed seasonal cycle (Step 5 of methodology)
@@ -246,7 +245,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component wind
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     filter_freq : int
         number of days in filter (default=10 timeunits)
     window_size : int
@@ -255,10 +254,11 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing values for z_lat, z_spd, z_width for jet-stream latitude, speed and width
+        Data containing the three output variables: 'jet_lat', 'jet_speed', 'jet_width'
 
     Notes
     -----
+    Based on the method from Woollings et al. (2010) (http://dx.doi.org/10.1002/qj.625)
 
     Examples
     --------
@@ -267,6 +267,14 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
         import jsmetrics
         import xarray as xr
 
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology (700-850 hPa & 20-70 N, 300-360 W)):
+        ua_sub = ua.sel(plev=slice(700, 850), lat=slice(20, 70), lon=slice(300, 360))
+
+        # Run statistic with a filter frequency and window size used in the original methodology:
+        bp13 = jsmetrics.jet_statistics.barnes_polvani_2013(ua_sub, filter_freq=10, window_size=41)
     """
     #  Step 1. Get pressure-weighted u-component wind
     pressure_weighted_ua = jet_statistics_components.calc_mass_weighted_average(
@@ -355,12 +363,12 @@ def barnes_polvani_2015(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component wind
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
     Returns
     ----------
     output : xarray.Dataset
-        Data containing jet-stream position and jet-speed
+        Data containing the x outputs: ''
 
     Notes
     -----
@@ -371,6 +379,15 @@ def barnes_polvani_2015(data):
 
         import jsmetrics
         import xarray as xr
+
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
+        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+
+        # Run statistic:
+        bp15 = jsmetrics.jet_statistics.barnes_polvani_2015(ua_sub)
 
     """
     # Step 1. Get zonal mean
@@ -393,20 +410,20 @@ def barnes_polvani_2015(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_simpson_2017(data):
     r"""
-    "Time series of jet latitude and jet speed are defined as the latitude and speed of the 10-day-averaged
-     maximum 700-hPa zonal winds averaged over the longitudinal sector of interest"
+    Time series of jet latitude and jet speed are defined as the latitude and speed of the 10-day-averaged
+    maximum 700-hPa zonal winds averaged over the longitudinal sector of interest"
 
-     Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
 
-     Parameters
-     ----------
-     data : xarray.Dataset
-         Data containing u-component wind
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
-     Returns
-     ----------
-     output : xarray.Dataset
-         Data with max latitude and max windspeed for North Atlantic (280.E to 350. E) and North Pacific (120.E to 230. E) sectors
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing the x outputs: ''
 
     Notes
     -----
@@ -417,6 +434,15 @@ def barnes_simpson_2017(data):
 
         import jsmetrics
         import xarray as xr
+
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
+        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+
+        # Run statistic:
+        bp17 = jsmetrics.jet_statistics.barnes_simpson_2017(ua_sub)
 
     """
     if "plev" in data.dims:
@@ -463,12 +489,12 @@ def grise_polvani_2017(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component wind
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
     Returns
     ----------
     output : xarray.Dataset
-        Data containing max latitudes per time unit scaled to 0.01 resolution
+        Data containing the x outputs: ''
 
     Notes
     -----
@@ -480,6 +506,14 @@ def grise_polvani_2017(data):
         import jsmetrics
         import xarray as xr
 
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
+        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+
+        # Run statistic:
+        gp17 = jsmetrics.jet_statistics.grise_polvani_2017(ua_sub)
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -542,12 +576,12 @@ def bracegirdle_et_al_2018(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component windspeed
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
     Returns
     ----------
     output : xarray.Dataset
-        Data containing seasonal and annual jet-stream position and strength (ms-1)
+        Data containing the x outputs: ''
 
     Notes
     -----
@@ -556,9 +590,18 @@ def bracegirdle_et_al_2018(data):
     --------
     .. code-block:: python
 
+
         import jsmetrics
         import xarray as xr
 
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
+        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+
+        # Run statistic:
+        b18 = jsmetrics.jet_statistics.bracegirdle_et_al_2018(ua_sub)
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -624,14 +667,14 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component windspeed
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     lon_resolution : numeric
         Resolution to use for longitude coord if size 1
 
     Returns
     ----------
     output : xarray.Dataset
-        Data containing centroid latitude of u-wind for each time unit (e.g. each day)
+        Data containing the x outputs: ''
 
     Notes
     -----
@@ -643,6 +686,14 @@ def ceppi_et_al_2018(data, lon_resolution=None):
         import jsmetrics
         import xarray as xr
 
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
+        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+
+        # Run statistic:
+        c18 = jsmetrics.jet_statistics.ceppi_et_al_2018(ua_sub)
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:
@@ -718,14 +769,14 @@ def zappa_et_al_2018(data, lon_resolution=None):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component windspeed
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     lon_resolution : numeric
         Resolution to use for longitude coord if size 1
 
     Returns
     ----------
     output : xarray.Dataset
-        Data containing centroid latitude of u-wind for each time unit (e.g. each day)
+        Data containing the x outputs: ''
 
     Notes
     -----
@@ -737,6 +788,14 @@ def zappa_et_al_2018(data, lon_resolution=None):
         import jsmetrics
         import xarray as xr
 
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
+        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+
+        # Run statistic:
+        z18 = jsmetrics.jet_statistics.zappa_et_al_2018(ua_sub)
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:
@@ -812,12 +871,15 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u-component windspeed at one plev
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
     Returns
     ----------
     output : xarray.Dataset
         Data containing jet-stream latitude by longitude and smoothed jet_latitude
+
+    output : xarray.Dataset
+        Data containing the x outputs: ''
 
     Notes
     -----
@@ -829,6 +891,14 @@ def kerr_et_al_2020(data, width_of_pulse=10):
         import jsmetrics
         import xarray as xr
 
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
+        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+
+        # Run statistic:
+        k20 = jsmetrics.jet_statistics.kerr_et_al_2020(ua_sub)
     """
     if "plev" in data.dims:
         if data["plev"].count() == 1:

@@ -50,6 +50,9 @@ All methods are implementation from existing research which have been translated
 
 Jet core algorithms
 ###################
+Methods that isolate parts of the atmospheric column associated with jet-streams based on various techniques from the literature.
+In each case, these algorithms output a mask of the input data, and so can be used to further characterise variables at the same location as the jet core mask.
+All methods are implementation from existing research which have been translated to Python for this package.
 
 **Overview table:**
 

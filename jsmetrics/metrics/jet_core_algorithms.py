@@ -214,10 +214,10 @@ def manney_et_al_2011(
     (default is 25 m/s, see 'ws_drop_threshold')
 
     This method returns four outputs
-        1. 'jet_core_mask' -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
-        2. 'jet_region_mask' -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
-        3. 'jet_region_above_ws_threshold_mask' -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
-        4. 'ws' -- Wind speed calculated from 'ua', 'va' inputs.
+        1. **jet_core_mask** -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
+        2. **jet_region_mask** -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
+        3. **jet_region_above_ws_threshold_mask** -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
+        4. **ws** -- Wind speed calculated from 'ua', 'va' inputs.
 
     This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
     and is described in Section 3.1 of that study. This method is also known as JETPAC, and available in its

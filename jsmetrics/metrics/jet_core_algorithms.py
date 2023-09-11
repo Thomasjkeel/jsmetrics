@@ -37,7 +37,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     .. math::
         \alpha vel =  \frac{1}{p2-p1} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
 
-    where p1, p2 is min, max pressure level.
+    where :math:`p1`, :math:`p2` is min, max pressure level.
 
     This method was first introduced in Koch et al (2006) (https://doi.org/10.1002/joc.1255)
     and is described in section 2.2.2 of that study. The original methodology provides a third step

@@ -141,10 +141,10 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     Will calculate this metric based on data (regardless of pressure level or time span etc.).
 
     This method returns four outputs:
-    1. **jet_lat** -- latitude of maximum wind speed within low-pass filtered zonally averaged wind profile
-    2. **jet_speed** -- speed at the latitude of maximum windspeed within low-pass filtered zonally averaged wind profile
-    3. **ff_jet_lat** -- Fourier-filtered jet latitude by season
-    4. **ff_jet_speed** -- Fourier-filtered jet speed by season
+        1. **jet_lat** -- latitude of maximum wind speed within low-pass filtered zonally averaged wind profile
+        2. **jet_speed** -- speed at the latitude of maximum windspeed within low-pass filtered zonally averaged wind profile
+        3. **ff_jet_lat** -- Fourier-filtered jet latitude by season
+        4. **ff_jet_speed** -- Fourier-filtered jet speed by season
 
     This method was first introduce in Woollings et al (2010) (http://dx.doi.org/10.1002/qj.625) and
     is described in section 2 of that study.

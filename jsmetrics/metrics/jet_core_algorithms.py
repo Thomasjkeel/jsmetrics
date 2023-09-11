@@ -216,7 +216,7 @@ def manney_et_al_2011(
     This method returns four outputs
         1. **jet_core_mask** -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
         2. **jet_region_mask** -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
-        3. **jet_region_above_ws_threshold_mask** -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
+        3. **jet_region_contour_mask** -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
         4. **ws** -- Wind speed calculated from 'ua', 'va' inputs.
 
     This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
@@ -494,8 +494,12 @@ def jet_core_identification_algorithm(
     data, ws_core_threshold=40, ws_boundary_threshold=30
 ):
     r"""
-    This method seperates jet cores based on boundary and windspeed threshold.
-    Core are discovered where 8-cells are above boundary threshold
+    This method extract seperate jet cores based on boundary and core windspeed thresholds.
+    The output includes two types:
+        0. is not determined to be part of the jet
+        1-n. Seperate jet core regions
+
+    Core are discovered as regions of local maxima surrounded by within 8-cells are above boundary threshold
 
     This method is inspired by the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
     which is described in Section 3.1 of that study.
@@ -529,7 +533,7 @@ def jet_core_identification_algorithm(
         # Load in dataset with u and v components:
         uv_data = xr.open_dataset('path_to_uv_data')
 
-        # Subset dataset to range used in original methodology (100-400 hPa)):
+        # Subset dataset to range appropriate for methodology (100-400 hPa)):
         uv_sub = uv_data.sel(plev=slice(100, 400))
 
         # Run algorithm:

@@ -319,11 +319,14 @@ def manney_et_al_2011(
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def penaortiz_et_al_2013(data, ws_threshold=30):
     r"""
-    This method follows a two step procedure for calculate local wind maxima days.
-    This method returns 3 outputted variables:
-        1. **local_wind_maxima**
-        2. **polar_front_jet**
-        3. **subtropical_jet**
+    This method follows a two step procedure for calculating local wind maxima and then subcategorising the local maxima into
+    two distinct jet masks: the Subtropical Jet (STJ) and Polar Front Jet (PFJ).
+
+    This method returns 4 outputted variables:
+        1. **local_wind_maxima** -- Binary mask of local wind maxima
+        2. **local_wind_maxima_by_monthyear** -- Same as above, but for monthyear frequency
+        3. **polar_front_jet** -- Binary mask of the PFJ (by monthyear).
+        4. **subtropical_jet** -- Binary ask of the STJ (by monthyear).
 
     The outputs of this method are in a monthyear frequency.
 
@@ -348,6 +351,8 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
 
     Notes
     -----
+    See Table 1 in the respective paper for the categories used to seperate the STJ and PFJ.
+    The STJ is only seperated in DJF for the Northern Hemisphere.
     Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day)
     on a AMD Ryzen 5 3600 6-core processor.
 

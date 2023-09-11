@@ -983,9 +983,10 @@ def subdivide_local_wind_maxima_into_stj_pfj(
     data, local_wind_column_name="local_wind_maxima_by_monthyear"
 ):
     """
-    Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on pg. 2709.
-    After the method in that paper (see Table 1), categorisation for the Northern Hemisphere PFJ are not made in DJF,
-    and no categorisation are made in December, March, June and September.
+    Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on Table 1 pg. 2709
+    from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305.
+    After the method in that paper, categorisation for the Northern Hemisphere STJ is only possible in DJF,
+    and the latitudes used are not based on December, March, June or September.
 
     Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
@@ -1000,14 +1001,14 @@ def subdivide_local_wind_maxima_into_stj_pfj(
         data with polar_front_jet and subtropical_jet subdivisions
     """
     DJF_STJ = data.sel(
-        monthyear=data.monthyear.dt.month.isin([1, 2]), lat=slice(15, 40)
+        monthyear=data.monthyear.dt.month.isin([12, 1, 2]), lat=slice(15, 40)
     )[local_wind_column_name]
     MAM_SON_PFJ = data.sel(
-        monthyear=data.monthyear.dt.month.isin([4, 5, 10, 11]),
+        monthyear=data.monthyear.dt.month.isin([3, 4, 5, 9, 10, 11]),
         lat=slice(10, 70),
     )[local_wind_column_name]
     JJA_PFJ = data.sel(
-        monthyear=data.monthyear.dt.month.isin([7, 8]), lat=slice(30, 60)
+        monthyear=data.monthyear.dt.month.isin([6, 7, 8]), lat=slice(30, 60)
     )[local_wind_column_name]
     SH_STJ = data.sel(lat=slice(-40, -15))[local_wind_column_name]
     SH_PFJ = data.sel(lat=slice(-70, -41))[local_wind_column_name]

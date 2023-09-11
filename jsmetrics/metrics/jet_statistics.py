@@ -78,7 +78,7 @@ def archer_caldeira_2008(data):
         # Subset dataset to range used in original methodology for the NH jet (100-400 hPa & 15-70 N)):
         uv_sub = uv_data.sel(plev=slice(100, 400), lat=slice(15, 70))
 
-        # Run algorithm:
+        # Run statistic:
         archer_outputs = jsmetrics.jet_statistcs.archer_caldiera_2008(uv_sub)
 
         # Subset mass weighted wind by a windspeed threshold
@@ -138,18 +138,25 @@ def archer_caldeira_2008(data):
 def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     r"""
     Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woollings et al. (2010).
-    Will calculate this metric based on data (regardless of pressure level of time span etc.).
+    Will calculate this metric based on data (regardless of pressure level or time span etc.).
+
+    This method returns four outputs:
+    1. **jet_lat** -- latitude of maximum wind speed within low-pass filtered zonally averaged wind profile
+    2. **jet_speed** -- speed at the latitude of maximum windspeed within low-pass filtered zonally averaged wind profile
+    3. **ff_jet_lat** -- Fourier-filtered jet latitude by season
+    4. **ff_jet_speed** -- Fourier-filtered jet speed by season
 
     This method was first introduce in Woollings et al (2010) (http://dx.doi.org/10.1002/qj.625) and
     is described in section 2 of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method
-    to this package including how to express the outputs of this method in relation to its season cycle.
+    to this package including Step 5 of the methodology.
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- component wind
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+
     filter_freq : int
         number of days in filter (default=10 days)
     window_size : int
@@ -157,13 +164,13 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 
     Returns
     ----------
-    fourier_filtered_data : xarray.Dataset
-        Data containing maximum latitudes and maximum windspeed at those lats and fourier-filtered versions of those two variables
+    output : xarray.Dataset
+        Data containing the two output variables:
 
     Notes
     -----
-    In the original paper, a further step (Step 6) is carried out to express the values of jet latitude
-    and jet speed anomalies from the seasonal cycle
+    In the original paper, a further step (Step 5) is carried out to express the values of jet latitude
+    and jet speed anomalies from the seasonal cycle, this is shown in the 'Examples'
 
     Examples
     --------
@@ -172,7 +179,17 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         import jsmetrics
         import xarray as xr
 
-        # Calculate jet latitude and jet speed anomalies from the seasonal cycle
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology (700-850 hPa & 20-70 N, 300-360 W)):
+        ua_sub = ua.sel(lon=slice(300, 360), lat=slice(20, 70), plev=slice(700, 850))
+
+        # Run statistic:
+        w10 = jsmetrics.jet_statistics.woollings_et_al_2010(ua_sub, filter_freq=10, window_size=61)
+
+        # Express jet latitude and speed as anomalies from smoothed seasonal cycle (Step 5 of methodology)
+        w10_seasonal_anomalies = w10.groupby('time.season').apply(lambda row: row['jet_lat'] - row['ff_jet_lat']).plot()
 
     """
     if isinstance(data, xarray.DataArray):

@@ -25,7 +25,7 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def archer_caldeira_2008(data):
     r"""
-    This method defines three jet stream properties via integrated quantities (windspeed, pressure and latitude)
+    This method defines three monthly-averaged jet stream properties via integrated quantities (windspeed, pressure and latitude)
     The three properties are:
         1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:
          .. math::
@@ -53,18 +53,17 @@ def archer_caldeira_2008(data):
     data : xarray.Dataset
         Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
-
     Returns
     ----------
     output : xarray.Dataset
-        Data containing mass weighted average ws, mass flux weighted pressure and latitude
+        Data containing the three jet properties: 'mass_weighted_average_ws', 'mass_flux_weighted_pressure' and 'mass_flux_weighted_latitude'
 
     Notes
     -----
     While the initial methodology provides limits for pressure level (100-400 hPa), here the mass weighted outputs
     will be calculated for any pressure levels passed into the method.
-    The latitude calculation is limited to 15-75 however (as this was meant for Northern Hemisphere), but you may
-    find it easy enough to edit this method to calculate outputs for a different region.
+    The latitude calculation is limited to 15-75 degrees North, however (as this was meant for Northern Hemisphere),
+    but you may find it easy enough to edit this method to calculate outputs for a different region.
 
     Examples
     --------
@@ -82,13 +81,9 @@ def archer_caldeira_2008(data):
         # Run algorithm:
         archer_outputs = jsmetrics.jet_statistcs.archer_caldiera_2008(uv_sub)
 
-
-
-        # Produce a jet occurence count across all pressure levels
-        schiemann_jet_counts_all_levels = schiemann_outputs['jet_occurence'].sum(('time', 'plev'))
-
-        # Use the jet occurence values as a mask to extract the jet windspeeds
-        schiemann_jet_ws = schiemann_outputs.where(schiemann_outputs['jet_occurence'] > 0)['ws']
+        # Subset mass weighted wind by a windspeed threshold
+        windspeed_threshold = 15 # remember this is for monthly averages
+        strong_jet = archer_outputs['mass_weighted_average_ws'].where(lambda row: row > 20)
 
     """
     #  Step 1. Get monthly means

@@ -4,7 +4,7 @@
     Metrics and indices used to characterise features of jet-streams (e.g. location, speed, waviness and width).
     All methods are implementation from existing research which have been translated to Python for this package.
 
-    All functions should return a xarray.Dataset.
+    All functions return a xarray.Dataset.
 
     The following jet statistics are ordered by paper publish year.
 """

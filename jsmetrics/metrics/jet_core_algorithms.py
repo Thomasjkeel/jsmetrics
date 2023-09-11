@@ -7,6 +7,8 @@
     Algorithms are treated seperately to jet statistics, as in general, jet statistics are used to summarise information about the jet-stream,
     the jet core algorithms simply identify it.
 
+    All functions return a xarray.Dataset.
+
     The following algorithms are ordered by paper publish year.
 """
 

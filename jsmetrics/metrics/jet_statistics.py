@@ -26,7 +26,7 @@ __status__ = "Development"
 def archer_caldeira_2008(data):
     r"""
     This method defines three jet stream properties via integrated quantities (windspeed, pressure and latitude)
-    The method returns three outputs:
+    The three properties are:
         1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:
          .. math::
             WS_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k}}
@@ -51,7 +51,8 @@ def archer_caldeira_2008(data):
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+
 
     Returns
     ----------

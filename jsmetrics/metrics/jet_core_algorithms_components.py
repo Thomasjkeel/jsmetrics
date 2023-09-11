@@ -904,16 +904,19 @@ def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold=30):
     return ws_slice.where(lambda x: x > ws_threshold).fillna(0.0)
 
 
-def get_local_wind_maxima_by_timeunit(row):
+def get_local_wind_maxima_by_timeunit(row, ws_threshold):
     """
     Get local wind maxima by timeunit (i.e. day)
 
-    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
+    Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305 who originally use 30 m/s as their ws threshold
 
     Parameters
     ----------
     row : xarray.Dataset
         Data of single time unit containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev'
+
+    ws_threshold : int or float
+        windspeed threshold to apply
 
     Returns
     ----------
@@ -927,7 +930,7 @@ def get_local_wind_maxima_by_timeunit(row):
     for lon in row["lon"]:
         current = row.sel(lon=lon, method="nearest")
         pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(
-            current["ws"], 30
+            current["ws"], ws_threshold
         ).data
         ind_local_wind_maximas = data_utils.get_local_maxima(pot_local_maximas, axis=1)
         # Turn into 2-d numpy array
@@ -981,6 +984,8 @@ def subdivide_local_wind_maxima_into_stj_pfj(
 ):
     """
     Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on pg. 2709.
+    After the method in that paper (see Table 1), categorisation for the Northern Hemisphere PFJ are not made in DJF,
+    and no categorisation are made in December, March, June and September.
 
     Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 
@@ -995,14 +1000,14 @@ def subdivide_local_wind_maxima_into_stj_pfj(
         data with polar_front_jet and subtropical_jet subdivisions
     """
     DJF_STJ = data.sel(
-        monthyear=data.monthyear.dt.month.isin([1, 2, 12]), lat=slice(15, 40)
+        monthyear=data.monthyear.dt.month.isin([1, 2]), lat=slice(15, 40)
     )[local_wind_column_name]
     MAM_SON_PFJ = data.sel(
-        monthyear=data.monthyear.dt.month.isin([3, 4, 5, 9, 10, 11]),
+        monthyear=data.monthyear.dt.month.isin([4, 5, 10, 11]),
         lat=slice(10, 70),
     )[local_wind_column_name]
     JJA_PFJ = data.sel(
-        monthyear=data.monthyear.dt.month.isin([6, 7, 8]), lat=slice(30, 60)
+        monthyear=data.monthyear.dt.month.isin([7, 8]), lat=slice(30, 60)
     )[local_wind_column_name]
     SH_STJ = data.sel(lat=slice(-40, -15))[local_wind_column_name]
     SH_PFJ = data.sel(lat=slice(-70, -41))[local_wind_column_name]

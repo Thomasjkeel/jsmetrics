@@ -986,7 +986,7 @@ def subdivide_local_wind_maxima_into_stj_pfj(
     Subdivide the local_wind_maxima values into the Subtropical Jet (STJ) and Polar Front Jet (PFJ) based on Table 1 pg. 2709
     from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305.
     After the method in that paper, categorisation for the Northern Hemisphere STJ is only possible in DJF,
-    and the latitudes used are not based on December, March, June or September.
+    and the latitude bands used are not based on December, March, June or September in Table 1 of that study.
 
     Component of method from Pena-Ortiz (2013) https://doi.org/10.1002/jgrd.50305
 

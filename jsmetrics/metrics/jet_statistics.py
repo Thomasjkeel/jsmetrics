@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 """
-    Metrics (or Indices) used to identify or classify jet-stream in the literature. This includes metrics to calculate
-    latitudes at which highest wind-speed occurs or and upper-level wind sinuosity with the specific purpose of capturing the jet-stream 'waviness'
+    Metrics and indices used to characterise features of jet-streams (e.g. location, speed, waviness and width).
+    All methods are implementation from existing research which have been translated to Python for this package.
 
     All functions should return a xarray.Dataset.
 

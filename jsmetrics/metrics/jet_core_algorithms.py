@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-    Jet-stream algorithms used in the literature.
-    Algorithms are treated seperately to metrics, as in general, metrics are used to summarise information about the jet-stream, the algorithms simply identify it
+    Methods that isolate parts of the atmospheric column associated with jet-streams based on various techniques from the literature.
+    In each case, these algorithms output a mask of the input data, and so can be used to further characterise variables at the same location
+    as the jet core mask.
+    Algorithms are treated seperately to jet statistics, as in general, jet statistics are used to summarise information about the jet-stream,
+    the jet core algorithms simply identify it.
 
-    Classes and Functions ordered by paper publish year.
+    The following algorithms are ordered by paper publish year.
 """
 
 # imports

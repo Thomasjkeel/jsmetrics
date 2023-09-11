@@ -6,7 +6,7 @@
 
     All functions should return a xarray.Dataset.
 
-    Classes and Functions ordered by paper publish year.
+    The following jet statistics are ordered by paper publish year.
 """
 
 # imports

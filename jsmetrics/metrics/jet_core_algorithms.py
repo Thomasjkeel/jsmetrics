@@ -496,10 +496,8 @@ def jet_core_identification_algorithm(
     r"""
     This method extract seperate jet cores based on boundary and core windspeed thresholds.
     The output includes two types:
-        0. is not determined to be part of the jet
-        1-n. Seperate jet core regions
-
-    Core are discovered as regions of local maxima surrounded by within 8-cells are above boundary threshold
+        0. regions not determined to be part of the jet
+        1-n. Seperate jet core regions seperated by one condition: if two cores in the same region are more than 15 degrees of latitude away
 
     This method is inspired by the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
     which is described in Section 3.1 of that study.

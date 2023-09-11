@@ -328,8 +328,6 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
         3. **polar_front_jet** -- Binary mask of the PFJ (by monthyear).
         4. **subtropical_jet** -- Binary ask of the STJ (by monthyear).
 
-    The outputs of this method are in a monthyear frequency.
-
     This method was first introduced in Pena-Ortiz et al. (2013) (https://doi.org/10.1002/jgrd.50305) and
     is described in section 2 of that study.
 

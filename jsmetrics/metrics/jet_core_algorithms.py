@@ -118,7 +118,7 @@ def koch_et_al_2006(data, ws_threshold=30):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def schiemann_et_al_2009(data, ws_threshold=30):
     r"""
-    This method detects jet occurrences, whereby each jet occurence is detected based
+    This method detects 'jet occurrences', whereby each jet occurence is detected based
     on three rules applied to inputted wind speed (V = [u, v]):
         1. \|V\| is a local maxima in latitude and altitude plane
         2. \|V\| ≥ 30 m/s

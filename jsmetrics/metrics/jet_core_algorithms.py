@@ -322,7 +322,7 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
     This method follows a two step procedure for calculating local wind maxima and then subcategorising the local maxima into
     two distinct jet masks: the Subtropical Jet (STJ) and Polar Front Jet (PFJ).
 
-    This method returns 4 outputted variables:
+    This method returns 4 outputs:
         1. **local_wind_maxima** -- Binary mask of local wind maxima
         2. **local_wind_maxima_by_monthyear** -- Same as above, but for monthyear frequency
         3. **polar_front_jet** -- Binary mask of the PFJ (by monthyear).

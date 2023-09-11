@@ -12,6 +12,8 @@ See the :ref:`Metric sub-components` for more detail about the implementation of
 
 Jet statistics
 ##############
+Metrics and indices used to characterise features of jet-streams (e.g. location, speed, waviness and width).
+All methods are implementation from existing research which have been translated to Python for this package.
 
 **Overview table:**
 

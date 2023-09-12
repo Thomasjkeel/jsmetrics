@@ -382,6 +382,9 @@ def barnes_polvani_2015(data):
     This method was originally introduce in Barnes & Polvani (2015) https://doi.org/10.1175/JCLI-D-14-00589.1
     and is described in Section 2b of that study.
 
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
+
     Parameters
     ----------
     data : xarray.Dataset
@@ -434,10 +437,14 @@ def barnes_polvani_2015(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_simpson_2017(data):
     r"""
-    Time series of jet latitude and jet speed are defined as the latitude and speed of the 10-day-averaged
-    maximum 700-hPa zonal winds averaged over the longitudinal sector of interest"
+    This method defines two outputs: 'jet_lat' and 'jet_speed' which are defined as the latitude and speed of the 10-day-averaged
+    maximum zonally-averaged wind speed.
 
-    Method from Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    This method was originally introduce in Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    and is described in Section 2b of that study.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -447,10 +454,11 @@ def barnes_simpson_2017(data):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the x outputs: ''
+        Data containing the x outputs: 'jet_lat' and 'jet_speed'
 
     Notes
     -----
+    The original methodology was intended to work on one pressure level (700 hPa)
 
     Examples
     --------
@@ -509,6 +517,9 @@ def grise_polvani_2017(data):
     See also Ceppi et al. 2012
     Methodology is for Southern Hemisphere
     NOTE: This method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -596,6 +607,9 @@ def bracegirdle_et_al_2018(data):
     Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
 
     NOTE: Originally for Southern Hemisphere
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -687,6 +701,9 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
 
     Also see Zappa et al. 2018 method which includes exclusion of <0 m/s u-wind
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -790,6 +807,9 @@ def zappa_et_al_2018(data, lon_resolution=None):
 
     Also used in Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
 
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
+
     Parameters
     ----------
     data : xarray.Dataset
@@ -891,6 +911,9 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     maximum zonal winds occur for each longitude for each time unit (i.e. day) before smoothing
     with a rectangular pulse (of width 10 degrees) to get a moving average.
     Method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------

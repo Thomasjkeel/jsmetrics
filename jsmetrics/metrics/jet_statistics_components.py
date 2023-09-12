@@ -413,8 +413,8 @@ def get_latitude_and_speed_where_max_ws(data_row):
 
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
-    & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
+    Barnes & Simpson (2017) https://doi.org/10.1175/JCLI-D-17-0299.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     ----------
@@ -458,8 +458,8 @@ def calc_latitude_and_speed_where_max_ws(data, var_col="ua"):
 
     Component of method from Woollings et al (2010) http://dx.doi.org/10.1002/qj.625
     & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
-    & Grise & Polvani 2017 https://doi.org/10.1175/JCLI-D-16-0849.1
+    Barnes & Simpson (2017) https://doi.org/10.1175/JCLI-D-17-0299.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     ----------
@@ -748,7 +748,7 @@ def scale_lat_vals_with_quadratic_func(lats, speeds, scaled_lats):
     Will downscale or upscale the resolution of latitude using a quadratic func.
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     ----------
@@ -776,7 +776,7 @@ def get_latitude_and_speed_where_max_ws_at_reduced_resolution(
     Makes use of the quadratic func to scale latitude values.
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     ----------
@@ -810,7 +810,7 @@ def get_3_latitudes_and_speed_around_max_ws(row):
     Will get the latitudes neighbouring to east, at and to west where the max windspeed is found
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     --------------
@@ -864,7 +864,7 @@ def add_nan_value_to_arr_if_not_len_enough(arr, len_required):
     Add NaN value to array if any values in the array so it is a certain length
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     ----------
@@ -893,7 +893,7 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
     Get the three neighbouring values to a given input coord (coord_val)
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     ----------
@@ -926,7 +926,7 @@ def quadratic_func(x, y):
     Quadratic function.
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
     Parameters
     ----------
@@ -946,7 +946,7 @@ def apply_quadratic_func(x, y, vals):
     Apply quadratic function to an array of values (vals).
 
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
-    & Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    & Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
 
     Parameters

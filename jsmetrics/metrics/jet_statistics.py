@@ -438,8 +438,10 @@ def barnes_polvani_2015(data):
 def grise_polvani_2016(data):
     r"""
     This method calculates the maximum latitude of jet-stream to 0.01 degree resolution each time unit
-    Method from Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
+
+    This method was originally introduce in Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
+    and is described in Section 2 of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.

@@ -408,12 +408,11 @@ def barnes_polvani_2015(data):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+        # Subset dataset to range used in original methodology (700-925 hPa &  30-70N,  130-10W)):
+        ua_sub = ua.sel(plev=slice(700, 925), lat=slice(30, 70), lon=slice(230, 350))
 
         # Run statistic:
         bp15 = jsmetrics.jet_statistics.barnes_polvani_2015(ua_sub)
-
     """
     # Step 1. Get zonal mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)

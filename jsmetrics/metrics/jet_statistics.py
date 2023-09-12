@@ -286,11 +286,15 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology (700-850 hPa & 20-70 N, 300-360 W)):
-        ua_sub = ua.sel(plev=slice(700, 850), lat=slice(20, 70), lon=slice(300, 360))
+        # Subset dataset to three sectors of the globe used in original methodology:
+        ua_sh = ua.sel(plev=slice(700, 850), lat=slice(-90, 0)) # the Southern Hemisphere
+        ua_na = ua.sel(plev=slice(700, 850), lat=slice(0, 90), lon=slice(300, 360) # the North Atlantic
+        ua_np = ua.sel(plev=slice(700, 850), lat=slice(0, 90), lon=slice(135, 235) # the North Pacific
 
         # Run statistic with a filter frequency and window size used in the original methodology:
-        bp13 = jsmetrics.jet_statistics.barnes_polvani_2013(ua_sub, filter_freq=10, window_size=41)
+        bp13_sh = jsmetrics.jet_statistics.barnes_polvani_2013(ua_sh, filter_freq=10, window_size=41)
+        bp13_na = jsmetrics.jet_statistics.barnes_polvani_2013(ua_na, filter_freq=10, window_size=41)
+        bp13_np = jsmetrics.jet_statistics.barnes_polvani_2013(ua_np, filter_freq=10, window_size=41)
     """
     #  Step 1. Get pressure-weighted u-component wind
     pressure_weighted_ua = jet_statistics_components.calc_mass_weighted_average(

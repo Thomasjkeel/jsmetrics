@@ -35,8 +35,7 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     where :math:`p1`, :math:`p2` is min, max pressure level.
 
-    The first step is to calculate the weighted average windspeed and then the second step is to apply a
-    windspeed threshold to isolate jet events from that weighted average.
+    After calculating :math:`\alpha vel`, in a second step a windspeed threshold to isolate jet events (the default is :math:`30 m s^{-1}`).
 
     This method was first introduced in Koch et al (2006) (https://doi.org/10.1002/joc.1255)
     and is described in section 2.2.2 of that study. The original methodology provides a third step

@@ -56,27 +56,54 @@ __status__ = "Development"
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def francis_vavrus_2015(data):
-    """
-    Calculates the Meridional Circulation Index (MCI). When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is
-    from the South (North).
+    r"""
+    This method calculates a waviness metric called: Meridional Circulation Index (MCI) from u- and v-components of wind.
 
-    Method from Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
+    MCI is calculated as follows:
+
+    ..math::
+        MCI = \frac{v*|v|}{u^2+v^2}
+
+    When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is from the South (North).
+
+    This method was originally introduce in Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
+    and is described in the Section entitled: 'Meridional circulation Index (MCI)'.
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing u- and v-component wind
+        Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
     Returns
     ----------
     data : xarray.Dataset
-        Data containing MCI
+        Data containing the one output: 'mci'
+
+    Notes
+    -----
+    In the original methodology, MCI is expressed in terms of seasonal anomaly, we show you how to do this in 'Examples'
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        uv_data = xr.open_dataset('path_to_uv_data')
+
+        # Subset dataset to range used in original methodology for the NH jet (500 hPa & 20-80 N)):
+        uv_sub = uv_data.sel(plev=500, lat=slice(20, 80))
+
+        # Run statistic:
+        fv15 = jsmetrics.jet_statistcs.francis_vavrus_2015(uv_sub)
+
+        # Express MCI as a seasonal anomaly
+        fv15_seasonal_anomalies = (mci['mci'] - mci['mci'].groupby('time.season').mean())
     """
     #  Step 1. calculating Meridional Circulation Index from data
     data["mci"] = waviness_metrics_components.calc_meridional_circulation_index(data)
-
-    #  Step 2. TODO Calculate anomaly from season
-    # maybe TODO: Step 3 Calculate anomaly from season
     return data
 
 

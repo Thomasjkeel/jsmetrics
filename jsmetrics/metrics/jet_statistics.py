@@ -190,7 +190,7 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         w10 = jsmetrics.jet_statistics.woollings_et_al_2010(ua_sub, filter_freq=10, window_size=61)
 
         # Express jet latitude and speed as anomalies from smoothed seasonal cycle (Step 5 of methodology)
-        w10_seasonal_anomalies = w10.groupby('time.season').apply(lambda row: row['jet_lat'] - row['ff_jet_lat']).plot()
+        w10_seasonal_anomalies = w10.groupby('time.season').apply(lambda row: row['jet_lat'] - row['ff_jet_lat'])
 
     """
     if isinstance(data, xarray.DataArray):

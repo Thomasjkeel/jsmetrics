@@ -196,12 +196,13 @@ METRIC_DETAILS = {
     },
     "FrancisVavrus2015": {
         "variables": ["ua", "va"],
-        "coords": {"plev": [50000, 50000]},
+        "coords": {"plev": [50000, 50000], "lat": [20, 80]},
         "plev_units": "Pa",
         "metric": waviness_metrics.francis_vavrus_2015,
         "name": "Francis & Vavrus 2015",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates a waviness metric called: Meridional Circulation Index (MCI)\
+                        from u- and v-components of wind. For more information see 'Notes' for this method\
+                        available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1088/1748-9326/10/1/014005",
     },
     "Cattiaux2016": {

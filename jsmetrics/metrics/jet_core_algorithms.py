@@ -27,6 +27,7 @@ __status__ = "Development"
 def koch_et_al_2006(data, ws_threshold=30):
     r"""
     This method follows a two-step procedure used to detect jet-event occurences (here: 'jet_events_ws').
+
     The weighted average windspeed (:math:`\alpha vel`) for the jet events is calculated as follows:
 
     .. math::

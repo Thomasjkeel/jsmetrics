@@ -707,9 +707,11 @@ def bracegirdle_et_al_2018(data):
 def ceppi_et_al_2018(data, lon_resolution=None):
     r"""
     This method calculates the jet latitude ('jet-lat') as defined by selecting the centroid of a zonally-averaged wind profile.
+
     The centroid is calculate by:
-    ..math::
-        \phi
+
+    .. math::
+        \phi_{jet}  = \frac{\int_{30}^{60} \phi\bar{u}^2, d\phi}{\int_{30}^{60} \bar{u}^2, d\phi}
 
     This method has been slightly adapted to include a jet speed extraction (provided for this method in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
 

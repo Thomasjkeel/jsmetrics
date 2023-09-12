@@ -458,7 +458,10 @@ def barnes_simpson_2017(data):
 
     Notes
     -----
-    The original methodology was intended to work on one pressure level (700 hPa)
+    The original methodology was intended to work on one pressure level (700 hPa) and on daily data, for the
+    implementation included in this package, we have included methods to automatically average any inputted pressure levels
+    and to return the data without 10-day averaging if data above the 10-day resolution is inputted.
+    Instead, warnings are returned to user to help them use the method the way it was originally intended.
 
     Examples
     --------
@@ -470,11 +473,13 @@ def barnes_simpson_2017(data):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+        # Subset dataset to range used in original methodology (700 hPa & North Atlantic & North Pacific)):
+        ua_na = ua.sel(plev=700, lat=slice(0, 90), lon=slice(280, 350)) # North Atlantic
+        ua_np = ua.sel(plev=700, lat=slice(0, 90), lon=slice(120, 230)) # North Pacific
 
         # Run statistic:
-        bp17 = jsmetrics.jet_statistics.barnes_simpson_2017(ua_sub)
+        bp17_na = jsmetrics.jet_statistics.barnes_simpson_2017(ua_na)
+        bp17_np = jsmetrics.jet_statistics.barnes_simpson_2017(ua_np)
 
     """
     if "plev" in data.dims:

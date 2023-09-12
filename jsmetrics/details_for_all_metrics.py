@@ -211,7 +211,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": waviness_metrics.cattiaux_et_al_2016,
         "name": "Cattiaux et al. 2016",
-        "description": "For more information see 'Notes' for this method available on the\
+        "description": "This method calculates a sinousity metric for upper-air flow using geopotential height.\
+                        This is achieved by comparing an isohype at the Z500 average over 30-70 N to the perimeter at 50∘N.\
+                        For more information see 'Notes' for this method available on the\
                         ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1002/2016GL070309",
     },

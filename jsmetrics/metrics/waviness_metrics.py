@@ -79,7 +79,7 @@ def francis_vavrus_2015(data):
 
     Returns
     ----------
-    data : xarray.Dataset
+    output : xarray.Dataset
         Data containing the one output: 'mci'
 
     Notes
@@ -114,20 +114,20 @@ def francis_vavrus_2015(data):
 def cattiaux_et_al_2016(data):
     r"""
     This method calculates a sinousity metric for upper-air flow using geopotential height.
-    The value of sinuosity is selected isohypse precisely corresponds to the Z500 average over 30–70∘N .
-    Then uses the perimeter of this isohype and around 50 .N to calculate sinuosity
+    The value of sinuosity is selected using an isohype which precisely corresponds to the Z500 average over 30-70∘N .
+    Then this value is compared to the perimeter at 50∘N to calculate sinuosity.
 
     Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
     Parameters
     ----------
     data : xarray.Dataset
-        Data containing geopotential height (zg)
+        Data which should containing the variables: 'zg', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
     Returns
     ----------
-    data : xarray.Dataset
-        Data containing sinuosity of zonal mean by each time unit
+    output : xarray.Dataset
+        Data containing the two outputs: 'sinousity' and 'zonal_mean_zg_30Nto70N'
 
     Notes
     -----

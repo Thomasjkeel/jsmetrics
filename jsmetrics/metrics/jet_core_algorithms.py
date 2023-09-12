@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
 
 """
-    Jet-stream algorithms used in the literature.
-    Algorithms are treated seperately to metrics, as in general, metrics are used to summarise information about the jet-stream, the algorithms simply identify it
+    Methods that isolate parts of the atmospheric column associated with jet-streams based on various techniques from the literature.
+    In each case, these algorithms output a mask of the input data, and so can be used to further characterise variables at the same location
+    as the jet core mask.
+    Algorithms are treated seperately to jet statistics, as in general, jet statistics are used to summarise information about the jet-stream,
+    the jet core algorithms simply identify it.
 
-    Classes and Functions ordered by paper publish year.
+    All functions return a xarray.Dataset.
+
+    The following algorithms are ordered by paper publish year.
 """
 
 # imports
@@ -21,18 +26,17 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def koch_et_al_2006(data, ws_threshold=30):
     r"""
-    This method follows a two-step procedure used to detect 'jet-event occurences'.
-    The first step is to calculate the weighted average windspeed and then the
-    second step is to apply a windspeed threshold to isolate jet events from that weighted average.
-    The original methodology uses windspeed between 100-400 hPa to calculated the weighted average
-    and 30 meters per second as the windspeed threshold.
+    This method follows a two-step procedure used to detect jet-event occurences (here: 'jet_events_ws').
 
-    The weighted average windspeed for the jet events is calculated as follows:
+    The weighted average windspeed (:math:`\alpha vel`) for the jet events is calculated as follows:
 
     .. math::
         \alpha vel =  \frac{1}{p2-p1} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
 
-    where p1, p2 is min, max pressure level.
+    where :math:`p1`, :math:`p2` is min, max pressure level.
+
+    The first step is to calculate the weighted average windspeed and then the second step is to apply a
+    windspeed threshold to isolate jet events from that weighted average.
 
     This method was first introduced in Koch et al (2006) (https://doi.org/10.1002/joc.1255)
     and is described in section 2.2.2 of that study. The original methodology provides a third step
@@ -52,12 +56,16 @@ def koch_et_al_2006(data, ws_threshold=30):
 
     Returns
     ----------
-    xarray.Dataset
-        A dataset containing weighted average ws above windspeed threshold
+    output : xr.Dataset
+        Data containing the outpyt variable 'jet_events_ws'
 
     Notes
     -----
+    The original methodology uses windspeed between 100-400 hPa to calculated the weighted average
+    and 30 meters per second as the windspeed threshold.
+
     This equation for this method is provided on pg 287 of the Koch et al. 2006 paper.
+
     In the original paper, they accumulate the jet events into two-class jet typology (described in section 2.2.3
     of Koch et al. 2006)
 
@@ -113,11 +121,11 @@ def koch_et_al_2006(data, ws_threshold=30):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def schiemann_et_al_2009(data, ws_threshold=30):
     r"""
-    This method detects jet occurrences, whereby each jet occurence is detected based
-    on three rules applied to inputted wind speed (V = [u, v]):
-        1. \|V\| is a local maxima in latitude and altitude plane
-        2. \|V\| ≥ 30 m/s
-        3. \|u\| ≥ 0 m/s.
+    This method detects 'jet occurrences', whereby each jet occurence is detected based
+    on three rules applied to inputted wind speed (:math:`V = [u, v]`):
+        1. :math:`|V|` is a local maxima in latitude and altitude plane
+        2. :math:`|V| \ge 30 m s^{-1}`
+        3. :math:`u \ge 0 m s^{-1}`.
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.
@@ -137,14 +145,14 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     Returns
     ----------
     output : xr.Dataset
-        Data with local jet maximas
+        Data containing the two output variables: 'ws' and 'jet_occurence'
 
     Notes
     -----
     While the original method is built on a four dimension slice of wind speed (time, lat, lon, plev),
     This implementation will work where there is only one pressure level, so a 3-d slice (time, lat, lon).
 
-    **Slow method:** Due to the nature of this method, it currently takes a very long time to run,
+    **Slow method:** due to the nature of this method, it currently takes a very long time to run,
     i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
 
     Examples
@@ -209,10 +217,10 @@ def manney_et_al_2011(
     (default is 25 m/s, see 'ws_drop_threshold')
 
     This method returns four outputs
-        1. 'jet_core_mask' -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
-        2. 'jet_region_mask' -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
-        3. 'jet_region_above_ws_threshold_mask' -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
-        4. 'ws' -- Wind speed calculated from 'ua', 'va' inputs.
+        1. **jet_core_mask** -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
+        2. **jet_region_mask** -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
+        3. **jet_region_contour_mask** -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
+        4. **ws** -- Wind speed calculated from 'ua', 'va' inputs.
 
     This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
     and is described in Section 3.1 of that study. This method is also known as JETPAC, and available in its
@@ -240,14 +248,15 @@ def manney_et_al_2011(
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the variable 'jet-core_id' (ID number relates to each unique core)
+        Data containing the four output variables: 'ws', 'jet_region_mask', 'jet_region_contour_mask', and 'jet_core_mask'
 
     Notes
     -----
     The implementation of this method varies slightly from the original, in that this method will return
     variables that have 0, 1+ values, so that the user can use these as a mask on other variables such as windspeed
     (see 'Examples' for demonstration of how to use the mask).
-    Also, 'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
+
+    'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
     encompass jet cores.
 
     Examples
@@ -312,14 +321,16 @@ def manney_et_al_2011(
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def penaortiz_et_al_2013(data):
+def penaortiz_et_al_2013(data, ws_threshold=30):
     r"""
-    This method follows a two step procedure for calculate local wind maxima days.
-    This method returns 3 outputted variables:
-        1. local_wind_maxima
-        2. polar_front_jet
-        3. subtropical_jet
-    Each output is in a monthyear frequency.
+    This method follows a two step procedure for calculating local wind maxima and then subcategorising the local maxima into
+    two distinct jet masks: the Subtropical Jet (STJ) and Polar Front Jet (PFJ).
+
+    This method returns 4 outputs:
+        1. **local_wind_maxima** -- Binary mask of local wind maxima
+        2. **local_wind_maxima_by_monthyear** -- Same as above, but for monthyear frequency
+        3. **polar_front_jet** -- Binary mask of the PFJ (by monthyear).
+        4. **subtropical_jet** -- Binary ask of the STJ (by monthyear).
 
     This method was first introduced in Pena-Ortiz et al. (2013) (https://doi.org/10.1002/jgrd.50305) and
     is described in section 2 of that study.
@@ -332,15 +343,21 @@ def penaortiz_et_al_2013(data):
     data : xarray.Dataset
         Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
 
+    ws_threshold : int or float
+        windspeed threshold to apply (default=30 ms-1)
+
     Returns
     ----------
     output : xarray.Dataset
-        Data containing number of days per month with local wind maxima
+        Data containing the four output variables: 'local_wind_maxima', 'local_wind_maxima_by_monthyear', 'polar_front_jet', and 'subtropical_jet'
 
     Notes
     -----
-    Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day)
-    on AMD Ryzen 5 3600 6-core processor
+    See Table 1 in the respective paper for the categories used to seperate the STJ and PFJ.
+    The STJ is only seperated in DJF for the Northern Hemisphere.
+
+    **Slow method**: currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day)
+    on a AMD Ryzen 5 3600 6-core processor.
 
     Examples
     --------
@@ -383,7 +400,8 @@ def penaortiz_et_al_2013(data):
 
     #  Step 3. Find local wind maxima locations by day
     output = output.groupby("time").map(
-        jet_core_algorithms_components.get_local_wind_maxima_by_timeunit
+        jet_core_algorithms_components.get_local_wind_maxima_by_timeunit,
+        (ws_threshold,),
     )
 
     #  Step 4. Get number of days per month with local wind maxima
@@ -401,7 +419,9 @@ def penaortiz_et_al_2013(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
     r"""
-    This method produces an event-based jet occurrence and jet center occurrence of JS.
+    This method produces an event-based jet occurrences and jet center occurrences of the jet stream
+    in a given atmospheric column.
+
     The outputs of this method will produce categorical values of three types:
         0. is not determined to be part of the jet
         1. is a jet occurence
@@ -428,7 +448,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
     Notes
     -----
-    Currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    **Slow method**: currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Examples
     --------
@@ -489,8 +509,11 @@ def jet_core_identification_algorithm(
     data, ws_core_threshold=40, ws_boundary_threshold=30
 ):
     r"""
-    This method seperates jet cores based on boundary and windspeed threshold.
-    Core are discovered where 8-cells are above boundary threshold
+    This method extract seperate jet cores based on boundary and core windspeed thresholds.
+
+    The output variable of this method includes two types:
+        0. regions not determined to be part of the jet
+        1-n. Seperate jet core regions seperated by one condition: if two cores in the same region are more than 15 degrees of latitude away
 
     This method is inspired by the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
     which is described in Section 3.1 of that study.
@@ -524,7 +547,7 @@ def jet_core_identification_algorithm(
         # Load in dataset with u and v components:
         uv_data = xr.open_dataset('path_to_uv_data')
 
-        # Subset dataset to range used in original methodology (100-400 hPa)):
+        # Subset dataset to range appropriate for methodology (100-400 hPa)):
         uv_sub = uv_data.sel(plev=slice(100, 400))
 
         # Run algorithm:

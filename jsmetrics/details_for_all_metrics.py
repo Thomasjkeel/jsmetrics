@@ -37,7 +37,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.archer_caldeira_2008,
         "name": "Archer & Caldeira 2008",
-        "description": "",
+        "description": "This method extracts three monthly-averaged jet stream properties\
+                        via integrated quantities (windspeed, pressure and latitude) from u-component wind.\
+                        For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics",
         "doi": "https://doi.org/10.1029/2008GL033614",
     },
     "Schiemann2009": {
@@ -62,7 +65,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.woollings_et_al_2010,
         "name": "Woollings et al. 2010 North Atlantic",
-        "description": "exact coords for metric are: [92500, 85000, 77500, 70000]",
+        "description": "This method follows an in-text description of 4-steps describing the algorithm\
+                        of jet-stream identification from Woollings et al. (2010). For more information\
+                        see 'Notes' for this method available on the ReadTheDocs for jsmetrics",
         "doi": "https://onlinelibrary.wiley.com/doi/10.1002/qj.625",
     },
     "Manney2011": {
@@ -85,7 +90,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 North Atlantic",
-        "description": "",
+        "description": "This method constructs the 'eddy-driven jet' by performing a pressure-weighted average\
+                        of zonal winds. The winds are then low-pass frequency filtered at each grid point using\
+                        a 10-day Lanczos filter with 41 weights by default. Finally a 0.01 degree quadratic function\
+                        is fitted to the peak of the subsequent wind speed profile for each time step. For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "BarnesPolvani2013_NorthPacific": {
@@ -94,7 +103,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 North Pacific",
-        "description": "",
+        "description": "This method constructs the 'eddy-driven jet' by performing a pressure-weighted average\
+                        of zonal winds. The winds are then low-pass frequency filtered at each grid point using\
+                        a 10-day Lanczos filter with 41 weights by default. Finally a 0.01 degree quadratic function\
+                        is fitted to the peak of the subsequent wind speed profile for each time step. For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "BarnesPolvani2013_SouthernHemisphere": {
@@ -103,7 +116,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 Southern Hemisphere",
-        "description": "",
+        "description": "This method constructs the 'eddy-driven jet' by performing a pressure-weighted average\
+                        of zonal winds. The winds are then low-pass frequency filtered at each grid point using\
+                        a 10-day Lanczos filter with 41 weights by default. Finally a 0.01 degree quadratic function\
+                        is fitted to the peak of the subsequent wind speed profile for each time step. For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "PenaOrtiz2013": {
@@ -112,7 +129,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.penaortiz_et_al_2013,
         "name": "Pena-Ortiz et al. 2013",
-        "description": "",
+        "description": "This method follows a two step procedure for calculating local wind maxima and then\
+                        subcategorising the local maxima into two distinct jet masks: the Subtropical Jet (STJ)\
+                        and Polar Front Jet (PFJ). For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1002/jgrd.50305",
     },
     # "ScreenSimmonds2013_NorthAmerica_NorthAtlantic": {
@@ -157,7 +177,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.kuang_et_al_2014,
         "name": "Kuang et al. 2014.",
-        "description": "",
+        "description": "This method produces an event-based jet occurrences and jet center occurrences of the\
+                        jet stream in a given atmospheric column. For more information see 'Notes' for this\
+                        method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1007/s00704-013-0994-x",
     },
     "BarnesPolvani2015_NorthAmerica_NorthAtlantic": {
@@ -166,16 +188,21 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2015,
         "name": "Barnes & Polvani 2015",
-        "description": "",
+        "description": "This method calculates the jet positon and wind speed at that position by fitting a parabola\
+                        around the maximum of zonally average u-component wind speed, using the magnitude at the\
+                        maximum ('jet_speed') and latitude at that maximum ('jet_lat'). For more information see\
+                        'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-14-00589.1",
     },
     "FrancisVavrus2015": {
         "variables": ["ua", "va"],
-        "coords": {"plev": [50000, 50000]},
+        "coords": {"plev": [50000, 50000], "lat": [20, 80]},
         "plev_units": "Pa",
         "metric": waviness_metrics.francis_vavrus_2015,
         "name": "Francis & Vavrus 2015",
-        "description": "",
+        "description": "This method calculates a waviness metric called: Meridional Circulation Index (MCI)\
+                        from u- and v-components of wind. For more information see 'Notes' for this method\
+                        available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1088/1748-9326/10/1/014005",
     },
     "Cattiaux2016": {
@@ -184,8 +211,24 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": waviness_metrics.cattiaux_et_al_2016,
         "name": "Cattiaux et al. 2016",
-        "description": "",
+        "description": "This method calculates a sinousity metric for upper-air flow using geopotential height.\
+                        This is achieved by comparing an isohype at the Z500 average over 30-70 N to the perimeter at 50∘N.\
+                        For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1002/2016GL070309",
+    },
+    "GrisePolvani2016": {
+        "variables": ["ua"],
+        "coords": {"plev": [85000, 85000], "lat": [-65, -30]},
+        "plev_units": "Pa",
+        "metric": jet_statistics.grise_polvani_2016,
+        "name": "Grise & Polvani 2016",
+        "description": "This method calculates the latitude of the midlatitude eddy-driven jet\
+                        by finding the peak value of the input u-wind field.\
+                        A polynomial fit is then applied to get an appropriate value of 'jet_lat'\
+                        at a resolution 0.01 degrees. For more information see 'Notes' for this\
+                        method available on the ReadTheDocs for jsmetrics.",
+        "doi": "https://doi.org/10.1002/2015JD024687",
     },
     "BarnesSimpson2017_NorthAtlantic": {
         "variables": ["ua"],
@@ -193,7 +236,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_simpson_2017,
         "name": "Barnes & Simpson 2017 North Atlantic",
-        "description": "",
+        "description": "This method defines two outputs: 'jet_lat' and 'jet_speed' \
+                        which are defined as the latitude and speed of the 10-day-averaged\
+                        maximum zonally-averaged wind speed. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
     },
     "BarnesSimpson2017_NorthPacific": {
@@ -202,17 +248,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_simpson_2017,
         "name": "Barnes & Simpson 2017 North Pacific",
-        "description": "",
+        "description": "This method defines two outputs: 'jet_lat' and 'jet_speed' \
+                        which are defined as the latitude and speed of the 10-day-averaged\
+                        maximum zonally-averaged wind speed. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
-    },
-    "GrisePolvani2017": {
-        "variables": ["ua"],
-        "coords": {"plev": [85000, 85000], "lat": [-65, -30]},
-        "plev_units": "Pa",
-        "metric": jet_statistics.grise_polvani_2017,
-        "name": "Grise & Polvani 2017",
-        "description": "",
-        "doi": "https://journals.ametsoc.org/doi/10.1175/JCLI-D-16-0849.1",
     },
     "Bracegirdle2018_SouthernHemisphere": {
         "variables": ["ua"],
@@ -220,7 +260,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.bracegirdle_et_al_2018,
         "name": " Bracegirdle et al. 2018",
-        "description": "",
+        "description": "This method calculates the seasonal and annual jet-stream position ('JPOS')\
+                        and strength ('JSTR') by applying a 0.075 degree cubic spline interpolation to zonally-averaged\
+                        wind climatology and selecting the maximum. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0320.1",
     },
     "Ceppi2018_NorthAtlantic_Europe": {
@@ -229,7 +272,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 North Atlantic",
-        "description": "",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Ceppi2018_NorthPacific": {
@@ -238,7 +283,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 North Pacific",
-        "description": "",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Ceppi2018_SouthernHemisphere": {
@@ -247,7 +294,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 Southern Hemisphere",
-        "description": "",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Zappa2018_NorthAtlantic": {
@@ -256,7 +305,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.zappa_et_al_2018,
         "name": "Zappa et al. 2018 North Atlantic",
-        "description": "",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. It differs from Ceppi et al. 2018\
+                        by also flooring the u-wind input to 0. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1002/2017GL076096",
     },
     "Zappa2018_NorthPacific": {
@@ -265,7 +317,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.zappa_et_al_2018,
         "name": "Zappa et al. 2018 North Pacific",
-        "description": "",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. It differs from Ceppi et al. 2018\
+                        by also flooring the u-wind input to 0. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1002/2017GL076096",
     },
     "Kerr2020_NorthernHemisphere": {
@@ -274,7 +329,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.kerr_et_al_2020,
         "name": "Kerr et al. 2020",
-        "description": "",
+        "description": "This method defines the latitude and speed of the jet-stream where\
+                        the maximum zonal winds occur for each longitude and for each time unit\
+                        (i.e. day). These values are then smoothed across the longitudes with\
+                        a rectangular pulse (by default this has a width of 10 degrees). For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1029/2020JD032735",
     },
     # "BlackportFyfe2022_NorthAtlantic": {

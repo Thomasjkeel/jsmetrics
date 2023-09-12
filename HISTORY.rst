@@ -3,10 +3,14 @@ History
 =======
 
 
-0.1.6 (2023-XX-XX)
+0.1.6 (2023-09-12)
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
-    * add examples and notes to each metric in package  
+    * Write a more detailed description of each metric
+    * Add examples and implementation notes to each metric  
+    * Update listing in 'details_for_all_metrics.py'
+* Add ws_threshold parameter to Pena-Ortiz method
+* Rename Pena-Ortiz method to 'pena_ortiz_et_al_2016' (as earlier paper)
 
 0.1.6-alpha (2023-08-19)
 -------------------------

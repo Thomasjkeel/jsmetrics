@@ -12,6 +12,8 @@ See the :ref:`Metric sub-components` for more detail about the implementation of
 
 Jet statistics
 ##############
+Metrics and indices used to characterise features of jet-streams (e.g. location, speed, waviness and width).
+All methods are implementation from existing research which have been translated to Python for this package.
 
 **Overview table:**
 
@@ -48,6 +50,12 @@ Jet statistics
 
 Jet core algorithms
 ###################
+Methods that isolate parts of the atmospheric column associated with jet-streams based on various techniques from the literature.
+In each case, these algorithms output a mask of the input data, and so can be used to further characterise variables at the same location
+as the jet core mask. Algorithms are treated seperately to jet statistcs, as in general, the jet statistic are used to summarise information
+about the jet-stream, the jet core algorithms simply identify it. All methods are implementation from existing research which have been
+translated to Python for this package.
+
 
 **Overview table:**
 
@@ -68,6 +76,36 @@ Jet core algorithms
 **Documentation:**
 
 .. automodule:: jsmetrics.metrics.jet_core_algorithms
+   :members:
+   :imported-members:
+   :undoc-members:
+   :show-inheritance:
+   :noindex:
+
+
+Waviness metrics
+################
+Methods that characterise 'waviness' or 'sinousity' in parts of the atmospheric column based on various techniques from the literature.
+All methods are implementation from existing research which have been translated to Python for this package.
+
+
+**Overview table:**
+
+.. table::
+   :align: left
+   :widths: auto
+   
+   =============================================================================== ==============  ==  =============================================================================== ==============
+   Algorithm                                                                       Status              Algorithm                                                                       Status                                                                                
+   =============================================================================== ==============  ==  =============================================================================== ==============
+   `Francis & Vavrus 2015 <https://doi.org/10.1088/1748-9326/10/1/014005>`_        Complete            `Cattiaux et al. 2009 <https://doi.org/10.1002/2016GL070309>`_                  To verify          
+   =============================================================================== ==============  ==  =============================================================================== ==============
+
+* == help needed
+
+**Documentation:**
+
+.. automodule:: jsmetrics.metrics.waviness_metrics
    :members:
    :imported-members:
    :undoc-members:

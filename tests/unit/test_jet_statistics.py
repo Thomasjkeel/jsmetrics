@@ -273,6 +273,18 @@ class TestBarnesPolvani2015(unittest.TestCase):
         self.assertEqual(round(float(result["jet_speed"].min()), 5), 13.52508)
 
 
+class TestGrisePolvani2016(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_u_data()
+
+    def test_metric(self):
+        result = jet_statistics.grise_polvani_2016(self.data)
+        jet_statistics.grise_polvani_2016(self.data["ua"])
+        self.assertEqual(float(result["jet_lat"].min()), 35.38)
+        self.assertEqual(float(result["jet_lat"].max()), 36.41)
+        self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.92644)
+
+
 class TestBarnesSimpson2017(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_u_data()
@@ -282,18 +294,6 @@ class TestBarnesSimpson2017(unittest.TestCase):
         result = test_func(self.data)
         self.assertEqual(round(float(result["jet_lat"].mean()), 5), 36.25)
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.05004)
-
-
-class TestGrisePolvani2017(unittest.TestCase):
-    def setUp(self):
-        self.data = set_up_test_u_data()
-
-    def test_metric(self):
-        result = jet_statistics.grise_polvani_2017(self.data)
-        jet_statistics.grise_polvani_2017(self.data["ua"])
-        self.assertEqual(float(result["jet_lat"].min()), 35.38)
-        self.assertEqual(float(result["jet_lat"].max()), 36.41)
-        self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.92644)
 
 
 class TestBracegirdle2018(unittest.TestCase):

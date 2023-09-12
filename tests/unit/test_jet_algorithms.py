@@ -133,7 +133,9 @@ class TestPenaOrtiz2013(unittest.TestCase):
 
     def test_get_local_wind_maxima_by_timeunit(self):
         test_func = jet_core_algorithms_components.get_local_wind_maxima_by_timeunit
-        self.assertRaises(ValueError, lambda: test_func(self.data.isel(time=0)))
+        self.assertRaises(
+            ValueError, lambda: test_func(self.data.isel(time=0), ws_threshold=30)
+        )
 
 
 class TestKuang2014(unittest.TestCase):

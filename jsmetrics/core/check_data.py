@@ -25,8 +25,8 @@ def check_input_data_is_xarray(func):
 
 def sort_xarray_data_coords(coords, ascending=True):
     """
-    Used in all metrics included in jsmetrics to sort the coordinates of the input data (e.g. lat or lon)
-    in ascending order.
+    Sort the coordinates of the input data (e.g. lat or lon). Sort in ascending order by default.
+    Used in all jet statistics and jet core algorithms included in this package.
 
     Parameters
     ----------

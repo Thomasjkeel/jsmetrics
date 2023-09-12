@@ -25,7 +25,7 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def archer_caldeira_2008(data):
     r"""
-    This method extracts three monthly-averaged jet stream properties via integrated quantities (windspeed, pressure and latitude) from u-component wind.
+    This method calculates three monthly-averaged jet stream properties via integrated quantities (windspeed, pressure and latitude) from u-component wind.
 
     This method returns three properties:
         1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:
@@ -437,7 +437,7 @@ def barnes_polvani_2015(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_simpson_2017(data):
     r"""
-    This method defines two outputs: 'jet_lat' and 'jet_speed' which are defined as the latitude and speed of the 10-day-averaged
+    This method calculates two outputs: 'jet_lat' and 'jet_speed' which are defined as the latitude and speed of the 10-day-averaged
     maximum zonally-averaged wind speed.
 
     This method was originally introduce in Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
@@ -516,12 +516,9 @@ def barnes_simpson_2017(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def grise_polvani_2017(data):
     r"""
-    Calculates maximum latitude of jet-stream to 0.01 degree resolution each time unit
+    This method calculates the maximum latitude of jet-stream to 0.01 degree resolution each time unit
     Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
 
-    See also Ceppi et al. 2012
-    Methodology is for Southern Hemisphere
-    NOTE: This method also uses poleward edge of sub-tropical dry zone and poleward edge of Hadley cell derived from precip. record
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -538,6 +535,8 @@ def grise_polvani_2017(data):
 
     Notes
     -----
+    See also Ceppi et al. 2012
+    This method was originally developed for the jet streams in the Southern Hemisphere
 
     Examples
     --------
@@ -611,7 +610,6 @@ def bracegirdle_et_al_2018(data):
     Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal wind climatology.
     Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
 
-    NOTE: Originally for Southern Hemisphere
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -628,6 +626,7 @@ def bracegirdle_et_al_2018(data):
 
     Notes
     -----
+    This method was originally developed for the jet streams in the Southern Hemisphere
 
     Examples
     --------

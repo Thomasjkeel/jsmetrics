@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 
 """
-    Jet-stream waviness metrics used in the literature.
+    Method which define jet-stream waviness from upper-air.
+    All methods are implementation from existing research which have been translated to Python for this package.
 
-    Classes and Functions ordered by paper publish year.
+    All functions return a xarray.Dataset.
+
+    The following waviness metrics are ordered by paper publish year.
 """
 
 # imports

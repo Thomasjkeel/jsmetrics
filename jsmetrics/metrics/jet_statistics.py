@@ -137,14 +137,13 @@ def archer_caldeira_2008(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     r"""
-    Follows an in-text description of 4-steps describing the algorithm of jet-stream identification from Woollings et al. (2010).
-    Will calculate this metric based on data (regardless of pressure level or time span etc.).
-
+    This method follows an in-text description of 4-steps describing the algorithm of jet-stream identification
+    from Woollings et al. (2010).
     This method returns four outputs:
         1. **jet_lat** -- latitude of maximum speed within low-pass filtered zonally averaged wind profile
-        2. **jet_speed** -- speed at the jet latitude within low-pass filtered zonally averaged wind profile
-        3. **ff_jet_lat** -- Fourier-filtered jet latitude by season
-        4. **ff_jet_speed** -- Fourier-filtered jet speed by season
+        2. **jet_speed** -- speed at the 'jet_lat'
+        3. **ff_jet_lat** -- Fourier-filtered 'jet_lat' by season
+        4. **ff_jet_speed** -- Fourier-filtered 'jet_speed' by season
 
     This method was first introduce in Woollings et al (2010) (http://dx.doi.org/10.1002/qj.625) and
     is described in section 2 of that study.
@@ -237,10 +236,21 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     r"""
-    Pressure weighted u-component wind then gets low-pass lanczos filtered (10-day, 41 weights) and 0.01 quadratic function applied
-    for jet-lat and speed. "We define the jet width as the full width at half of the maximum jet speed".
+    This method constructs the 'eddy-driven jet' by performing a pressure-weighted average of zonal winds. The winds
+    are then low-pass frequency filtered at each grid point using a 10-day Lanczos filter with 41 weights by default.
+    Finally a 0.01 degree quadratic function is fitted to the peak of the subsequent wind speed profile for each time step.
+    This method returns three outputs:
+        1. **jet_lat** -- latitude of maximum speed at an interval of 0.01 degree within the subseqeunt profile
+        2. **jet_speed** -- speed at the 'jet_lat'
+        3. **jet_width** -- full width at half of the maximum 'jet_speed' within the 0.01 quadratic fitted to the peak of the wind speed profile
 
-    Method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    *Note:* 'jet_width' is undefined where the 'jet_speed' never drops below half maximum.
+
+    This method was originally introduce in Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+    and is described in Section 2b and 2c of that study.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -258,7 +268,10 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
     Notes
     -----
-    Based on the method from Woollings et al. (2010) (http://dx.doi.org/10.1002/qj.625)
+    Whereas the original analysis using this method focuses on three distinct sections of the globe,
+    the method here does not make any distinction. Instead we highlight how to do subset the input data and
+    calculate this metric for those three sections in 'Examples.
+    This method was based on the method from Woollings et al. (2010) (http://dx.doi.org/10.1002/qj.625)
 
     Examples
     --------

@@ -513,6 +513,7 @@ def jet_core_identification_algorithm(
 
     The output variable of this method includes two types:
         0. regions not determined to be part of the jet
+
         1-n. Seperate jet core regions seperated by one condition: if two cores in the same region are more than 15 degrees of latitude away
 
     This method is inspired by the method from Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),

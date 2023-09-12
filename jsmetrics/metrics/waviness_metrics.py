@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    Method which define jet-stream waviness from upper-air.
+    Methods which define jet-stream waviness from upper-air.
     All methods are implementation from existing research which have been translated to Python for this package.
 
     All functions return a xarray.Dataset.

@@ -740,7 +740,7 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     Notes
     -----
     This method was improved by Zappa et al. (2018) https://doi.org/10.1029/2019GL083653,
-    which includes exclusion of :math:`<0 m s^{-1}` u-wind.
+    which includes exclusion of :math:`<0 m s^{-1}` u-wind. This method is also available in jsmetrics.
 
     Examples
     --------

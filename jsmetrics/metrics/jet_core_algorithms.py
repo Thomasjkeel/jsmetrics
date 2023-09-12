@@ -27,7 +27,7 @@ __status__ = "Development"
 def koch_et_al_2006(data, ws_threshold=30):
     r"""
     This method follows a two-step procedure used to detect jet-event occurences (here: 'jet_events_ws').
-    The weighted average windspeed for the jet events is calculated as follows:
+    The weighted average windspeed (:math:`\alpha vel`) for the jet events is calculated as follows:
 
     .. math::
         \alpha vel =  \frac{1}{p2-p1} \int_{p1}^{p2} (u^2+v^2)^{1/2} \,dp
@@ -64,6 +64,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     and 30 meters per second as the windspeed threshold.
 
     This equation for this method is provided on pg 287 of the Koch et al. 2006 paper.
+
     In the original paper, they accumulate the jet events into two-class jet typology (described in section 2.2.3
     of Koch et al. 2006)
 
@@ -120,10 +121,10 @@ def koch_et_al_2006(data, ws_threshold=30):
 def schiemann_et_al_2009(data, ws_threshold=30):
     r"""
     This method detects 'jet occurrences', whereby each jet occurence is detected based
-    on three rules applied to inputted wind speed (V = [u, v]):
-        1. \|V\| is a local maxima in latitude and altitude plane
-        2. \|V\| ≥ 30 m/s
-        3. \|u\| ≥ 0 m/s.
+    on three rules applied to inputted wind speed (:math:`V = [u, v]`):
+        1. :math:`|V|` is a local maxima in latitude and altitude plane
+        2. :math:`|V| \ge 30 ms^{-1}`
+        3. :math:`|u| \ge 0 ms^{-1}`.
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.

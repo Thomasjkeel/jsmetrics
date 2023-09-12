@@ -435,85 +435,6 @@ def barnes_polvani_2015(data):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def barnes_simpson_2017(data):
-    r"""
-    This method calculates two outputs: 'jet_lat' and 'jet_speed' which are defined as the latitude and speed of the 10-day-averaged
-    maximum zonally-averaged wind speed.
-
-    This method was originally introduce in Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
-    and is described in Section 2b of that study.
-
-    Please see 'Notes' below for any additional information about the implementation of this method
-    to this package.
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
-
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data containing the x outputs: 'jet_lat' and 'jet_speed'
-
-    Notes
-    -----
-    The original methodology was intended to work on one pressure level (700 hPa) and on daily data, for the
-    implementation included in this package, we have included methods to automatically average any inputted pressure levels
-    and to return the data without 10-day averaging if data above the 10-day resolution is inputted.
-    Instead, warnings are returned to user to help them use the method the way it was originally intended.
-
-    Examples
-    --------
-    .. code-block:: python
-
-        import jsmetrics
-        import xarray as xr
-
-        # Load in dataset with u component wind:
-        ua_data = xr.open_dataset('path_to_u_data')
-
-        # Subset dataset to range used in original methodology (700 hPa & North Atlantic & North Pacific)):
-        ua_na = ua.sel(plev=700, lat=slice(0, 90), lon=slice(280, 350)) # North Atlantic
-        ua_np = ua.sel(plev=700, lat=slice(0, 90), lon=slice(120, 230)) # North Pacific
-
-        # Run statistic:
-        bp17_na = jsmetrics.jet_statistics.barnes_simpson_2017(ua_na)
-        bp17_np = jsmetrics.jet_statistics.barnes_simpson_2017(ua_np)
-
-    """
-    if "plev" in data.dims:
-        if data["plev"].count() == 1:
-            data = data.isel(plev=0)
-        else:
-            print(
-                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
-            )
-            data = data.mean("plev")
-    data = data.mean("lon")
-    if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1 and "time" not in data.dims:
-        data = data.expand_dims("time")
-    if not data.indexes["time"].is_monotonic_increasing:
-        raise IndexError("Data needs to have a montonic increasing index")
-    # Check that data can be resampled into 10 days
-    if not data["time"].size == 1:
-        time_step_in_data = int((data["time"][1] - data["time"][0]).dt.days)
-        if time_step_in_data <= 10:
-            data = data.resample(time="10D").mean()
-            time_step_in_data = 10
-        else:
-            print(
-                f"Warning this method was developed for 10 day average and data has larger time-step than 10 days. Time step is {time_step_in_data} days"
-            )
-    #  Drop all NaN slices
-    data = data.dropna("time")
-    data = jet_statistics_components.calc_latitude_and_speed_where_max_ws(data)
-    return data
-
-
-@sort_xarray_data_coords(coords=["lat", "lon"])
 def grise_polvani_2016(data):
     r"""
     This method calculates the maximum latitude of jet-stream to 0.01 degree resolution each time unit
@@ -602,6 +523,85 @@ def grise_polvani_2016(data):
         }
     )
     return output
+
+
+@sort_xarray_data_coords(coords=["lat", "lon"])
+def barnes_simpson_2017(data):
+    r"""
+    This method calculates two outputs: 'jet_lat' and 'jet_speed' which are defined as the latitude and speed of the 10-day-averaged
+    maximum zonally-averaged wind speed.
+
+    This method was originally introduce in Barnes & Simpson 2017 https://doi.org/10.1175/JCLI-D-17-0299.1
+    and is described in Section 2b of that study.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing the x outputs: 'jet_lat' and 'jet_speed'
+
+    Notes
+    -----
+    The original methodology was intended to work on one pressure level (700 hPa) and on daily data, for the
+    implementation included in this package, we have included methods to automatically average any inputted pressure levels
+    and to return the data without 10-day averaging if data above the 10-day resolution is inputted.
+    Instead, warnings are returned to user to help them use the method the way it was originally intended.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology (700 hPa & North Atlantic & North Pacific)):
+        ua_na = ua.sel(plev=700, lat=slice(0, 90), lon=slice(280, 350)) # North Atlantic
+        ua_np = ua.sel(plev=700, lat=slice(0, 90), lon=slice(120, 230)) # North Pacific
+
+        # Run statistic:
+        bp17_na = jsmetrics.jet_statistics.barnes_simpson_2017(ua_na)
+        bp17_np = jsmetrics.jet_statistics.barnes_simpson_2017(ua_np)
+
+    """
+    if "plev" in data.dims:
+        if data["plev"].count() == 1:
+            data = data.isel(plev=0)
+        else:
+            print(
+                "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
+            )
+            data = data.mean("plev")
+    data = data.mean("lon")
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
+    if data["time"].size == 1 and "time" not in data.dims:
+        data = data.expand_dims("time")
+    if not data.indexes["time"].is_monotonic_increasing:
+        raise IndexError("Data needs to have a montonic increasing index")
+    # Check that data can be resampled into 10 days
+    if not data["time"].size == 1:
+        time_step_in_data = int((data["time"][1] - data["time"][0]).dt.days)
+        if time_step_in_data <= 10:
+            data = data.resample(time="10D").mean()
+            time_step_in_data = 10
+        else:
+            print(
+                f"Warning this method was developed for 10 day average and data has larger time-step than 10 days. Time step is {time_step_in_data} days"
+            )
+    #  Drop all NaN slices
+    data = data.dropna("time")
+    data = jet_statistics_components.calc_latitude_and_speed_where_max_ws(data)
+    return data
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])

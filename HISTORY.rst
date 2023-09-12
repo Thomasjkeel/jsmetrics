@@ -9,6 +9,7 @@ History
     * Write a more detailed description of each metric
     * Add examples and implementation notes to each metric  
 * Add ws_threshold parameter to Pena-Ortiz method
+* Rename Pena-Ortiz method to 'pena_ortiz_et_al_2016' (as earlier paper)
 
 0.1.6-alpha (2023-08-19)
 -------------------------

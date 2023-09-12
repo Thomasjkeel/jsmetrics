@@ -191,6 +191,15 @@ METRIC_DETAILS = {
         "description": "",
         "doi": "https://doi.org/10.1002/2016GL070309",
     },
+    "GrisePolvani2016": {
+        "variables": ["ua"],
+        "coords": {"plev": [85000, 85000], "lat": [-65, -30]},
+        "plev_units": "Pa",
+        "metric": jet_statistics.grise_polvani_2016,
+        "name": "Grise & Polvani 2016",
+        "description": "",
+        "doi": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015JD024687",
+    },
     "BarnesSimpson2017_NorthAtlantic": {
         "variables": ["ua"],
         "coords": {"plev": [70000, 70000], "lat": [1, 90], "lon": [280, 350]},
@@ -214,15 +223,6 @@ METRIC_DETAILS = {
                         maximum zonally-averaged wind speed. For more information see 'Notes'\
                         for this method available on the ReadTheDocs for jsmetrics",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
-    },
-    "GrisePolvani2016": {
-        "variables": ["ua"],
-        "coords": {"plev": [85000, 85000], "lat": [-65, -30]},
-        "plev_units": "Pa",
-        "metric": jet_statistics.grise_polvani_2016,
-        "name": "Grise & Polvani 2016",
-        "description": "",
-        "doi": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015JD024687",
     },
     "Bracegirdle2018_SouthernHemisphere": {
         "variables": ["ua"],

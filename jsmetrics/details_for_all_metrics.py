@@ -89,7 +89,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 North Atlantic",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "BarnesPolvani2013_NorthPacific": {
@@ -98,7 +99,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 North Pacific",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "BarnesPolvani2013_SouthernHemisphere": {
@@ -107,7 +109,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 Southern Hemisphere",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "PenaOrtiz2013": {
@@ -116,7 +119,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.penaortiz_et_al_2013,
         "name": "Pena-Ortiz et al. 2013",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1002/jgrd.50305",
     },
     # "ScreenSimmonds2013_NorthAmerica_NorthAtlantic": {
@@ -161,7 +165,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.kuang_et_al_2014,
         "name": "Kuang et al. 2014.",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1007/s00704-013-0994-x",
     },
     "BarnesPolvani2015_NorthAmerica_NorthAtlantic": {
@@ -170,7 +175,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2015,
         "name": "Barnes & Polvani 2015",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-14-00589.1",
     },
     "FrancisVavrus2015": {
@@ -179,7 +185,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": waviness_metrics.francis_vavrus_2015,
         "name": "Francis & Vavrus 2015",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1088/1748-9326/10/1/014005",
     },
     "Cattiaux2016": {
@@ -188,7 +195,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": waviness_metrics.cattiaux_et_al_2016,
         "name": "Cattiaux et al. 2016",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1002/2016GL070309",
     },
     "GrisePolvani2016": {
@@ -197,7 +205,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.grise_polvani_2016,
         "name": "Grise & Polvani 2016",
-        "description": "",
+        "description": "This method calculates the latitude of the midlatitude eddy-driven jet\
+                        by finding the peak value of the input u-wind field.\
+                        A polynomial fit is then applied to get an appropriate value of 'jet_lat'\
+                        at a resolution 0.01 degrees. For more information see 'Notes' for this\
+                        method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015JD024687",
     },
     "BarnesSimpson2017_NorthAtlantic": {
@@ -209,7 +221,7 @@ METRIC_DETAILS = {
         "description": "This method defines two outputs: 'jet_lat' and 'jet_speed' \
                         which are defined as the latitude and speed of the 10-day-averaged\
                         maximum zonally-averaged wind speed. For more information see 'Notes'\
-                        for this method available on the ReadTheDocs for jsmetrics",
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
     },
     "BarnesSimpson2017_NorthPacific": {
@@ -221,7 +233,7 @@ METRIC_DETAILS = {
         "description": "This method defines two outputs: 'jet_lat' and 'jet_speed' \
                         which are defined as the latitude and speed of the 10-day-averaged\
                         maximum zonally-averaged wind speed. For more information see 'Notes'\
-                        for this method available on the ReadTheDocs for jsmetrics",
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
     },
     "Bracegirdle2018_SouthernHemisphere": {
@@ -230,7 +242,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.bracegirdle_et_al_2018,
         "name": " Bracegirdle et al. 2018",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0320.1",
     },
     "Ceppi2018_NorthAtlantic_Europe": {
@@ -239,7 +252,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 North Atlantic",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Ceppi2018_NorthPacific": {
@@ -248,7 +262,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 North Pacific",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Ceppi2018_SouthernHemisphere": {
@@ -257,7 +272,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 Southern Hemisphere",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Zappa2018_NorthAtlantic": {
@@ -266,7 +282,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.zappa_et_al_2018,
         "name": "Zappa et al. 2018 North Atlantic",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "10.1002/2017GL076096",
     },
     "Zappa2018_NorthPacific": {
@@ -275,7 +292,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.zappa_et_al_2018,
         "name": "Zappa et al. 2018 North Pacific",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "10.1002/2017GL076096",
     },
     "Kerr2020_NorthernHemisphere": {
@@ -284,7 +302,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.kerr_et_al_2020,
         "name": "Kerr et al. 2020",
-        "description": "",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics.",
         "doi": "10.1029/2020JD032735",
     },
     # "BlackportFyfe2022_NorthAtlantic": {

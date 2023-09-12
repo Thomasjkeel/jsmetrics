@@ -72,6 +72,9 @@ def francis_vavrus_2015(data):
     This method was originally introduce in Francis & Vavrus (2015) https://doi.org/10.1088/1748-9326/10/1/014005
     and is described in the Section entitled: 'Meridional circulation Index (MCI)'.
 
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
+
     Parameters
     ----------
     data : xarray.Dataset
@@ -117,7 +120,11 @@ def cattiaux_et_al_2016(data):
     The value of sinuosity is selected using an isohype which precisely corresponds to the Z500 average over 30-70∘N .
     Then this value is compared to the perimeter at 50∘N to calculate sinuosity.
 
-    Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+    This method was first introduce in Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309 and
+    is described in section 3.1 of that study.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -131,6 +138,9 @@ def cattiaux_et_al_2016(data):
 
     Notes
     -----
+    The original implementation used the R package 'geosphere' to calculate sinuosity. Here we use the Python package
+    Shapely to calculate great circle distances between the two perimeters to calculate sinuosity.
+
     **Moderately slow method:** currently takes a moderate amount of time i.e. 2 seconds per 100 time units\
     with 1 plev on AMD Ryzen 5 3600 6-core processor
 

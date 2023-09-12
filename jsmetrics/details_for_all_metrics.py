@@ -210,7 +210,7 @@ METRIC_DETAILS = {
                         A polynomial fit is then applied to get an appropriate value of 'jet_lat'\
                         at a resolution 0.01 degrees. For more information see 'Notes' for this\
                         method available on the ReadTheDocs for jsmetrics.",
-        "doi": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015JD024687",
+        "doi": "https://doi.org/10.1002/2015JD024687",
     },
     "BarnesSimpson2017_NorthAtlantic": {
         "variables": ["ua"],
@@ -311,8 +311,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.kerr_et_al_2020,
         "name": "Kerr et al. 2020",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method defines the latitude and speed of the jet-stream where\
+                        the maximum zonal winds occur for each longitude and for each time unit\
+                        (i.e. day). These values are then smoothed across the longitudes with\
+                        a rectangular pulse (by default this has a width of 10 degrees). For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1029/2020JD032735",
     },
     # "BlackportFyfe2022_NorthAtlantic": {

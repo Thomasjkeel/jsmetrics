@@ -863,8 +863,9 @@ def zappa_et_al_2018(data, lon_resolution=None):
     Notes
     -----
     This method was adapted from and very similar to Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1.
-    This method is also used in Ayres & Screen, 2019 and Screen et al. 2022.
-    Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
+
+    This method is also used in Ayres & Screen, 2019 and Screen et al. 2022. Similar methods are used in:
+    Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
 
     Examples
     --------
@@ -951,10 +952,12 @@ def zappa_et_al_2018(data, lon_resolution=None):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def kerr_et_al_2020(data, width_of_pulse=10):
     r"""
-    Described in section 2.4.2 of paper. Defines the latitude of the jet-stream as where the
-    maximum zonal winds occur for each longitude for each time unit (i.e. day) before smoothing
-    with a rectangular pulse (of width 10 degrees) to get a moving average.
-    Method from Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+    This method defines the latitude and speed of the jet-stream where the maximum zonal winds occur for
+    each longitude and for each time unit (i.e. day). These values are then smoothed across the longitudes
+    with a rectangular pulse (by default this has a width of 10 degrees).
+
+    This method was originally introduced in Kerr et al. (2020) https://onlinelibrary.wiley.com/doi/10.1029/2020JD032735
+    and is described in Section 2.4.2 of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -967,13 +970,13 @@ def kerr_et_al_2020(data, width_of_pulse=10):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing jet-stream latitude by longitude and smoothed jet_latitude
-
-    output : xarray.Dataset
-        Data containing the x outputs: ''
+        Data containing the two outputs: 'jet_lat' and 'smoothed_jet_lat'
 
     Notes
     -----
+    This method was based on the method from Barnes and Fiore (2013) https://doi.org/10.1002/grl.50411
+
+    The implementation here returns both smoothed and unsmoothed jet latitude outputs.
 
     Examples
     --------

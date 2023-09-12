@@ -40,7 +40,7 @@ def archer_caldeira_2008(data):
 
         3. **mass flux weighted latitude** -- Latitude of the Northern Hemisphere jet (:math:`L^{NH}`), calculated by:
          .. math::
-            L_{i}^{NH} =  \frac{\sum\limits_{j=15N}^{j=70N} \left[\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \right] \times \phi_{i,j}}{\sum\limits_{j=15N}^{j=70N} \sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
+            L_{i}^{NH} =  \frac{\sum\limits_{j=15°N}^{j=70°N} \left[\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \right] \times \phi_{i,j}}{\sum\limits_{j=15N}^{j=70N} \sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
         where :math:`\phi_{i,j}` is the grid cell latitude.
 
     This method was originally introduce in Archer & Caldiera (2008) (https://doi.org/10.1029/2008GL033614)
@@ -711,7 +711,7 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     The centroid is calculate by:
 
     .. math::
-        \phi_{jet}  = \frac{\int_{30}^{60} \phi\bar{u}^2, d\phi}{\int_{30}^{60} \bar{u}^2, d\phi}
+        \phi_{jet}  = \frac{\int_{30°}^{60°} \phi\bar{u}^2, d\phi}{\int_{30°}^{60°} \bar{u}^2, d\phi}
 
     This method has been slightly adapted to include a jet speed extraction (provided for this method in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
 
@@ -820,11 +820,22 @@ def ceppi_et_al_2018(data, lon_resolution=None):
 def zappa_et_al_2018(data, lon_resolution=None):
     r"""
     Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
+
     This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
+
+    .. math::
+        \phi_{jet}  = \frac{\int_{20°}^{70°} \phi\bar{u}^2_0, d\phi}{\int_{20°}^{70°} \bar{u}^2_0, d\phi}
+
+    .. math::
+
+    **Note:** The implementation here does not explicit limit the centroid calculation to 20-70 North
+
     Method from Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
     Adapted from and very similar to Ceppi et al (2018).
     2.3
     Also used in Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
+
+
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.

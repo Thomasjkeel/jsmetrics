@@ -242,8 +242,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.bracegirdle_et_al_2018,
         "name": " Bracegirdle et al. 2018",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates the seasonal and annual jet-stream position ('JPOS')\
+                        and strength ('JSTR') by applying a 0.075 degree cubic spline interpolation to zonally-averaged\
+                        wind climatology and selecting the maximum. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0320.1",
     },
     "Ceppi2018_NorthAtlantic_Europe": {

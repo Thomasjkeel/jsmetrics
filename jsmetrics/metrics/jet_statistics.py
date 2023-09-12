@@ -393,7 +393,7 @@ def barnes_polvani_2015(data):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the x outputs: 'jet_lat' and 'jet_speed'
+        Data containing the two outputs: 'jet_lat' and 'jet_speed'
 
     Notes
     -----
@@ -437,8 +437,9 @@ def barnes_polvani_2015(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def grise_polvani_2016(data):
     r"""
-    This method calculates the maximum latitude of jet-stream to 0.01 degree resolution each time unit
-
+    This method calculates the latitude of the midlatitude eddy-driven jet ('jet_lat') by finding the peak value of the input u-wind field.
+    A polynomial fit is then applied to get an appropriate value of 'jet_lat' at a resolution 0.01 degrees.
+    As opposed to the original method, this implementation also returns the speed at the 'jet_lat': the 'jet_speed'
 
     This method was originally introduce in Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
     and is described in Section 2 of that study.
@@ -454,12 +455,13 @@ def grise_polvani_2016(data):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the x outputs: ''
+        Data containing the two outputs: 'jet_lat' and 'jet_speed'
 
     Notes
     -----
-    See also Ceppi et al. 2012
-    This method was originally developed for the jet streams in the Southern Hemisphere
+    This method was originally developed for the jet streams in the Southern Hemisphere.
+
+    The original paper also includes two other metrics for zonal mean atmospheric circulation.
 
     Examples
     --------
@@ -471,11 +473,11 @@ def grise_polvani_2016(data):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(-65, -30), lon=slice())
+        # Subset dataset to range used in original methodology (850 hPa &  -65--30N)):
+        ua_sub = ua.sel(plev=850, lat=slice(-65, -30))
 
         # Run statistic:
-        gp17 = jsmetrics.jet_statistics.grise_polvani_2016(ua_sub)
+        gp16 = jsmetrics.jet_statistics.grise_polvani_2016(ua_sub)
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
@@ -609,9 +611,12 @@ def barnes_simpson_2017(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def bracegirdle_et_al_2018(data):
     r"""
-    Calculates the seasonal and annual jet-stream position from a cubic spline interpolation of zonal wind climatology.
-    Method from Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
+    This method calculates the seasonal and annual jet-stream position ('JPOS') and strength ('JSTR')
+    by applying a 0.075 degrees cubic spline interpolation to a zonally-averaged wind climatology
+    and selecting the maximum.
 
+    This method was originally introduce in Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
+    and is described in Section 2 of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -624,16 +629,15 @@ def bracegirdle_et_al_2018(data):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the x outputs: ''
+        Data containing the four outputs: 'annual_JPOS', 'seasonal_JPOS', 'annual_JSTR' and 'seasonal_JSTR'
 
     Notes
     -----
-    This method was originally developed for the jet streams in the Southern Hemisphere
+    This method was originally developed for the jet streams in the Southern Hemisphere.
 
     Examples
     --------
     .. code-block:: python
-
 
         import jsmetrics
         import xarray as xr
@@ -641,8 +645,8 @@ def bracegirdle_et_al_2018(data):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+        # Subset dataset to range used in original methodology (850 hPa &  -75--10N)):
+        ua_sub = ua.sel(plev=850, lat=slice(-75, -10))
 
         # Run statistic:
         b18 = jsmetrics.jet_statistics.bracegirdle_et_al_2018(ua_sub)
@@ -702,11 +706,15 @@ def bracegirdle_et_al_2018(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def ceppi_et_al_2018(data, lon_resolution=None):
     r"""
-    Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
-    This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
-    Method from Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+    This method calculates the jet latitude ('jet-lat') as defined by selecting the centroid of a zonally-averaged wind profile.
+    The centroid is calculate by:
+    ..math::
+        \phi
 
-    Also see Zappa et al. 2018 method which includes exclusion of <0 m/s u-wind
+    This method has been slightly adapted to include a jet speed extraction (provided for this method in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
+
+    This method was originally introduce in Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
+    and is described in Section 2b of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -725,6 +733,9 @@ def ceppi_et_al_2018(data, lon_resolution=None):
 
     Notes
     -----
+    This method was improved by Zappa et al. (2018) https://doi.org/10.1029/2019GL083653,
+    which includes exclusion of <0 m/s u-wind
+
 
     Examples
     --------
@@ -810,7 +821,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
     This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
     Method from Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
     Adapted from and very similar to Ceppi et al (2018).
-
+    2.3
     Also used in Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
 
     Please see 'Notes' below for any additional information about the implementation of this method

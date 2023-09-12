@@ -825,9 +825,9 @@ def ceppi_et_al_2018(data, lon_resolution=None):
 
 def zappa_et_al_2018(data, lon_resolution=None):
     r"""
-    Calculates the jet latitude per time unit where jet-lat is defined as a centroid of a zonal wind distribution.
+    This method calculates the jet latitude ('jet-lat') as defined by selecting the centroid of a zonally-averaged wind profile.
 
-    This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
+    The centroid is calculated by:
 
     .. math::
         \phi_{jet}  = \frac{\int_{20°}^{70°} \phi\bar{u}^2_0, d\phi}{\int_{20°}^{70°} \bar{u}^2_0, d\phi}
@@ -838,10 +838,10 @@ def zappa_et_al_2018(data, lon_resolution=None):
     **Note:** The implementation here does not explicit limit the centroid calculation to latitude between 20°-70°,
     instead this range is determined by the input data.
 
-    Method from Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
-    Adapted from and very similar to Ceppi et al (2018).
-    2.3
-    Also used in Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
+    This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
+
+    This method was originally introduce in Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
+    and is described in Section 2.3 of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -860,6 +860,9 @@ def zappa_et_al_2018(data, lon_resolution=None):
 
     Notes
     -----
+    This method was adapted from and very similar to Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1.
+    This method is also used in Ayres & Screen, 2019 and Screen et al. 2022.
+    Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
 
     Examples
     --------
@@ -877,7 +880,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
 
 
         # Run statistic:
-        z18_np = jsmetrics.jet_statistics.zappa_et_al_2018(ua_na)
+        z18_na = jsmetrics.jet_statistics.zappa_et_al_2018(ua_na)
         z18_np = jsmetrics.jet_statistics.zappa_et_al_2018(ua_np)
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells

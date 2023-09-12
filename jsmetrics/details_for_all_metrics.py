@@ -287,8 +287,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.zappa_et_al_2018,
         "name": "Zappa et al. 2018 North Atlantic",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. It differs from Ceppi et al. 2018\
+                        by also flooring the u-wind input to 0. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1002/2017GL076096",
     },
     "Zappa2018_NorthPacific": {
@@ -297,8 +299,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.zappa_et_al_2018,
         "name": "Zappa et al. 2018 North Pacific",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. It differs from Ceppi et al. 2018\
+                        by also flooring the u-wind input to 0. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1002/2017GL076096",
     },
     "Kerr2020_NorthernHemisphere": {

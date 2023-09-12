@@ -842,7 +842,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
     This method has been slightly adapted to include a 'jet_speed' extraction (provided for this method
     in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
 
-    This method was originally introduce in Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
+    This method was originally introduced in Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
     and is described in Section 2.3 of that study.
 
     Please see 'Notes' below for any additional information about the implementation of this method

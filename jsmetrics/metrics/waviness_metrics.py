@@ -112,7 +112,7 @@ def francis_vavrus_2015(data):
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def cattiaux_et_al_2016(data):
-    """
+    r"""
     A sinousity metric for upper-air flow.
     Calculates, for each time unit, the value of the selected isohypse precisely corresponds to the Z500 average over 30–70∘N .
     Then uses the perimeter of this isohype and around 50 .N to calculate sinuosity

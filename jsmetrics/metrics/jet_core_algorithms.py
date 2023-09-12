@@ -123,8 +123,8 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     This method detects 'jet occurrences', whereby each jet occurence is detected based
     on three rules applied to inputted wind speed (:math:`V = [u, v]`):
         1. :math:`|V|` is a local maxima in latitude and altitude plane
-        2. :math:`|V| \ge 30 ms^{-1}`
-        3. :math:`u \ge 0 ms^{-1}`.
+        2. :math:`|V| \ge 30 m s^{-1}`
+        3. :math:`u \ge 0 m s^{-1}`.
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.

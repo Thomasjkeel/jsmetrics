@@ -708,12 +708,15 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     r"""
     This method calculates the jet latitude ('jet-lat') as defined by selecting the centroid of a zonally-averaged wind profile.
 
-    The centroid is calculate by:
+    The centroid is calculated by:
 
     .. math::
         \phi_{jet}  = \frac{\int_{30°}^{60°} \phi\bar{u}^2, d\phi}{\int_{30°}^{60°} \bar{u}^2, d\phi}
 
     This method has been slightly adapted to include a jet speed extraction (provided for this method in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
+
+    **Note:** The implementation here does not explicit limit the centroid calculation to latitude between 20°-70°,
+    instead this range is determined by the input data.
 
     This method was originally introduce in Ceppi et al (2018) https://doi.org/10.1175/JCLI-D-17-0323.1
     and is described in Section 2b of that study.
@@ -731,13 +734,12 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the x outputs: ''
+        Data containing the three outputs: 'jet_lat', 'jet_speed', 'total_area_m2'
 
     Notes
     -----
     This method was improved by Zappa et al. (2018) https://doi.org/10.1029/2019GL083653,
-    which includes exclusion of <0 m/s u-wind
-
+    which includes exclusion of :math:`<0 m s^{-1}` u-wind.
 
     Examples
     --------
@@ -749,11 +751,15 @@ def ceppi_et_al_2018(data, lon_resolution=None):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+        # Subset dataset to range used in original methodology (850 hPa &  30-60N/S)):
+        ua_na = ua.sel(plev=850, lat=slice(30, 60), lon=slice(300, 60)) # North Atlantic-European Sector
+        ua_na = ua.sel(plev=850, lat=slice(30, 60), lon=slice(140, 240)) # North Pacific
+        ua_sh = ua.sel(plev=850, lat=slice(-60, -30)) # Southern Hemisphere
 
         # Run statistic:
-        c18 = jsmetrics.jet_statistics.ceppi_et_al_2018(ua_sub)
+        c18_na = jsmetrics.jet_statistics.ceppi_et_al_2018(ua_na)
+        c18_np = jsmetrics.jet_statistics.ceppi_et_al_2018(ua_np)
+        c18_sh = jsmetrics.jet_statistics.ceppi_et_al_2018(ua_sh)
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:
@@ -827,15 +833,15 @@ def zappa_et_al_2018(data, lon_resolution=None):
         \phi_{jet}  = \frac{\int_{20°}^{70°} \phi\bar{u}^2_0, d\phi}{\int_{20°}^{70°} \bar{u}^2_0, d\phi}
 
     .. math::
+        u_0(\phi) = \max(0, u(\phi))
 
-    **Note:** The implementation here does not explicit limit the centroid calculation to 20-70 North
+    **Note:** The implementation here does not explicit limit the centroid calculation to latitude between 20°-70°,
+    instead this range is determined by the input data.
 
     Method from Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
     Adapted from and very similar to Ceppi et al (2018).
     2.3
     Also used in Ayres & Screen, 2019 and Screen et al. 2022. Similar methods used in: Chen et al. 2008; Ceppi et al. 2014, Ceppi et al. 2018.
-
-
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -850,7 +856,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the x outputs: ''
+        Data containing the three outputs: 'jet_lat', 'jet_speed', 'total_area_m2'
 
     Notes
     -----
@@ -865,11 +871,14 @@ def zappa_et_al_2018(data, lon_resolution=None):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+        # Subset dataset to range used in original methodology (850 hPa &  20-70N, 140∘E-240∘E or 300-360 E))):
+        ua_na = ua.sel(plev=850, lat=slice(20, 70), lon=slice(140, 240))
+        ua_np = ua.sel(plev=850, lat=slice(20, 70), lon=slice(300, 360))
+
 
         # Run statistic:
-        z18 = jsmetrics.jet_statistics.zappa_et_al_2018(ua_sub)
+        z18_np = jsmetrics.jet_statistics.zappa_et_al_2018(ua_na)
+        z18_np = jsmetrics.jet_statistics.zappa_et_al_2018(ua_np)
     """
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:

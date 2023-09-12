@@ -254,8 +254,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 North Atlantic",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Ceppi2018_NorthPacific": {
@@ -264,8 +265,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 North Pacific",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Ceppi2018_SouthernHemisphere": {
@@ -274,8 +276,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.ceppi_et_al_2018,
         "name": "Ceppi et al. 2018 Southern Hemisphere",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates the jet latitude ('jet-lat') as defined by selecting\
+                        the centroid of a zonally-averaged wind profile. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "10.1175/JCLI-D-17-0323.1",
     },
     "Zappa2018_NorthAtlantic": {

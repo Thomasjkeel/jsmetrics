@@ -713,7 +713,8 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     .. math::
         \phi_{jet}  = \frac{\int_{30°}^{60°} \phi\bar{u}^2, d\phi}{\int_{30°}^{60°} \bar{u}^2, d\phi}
 
-    This method has been slightly adapted to include a jet speed extraction (provided for this method in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
+    This method has been slightly adapted to include a 'jet_speed' extraction (provided for this method
+    in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
 
     **Note:** The implementation here does not explicit limit the centroid calculation to latitude between 20°-70°,
     instead this range is determined by the input data.
@@ -838,7 +839,8 @@ def zappa_et_al_2018(data, lon_resolution=None):
     **Note:** The implementation here does not explicit limit the centroid calculation to latitude between 20°-70°,
     instead this range is determined by the input data.
 
-    This method has been slightly adapted to include a jet speed extraction (after Screen et al. 2022 and refs therein).
+    This method has been slightly adapted to include a 'jet_speed' extraction (provided for this method
+    in Screen et al. (2022) https://doi.org/10.1029/2022GL100523).
 
     This method was originally introduce in Zappa et al. 2018 https://doi.org/10.1029/2019GL083653
     and is described in Section 2.3 of that study.

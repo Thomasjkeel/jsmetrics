@@ -63,6 +63,7 @@ def archer_caldeira_2008(data):
     -----
     While the initial methodology provides limits for pressure level (100-400 hPa), here the mass weighted outputs
     will be calculated for any pressure levels passed into the method.
+
     The latitude calculation is limited to 15-70N (as we only provide a way to extract the Northern Hemisphere jet),
     but you may find it easy enough to edit this method to calculate outputs for a different region.
 
@@ -274,6 +275,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     Whereas the original analysis using this method focuses on three distinct sections of the globe,
     the method here does not make any distinction. Instead we highlight how to do subset the input data and
     calculate this metric for those three sections in 'Examples.
+
     This method was based on the method from Woollings et al. (2010) (http://dx.doi.org/10.1002/qj.625)
 
     Examples
@@ -392,6 +394,8 @@ def barnes_polvani_2015(data):
 
     Notes
     -----
+    This methodology make an assumption that the a parabola can be fit to windspeed profile, so it performs quite different from
+    other jet latitude methods available in the package where the windspeed profile is more complex (and on data with finer temporal resolution).
 
     Examples
     --------

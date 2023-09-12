@@ -419,7 +419,9 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def kuang_et_al_2014(data, occurence_ws_threshold=30):
     r"""
-    This method produces an event-based jet occurrence and jet center occurrence of JS.
+    This method produces an event-based jet occurrences and jet center occurrences of the jet stream
+    in a given atmospheric column.
+
     The outputs of this method will produce categorical values of three types:
         0. is not determined to be part of the jet
         1. is a jet occurence

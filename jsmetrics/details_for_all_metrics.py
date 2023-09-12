@@ -65,8 +65,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.woollings_et_al_2010,
         "name": "Woollings et al. 2010 North Atlantic",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics",
+        "description": "This method follows an in-text description of 4-steps describing the algorithm\
+                        of jet-stream identification from Woollings et al. (2010). For more information\
+                        see 'Notes' for this method available on the ReadTheDocs for jsmetrics",
         "doi": "https://onlinelibrary.wiley.com/doi/10.1002/qj.625",
     },
     "Manney2011": {
@@ -89,8 +90,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 North Atlantic",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method constructs the 'eddy-driven jet' by performing a pressure-weighted average\
+                        of zonal winds. The winds are then low-pass frequency filtered at each grid point using\
+                        a 10-day Lanczos filter with 41 weights by default. Finally a 0.01 degree quadratic function\
+                        is fitted to the peak of the subsequent wind speed profile for each time step. For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "BarnesPolvani2013_NorthPacific": {
@@ -99,8 +103,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 North Pacific",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method constructs the 'eddy-driven jet' by performing a pressure-weighted average\
+                        of zonal winds. The winds are then low-pass frequency filtered at each grid point using\
+                        a 10-day Lanczos filter with 41 weights by default. Finally a 0.01 degree quadratic function\
+                        is fitted to the peak of the subsequent wind speed profile for each time step. For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "BarnesPolvani2013_SouthernHemisphere": {
@@ -109,8 +116,11 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2013,
         "name": "Barnes & Polvani 2013 Southern Hemisphere",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method constructs the 'eddy-driven jet' by performing a pressure-weighted average\
+                        of zonal winds. The winds are then low-pass frequency filtered at each grid point using\
+                        a 10-day Lanczos filter with 41 weights by default. Finally a 0.01 degree quadratic function\
+                        is fitted to the peak of the subsequent wind speed profile for each time step. For more\
+                        information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-12-00536.1",
     },
     "PenaOrtiz2013": {
@@ -119,7 +129,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.penaortiz_et_al_2013,
         "name": "Pena-Ortiz et al. 2013",
-        "description": "For more information see 'Notes' for this method available on the\
+        "description": "This method follows a two step procedure for calculating local wind maxima and then\
+                        subcategorising the local maxima into two distinct jet masks: the Subtropical Jet (STJ)\
+                        and Polar Front Jet (PFJ). For more information see 'Notes' for this method available on the\
                         ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1002/jgrd.50305",
     },
@@ -165,8 +177,9 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_core_algorithms.kuang_et_al_2014,
         "name": "Kuang et al. 2014.",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method produces an event-based jet occurrences and jet center occurrences of the\
+                        jet stream in a given atmospheric column. For more information see 'Notes' for this\
+                        method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1007/s00704-013-0994-x",
     },
     "BarnesPolvani2015_NorthAmerica_NorthAtlantic": {
@@ -175,8 +188,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_polvani_2015,
         "name": "Barnes & Polvani 2015",
-        "description": "For more information see 'Notes' for this method available on the\
-                        ReadTheDocs for jsmetrics.",
+        "description": "This method calculates the jet positon and wind speed at that position by fitting a parabola\
+                        around the maximum of zonally average u-component wind speed, using the magnitude at the\
+                        maximum ('jet_speed') and latitude at that maximum ('jet_lat'). For more information see\
+                        'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1175/JCLI-D-14-00589.1",
     },
     "FrancisVavrus2015": {

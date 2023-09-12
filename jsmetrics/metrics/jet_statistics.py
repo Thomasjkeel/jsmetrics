@@ -376,11 +376,11 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_polvani_2015(data):
     r"""
-    Calculates the jet speed and jet position by fitting a parabola around the
-    maximum of zonally average wind and taking the maximum magnitude and position
-    to be the jet speed and jet latitude respectively.
+    This method calculates the jet positon and wind speed at that position by fitting a parabola around the
+    maximum of zonally average u-component wind speed, using the magnitude at the maximum ('jet_speed') and latitude at that maximum ('jet_lat').
 
-    Method from Barnes & Polvani (2015) https://doi.org/10.1175/JCLI-D-14-00589.1
+    This method was originally introduce in Barnes & Polvani (2015) https://doi.org/10.1175/JCLI-D-14-00589.1
+    and is described in Section 2b of that study.
 
     Parameters
     ----------
@@ -390,12 +390,13 @@ def barnes_polvani_2015(data):
     Returns
     ----------
     output : xarray.Dataset
-        Data containing the x outputs: ''
+        Data containing the x outputs: 'jet_lat' and 'jet_speed'
 
     Notes
     -----
     This methodology make an assumption that the a parabola can be fit to windspeed profile, so it performs quite different from
-    other jet latitude methods available in the package where the windspeed profile is more complex (and on data with finer temporal resolution).
+    other jet latitude methods available in the package in cases where the windspeed profile is more complex (multiple jets),
+    and on data with finer temporal resolution in general.
 
     Examples
     --------

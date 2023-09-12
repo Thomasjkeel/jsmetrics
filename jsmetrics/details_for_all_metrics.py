@@ -37,7 +37,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.archer_caldeira_2008,
         "name": "Archer & Caldeira 2008",
-        "description": "",
+        "description": "This method extracts three monthly-averaged jet stream properties\
+                        via integrated quantities (windspeed, pressure and latitude) from u-component wind.\
+                        For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics",
         "doi": "https://doi.org/10.1029/2008GL033614",
     },
     "Schiemann2009": {
@@ -62,7 +65,8 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.woollings_et_al_2010,
         "name": "Woollings et al. 2010 North Atlantic",
-        "description": "exact coords for metric are: [92500, 85000, 77500, 70000]",
+        "description": "For more information see 'Notes' for this method available on the\
+                        ReadTheDocs for jsmetrics",
         "doi": "https://onlinelibrary.wiley.com/doi/10.1002/qj.625",
     },
     "Manney2011": {
@@ -193,7 +197,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_simpson_2017,
         "name": "Barnes & Simpson 2017 North Atlantic",
-        "description": "",
+        "description": "This method defines two outputs: 'jet_lat' and 'jet_speed' \
+                        which are defined as the latitude and speed of the 10-day-averaged\
+                        maximum zonally-averaged wind speed. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
     },
     "BarnesSimpson2017_NorthPacific": {
@@ -202,7 +209,10 @@ METRIC_DETAILS = {
         "plev_units": "Pa",
         "metric": jet_statistics.barnes_simpson_2017,
         "name": "Barnes & Simpson 2017 North Pacific",
-        "description": "",
+        "description": "This method defines two outputs: 'jet_lat' and 'jet_speed' \
+                        which are defined as the latitude and speed of the 10-day-averaged\
+                        maximum zonally-averaged wind speed. For more information see 'Notes'\
+                        for this method available on the ReadTheDocs for jsmetrics",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
     },
     "GrisePolvani2017": {

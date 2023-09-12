@@ -988,8 +988,8 @@ def kerr_et_al_2020(data, width_of_pulse=10):
         # Load in dataset with u component wind:
         ua_data = xr.open_dataset('path_to_u_data')
 
-        # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+        # Subset dataset to range used in original methodology (700 hPa &  20-70N,  300-360W)):
+        ua_sub = ua.sel(plev=700, lat=slice(20, 70), lon=slice(300, 360))
 
         # Run statistic:
         k20 = jsmetrics.jet_statistics.kerr_et_al_2020(ua_sub)

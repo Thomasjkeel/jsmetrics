@@ -42,11 +42,11 @@ def archer_caldeira_2008(data):
             L_{i}^{NH} =  \frac{\sum\limits_{j=15N}^{j=70N} \left[\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \right] \times \phi_{i,j}}{\sum\limits_{j=15N}^{j=70N} \sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
         where :math:`\phi_{i,j}` is the grid cell latitude.
 
-    **Note:** this method does not explicitly limit inputted wind to 100-400 hPa, see 'Notes' for more information about the implementation of this method
-    to this package.
-
     This method was originally introduce in Archer & Caldiera (2008) (https://doi.org/10.1029/2008GL033614)
     and is described in Section 3 of that study.
+
+    **Note:** this method does not explicitly limit inputted wind to 100-400 hPa, see 'Notes' for more information about the implementation of this method
+    to this package.
 
     Parameters
     ----------

@@ -215,14 +215,14 @@ METRIC_DETAILS = {
                         for this method available on the ReadTheDocs for jsmetrics",
         "doi": "https://doi.org/10.1175/JCLI-D-17-0299.1",
     },
-    "GrisePolvani2017": {
+    "GrisePolvani2016": {
         "variables": ["ua"],
         "coords": {"plev": [85000, 85000], "lat": [-65, -30]},
         "plev_units": "Pa",
-        "metric": jet_statistics.grise_polvani_2017,
-        "name": "Grise & Polvani 2017",
+        "metric": jet_statistics.grise_polvani_2016,
+        "name": "Grise & Polvani 2016",
         "description": "",
-        "doi": "https://journals.ametsoc.org/doi/10.1175/JCLI-D-16-0849.1",
+        "doi": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1002/2015JD024687",
     },
     "Bracegirdle2018_SouthernHemisphere": {
         "variables": ["ua"],

@@ -514,10 +514,10 @@ def barnes_simpson_2017(data):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def grise_polvani_2017(data):
+def grise_polvani_2016(data):
     r"""
     This method calculates the maximum latitude of jet-stream to 0.01 degree resolution each time unit
-    Method from Grise & Polvani (2017) https://doi.org/10.1175/JCLI-D-16-0849.1
+    Method from Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
 
 
     Please see 'Notes' below for any additional information about the implementation of this method
@@ -549,10 +549,10 @@ def grise_polvani_2017(data):
         ua_data = xr.open_dataset('path_to_u_data')
 
         # Subset dataset to range used in original methodology ( hPa &  N,  W)):
-        ua_sub = ua.sel(plev=slice(), lat=slice(), lon=slice())
+        ua_sub = ua.sel(plev=slice(), lat=slice(-65, -30), lon=slice())
 
         # Run statistic:
-        gp17 = jsmetrics.jet_statistics.grise_polvani_2017(ua_sub)
+        gp17 = jsmetrics.jet_statistics.grise_polvani_2016(ua_sub)
     """
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()

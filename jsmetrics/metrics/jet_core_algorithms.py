@@ -151,7 +151,7 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     While the original method is built on a four dimension slice of wind speed (time, lat, lon, plev),
     This implementation will work where there is only one pressure level, so a 3-d slice (time, lat, lon).
 
-    **Slow method:** Due to the nature of this method, it currently takes a very long time to run,
+    **Slow method:** due to the nature of this method, it currently takes a very long time to run,
     i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
 
     Examples
@@ -254,7 +254,8 @@ def manney_et_al_2011(
     The implementation of this method varies slightly from the original, in that this method will return
     variables that have 0, 1+ values, so that the user can use these as a mask on other variables such as windspeed
     (see 'Examples' for demonstration of how to use the mask).
-    Also, 'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
+
+    'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
     encompass jet cores.
 
     Examples
@@ -353,7 +354,8 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
     -----
     See Table 1 in the respective paper for the categories used to seperate the STJ and PFJ.
     The STJ is only seperated in DJF for the Northern Hemisphere.
-    Currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day)
+
+    **Slow method**: currently takes a long time i.e. 1.3 seconds per time unit with 8 plevs (i.e. 1.3 seconds per day)
     on a AMD Ryzen 5 3600 6-core processor.
 
     Examples
@@ -443,7 +445,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
 
     Notes
     -----
-    Currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
+    **Slow method**: currently takes a long time i.e. 2 seconds per time unit with 1 plev (i.e. 2 seconds per day) on AMD Ryzen 5 3600 6-core processor
 
     Examples
     --------
@@ -505,7 +507,8 @@ def jet_core_identification_algorithm(
 ):
     r"""
     This method extract seperate jet cores based on boundary and core windspeed thresholds.
-    The output includes two types:
+
+    The output variable of this method includes two types:
         0. regions not determined to be part of the jet
         1-n. Seperate jet core regions seperated by one condition: if two cores in the same region are more than 15 degrees of latitude away
 

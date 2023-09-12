@@ -81,7 +81,7 @@ def archer_caldeira_2008(data):
         uv_sub = uv_data.sel(plev=slice(100, 400), lat=slice(15, 70))
 
         # Run statistic:
-        archer_outputs = jsmetrics.jet_statistcs.archer_caldiera_2008(uv_sub)
+        archer_outputs = jsmetrics.jet_statistics.archer_caldiera_2008(uv_sub)
 
         # Subset mass weighted wind by a windspeed threshold
         windspeed_threshold = 15 # remember this is for monthly averages

@@ -64,7 +64,7 @@ def francis_vavrus_2015(data):
 
     MCI is calculated as follows:
 
-    ..math::
+    .. math::
         MCI = \frac{v*|v|}{u^2+v^2}
 
     When MCI = 0, the wind is purely zonal, and when MCI= 1 (-1), the flow is from the South (North).
@@ -96,11 +96,11 @@ def francis_vavrus_2015(data):
         # Load in dataset with u and v components:
         uv_data = xr.open_dataset('path_to_uv_data')
 
-        # Subset dataset to range used in original methodology for the NH jet (500 hPa & 20-80 N)):
+        # Subset dataset to range used in original methodology (500 hPa & 20-80 N)):
         uv_sub = uv_data.sel(plev=500, lat=slice(20, 80))
 
         # Run statistic:
-        fv15 = jsmetrics.jet_statistcs.francis_vavrus_2015(uv_sub)
+        fv15 = jsmetrics.waviness_metrics.francis_vavrus_2015(uv_sub)
 
         # Express MCI as a seasonal anomaly
         fv15_seasonal_anomalies = (mci['mci'] - mci['mci'].groupby('time.season').mean())
@@ -113,12 +113,11 @@ def francis_vavrus_2015(data):
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def cattiaux_et_al_2016(data):
     r"""
-    A sinousity metric for upper-air flow.
-    Calculates, for each time unit, the value of the selected isohypse precisely corresponds to the Z500 average over 30–70∘N .
+    This method calculates a sinousity metric for upper-air flow using geopotential height.
+    The value of sinuosity is selected isohypse precisely corresponds to the Z500 average over 30–70∘N .
     Then uses the perimeter of this isohype and around 50 .N to calculate sinuosity
-    Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
-    NOTE: Currently takes a moderate amount of time i.e. 2 seconds per 100 time unit with 1 plev on AMD Ryzen 5 3600 6-core processor
+    Method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
 
     Parameters
     ----------
@@ -129,7 +128,29 @@ def cattiaux_et_al_2016(data):
     ----------
     data : xarray.Dataset
         Data containing sinuosity of zonal mean by each time unit
+
+    Notes
+    -----
+    **Moderately slow method:** currently takes a moderate amount of time i.e. 2 seconds per 100 time units\
+    with 1 plev on AMD Ryzen 5 3600 6-core processor
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u and v components:
+        zg_data = xr.open_dataset('path_to_zg_data')
+
+        # Subset dataset to range used in original methodology (500 hPa & 00-90 N)):
+        zg_sub = zg_data.sel(plev=500, lat=slice(0, 90))
+
+        # Run statistic:
+        c16 = jsmetrics.waviness_metrics.cattiaux_et_al_2016(zg_sub)
     """
+    # Check input is xarray.Dataset
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
 

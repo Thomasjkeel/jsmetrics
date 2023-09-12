@@ -26,7 +26,8 @@ __status__ = "Development"
 def archer_caldeira_2008(data):
     r"""
     This method extracts three monthly-averaged jet stream properties via integrated quantities (windspeed, pressure and latitude) from u-component wind.
-    These three properties are:
+
+    This method returns three properties:
         1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:
          .. math::
             WS_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k}}
@@ -139,6 +140,7 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     r"""
     This method follows an in-text description of 4-steps describing the algorithm of jet-stream identification
     from Woollings et al. (2010).
+
     This method returns four outputs:
         1. **jet_lat** -- latitude of maximum speed within low-pass filtered zonally averaged wind profile
         2. **jet_speed** -- speed at the 'jet_lat'
@@ -239,6 +241,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
     This method constructs the 'eddy-driven jet' by performing a pressure-weighted average of zonal winds. The winds
     are then low-pass frequency filtered at each grid point using a 10-day Lanczos filter with 41 weights by default.
     Finally a 0.01 degree quadratic function is fitted to the peak of the subsequent wind speed profile for each time step.
+
     This method returns three outputs:
         1. **jet_lat** -- latitude of maximum speed at an interval of 0.01 degree within the subseqeunt profile
         2. **jet_speed** -- speed at the 'jet_lat'

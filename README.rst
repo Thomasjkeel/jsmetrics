@@ -1,4 +1,4 @@
-.. image:: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/docs/logos/jsmetrics_logo_tiny.png
+.. image:: https://github.com/Thomasjkeel/jsmetrics/docs/logos/jsmetrics_logo_tiny.png
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
    :align: center
    :alt: jsmetrics

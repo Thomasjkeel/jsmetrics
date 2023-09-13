@@ -45,8 +45,8 @@ Quick start
    |                                                        | | algorithm has discovered jet cores. Our reccomendation is to    |
    |                                                        | | use 'koch_et_al_2006', which provides a weighted windspeed and  |
    |                                                        | | or 'manney_et_al_2011' which will seperate different jet cores  |
-   |                                                        | | within the same region. Be warned that most of the jet core     |
-   |                                                        | | algorithms are rather computationally expensive, so read the    |
+   |                                                        | | within the same region. Be warned that most of the 5 jet core   |
+   |                                                        | | algorithms available are computationally expensive, so read the |
    |                                                        | | docstring of a given method for some information about run time |
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | Know the waviness of the jet stream or upper-air flow  | | Methods for quantifying the waviness of the jet stream are      |

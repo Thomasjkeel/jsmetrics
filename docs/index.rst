@@ -66,7 +66,7 @@ You can find details of each metric or algorithm here: `all metrics`_.
 
 Metrics & Algorithms
 --------------------
-See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `Status`_.
+See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `status`_.
 
 
 .. table::
@@ -97,7 +97,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
 * == help needed
 
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
-.. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
+.. _status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 .. 
         _also mention related references (i.e. Manney et al. )

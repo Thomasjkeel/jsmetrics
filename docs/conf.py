@@ -108,7 +108,8 @@ html_static_path = ["_static"]
 html_theme_options = {
     "logo_only": True,
     "style_external_links": True,
-    "style_nav_header_background": "white",
+    "style_nav_header_background": "#9aa7e3",
+    "relbarbgcolor": "red",
 }
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.

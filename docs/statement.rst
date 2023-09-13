@@ -4,7 +4,7 @@ Why use jsmetrics?
 
 
 Quick help
-------------------------
+----------
 .. table::
    :align: left
    :widths: auto
@@ -18,6 +18,16 @@ Quick help
    ...                                                     ...
    ======================================================= ===============================================
  
+
+What are jet-streams?
+---------------------
+Jet streams are features of the atmospheric circulation that manifest as fast-flowing ribbons of air, usually around
+8-12 km above the surface. 
+They form in regions of extreme temperature gradients
+
+They is no exact definition for what is and not a 'jet-stream' at any scale, as such differences in their measurement. 
+
+
 
 .. Built from sub-components
 .. ----------------------------

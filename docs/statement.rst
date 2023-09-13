@@ -38,10 +38,10 @@ Quick start
    |                                                        | | Around 8 jet speed methods are available in this package,       |
    |                                                        | | the most commonly used is 'woollings_et_al_2010'.               |
    +--------------------------------------------------------+-------------------------------------------------------------------+
-   | Make a map of the jet stream                           | | Methods for identifying the location of jets are provided by    | 
-   |                                                        | | the :ref:`jet core algorithms <jet core algorithms>` group of   |
-   |                                                        | | methods available in *jsmetrics*. These methods all provide a   |
-   |                                                        | | mask of the latitude/longitude/level coordinates where a given  |
+   | Make a map of the jet stream                           | | Methods for identifying the coordinates of jets on are provided | 
+   |                                                        | | by the :ref:`jet core algorithms <jet core algorithms>` group   |
+   |                                                        | | of methods available in *jsmetrics*. These methods all produce  |
+   |                                                        | | masks of the latitude/longitude/level coordinates where a given |
    |                                                        | | algorithm has discovered jet cores. Our reccomendation is to    |
    |                                                        | | use 'koch_et_al_2006', which provides a weighted windspeed and  |
    |                                                        | | or 'manney_et_al_2011' which will seperate different jet cores  |

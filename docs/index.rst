@@ -12,7 +12,7 @@ written in Python and built from `*xarray* <https://docs.xarray.dev/en/stable/>`
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    
   - example jupyter notebooks on `Github <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-The package currently contains *17* jet statistics and jet core algorithms (complete or in final verification), and you can find more information about them in :ref:`Metrics & Algorithms`
+The package currently contains *17* jet statistics and jet core algorithms (complete or in final verification), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
 
 
 How to Install 

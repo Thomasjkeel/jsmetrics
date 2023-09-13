@@ -26,7 +26,7 @@ Quick start
    | | GRIB (.grib) format                                  | | or .grib format by default. And all metrics in *jsmetrics*      |
    | |                                                      | | have been implementated to work with *xarray* data types        |
    +--------------------------------------------------------+-------------------------------------------------------------------+
-   | Know the position of the jet stream                    | | The most common method for this would be to calculate the       |
+   | Know the mean position of the jet stream               | | The most common method for this would be to calculate the       |
    |                                                        | | 'jet latitude', which are provided by *jsmetrics* under the     |
    |                                                        | | :ref:`jet statistics <jet statistics>` group of methods.        |
    |                                                        | | Around 9 jet latitude methods are available in this package,    |

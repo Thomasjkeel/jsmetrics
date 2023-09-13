@@ -6,7 +6,7 @@
 Welcome to jsmetrics's documentation!
 ==============================================
 This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising :ref:`jet streams<What are jet streams?>`.
-written in Python and built from xarray.
+written in Python and built from `*xarray* <https://docs.xarray.dev/en/stable/>`_.
 
 .. note:: 
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    

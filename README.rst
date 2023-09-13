@@ -204,7 +204,7 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 
-.. |logo| image:: https://raw.githubusercontent.com/Thomasjkeel/jsmetrics/docs/logos/jsmetric_logo_tiny.png
+.. |logo| image:: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/docs/logos/jsmetrics_logo_tiny.png
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
    :alt: jsmetrics
 

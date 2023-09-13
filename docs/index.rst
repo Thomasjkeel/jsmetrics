@@ -5,27 +5,14 @@
 
 Welcome to jsmetrics's documentation!
 ==============================================
-This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising jet-streams
-written in Python and built from xarray.
+This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising :ref:`jet streams<What are jet streams?>`.
+written in Python and built from `*xarray* <https://docs.xarray.dev/en/stable/>`_.
 
 .. note:: 
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    
   - example jupyter notebooks on `Github <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-The package currently contains 17 jet statistics and jet core algorithms (complete or in final verification), and you can find more information about them in :ref:`Metrics & Algorithms`
-
-The philosophy of *jsmetrics*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
-*but* to not limit the method to a given:
-
-        * time period,  
-        * time unit (i.e. day, month, DJF),  
-        * latitude/longitude resolution,  
-        * region (where possible),  
-        * pressure level height.  
-
-All can be handled user-side.
+The package currently contains *17* jet statistics and jet core algorithms (complete or in final verification), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
 
 
 How to Install 
@@ -34,7 +21,7 @@ How to Install
     
     pip install jsmetrics
 
-Let me know if you have any problems installing this package, as I have not extensively tested for Mac-OS and Windows versions. 
+*Let me know if you have any problems installing this package, as I have not extensively tested for Mac-OS and Windows versions.*
 
     
 Usage
@@ -53,14 +40,15 @@ Usage
  print(w10['jet_lat'])
  print(w10['jet_speed'])
 
- # run Kuang et al. 2014 metric. NOTE: may take a long time after you have more than 50 time steps.
- k14 = jsmetrics.metrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
- print(k14['jet_center'].sel(time=0))
+ # run Koch et al. 2006 metric.
+ k06 = jsmetrics.metrics.jet_core_algorithms.koch_et_al_2006(uv_data)
+ print(k06['weighted_average_ws'].sel(time=0))
 
 Examples
 -------------
-Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
-Also check out the :ref:`Examples of Use`
+For examples please check out the :ref:`Examples of Use`.
+
+Some example jupyter notebooks are also made available `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 DISCLAIMER
 -------------
@@ -79,7 +67,7 @@ You can find details of each metric or algorithm here: `all metrics`_.
 
 Metrics & Algorithms
 --------------------
-See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `Status`_.
+See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `status`_.
 
 
 .. table::
@@ -107,10 +95,10 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    `Bosiger et al. 2022 <https://doi.org/10.5194/gmd-15-1079-2022>`_               To start            `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*                        
    =============================================================================== ==============  ==  =============================================================================== ==============
 
-* == help needed
+\* == help needed
 
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
-.. _Status: https://github.com/Thomasjkeel/jsmetrics/projects/1
+.. _status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 .. 
         _also mention related references (i.e. Manney et al. )

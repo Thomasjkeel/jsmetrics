@@ -25,7 +25,7 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def archer_caldeira_2008(data):
     r"""
-    This method calculates three monthly-averaged jet stream properties via integrated quantities (windspeed, pressure and latitude) from u-component wind.
+    This method calculates three monthly-averaged jet stream properties (windspeed, pressure and latitude) via integrated quantities from u-component wind.
 
     This method returns three properties:
         1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:

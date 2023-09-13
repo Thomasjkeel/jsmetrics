@@ -3,12 +3,13 @@ History
 =======
 
 
-0.1.6 (2023-09-12)
+0.1.6 (2023-09-14)
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
     * Write a more detailed description of each metric
     * Add examples and implementation notes to each metric  
     * Update listing in 'details_for_all_metrics.py'
+    * Update the 'Why jsmetrics' section with notes about what jets are and quick start help
 * Add ws_threshold parameter to Pena-Ortiz method
 * Rename Pena-Ortiz method to 'pena_ortiz_et_al_2016' (as earlier paper)
 

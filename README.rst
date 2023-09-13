@@ -1,3 +1,8 @@
+.. image:: https://github.com/Thomasjkeel/jsmetrics/blob/main/docs/logos/jsmetrics_logo_tiny.png
+   :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
+   :align: center
+   :alt: jsmetrics
+
 ============================================
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
@@ -61,12 +66,14 @@ Usage
  print(w10['jet_lat'])
  print(w10['jet_speed'])
 
- # run Kuang et al. 2014 metric. NOTE: may take a long time after you have more than 50 time steps.
- k14 = jsmetrics.metrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
- print(k14['jet_center'].sel(time=0))
+ # run Koch et al. 2006 weighted average windspeed algorithm.
+ k06 = jsmetrics.metrics.jet_core_algorithms.koch_et_al_2006(uv_data)
+ print(k06['weighted_average_ws'])
 
 Examples
 -------------
+For examples please check out the `examples <https://jsmetrics.readthedocs.io/en/latest/usage.html>`_
+
 Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
 
 .. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png

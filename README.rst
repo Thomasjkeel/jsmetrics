@@ -2,6 +2,7 @@
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
    :align: center
    :alt: jsmetrics
+
 ============================================
 jsmetrics: Jet-stream metrics and algorithms
 ============================================

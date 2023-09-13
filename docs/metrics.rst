@@ -36,7 +36,7 @@ All methods are implementation from existing research which have been translated
    `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*
    =============================================================================== ==============  ==  =============================================================================== ==============
 
-* == help needed
+\* == help needed
 
 **Documentation:**
 
@@ -71,7 +71,7 @@ translated to Python for this package.
    `Kuang et al. 2014 <http://link.springer.com/10.1007/s00704-013-0994-x>`_       To verify                 
    =============================================================================== ==============  ==  =============================================================================== ==============
 
-* == help needed
+\* == help needed
 
 **Documentation:**
 
@@ -101,7 +101,7 @@ All methods are implementation from existing research which have been translated
    `Francis & Vavrus 2015 <https://doi.org/10.1088/1748-9326/10/1/014005>`_        Complete            `Cattiaux et al. 2009 <https://doi.org/10.1002/2016GL070309>`_                  To verify          
    =============================================================================== ==============  ==  =============================================================================== ==============
 
-* == help needed
+\* == help needed
 
 **Documentation:**
 

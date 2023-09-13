@@ -2,6 +2,17 @@
 Examples of Use
 ===============
 
+`jsmetrics` is designed to be easy to use and should primarly rely on xarray.
+
+.. code-block:: python
+
+    import jsmetrics
+    import xarray as xr
+
+    your_data = xr.open_dataset('path_to_your_data')
+
+    output = jsmetrics.<jet_module>.<jet_metric>(your_data)
+
 How to use jsmetrics in a project:
 
 

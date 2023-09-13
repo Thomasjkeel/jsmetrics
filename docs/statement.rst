@@ -19,29 +19,43 @@ Quick start
    :widths: auto
 
    
-   +--------------------------------------------------------+----------------------------------------------------------------+
-   | I would like to...                                     | Reccomendation                                                 |
-   +========================================================+================================================================+
-   | | Read in my data from NetCDF (.nc) or GRIB            | | Python's *xarray* library can read in climate data in a .nc  |
-   | | (.grib) format                                       | | or .grib format by default. And all metrics in *jsmetrics*   |
-   | |                                                      | | have been implementated to work with *xarray* data types     |
-   +--------------------------------------------------------+----------------------------------------------------------------+
-   | Know the position of the jet stream                    | | The most common method for this would be to calculate the    |
-   |                                                        | | jet latitude, which are provided by *jsmetrics* under the    |
-   |                                                        | | :ref:`jet statistics <jet statistics>` group.                |
-   |                                                        | | Around 9 jet latitude methods are available in this package, |
-   |                                                        | | the most commonly used is 'woollings_et_al_2010'.            |
-   +--------------------------------------------------------+----------------------------------------------------------------+
-   | Know the average speed of the jet stream               | | The most common method for this would be to calculate        |
-   |                                                        | | jet speed, which are provided by *jsmetrics* under the       |
-   |                                                        | | :ref:`jet statistics <jet statistics>` group.                |
-   |                                                        | | Around 8 jet speed methods are available in this package,    |
-   |                                                        | | the most commonly used is 'woollings_et_al_2010'.            |
-   +--------------------------------------------------------+----------------------------------------------------------------+
-   | Make a map of the jet stream                           | Use a jet core algorithm to                                    |
-   +--------------------------------------------------------+----------------------------------------------------------------+
-   | ...                                                    | ...                                                            |
-   +--------------------------------------------------------+----------------------------------------------------------------+
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | I would like to...                                     | Reccomendation                                                    |
+   +========================================================+===================================================================+
+   | | Read in my wind-speed data from NetCDF (.nc) or      | | Python's *xarray* library can read in climate data in a .nc     |
+   | | GRIB (.grib) format                                  | | or .grib format by default. And all metrics in *jsmetrics*      |
+   | |                                                      | | have been implementated to work with *xarray* data types        |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | Know the position of the jet stream                    | | The most common method for this would be to calculate the       |
+   |                                                        | | 'jet latitude', which are provided by *jsmetrics* under the     |
+   |                                                        | | :ref:`jet statistics <jet statistics>` group of methods.        |
+   |                                                        | | Around 9 jet latitude methods are available in this package,    |
+   |                                                        | | the most commonly used is 'woollings_et_al_2010'.               |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | Know the average speed of the jet stream               | | The most common method for this would be to calculate the       |
+   |                                                        | | 'jet speed', which are provided by *jsmetrics* under the        |
+   |                                                        | | :ref:`jet statistics <jet statistics>` group of methods.        |
+   |                                                        | | Around 8 jet speed methods are available in this package,       |
+   |                                                        | | the most commonly used is 'woollings_et_al_2010'.               |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | Make a map of the jet stream                           | | Methods for identifying the location of jets are provided by    | 
+   |                                                        | | the :ref:`jet core algorithms <jet core algorithms>` group of   |
+   |                                                        | | methods available in *jsmetrics*. These methods all provide a   |
+   |                                                        | | mask of the latitude/longitude/level coordinates where a given  |
+   |                                                        | | algorithm has discovered jet cores. Our reccomendation is to    |
+   |                                                        | | use 'koch_et_al_2006', which provides a weighted windspeed and  |
+   |                                                        | | or 'manney_et_al_2011' which will seperate different jet cores  |
+   |                                                        | | within the same region. Be warned that most of the jet core     |
+   |                                                        | | algorithms are rather computationally expensive, so read the    |
+   |                                                        | | docstring of a given method for some information about run time |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | Know the waviness of the jet stream or upper-air flow  | | Methods for quantifying the waviness of the jet stream are      |
+   |                                                        | | provided by the :ref:`waviness metrics <waviness metrics>`      |
+   |                                                        | | available in *jsmetrics*. These are fairly quick to run methods |
+   |                                                        | | and there are currently only two available in this package.     |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | ...                                                    | ...                                                               |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
 
 
 What are jet streams?

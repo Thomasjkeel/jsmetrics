@@ -5,14 +5,14 @@
 
 Welcome to jsmetrics's documentation!
 ==============================================
-This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising jet-streams
+This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising :ref:`jet streams<What are jet streams?>`.
 written in Python and built from xarray.
 
 .. note:: 
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    
   - example jupyter notebooks on `Github <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-The package currently contains _17_ jet statistics and jet core algorithms (complete or in final verification), and you can find more information about them in :ref:`Metrics & Algorithms`
+The package currently contains *17* jet statistics and jet core algorithms (complete or in final verification), and you can find more information about them in :ref:`Metrics & Algorithms`
 
 The philosophy of *jsmetrics*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

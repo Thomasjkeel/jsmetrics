@@ -21,7 +21,7 @@ How to Install
     
     pip install jsmetrics
 
-Let me know if you have any problems installing this package, as I have not extensively tested for Mac-OS and Windows versions. 
+*Let me know if you have any problems installing this package, as I have not extensively tested for Mac-OS and Windows versions.*
 
     
 Usage
@@ -40,9 +40,9 @@ Usage
  print(w10['jet_lat'])
  print(w10['jet_speed'])
 
- # run Kuang et al. 2014 metric. NOTE: may take a long time after you have more than 50 time steps.
- k14 = jsmetrics.metrics.jet_core_algorithms.kuang_et_al_2014(uv_data)
- print(k14['jet_center'].sel(time=0))
+ # run Koch et al. 2006 metric.
+ k06 = jsmetrics.metrics.jet_core_algorithms.koch_et_al_2006(uv_data)
+ print(k06['weighted_average_ws'].sel(time=0))
 
 Examples
 -------------

@@ -1,6 +1,6 @@
-============================================
-jsmetrics: Jet-stream metrics and algorithms
-============================================
+===================================================
+jsmetrics: Jet-stream metrics and algorithms |logo|
+===================================================
 
 |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 ------------------------------------------------------------------------------
@@ -203,6 +203,10 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
    
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
+
+.. |logo| image:: https://raw.githubusercontent.com/Thomasjkeel/jsmetrics/docs/logos/jsmetric_logo_tiny.png
+   :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
+   :alt: jsmetrics
 
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8123560.svg
         :target:  https://doi.org/10.5281/zenodo.8123560

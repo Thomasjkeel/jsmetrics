@@ -1,10 +1,11 @@
-====================
-Why use jsmetrics?
-====================
+==============
+Why jsmetrics?
+==============
 
 
-Quick help
-----------
+
+Quick start
+-----------
 .. table::
    :align: left
    :widths: auto
@@ -23,7 +24,18 @@ What are jet-streams?
 ---------------------
 Jet streams are features of the atmospheric circulation that manifest as fast-flowing ribbons of air, usually around
 8-12 km above the surface. 
-They form in regions of extreme temperature gradients
+They are generated and maintained in regions with extreme temperature gradients. These extreme gradients are produced
+on the Earth by two major processes: (1) disturbances in the zonal mean-flow (known as eddy-driven processes) and (2)
+conservation of angular momentum at the poleward edge of the Hadley Cell (known as thermally-driven processes).
+In general, these processes create two major types of jets at a climatological scale:
+1. the Polar Front Jet (PFJ) -- a deep and primarily eddy-driven feature
+2. the Subtropical Jet (STJ) -- a shallow and primarily thermally-driven feature
+
+.. image:: https://github.com/Thomasjkeel/jsmetrics/blob/write-docs/docs/_static/simple_jet_globe_diagram.jpeg
+   :align: center
+   :alt: Earth's two major jet streams
+
+While it is often hard to seperate the two jets, the general strategy is to select 
 
 They is no exact definition for what is and not a 'jet-stream' at any scale, as such differences in their measurement. 
 

@@ -2,22 +2,35 @@
 Examples of Use
 ===============
 
-`jsmetrics` is designed to be easy to use and should primarly rely on xarray.
+:code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_ 
+(which is a Python library useful for dealing with earth science datasets).
+An extensive knowledge of Python or *xarray* is **not** required to use *jsmetrics*, although it will help you use the package
+more effectively if you wish to run some of the more advanced use cases. 
 
-.. code-block:: python
+.. note:: 
+    To run any metric in :code:`jsmetrics` the syntax will be something like:
 
-    import jsmetrics
-    import xarray as xr
+    .. code-block:: python
 
-    your_data = xr.open_dataset('path_to_your_data')
+        import jsmetrics
+        import xarray as xr
 
-    output = jsmetrics.<jet_module>.<jet_metric>(your_data)
+        # Use xarray to load in NetCDF or GRIB format data
+        your_data = xr.open_dataset('path_to_your_data.nc')
 
-How to use jsmetrics in a project:
+        # Run a metric on your data and store the outputs 
+        output = jsmetrics.<jet_module>.<jet_metric>(your_data)
 
 
-Using the jet statistics 
-########################
+*jsmetrics* provides three :ref:`types <Statistics & Algorithms>` of metric, we provide examples for each of them:
+    1. :ref:`Jet statistics <1. Using the jet statistics>` 
+    2. :ref:`Jet core algorithms <2. Using the jet core algorithms>`
+    3. :ref:`Waviness metrics <3. Using the waviness metrics>`
+
+*Please note that we also provide some examples in a jupyter notebook format available* `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_.
+
+1. Using the jet statistics 
+###########################
 ...in combination with each other
 ---------------------------------
 
@@ -32,8 +45,8 @@ Using the jet statistics
 
 
 
-Using the jet core algorithm outputs 
-####################################
+2. Using the jet core algorithms 
+################################
 
 ...as a spatial mask on other variables (such as windspeed)
 -----------------------------------------------------------
@@ -81,4 +94,6 @@ If you want to look at the frequency of jet locations and produce a map.
     schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
 
 
+3. Using the waviness metrics 
+#############################
 

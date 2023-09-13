@@ -93,7 +93,7 @@ comparison of their differences and impact on trends and changes shown to the je
 
 
 The philosophy of *jsmetrics*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
 

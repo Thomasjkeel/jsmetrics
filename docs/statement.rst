@@ -1,8 +1,15 @@
 ==============
 Why jsmetrics?
 ==============
-The planet see
- 
+The planet's jet streams are complex and not well defined at any one scale (:ref:`what are jet streams <What are jet streams?>`),
+and as such there have are a wide range of metrics, algorithms and statistics which have been employed in research to help
+identify and characterise them. However, it has been generally quite difficult to reconcile various types of information
+provided by different techniques. The motivation for this package was thus to standardise the most common methods developed for 
+the identification and characterisation of jet streams, so that they can be used in combination to help researchers quantitative
+compare differences provided by various techniques. 
+For more information about the standardisation process of the metrics into Python, see :ref:`the philosophy of jsmetrics <The philosophy of *jsmetrics*>`)
+
+For a quick overview for the sort of things jsmetrics will help you do, see our 'Quick start' section below.
 
 
 Quick start
@@ -10,16 +17,32 @@ Quick start
 .. table::
    :align: left
    :widths: auto
+
    
-   ======================================================= ===============================================
-   I would like to...                                      Reccomendation 
-   ======================================================= ===============================================
-   Know the average position of the jet stream             Use a jet latitude statistic
-   Know the average speed of the jet stream                Use a jet latitude statistic
-   Make a map of the jet stream                            Use a jet core algorithm to   
-   ...                                                     ...
-   ======================================================= ===============================================
- 
+   +--------------------------------------------------------+----------------------------------------------------------------+
+   | I would like to...                                     | Reccomendation                                                 |
+   +========================================================+================================================================+
+   | | Read in my data from NetCDF (.nc) or GRIB            | | Python's *xarray* library can read in climate data in a .nc  |
+   | | (.grib) format                                       | | or .grib format by default. And all metrics in *jsmetrics*   |
+   | |                                                      | | have been implementated to work with *xarray* data types     |
+   +--------------------------------------------------------+----------------------------------------------------------------+
+   | Know the position of the jet stream                    | | The most common method for this would be to calculate the    |
+   |                                                        | | jet latitude, which are provided by *jsmetrics* under the    |
+   |                                                        | | :ref:`jet statistics <jet statistics>` group.                |
+   |                                                        | | Around 9 jet latitude methods are available in this package, |
+   |                                                        | | the most commonly used is 'woollings_et_al_2010'.            |
+   +--------------------------------------------------------+----------------------------------------------------------------+
+   | Know the average speed of the jet stream               | | The most common method for this would be to calculate        |
+   |                                                        | | jet speed, which are provided by *jsmetrics* under the       |
+   |                                                        | | :ref:`jet statistics <jet statistics>` group.                |
+   |                                                        | | Around 8 jet speed methods are available in this package,    |
+   |                                                        | | the most commonly used is 'woollings_et_al_2010'.            |
+   +--------------------------------------------------------+----------------------------------------------------------------+
+   | Make a map of the jet stream                           | Use a jet core algorithm to                                    |
+   +--------------------------------------------------------+----------------------------------------------------------------+
+   | ...                                                    | ...                                                            |
+   +--------------------------------------------------------+----------------------------------------------------------------+
+
 
 What are jet streams?
 ---------------------
@@ -54,6 +77,19 @@ comparison of their differences and impact on trends and changes shown to the je
 
 *I am still writing this section, so please email me if you have some suggestions or feedback.*
 
+
+The philosophy of *jsmetrics*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
+*but* to not limit the method to a given:
+
+        * time period,  
+        * time unit (i.e. day, month, DJF),  
+        * latitude/longitude resolution,  
+        * region (where possible),  
+        * pressure level height.  
+
+The motivation for this was to allow the user to handle these factors and allow for the comparison of various metrics on the same underlying data. 
 
 .. Built from sub-components
 .. ----------------------------

@@ -54,7 +54,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "jsmetrics"
-copyright = "2022, Tom Keel"
+copyright = "2023, Tom Keel"
 author = "Tom Keel"
 
 # The version info for the project you're documenting, acts as replacement
@@ -105,6 +105,15 @@ html_static_path = ["_static"]
 
 
 # -- Options for HTMLHelp output ---------------------------------------
+html_theme_options = {
+    "logo_only": True,
+    "style_external_links": True,
+    "style_nav_header_background": "white",
+}
+# The name of an image file (relative to this directory) to place at the top
+# of the sidebar.
+html_logo = "logos/jsmetrics_logo_tiny.png"
+
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = "jsmetricsdoc"

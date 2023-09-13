@@ -94,7 +94,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    `Bosiger et al. 2022 <https://doi.org/10.5194/gmd-15-1079-2022>`_               To start            `Local Wave Activity <https://doi.org/10.1175/JAS-D-15-0194.1>`_                In progress*                        
    =============================================================================== ==============  ==  =============================================================================== ==============
 
-* == help needed
+\* == help needed
 
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _status: https://github.com/Thomasjkeel/jsmetrics/projects/1

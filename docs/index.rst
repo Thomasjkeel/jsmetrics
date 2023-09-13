@@ -47,7 +47,7 @@ Usage
 Examples
 -------------
 For examples please check out the :ref:`Examples of Use`
-Some example jupyter notebooks are also made available `here https://github.com/Thomasjkeel/jsmetrics-examples`_
+Some example jupyter notebooks are also made available `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 DISCLAIMER
 -------------

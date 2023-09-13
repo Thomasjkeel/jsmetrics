@@ -3,7 +3,7 @@ History
 =======
 
 
-0.1.6 (2023-09-12)
+0.1.6 (2023-09-14)
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
     * Write a more detailed description of each metric

@@ -44,7 +44,7 @@ METRIC_DETAILS = {
     },
     "Woollings2010_NorthAtlantic": {
         "variables": ["ua"],
-        "coords": {"plev": [700, 925], "lat": [15, 75], "lon": [120, 180]},
+        "coords": {"plev": [700, 925], "lat": [15, 75], "lon": [300, 360]},
         "plev_units": "hPa",
         "metric": jet_statistics.woollings_et_al_2010,
         "name": "Woollings et al. 2010 North Atlantic",

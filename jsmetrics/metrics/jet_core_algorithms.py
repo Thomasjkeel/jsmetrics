@@ -132,7 +132,6 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
 
-
     Parameters
     ----------
     data : xarray.Dataset
@@ -208,12 +207,12 @@ def manney_et_al_2011(
     jet_core_lat_distance=15,
 ):
     r"""
-    This method detects jet cores and defines a boundary region beside those cores based on two windspeed thresholds.
-    Two additional checks are applied after initial detection of cores to check whether cores within the same windspeed region
-    are part of the same feature (default is 30 m/s, see 'jet_boundary_ws_threshold').
-    These two checks are achieved by checking whether regions with multiple jet cores are more than a certain distance apart
-    (default is 15 degrees, see 'jet_core_lat_distance') and the windspeed between two cores does not drop below a threshold
-    (default is 25 m/s, see 'ws_drop_threshold')
+    This method detects jet cores and a boundary region surrounding those cores based on two windspeed thresholds.
+    Two checks are applied after initial detection of cores to check whether boundaries with more then one core
+    are part of the same feature (the default threshold for these boundaries is 30 m/s, see 'jet_boundary_ws_threshold').
+    The two checks seperate cores based on whether the cores are more than a certain distance apart
+    (default is 15 degrees, see 'jet_core_lat_distance') and whether the windspeed between two given cores does not drop
+    below a windspeed threshold (default is 25 m/s, see 'ws_drop_threshold')
 
     This method returns four outputs
         1. **jet_core_mask** -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
@@ -225,9 +224,8 @@ def manney_et_al_2011(
     and is described in Section 3.1 of that study. This method is also known as JETPAC, and available in its
     original form from NASA JPL.
 
-    There is an update to this method introduced in Manney & Hegglin 2018 to include physically-based method to extract the
-    subtropical jet is identified (and thus distinguished from polar jets).
-
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
 
     Parameters
     ----------
@@ -254,6 +252,9 @@ def manney_et_al_2011(
     The implementation of this method varies slightly from the original, in that this method will return
     variables that have 0, 1+ values, so that the user can use these as a mask on other variables such as windspeed
     (see 'Examples' for demonstration of how to use the mask).
+
+    There is an update to this method introduced in Manney & Hegglin 2018 to include physically-based method to extract the
+    subtropical jet is identified (and thus distinguished from polar jets).
 
     'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
     encompass jet cores.

@@ -44,6 +44,12 @@ more effectively if you wish to run some of the more advanced use cases.
     uv_data = xr.open_dataset('path_to_u_data')
 
 
+.. figure:: _static/images/simple_jet_globe_diagram.jpeg
+   :align: center
+   :alt: Earth's two major jet streams
+
+   Figure 1. Idealised view of the planet's jet streams
+
 
 2. Using the jet core algorithms 
 ################################
@@ -71,6 +77,11 @@ within the boundaries of the detected jet.
     # Use the jet occurence values as a mask to extract the jet occurence windspeeds
     schiemann_jet_ws = schiemann.where(schiemann['jet_occurence'] > 0)['ws']
 
+.. figure:: _static/images/simple_jet_globe_diagram.jpeg
+   :align: center
+   :alt: Earth's two major jet streams
+
+   Figure 1. Idealised view of the planet's jet streams
 
 ...to produce a count of jet cores:
 ------------------------------------
@@ -93,7 +104,33 @@ If you want to look at the frequency of jet locations and produce a map.
     # Produce a jet occurence count across all pressure levels
     schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
 
+.. figure:: _static/images/simple_jet_globe_diagram.jpeg
+   :align: center
+   :alt: Earth's two major jet streams
+
+   Figure 1. Idealised view of the planet's jet streams
 
 3. Using the waviness metrics 
 #############################
+.. code-block:: python
 
+    import jsmetrics
+    import xarray as xr
+
+    # Load in dataset with u and v components:
+    uv_data = xr.open_dataset('path_to_uv_data')
+
+    # Subset dataset to range used in original methodology (100-500 hPa & 16.7-58.25 N, 42.5-220.5 E)):
+    uv_sub = uv_data.sel(plev=slice(100, 500), lat=slice(16.7, 58.25), lon=slice(42.5, 220.5))
+
+    # Run algorithm:
+    schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
+
+    # Produce a jet occurence count across all pressure levels
+    schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
+
+.. figure:: _static/images/simple_jet_globe_diagram.jpeg
+   :align: center
+   :alt: Earth's two major jet streams
+
+   Figure 1. Idealised view of the planet's jet streams

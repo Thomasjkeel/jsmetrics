@@ -146,6 +146,7 @@ within the boundaries of the detected jet.
 
 .. code-block:: python
 
+    import jsmetrics
     import jsmetrics.metrics.jet_core_algorithms as jet_core_algorithms
     import xarray as xr
     import matplotlib.pyplot as plt # for plotting, not essential
@@ -170,15 +171,49 @@ within the boundaries of the detected jet.
     jet_boundaries = manney_outputs['jet_region_mask'].max('plev')
     jet_cores = manney_outputs['jet_core_mask'].max('plev')
 
+    # Plot the mask outputs from Manney et al. 2011 (see Example 3.1)
+    projection = ccrs.Orthographic(central_latitude=30, central_longitude=-100) # set the map projection and view
 
-    # Use the jet occurence values as a mask to extract the jet occurence windspeeds
-    schiemann_jet_ws = schiemann.where(schiemann['jet_occurence'] > 0)['ws']
+    fig, ax = plt.subplots(1, subplot_kw={'projection': projection, 'facecolor':"grey"})
+    (jet_boundaries + jet_cores).plot(add_colorbar=False, transform=ccrs.PlateCarree())
+    ax.coastlines()
+    ax.gridlines(alpha=.3)
+    ax.set_title("Jet cores and boundary on 2021-02-15")
+    fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.05, c='grey')
 
 .. figure:: _static/images/manney_jet_core_example.png
    :align: center
    :alt: Earth's two major jet streams
 
-   Figure 1. Idealised view of the planet's jet streams
+   Example 3.1 Example of the binary mask returned by the jet core algorithm from Manney et al. 2011. Jet cores (yellow) and jet boundaries (green) are shown for the 15th February 2021.
+
+While a mask is useful for visualising the coordinates of the jet, we can also use to extract other fields from xarray data e.g. windspeed, see below:
+
+.. code-block:: python
+
+    # Calculate windspeed from u and v components
+    uv_sub['ws'] = jsmetrics.utils.windspeed_utils.get_resultant_wind(uv_sub['ua'], uv_sub['va'])
+
+    # Select 250 hPa windspeed in jet boundary regions using the jet boundaries calculated by the algorithm from Manney et al. 2011
+    uv_sub.sel(time="2021-02-15", plev=250).where(jet_boundaries)['ws']
+
+    # Plot the 
+    projection = ccrs.Orthographic(central_latitude=30, central_longitude=-100) # set the map projection and view
+
+    fig, ax = plt.subplots(1, subplot_kw={'projection': projection, 'facecolor':"grey"})
+    jet_ws.plot(transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal', 'shrink':.6})
+    ax.coastlines()
+    ax.gridlines(alpha=.3)
+    ax.set_title("Jet wind speed 2021-02-15")
+    fig.text(s='Algorithm from Manney et al. 2011', x=0.4, y=0.3, c='grey')
+
+
+.. figure:: _static/images/manney_jet_core_ws.png
+   :align: center
+   :alt: Earth's two major jet streams
+
+   Example 3.2 Jet
+
 
 ...to produce a count of jet cores:
 ------------------------------------

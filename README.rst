@@ -52,6 +52,12 @@ My email is: thomas.keel.18@ucl.ac.uk. Please feel free to email me if you would
 
 Usage
 -------------
+:code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_. 
+An extensive knowledge of Python or *xarray* is **not** required to use *jsmetrics*, although it will help you use the package
+more effectively if you wish to run some of the more advanced use cases. 
+
+Below we introduce a simple use of the package to run a single jet statistic.
+
 .. code-block:: python
 
  import xarray as xr
@@ -66,22 +72,11 @@ Usage
  print(w10['jet_lat'])
  print(w10['jet_speed'])
 
- # run Koch et al. 2006 weighted average windspeed algorithm.
- k06 = jsmetrics.metrics.jet_core_algorithms.koch_et_al_2006(uv_data)
- print(k06['weighted_average_ws'])
-
 Examples
 -------------
 For examples please check out the `examples <https://jsmetrics.readthedocs.io/en/latest/usage.html>`_
 
 Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
-
-.. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png
-  :width: 560
-  :align: center
-  :alt: Jet latitude circbars with errorbars
-
-*Estimation of North Pacific mean jet latitude by month with 1-stdev errorbars. Data is monthly ERA5 700-850 hPa u-wind between 1980-2020.*
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 560
@@ -90,6 +85,12 @@ Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetr
 
 *Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 100-500 hPa u-v-wind.*
 
+.. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png
+  :width: 560
+  :align: center
+  :alt: Jet latitude circbars with errorbars
+
+*Estimation of North Pacific mean jet latitude by month with 1-stdev errorbars. Data is monthly ERA5 700-850 hPa u-wind between 1980-2020.*
 
 .. image:: docs/_static/images/all_jet_lats_stj_pfj_npac_maps_more_metrics.png
   :width: 560

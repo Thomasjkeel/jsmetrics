@@ -31,9 +31,53 @@ more effectively if you wish to run some of the more advanced use cases.
 
 1. Using the jet statistics 
 ###########################
-...in combination with each other
----------------------------------
+...to compare estimations of jet latitude and speed
+---------------------------------------------------
+The most simple use of the jet statistics is to just run them on the same dataset. Below we use the lower tropospheric jet of the 
+North Pacific as an example. More detail is provided about the exact regions each jet statistics was developed for in the file:
+`details_for_all_metrics.py <https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py>`_ 
 
+.. code-block:: python
+
+    import jsmetrics.metrics.jet_statistics as jet_statistics
+    import xarray as xr
+    import matplotlib.pyplot as plt
+
+    # Load in dataset with the variable 'ua' and coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+
+    # Subset to a study area of interest, in this case the lower tropospheric North Pacific (20-70 N, 135-235 E)
+    u_sub = u_data.sel(plev=slice(700, 850), lat=slice(20, 70), lon=slice(135, 235))
+
+    # Select and run a few jet statistics
+    w10 = jet_statistics.woollings_et_al_2010(u_sub, window_size=20, filter_freq=5)
+    bp13 = jet_statistics.barnes_polvani_2013(u_sub, window_size=20, filter_freq=5)
+    gp16 = jet_statistics.grise_polvani_2016(u_sub)
+    z18 = jet_statistics.zappa_et_al_2018(u_sub)
+    all_metrics = [w10, bp13, gp16, z18]
+
+    fig, axes = plt.subplots(1, 2, sharex=True, figsize=(8, 3))
+    for metric in all_metrics:
+        metric['jet_lat'].plot(ax=axes[0])
+        metric['jet_speed'].plot(ax=axes[1])
+
+    axes[0].set_ylabel("Mean jet latitude ($\circ N$)")
+    axes[1].legend(['Woollings et al. 2010', 'Barnes & Polvani 2013',\
+                    'Grise & Polvani 2016', 'Zappa et al. 2018'], fontsize=7)
+    axes[1].set_ylabel("Mean jet speed ($m s^{-1}$)")
+
+    fig.suptitle('Mean jet speed and position of the North Pacific Jet')
+    plt.subplots_adjust(wspace=.3)
+
+.. figure:: _static/images/example_jet_speed_and_lat.png
+   :align: center
+   :alt: example jet speed and lat
+
+   Figure 1. Example comparison of jet latitude and speed statistics as determined by four of the jet statistics included in *jsmetrics*
+
+
+...to calculate the jet latitude by longitude
+---------------------------------------------
 
 .. code-block:: python
 
@@ -41,7 +85,9 @@ more effectively if you wish to run some of the more advanced use cases.
     import xarray as xr
 
     # Load in dataset with the variable 'ua' and coordinates: 'time', 'plev', 'lon' and 'lat':
-    uv_data = xr.open_dataset('path_to_u_data')
+    u_data = xr.open_dataset('path_to_u_data')
+
+
 
 
 .. figure:: _static/images/simple_jet_globe_diagram.jpeg
@@ -49,6 +95,7 @@ more effectively if you wish to run some of the more advanced use cases.
    :alt: Earth's two major jet streams
 
    Figure 1. Idealised view of the planet's jet streams
+
 
 
 2. Using the jet core algorithms 
@@ -134,3 +181,7 @@ If you want to look at the frequency of jet locations and produce a map.
    :alt: Earth's two major jet streams
 
    Figure 1. Idealised view of the planet's jet streams
+
+4. Running the jsmetrics in batch 
+#################################
+If you have lots of different sources of data, and you would like to calculate   

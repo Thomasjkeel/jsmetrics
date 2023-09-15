@@ -298,6 +298,9 @@ While there are only two waviness metrics in *jsmetrics* as of version 0.6 (15th
 Currently, there is one sinuosity metric which uses geopotential height (zg) (Cattiaux et al., 2016) and one meridional circulation
 metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
 
+...a simple use:
+----------------
+
 .. code-block:: python
 
     import jsmetrics.metrics.waviness_metrics as waviness_metrics

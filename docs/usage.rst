@@ -74,7 +74,7 @@ was developed for in the file: `details_for_all_metrics.py <https://github.com/T
    :align: center
    :alt: example jet speed and lat
 
-   Example 1. Example comparison of jet latitude and speed statistics as determined by four of the jet statistics included in *jsmetrics*
+   Example 1. Example comparison of jet latitude and speed statistics as determined by four of the jet statistics included in *jsmetrics*. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 
 ...to calculate the jet latitude by longitude
@@ -131,7 +131,7 @@ In this case to run the jet statistic on each longitude in the input dataset, si
    :align: center
    :alt: Jet latitude by long
 
-   Example 2. By longitude estimation of the jet latitude in the Northern Hemisphere as determined by Grise & Polvani 2016 method. Notice how the Atlantic and Pacific have relatively low variability.
+   Example 2. By longitude estimation of the jet latitude in the Northern Hemisphere as determined by Grise & Polvani 2016 method. Notice how the Atlantic and Pacific have relatively low variability. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 
 
@@ -155,7 +155,7 @@ within the boundaries of the detected jet.
     # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
     uv_data = xr.open_dataset('path_to_uv_data')
 
-    # Subset dataset to a sensible range for the purpose of this example (100-400 hPa &.0-90 N, 220-300 E)):
+    # Subset dataset to a sensible range for the purpose of this example (100-400 hPa &.0-90 N, 220-300 E):
     uv_sub = uv_data.sel(time="2021-02-15", plev=slice(100, 400), lat=slice(0, 90), lon=slice(220-300))
 
     # Run algorithm:
@@ -164,83 +164,111 @@ within the boundaries of the detected jet.
     jet_core_ws_threshold = 40 # Jet cores will have windspeeds of a minimum of 40 m/s.
     jet_boundary_ws_threshold = 30 # Jet boundaries around the cores will be defines as regions with windspeeds of a minimum of 30 m/s.
     
-    ## The algorithm run should take about 5 seconds
+    ## The algorithm run should take about 5-15 seconds depending on CPI
     manney_outputs = jet_core_algorithms.manney_et_al_2011(uv_sub), jet_core_plev_limit=jet_core_plev_limit, jet_core_ws_threshold=jet_core_ws_threshold, jet_boundary_ws_threshold=jet_boundary_ws_threshold)
 
     # Instead of looking at one pressure level, lets take the maximum from each level.
-    jet_boundaries = manney_outputs['jet_region_mask'].max('plev')
+    jet_regions = manney_outputs['jet_region_mask'].max('plev')
     jet_cores = manney_outputs['jet_core_mask'].max('plev')
 
     # Plot the mask outputs from Manney et al. 2011 (see Example 3.1)
     projection = ccrs.Orthographic(central_latitude=30, central_longitude=-100) # set the map projection and view
 
-    fig, ax = plt.subplots(1, subplot_kw={'projection': projection, 'facecolor':"grey"})
-    (jet_boundaries + jet_cores).plot(add_colorbar=False, transform=ccrs.PlateCarree())
+    fig, ax = plt.subplots(1, figsize=(7, 7), subplot_kw={'projection': projection, 'facecolor':"grey"})
+    p = (jet_regions + jet_cores).plot(cmap=cmap, norm=norm,
+                                    cbar_kwargs={'orientation':'horizontal', 'shrink':.7,\
+                                                'pad':.07, 'spacing':'uniform',\
+                                                'ticks':[0.5, 1.5, 2.5]},\
+                                    transform=ccrs.PlateCarree())
+    p.colorbar.set_ticklabels(["no jet", "jet region", "jet core"], size=12)
+
     ax.coastlines()
     ax.gridlines(alpha=.3)
-    ax.set_title("Jet cores and boundary on 2021-02-15")
-    fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.05, c='grey')
+    ax.set_title("Jet mask (2021-02-15)", size=14)
+    fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.25, c='grey')
 
 .. figure:: _static/images/manney_jet_core_example.png
    :align: center
    :alt: Earth's two major jet streams
 
-   Example 3.1 Example of the binary mask returned by the jet core algorithm from Manney et al. 2011. Jet cores (yellow) and jet boundaries (green) are shown for the 15th February 2021.
+   Example 3.1 Example of the binary mask returned by the jet core algorithm from Manney et al. 2011. Jet cores (yellow) and jet regions (green) are shown for the 15th February 2021. Data is from the ERA5 and is in a 1*1 degree resolution.
 
-While a mask is useful for visualising the coordinates of the jet, we can also use to extract other fields from xarray data e.g. windspeed, see below:
+While a mask is useful for visualising the coordinates of the jet, we can also use to extract other fields that are within the same coordinates from xarray data e.g. windspeed, see below:
 
 .. code-block:: python
 
     # Calculate windspeed from u and v components
     uv_sub['ws'] = jsmetrics.utils.windspeed_utils.get_resultant_wind(uv_sub['ua'], uv_sub['va'])
 
-    # Select 250 hPa windspeed in jet boundary regions using the jet boundaries calculated by the algorithm from Manney et al. 2011
-    uv_sub.sel(time="2021-02-15", plev=250).where(jet_boundaries)['ws']
+    # Select 250 hPa windspeed in jet regions using the jet boundaries calculated by the algorithm from Manney et al. 2011
+    jet_ws = uv_sub.sel(time="2021-02-15", plev=250).where(jet_boundaries)['ws']
 
-    # Plot the 
+    # Plot the resulting windspeed at the same coordinates as the jet region 
     projection = ccrs.Orthographic(central_latitude=30, central_longitude=-100) # set the map projection and view
 
-    fig, ax = plt.subplots(1, subplot_kw={'projection': projection, 'facecolor':"grey"})
-    jet_ws.plot(transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal', 'shrink':.6})
+    fig, ax = plt.subplots(1, figsize=(7, 7), subplot_kw={'projection': projection, 'facecolor':"grey"})
+    p = jet_ws.plot(transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal', 'shrink':.7, 'pad': .07})
     ax.coastlines()
     ax.gridlines(alpha=.3)
-    ax.set_title("Jet wind speed 2021-02-15")
-    fig.text(s='Algorithm from Manney et al. 2011', x=0.4, y=0.3, c='grey')
+    ax.set_title("250 hPa winds at the jet boundary (2021-02-15)")
+    p.colorbar.set_label("Windspeed ($ms^{-1}$)", size=16)
 
+    fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.25, c='grey')
 
 .. figure:: _static/images/manney_jet_core_ws.png
    :align: center
    :alt: Earth's two major jet streams
 
-   Example 3.2 Jet
+   Example 3.2 Wind speeds at the jet region at 250 hPa as determined by the jet core algorithm from Manney et al. 2011. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 
 ...to produce a count of jet cores:
 ------------------------------------
-If you want to look at the frequency of jet locations and produce a map.
+If you want to look at the frequency of jet locations, below we provide a simple example of how to produce a count of jet core
+events over a given region. In this example we use Manney et al. 2011 and only use data from 
 
 .. code-block:: python
 
     import jsmetrics
+    import jsmetrics.metrics.jet_core_algorithms as jet_core_algorithms
     import xarray as xr
+    import matplotlib.pyplot as plt # for plotting, not essential
+    import cartopy.crs as ccrs # for plotting, not essential 
 
-    # Load in dataset with u and v components:
+    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
     uv_data = xr.open_dataset('path_to_uv_data')
 
-    # Subset dataset to range used in original methodology (100-500 hPa & 16.7-58.25 N, 42.5-220.5 E)):
-    uv_sub = uv_data.sel(plev=slice(100, 500), lat=slice(16.7, 58.25), lon=slice(42.5, 220.5))
+    # Subset dataset to a sensible range for the purpose of this example (Feb 2021, 100-400 hPa &.0-90 N, 220-300 E):
+    uv_sub = uv_data.sel(time=slice("2021-02"), plev=slice(100, 400), lat=slice(0, 90), lon=slice(220,300))
 
-    # Run algorithm:
-    schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
+    # The algorithm run should take around 40-120 seconds depending on CPU
+    ## We also set a lower threshold for jet cores (30 m/s)
+    manney_outputs = jsmetrics.jet_core_algorithms.manney_et_al_2011(uv_sub, jet_core_plev_limit=(100, 400),\
+                                                                     jet_core_ws_threshold=30) 
 
-    # Produce a jet occurence count across all pressure levels
-    schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
+    # Produce a jet core count across all pressure levels
+    manney_jet_counts_feb21 = manney_outputs['jet_core_mask'].sum(('time', 'plev'))
 
-.. figure:: _static/images/simple_jet_globe_diagram.jpeg
+    # Plot the counts
+    projection = ccrs.Orthographic(central_latitude=30, central_longitude=-100) # set the map projection and view
+
+    fig, ax = plt.subplots(1, figsize=(7, 7), subplot_kw={'projection': projection, 'facecolor':"grey"})
+    p = manney_jet_counts_feb21.plot.contourf(levels=[0, 0.5, 1.5, 2.5, 3.5, 4.5], transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal',\
+                                                        'ticks':[0.25, 1, 2, 3, 4], 'shrink':.7, 'pad': .07})
+
+    p.colorbar.set_ticklabels(['no jet', 1, 2, 3, 4], size=12)
+    ax.coastlines()
+    ax.gridlines(alpha=.3)
+    ax.set_title("Counts of jet cores at 100-400 hPa during February 2021")
+    p.colorbar.set_label("Count", size=16)
+
+    fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.25, c='grey')
+
+.. figure:: _static/images/manney_jet_core_count.png
    :align: center
-   :alt: Earth's two major jet streams
+   :alt: Jet core counts for Feb21
 
-   Figure 1. Idealised view of the planet's jet streams
+   Example 4. Counts of jet cores during February 2021 at 100-400 hPa over North America as determined by the jet core algorithm from Manney et al. 2011. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 3. Using the waviness metrics 
 #############################

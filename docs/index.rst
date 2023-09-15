@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to jsmetrics's documentation!
+Welcome to jsmetrics' documentation!
 ==============================================
 This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising :ref:`jet streams<What are jet streams?>`
 written in Python and built from `*xarray* <https://docs.xarray.dev/en/stable/>`_.

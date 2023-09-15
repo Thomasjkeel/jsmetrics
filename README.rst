@@ -20,6 +20,15 @@ written in Python and built from xarray.
 
 .. WRITE CURRENT PROGRESS WITH MODULDE in highlighted section near the top of this readme 
 
+*Why use jsmetrics?*
+The planet's jet streams are complex and not well defined at any one scale (see :ref:`what are jet streams <What are jet streams?>`),
+and as such there have are a wide range of metrics, algorithms and statistics which have been employed in research to help
+identify and characterise them. However, it has been generally quite difficult to reconcile various types of information
+provided by different techniques. The motivation for this package was thus to standardise the most common methods developed for 
+the identification and characterisation of jet streams, so that they can be used in combination to help researchers quantitative
+compare differences provided by various techniques.
+
+*jsmetrics' philosophy*
 The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
 

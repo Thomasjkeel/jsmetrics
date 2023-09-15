@@ -138,7 +138,7 @@ In this case to run the jet statistic on each longitude in the input dataset, si
 2. Using the jet core algorithms 
 ################################
 
-...as a spatial mask on other variables (such as windspeed)
+...to mask other variables (such as windspeed)
 -----------------------------------------------------------
 Because all the jet core algorithm included in this package return 0 for regions not detected as the jet,
 we can use xarray's `.where()` method to select a subset of another variable (i.e. windspeed)
@@ -225,7 +225,7 @@ While a mask is useful for visualising the coordinates of the jet, we can also u
 ...to produce a count of jet cores:
 ------------------------------------
 If you want to look at the frequency of jet locations, below we provide a simple example of how to produce a count of jet core
-events over a given region. In this example we use Manney et al. 2011 and only use data from 
+events over a given region. In this example we use Manney et al. 2011 and only use data from February 2021.
 
 .. code-block:: python
 

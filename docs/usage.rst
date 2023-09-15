@@ -239,7 +239,7 @@ events over a given region. In this example we use Manney et al. 2011 and only u
     uv_data = xr.open_dataset('path_to_uv_data')
 
     # Subset dataset to a sensible range for the purpose of this example (Feb 2021, 100-400 hPa &.0-90 N, 220-300 E):
-    uv_sub = uv_data.sel(time=slice("2021-02"), plev=slice(100, 400), lat=slice(0, 90), lon=slice(220,300))
+    uv_sub = uv_data.sel(time="2021-02", plev=slice(100, 400), lat=slice(0, 90), lon=slice(220,300))
 
     # The algorithm run should take around 40-120 seconds depending on CPU
     ## We also set a lower threshold for jet cores (30 m/s)
@@ -272,29 +272,53 @@ events over a given region. In this example we use Manney et al. 2011 and only u
 
 3. Using the waviness metrics 
 #############################
+While there are only two waviness metrics in *jsmetrics* as of version 0.6 (15th Sept 2023). There may be more in the future.
+Currently, there is one sinuosity metric which uses geopotential height (zg) (Cattiaux et al., 2016) and one meridional circulation
+metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
+
 .. code-block:: python
 
-    import jsmetrics
+    import jsmetrics.metrics.waviness_metrics as waviness_metrics
     import xarray as xr
 
-    # Load in dataset with u and v components:
+    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
     uv_data = xr.open_dataset('path_to_uv_data')
+    # Load in dataset with a geopotential height variable: 'zg' and coordinates: 'time', 'plev', 'lon' and 'lat':
+    zg_data = xr.open_dataset('path_to_zg_data')
 
-    # Subset dataset to range used in original methodology (100-500 hPa & 16.7-58.25 N, 42.5-220.5 E)):
-    uv_sub = uv_data.sel(plev=slice(100, 500), lat=slice(16.7, 58.25), lon=slice(42.5, 220.5))
 
-    # Run algorithm:
-    schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
+    # Subset the datasets to a sensible range for the purpose of this example (Feb 2021, 500 hPa &.0-90 N, 220-300 E):
+    uv_sub = uv_data.sel(time="2021-02", plev=500, lat=slice(0, 90), lon=slice(220,300))
+    zg_sub = uv_data.sel(time="2021-02", plev=500, lat=slice(0, 90), lon=slice(220,300))
 
-    # Produce a jet occurence count across all pressure levels
-    schiemann_jet_counts_all_levels = schiemann['jet_occurence'].sum(('time', 'plev'))
+    # Run metrics
+    mci = waviness_metrics.francis_vavrus_2015(uv_sub)
+    c16 = waviness_metrics.cattiaux_et_al_2016(zg_sub)
 
-.. figure:: _static/images/simple_jet_globe_diagram.jpeg
+    # Take mean of MCI
+    mci_feb21 = mci['mci'].mean('time')
+
+    # Plot Sinuosity and MCI
+    fig, axes = plt.subplots(1, 2, figsize=(8, 4))
+    mci_feb21.plot(ax=axes[0])
+    c16['sinuosity'].plot(ax=axes[1])
+    axes[0].set_ylabel("Latitude $\circ N$")
+    axes[0].set_xlabel("Longitude $\circ E$")
+    axes[0].set_title("Francis & Vavrus 2015")
+    axes[1].set_ylabel("Sinusosity")
+    axes[1].set_title("Cattiaux et al. 2016")
+    fig.subplots_adjust(wspace=.4)    
+
+.. figure:: _static/images/fv15_c16_example.png
    :align: center
-   :alt: Earth's two major jet streams
+   :alt: Waviness metrics example
 
-   Figure 1. Idealised view of the planet's jet streams
+   Example 5. Meridional Circulation Index and Sinuosity from the two waviness metrics available in *jsmetrics*. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 4. Running the jsmetrics in batch 
 #################################
-If you have lots of different sources of data, and you would like to calculate   
+*Work in progress, please email me if you are interested*
+If you have lots of different sources of data, and you would like to calculate various jet statistics on the fly from your data 
+(i.e. on JASMIN), we reccomend leaning on specification files which store information about metrics and subsetting like the 
+'details_for_all_metrics.py' available in this package. It is my (Tom) intention to upload the scripts which I have personally used to run
+and log outputs of various similar metrics from *jsmetrics* in batch on JASMIN.

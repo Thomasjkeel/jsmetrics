@@ -12,7 +12,7 @@ written in Python and built from `*xarray* <https://docs.xarray.dev/en/stable/>`
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    
   - example jupyter notebooks on `Github <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-The package currently contains *17* jet statistics and jet core algorithms (complete or in final verification), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
+The package currently contains *17* jet statistics and jet core algorithms (in the *complete* or *verification* phase), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
 
 
 How to Install 
@@ -26,6 +26,12 @@ How to Install
     
 Usage
 -------------
+:code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_. 
+An extensive knowledge of Python or *xarray* is **not** required to use *jsmetrics*, although it will help you use the package
+more effectively if you wish to run some of the more advanced use cases. 
+
+Below we introduce a simple use of the package to run a single jet statistic.
+
 .. code-block:: python
 
  import xarray as xr
@@ -39,10 +45,6 @@ Usage
 
  print(w10['jet_lat'])
  print(w10['jet_speed'])
-
- # run Koch et al. 2006 metric.
- k06 = jsmetrics.metrics.jet_core_algorithms.koch_et_al_2006(uv_data)
- print(k06['weighted_average_ws'].sel(time=0))
 
 Examples
 -------------

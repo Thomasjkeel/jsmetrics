@@ -7,7 +7,7 @@ identify and characterise them. However, it has been generally quite difficult t
 provided by different techniques. The motivation for this package was thus to standardise the most common methods developed for 
 the identification and characterisation of jet streams, so that they can be used in combination to help researchers quantitative
 compare differences provided by various techniques. 
-For more information about the standardisation process of the metrics into Python, see :ref:`the philosophy of jsmetrics <The philosophy of *jsmetrics*>`)
+For more information about the standardisation process of the metrics into Python, see :ref:`the philosophy of jsmetrics <The philosophy of *jsmetrics*>`.
 
 For a quick overview for the sort of things jsmetrics will help you do, see our 'Quick start' section below.
 
@@ -93,7 +93,7 @@ comparison of their differences and impact on trends and changes shown to the je
 
 
 The philosophy of *jsmetrics*
-----------------------------
+-----------------------------
 The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
 

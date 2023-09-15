@@ -181,7 +181,6 @@ within the boundaries of the detected jet.
                                                 'ticks':[0.5, 1.5, 2.5]},\
                                     transform=ccrs.PlateCarree())
     p.colorbar.set_ticklabels(["no jet", "jet region", "jet core"], size=12)
-
     ax.coastlines()
     ax.gridlines(alpha=.3)
     ax.set_title("Jet mask (2021-02-15)", size=14)
@@ -204,15 +203,12 @@ While a mask is useful for visualising the coordinates of the jet, we can also u
     jet_ws = uv_sub.sel(time="2021-02-15", plev=250).where(jet_boundaries)['ws']
 
     # Plot the resulting windspeed at the same coordinates as the jet region 
-    projection = ccrs.Orthographic(central_latitude=30, central_longitude=-100) # set the map projection and view
-
     fig, ax = plt.subplots(1, figsize=(7, 7), subplot_kw={'projection': projection, 'facecolor':"grey"})
     p = jet_ws.plot(transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal', 'shrink':.7, 'pad': .07})
     ax.coastlines()
     ax.gridlines(alpha=.3)
     ax.set_title("250 hPa winds at the jet boundary (2021-02-15)")
     p.colorbar.set_label("Windspeed ($ms^{-1}$)", size=16)
-
     fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.25, c='grey')
 
 .. figure:: _static/images/manney_jet_core_ws.png
@@ -229,7 +225,6 @@ events over a given region. In this example we use Manney et al. 2011 and only u
 
 .. code-block:: python
 
-    import jsmetrics
     import jsmetrics.metrics.jet_core_algorithms as jet_core_algorithms
     import xarray as xr
     import matplotlib.pyplot as plt # for plotting, not essential
@@ -243,7 +238,7 @@ events over a given region. In this example we use Manney et al. 2011 and only u
 
     # The algorithm run should take around 40-120 seconds depending on CPU
     ## We also set a lower threshold for jet cores (30 m/s)
-    manney_outputs = jsmetrics.jet_core_algorithms.manney_et_al_2011(uv_sub, jet_core_plev_limit=(100, 400),\
+    manney_outputs = jet_core_algorithms.manney_et_al_2011(uv_sub, jet_core_plev_limit=(100, 400),\
                                                                      jet_core_ws_threshold=30) 
 
     # Produce a jet core count across all pressure levels
@@ -255,20 +250,47 @@ events over a given region. In this example we use Manney et al. 2011 and only u
     fig, ax = plt.subplots(1, figsize=(7, 7), subplot_kw={'projection': projection, 'facecolor':"grey"})
     p = manney_jet_counts_feb21.plot.contourf(levels=[0, 0.5, 1.5, 2.5, 3.5, 4.5], transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal',\
                                                         'ticks':[0.25, 1, 2, 3, 4], 'shrink':.7, 'pad': .07})
-
     p.colorbar.set_ticklabels(['no jet', 1, 2, 3, 4], size=12)
     ax.coastlines()
     ax.gridlines(alpha=.3)
     ax.set_title("Counts of jet cores at 100-400 hPa during February 2021")
     p.colorbar.set_label("Count", size=16)
-
     fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.25, c='grey')
 
 .. figure:: _static/images/manney_jet_core_count.png
    :align: center
    :alt: Jet core counts for Feb21
 
-   Example 4. Counts of jet cores during February 2021 at 100-400 hPa over North America as determined by the jet core algorithm from Manney et al. 2011. Data is from the ERA5 and is in a 1*1 degree resolution.
+   Example 4.1 Counts of jet cores during February 2021 at 100-400 hPa over North America as determined by the jet core algorithm from Manney et al. 2011. Data is from the ERA5 and is in a 1*1 degree resolution.
+
+Depending on the resolution of the initial data (in this case we are using 1 degree latitude by 1 degree longitude), the output of the jet counts
+may be sporadic. In the next example we show you how you could use a gaussian filter to smooth the jet counts. 
+
+.. code-block:: python
+
+    import scipy.ndimage as ndimage
+
+    # Smooth the counts using a 2-sigma gaussian filter
+    manney_jet_counts_feb21_gaussian = ndimage.gaussian_filter(manney_jet_counts_feb21, sigma=2.0, order=0)
+    
+    # Save new filtered cores to outputs
+    manney_outputs['jet_cores_gaussian'] = (('lat', 'lon'), manney_jet_counts_feb21_gaussian)
+
+    # Plot smoothed values
+    fig, ax = plt.subplots(1, figsize=(7, 7), subplot_kw={'projection': projection, 'facecolor':"grey"})
+    p = manney_outputs['jet_cores_gaussian'].plot.contourf(transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal', 'shrink':.7, 'pad': .07})
+    ax.coastlines()
+    ax.gridlines(alpha=.3)
+    ax.set_title("Filtered counts of jet cores at 100-400 hPa during February 2021")
+    p.colorbar.set_label("2$\sigma$ kernel value", size=14)
+    fig.text(s='Algorithm from Manney et al. 2011', x=0.46, y=0.25, c='grey')
+
+.. figure:: _static/images/manney_jet_core_count_gaus.png
+   :align: center
+   :alt: Filtered jet core counts for Feb21
+
+   Example 4.2 Gaussian filtered counts of jet cores during February 2021 at 100-400 hPa over North America as determined by the jet core algorithm from Manney et al. 2011. Data is from the ERA5 and is in a 1*1 degree resolution.
+
 
 3. Using the waviness metrics 
 #############################
@@ -318,6 +340,7 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
 4. Running the jsmetrics in batch 
 #################################
 *Work in progress, please email me if you are interested*
+
 If you have lots of different sources of data, and you would like to calculate various jet statistics on the fly from your data 
 (i.e. on JASMIN), we reccomend leaning on specification files which store information about metrics and subsetting like the 
 'details_for_all_metrics.py' available in this package. It is my (Tom) intention to upload the scripts which I have personally used to run

@@ -85,7 +85,7 @@ def archer_caldeira_2008(data):
 
         # Subset mass weighted wind by a windspeed threshold
         windspeed_threshold = 15 # remember this is for monthly averages
-        strong_jet = archer_outputs['mass_weighted_average_ws'].where(lambda row: row > 20)
+        strong_jet = archer_outputs['mass_weighted_average_ws'].where(lambda row: row > windspeed_threshold)
 
     """
     #  Step 1. Get monthly means

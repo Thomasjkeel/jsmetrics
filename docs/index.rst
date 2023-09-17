@@ -3,17 +3,25 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to jsmetrics's documentation!
+Welcome to jsmetrics' documentation!
 ==============================================
-This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising :ref:`jet streams<What are jet streams?>`.
+This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising :ref:`jet streams<What are jet streams?>`
 written in Python and built from `*xarray* <https://docs.xarray.dev/en/stable/>`_.
 
 .. note:: 
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    
   - example jupyter notebooks on `Github <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-The package currently contains *17* jet statistics and jet core algorithms (in the *complete* or *verification* phase), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
+The package currently contains 17 jet statistics and jet core algorithms (in the *complete* or *verification* phase), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
 
+*Why use jsmetrics?:*
+
+The planet's jet streams are complex and not well defined at any one scale (see :ref:`what are jet streams <What are jet streams?>`),
+and as such there have are a wide range of metrics, algorithms and statistics which have been employed in research to help
+identify and characterise them. However, it has been generally quite difficult to reconcile various types of information
+provided by different techniques. The motivation for this package was thus to standardise the most common methods developed for 
+the identification and characterisation of jet streams, so that they can be used in combination to help researchers quantitative
+compare differences provided by various techniques.
 
 How to Install 
 --------------

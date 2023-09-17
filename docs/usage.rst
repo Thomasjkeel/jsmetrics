@@ -142,7 +142,7 @@ In this case to run the jet statistic on each longitude in the input dataset, si
 -----------------------------------------------------------
 Because all the jet core algorithm included in this package return 0 for regions not detected as the jet,
 we can use xarray's `.where()` method to select a subset of another variable (i.e. windspeed)
-within the boundaries of the detected jet.
+within the boundaries of the detected jet (where values are >0).
 
 .. code-block:: python
 

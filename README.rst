@@ -30,24 +30,6 @@ identification and characterisation of jet streams, so that various techniques a
 look at jet streams in data. Also, it is hoped that *jsmetrics* provides a foundation for new metrics and for researchers to be
 able to quantitatively compare differences provided by existing techniques. 
 
-*jsmetrics' philosophy:*
-
-The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
-*but* to not limit the method to a given:
-
-        * time period,  
-        * time unit (i.e. day, month, DJF),  
-        * latitude/longitude resolution,  
-        * region (where possible),  
-        * pressure level height.  
-
-All can be handled user-side.
-
-.. 
-        ALSO all algorithms have been broken down into various components and these components are not coupled to a given methodology.
-        As such each can be used seperately and this allows users to rebuilt aspects of a methodology (e.g. to replace a filtering method)
-
-
 Installation 
 -------------
 .. code-block:: bash
@@ -186,16 +168,8 @@ jsmetrics is in active development.
 
 Project To-Do's
 ---------------
-        - WRITE a 'I would like to calculate... Table with which statistics you can get from which metrics, latitude, speed, width etc.'
-        - FINISH verification notebook.
-        - LOOK INTO timing/benchmarking the metrics (maybe in seperate github repo)
-        - TO SOLVE: dealing with data from different sources (some sort of data translator module or maybe included in tests)
-                - for example what if 'v' or 'v-wind' is passed to func instead of 'va' (answer: cf-xarray)  
-                - for example what if 'mbar' or 'model levels' instead of 'plev' (answer: pint)
-        - TO SOLVE: subsetting longitude if it wraps around 0-360
         - ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
         - ADD: pint (see: https://pint.readthedocs.io/en/stable/)
-        - ADD: var names to details_for_all_metrics
 
 Credits
 -------------

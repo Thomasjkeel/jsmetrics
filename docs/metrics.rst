@@ -1,14 +1,18 @@
 =======================
 Statistics & Algorithms
 =======================
+:code:`jsmetrics` contains metrics of three types: 
+   1. **jet statistics** -- methods that extract a single quantity describing the jet stream (i.e. latitude, speed, width)
+   2. **jet core algorithms** -- methods that return a multi-dimensional mask at coordinates identified to be the jet streams.
+   3. **waviness metrics** -- methods that characterise the sinousity of the upper-level winds (acts as a proxy for jet stream waviness).
 
-See `all metrics`_ for specifications of each 'Complete' or 'In progress' statistic and algorithm. For progress on their completion see `issues`_.
+
+For specification details of each metric's DOI and original study area please see `all metrics`_.
+
+For progress on their completion see `issues`_.
 
 .. _all metrics: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _issues: https://github.com/Thomasjkeel/jsmetrics/issues
-
-See the :ref:`Metric sub-components` for more detail about the implementation of the metrics included in this package.
-
 
 Jet statistics
 ##############
@@ -111,3 +115,5 @@ All methods are implementation from existing research which have been translated
    :undoc-members:
    :show-inheritance:
    :noindex:
+
+See the :ref:`Metric sub-components` for more detail about the implementation of the metrics included in this package.

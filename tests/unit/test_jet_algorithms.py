@@ -149,7 +149,9 @@ class TestKuang2014(unittest.TestCase):
         self.assertEqual(result["jet_ocurrence1_jet_centre2"].max(), 2)
         lon_data = self.data.sel(plev=slice(50000, 25000)).isel(time=slice(0, 2))
         self.assertRaises(ValueError, lambda: tested_func(lon_data))
-        plev_data = self.data.sel(plev=slice(25000, 25000)).isel(time=slice(0, 2))
+        plev_data = self.data.sel(plev=slice(25000, 25000)).isel(
+            time=slice(0, 1), lat=slice(0, 10), lon=slice(0, 10)
+        )
         tested_func(plev_data)
 
 

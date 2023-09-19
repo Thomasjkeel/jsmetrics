@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - write-docs
   pull_request:
     branches:
       - main

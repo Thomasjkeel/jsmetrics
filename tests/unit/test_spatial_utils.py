@@ -15,6 +15,8 @@ __status__ = "Development"
 
 import unittest
 import numpy as np
+import matplotlib.pyplot
+import shapely.geometry
 from jsmetrics.utils import spatial_utils
 from . import set_up_test_uv_data, set_up_test_zg_data
 
@@ -73,6 +75,32 @@ class TestGetOneContourLinestring(unittest.TestCase):
 
     def test_basic(self):
         test_func = spatial_utils.get_one_contour_linestring
-        test_data = self.data.isel(time=0, plev=0)["zg"]
-        test_func(test_data.isel(lat=slice(0, 6), lon=slice(0, 5)), 100)
-        # leaves the work-around for valueerrors untested (because requires lots of data to find edge case)
+        test_data = self.data.isel(time=0).sel(plev=50000)["zg"]
+        one_contour_single = test_func(test_data, 5395)
+        one_contour_multi = test_func(test_data, 5095)
+        self.assertTrue(
+            isinstance(
+                one_contour_single, shapely.geometry.multilinestring.MultiLineString
+            )
+        )
+        self.assertTrue(
+            isinstance(
+                one_contour_multi, shapely.geometry.multilinestring.MultiLineString
+            )
+        )
+        self.assertEqual(len(one_contour_single.geoms), 1)
+        self.assertEqual(len(one_contour_multi.geoms), 2)
+
+
+class TestSeperateOneContourIntoLineSegments(unittest.TestCase):
+    def setUp(self):
+        self.data = set_up_test_zg_data()
+
+    def test_basic(self):
+        test_func = spatial_utils.seperate_one_contour_into_line_segments
+        test_data = self.data.isel(time=0).sel(plev=50000)["zg"]
+        one_contour_multi = test_data.plot.contour(levels=[5095]).get_paths()[0]
+        one_contour_single = test_data.plot.contour(levels=[5395]).get_paths()[0]
+        matplotlib.pyplot.close()
+        self.assertEqual(len(test_func(one_contour_multi)), 2)
+        self.assertEqual(len(test_func(one_contour_single)), 1)

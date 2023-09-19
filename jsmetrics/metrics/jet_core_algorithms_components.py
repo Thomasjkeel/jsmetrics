@@ -253,7 +253,7 @@ def run_jet_core_and_region_algorithm_on_one_day(
     )
 
     # Step 6. Remove old jet regions and define two outputs (jet_region, region_above_ws_threshold)
-    row = row.drop("potential_jet_regions")
+    row = row.drop_vars("potential_jet_regions")
     row["jet_region_mask"] = (
         ("plev", "lat", "lon"),
         np.clip(all_jet_regions_mask, 0, 1),
@@ -273,7 +273,7 @@ def run_jet_core_and_region_algorithm_on_one_day(
     )
 
     # Step 8. Remove old and add actual jet core mask
-    row = row.drop("potential_jet_cores")
+    row = row.drop_vars("potential_jet_cores")
     row["jet_core_mask"] = (("plev", "lat", "lon"), jet_core_masks)
     return row
 

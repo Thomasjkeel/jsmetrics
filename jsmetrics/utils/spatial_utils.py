@@ -289,14 +289,10 @@ def get_one_contour_linestring(dataarray, contour_level):
     ), "Data array needs to have latitude and longitude coords"
     one_contour = dataarray.plot.contour(levels=[contour_level])
     matplotlib.pyplot.close()
-    if len(one_contour.allsegs[0]) > 1:
-        try:
-            contour_line = shapely.geometry.MultiLineString((one_contour.allsegs[0]))
-        except ValueError as ve:
-            print(ve)
-            return np.nan
-    else:
-        contour_line = shapely.geometry.LineString((one_contour.allsegs[0][0]))
+    one_contour_segments = seperate_one_contour_into_line_segments(
+        one_contour.get_paths()[0]
+    )
+    contour_line = shapely.geometry.MultiLineString(one_contour_segments)
     return contour_line
 
 
@@ -344,3 +340,35 @@ def haversine(lon1, lat1, lon2, lat2):
     c = 2 * math.asin(math.sqrt(a))
     r = 6371  # Radius of earth in kilometers. Use 3956 for miles
     return c * r
+
+
+def seperate_one_contour_into_line_segments(one_contour):
+    """
+    Seperates a list of vertices of a given contour into multiple segments for
+    eventual conversion to multi-linestring.
+
+    Needed with new Matplotlib depreciation to collections and allsegs of the contour plots.
+
+    Component of method from Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309
+
+    Parameters
+    ----------
+    one_contour : matplotlib.path.Path
+        Path object of one contour from a contour plot
+
+    Returns
+    ----------
+    all_segments : list of lists
+        List of all segments that can be converted to a multilinestring
+    """
+
+    all_segments = []
+    current_segment = []
+    for ind, (segment, code) in enumerate(one_contour.iter_segments()):
+        if code == 1:
+            if ind != 0:
+                all_segments.append(current_segment)
+            current_segment = []
+        current_segment.append(segment)
+    all_segments.append(current_segment)
+    return all_segments

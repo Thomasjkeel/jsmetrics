@@ -7,22 +7,6 @@ import functools
 import xarray
 
 
-def check_input_data_is_xarray(func):
-    @functools.wraps(func)
-    def check_data(*args, **kwargs):
-        if "data" in kwargs:
-            data = kwargs["data"]
-        elif args:
-            #  Assumes first argument is data
-            data = args[0]
-        else:
-            return func(*args, **kwargs)
-        check_data_is_xarray(data)
-        return func(*args, **kwargs)
-
-    return check_data
-
-
 def sort_xarray_data_coords(coords, ascending=True):
     """
     Sort the coordinates of the input data (e.g. lat or lon). Sort in ascending order by default.

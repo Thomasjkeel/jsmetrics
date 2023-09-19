@@ -148,7 +148,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.archer_caldeira_2008(
-                self.data.isel(time=0).drop("time")
+                self.data.isel(time=0).drop_vars("time")
             ),
         )
 
@@ -292,7 +292,7 @@ class TestGrisePolvani2016(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.grise_polvani_2016(
-                self.data["ua"].isel(time=0).drop("time")
+                self.data["ua"].isel(time=0).drop_vars("time")
             ),
         )
 
@@ -309,7 +309,7 @@ class TestBarnesSimpson2017(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.barnes_simpson_2017(
-                self.data["ua"].isel(time=0).drop("time")
+                self.data["ua"].isel(time=0).drop_vars("time")
             ),
         )
 
@@ -331,7 +331,7 @@ class TestBracegirdle2018(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.bracegirdle_et_al_2018(
-                self.data["ua"].isel(time=0).drop("time")
+                self.data["ua"].isel(time=0).drop_vars("time")
             ),
         )
 
@@ -367,7 +367,7 @@ class TestCeppi2018(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.ceppi_et_al_2018(
-                self.data["ua"].isel(time=0).drop("time")
+                self.data["ua"].isel(time=0).drop_vars("time")
             ),
         )
 
@@ -403,7 +403,7 @@ class TestZappa2018(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.zappa_et_al_2018(
-                self.data["ua"].isel(time=0).drop("time")
+                self.data["ua"].isel(time=0).drop_vars("time")
             ),
         )
 
@@ -423,7 +423,7 @@ class TestKerr2020(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.kerr_et_al_2020(
-                self.data["ua"].isel(time=0).drop("time")
+                self.data["ua"].isel(time=0).drop_vars("time")
             ),
         )
 

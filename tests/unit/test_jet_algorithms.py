@@ -133,6 +133,10 @@ class TestPenaOrtiz2013(unittest.TestCase):
         res = tested_func(subset_data)
         self.assertTrue("polar_front_jet" in res)
         self.assertEqual(res["subtropical_jet"].max(), 1)
+        self.assertRaises(
+            KeyError,
+            lambda: tested_func(self.data.isel(time=0).drop("time")),
+        )
 
     def test_get_empty_local_wind_maxima(self):
         tested_func = jet_core_algorithms_components.get_empty_local_wind_maxima_data
@@ -144,10 +148,6 @@ class TestPenaOrtiz2013(unittest.TestCase):
         tested_func = jet_core_algorithms_components.get_local_wind_maxima_by_timeunit
         self.assertRaises(
             ValueError, lambda: tested_func(self.data.isel(time=0), ws_threshold=30)
-        )
-        self.assertRaises(
-            KeyError,
-            lambda: tested_func(self.data.isel(time=0).drop("time"), ws_threshold=30),
         )
 
 
@@ -182,7 +182,7 @@ class TestJetCoreIdentificationAlgorithm(unittest.TestCase):
         self.assertEqual(res["jet_core_id"].max(), 2)
         self.assertRaises(
             KeyError,
-            lambda: tested_func(self.data.isel(time=0).drop("time")),
+            lambda: tested_func(self.data.isel(time=0).drop_vars("time")),
         )
 
 

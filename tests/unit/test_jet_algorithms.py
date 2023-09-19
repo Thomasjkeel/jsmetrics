@@ -162,8 +162,10 @@ class TestJetCoreIdentificationAlgorithm(unittest.TestCase):
     def test_metric(self):
         test_func = jet_core_algorithms.jet_core_identification_algorithm
         # NOTE: this metric is a generator
-        subset_data = self.data.sel(plev=slice(25000, 20000)).isel(time=slice(0, 1))
-        res = test_func(subset_data.sel(plev=25000))
+        subset_data = self.data.sel(plev=25000).isel(
+            time=slice(0, 1), lat=slice(20, 30)
+        )
+        res = test_func(subset_data)
         self.assertEqual(res["jet_core_id"].max(), 2)
 
 

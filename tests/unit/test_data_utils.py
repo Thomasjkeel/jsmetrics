@@ -94,6 +94,48 @@ class TestAddNumDaysto360Datetime(unittest.TestCase):
         self.assertRaises(ValueError, lambda: tested_func(test_date, -1))
 
 
+class TestAddNumDaystoNoLeapDatetime(unittest.TestCase):
+    @parameterized.expand(
+        [
+            (
+                cftime.DatetimeNoLeap(day=1, month=1, year=2020, hour=1),
+                365,
+                cftime.DatetimeNoLeap(day=1, month=1, year=2021, hour=12),
+            ),
+            (
+                cftime.DatetimeNoLeap(day=1, month=1, year=2019, hour=1),
+                365,
+                cftime.DatetimeNoLeap(day=1, month=1, year=2020, hour=12),
+            ),
+            (
+                cftime.DatetimeNoLeap(day=28, month=2, year=2020, hour=1),
+                1,
+                cftime.DatetimeNoLeap(day=1, month=3, year=2020, hour=12),
+            ),
+        ]
+    )
+    def test_add_num_of_days_to_NoLeapDatetime(
+        self, test_date, days_to_add, expected_new_date
+    ):
+        added_test_date = data_utils.add_num_of_days_to_NoLeapDatetime(
+            test_date, num_of_days_to_add=days_to_add
+        )
+        self.assertEqual(added_test_date, expected_new_date)
+
+    def test_errors_raised(self):
+        tested_func = data_utils.add_num_of_days_to_NoLeapDatetime
+        test_date = cftime.DatetimeNoLeap(day=1, month=1, year=2000, hour=1)
+        self.assertRaises(
+            AssertionError, lambda: tested_func(np.datetime64("1970-01-11"), 1)
+        )
+        self.assertRaises(
+            AssertionError,
+            lambda: tested_func(cftime.DatetimeAllLeap(day=1, month=1, year=2000), 1),
+        )
+        self.assertRaises(ValueError, lambda: tested_func(test_date, 0))
+        self.assertRaises(ValueError, lambda: tested_func(test_date, -1))
+
+
 class TestLocalMinimaMaxima(unittest.TestCase):
     def setUp(self):
         self.data = set_up_test_uv_data()

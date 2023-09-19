@@ -87,6 +87,10 @@ class TestSchiemann2009(unittest.TestCase):
         print(result)
         self.assertTrue(result)
         self.assertEqual(int(result["jet_occurence"].isel(plev=0, lat=50, lon=10)), 1)
+        self.assertRaises(
+            KeyError,
+            lambda: tested_func(self.data.isel(time=0).drop("time")),
+        )
 
 
 class TestManney2011(unittest.TestCase):
@@ -94,23 +98,28 @@ class TestManney2011(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        test_func = jet_core_algorithms.manney_et_al_2011
-        # NOTE: this metric is a generator
+        tested_func = jet_core_algorithms.manney_et_al_2011
         subset_data = self.data.sel(plev=slice(50000, 10000)).isel(
             time=slice(0, 1), lon=slice(0, 100)
         )
-        res = test_func(subset_data, jet_core_plev_limit=(10000, 40000))
+        res = tested_func(subset_data, jet_core_plev_limit=(10000, 40000))
         self.assertEqual(int(res["jet_core_mask"].astype(int).max()), 1)
         self.assertEqual(int(res["jet_region_mask"].astype(int).max()), 1)
         self.assertEqual(
             int(res["jet_core_mask"].isel(lon=0).where(lambda x: x).count()), 1
         )
 
-        res = test_func(
+        res = tested_func(
             subset_data, jet_core_plev_limit=(10000, 40000), jet_core_ws_threshold=10
         )
         self.assertEqual(
             int(res["jet_core_mask"].isel(lon=0).where(lambda x: x).count()), 4
+        )
+        self.assertRaises(
+            KeyError,
+            lambda: tested_func(
+                self.data.isel(time=0).drop("time"), jet_core_plev_limit=(10000, 40000)
+            ),
         )
 
 
@@ -126,15 +135,19 @@ class TestPenaOrtiz2013(unittest.TestCase):
         self.assertEqual(res["subtropical_jet"].max(), 1)
 
     def test_get_empty_local_wind_maxima(self):
-        test_func = jet_core_algorithms_components.get_empty_local_wind_maxima_data
-        empty_local_wind_data = test_func(self.data)
+        tested_func = jet_core_algorithms_components.get_empty_local_wind_maxima_data
+        empty_local_wind_data = tested_func(self.data)
         self.assertEqual(empty_local_wind_data.max(), 0)
         self.assertTrue("local_wind_maxima" in empty_local_wind_data)
 
     def test_get_local_wind_maxima_by_timeunit(self):
-        test_func = jet_core_algorithms_components.get_local_wind_maxima_by_timeunit
+        tested_func = jet_core_algorithms_components.get_local_wind_maxima_by_timeunit
         self.assertRaises(
-            ValueError, lambda: test_func(self.data.isel(time=0), ws_threshold=30)
+            ValueError, lambda: tested_func(self.data.isel(time=0), ws_threshold=30)
+        )
+        self.assertRaises(
+            KeyError,
+            lambda: tested_func(self.data.isel(time=0).drop("time"), ws_threshold=30),
         )
 
 
@@ -160,13 +173,17 @@ class TestJetCoreIdentificationAlgorithm(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_metric(self):
-        test_func = jet_core_algorithms.jet_core_identification_algorithm
+        tested_func = jet_core_algorithms.jet_core_identification_algorithm
         # NOTE: this metric is a generator
         subset_data = self.data.sel(plev=25000).isel(
             time=slice(0, 1), lat=slice(20, 30)
         )
-        res = test_func(subset_data)
+        res = tested_func(subset_data)
         self.assertEqual(res["jet_core_id"].max(), 2)
+        self.assertRaises(
+            KeyError,
+            lambda: tested_func(self.data.isel(time=0).drop("time")),
+        )
 
 
 class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
@@ -193,18 +210,18 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
     def test_inner_funcs(self):
         tested_alg = jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm
-        test_data = self.data.isel(time=0, lon=0, lat=slice(20, 30))
+        test_data = self.data.isel(time=0, lon=0, lat=slice(20, 50))
         result = tested_alg(test_data)
         result.run()
         print(result._initial_core_ids.mean())
-        self.assertEqual(round(result._initial_core_ids.mean(), 3), 7.75)
-        self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 46)
+        self.assertEqual(round(result._initial_core_ids.mean(), 3), 11.25)
+        self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 16)
         self.assertEqual(
             len(np.where(result._labelled_data["ws"] == "Potential Boundary")[1]),
-            81,
+            39,
         )
-        self.assertEqual(result.num_of_cores, 3)
-        self.assertListEqual(result.final_jet_cores[0]["index_of_area"][0], [16, 4])
+        self.assertEqual(result.num_of_cores, 1)
+        self.assertListEqual(result.final_jet_cores[0]["index_of_area"][0], [8, 7])
 
     def test_classmethod(self):
         tested_alg = (
@@ -213,7 +230,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         test_data = self.data.isel(time=0, lon=0, lat=slice(20, 30))
         result = tested_alg(test_data)
         self.assertEqual(round(result._initial_core_ids.mean(), 3), 7.75)
-        self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 46)
+        self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 2)
 
 
 class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
@@ -232,7 +249,7 @@ class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
         result = self.tested_alg(test_data)
         result.run()
         self.assertEqual(round(float(result._jet_occurence["ws"].max()), 3), 69.214)
-        self.assertListEqual(result._jet_centres[0].tolist(), [0.0, 247.5])
+        self.assertListEqual(result._jet_centres[0].tolist(), [30.0, 16.875])
 
     def test_cls_method(self):
         test_data = self.data.isel(plev=4, lat=slice(20, 30), lon=slice(0, 10), time=0)

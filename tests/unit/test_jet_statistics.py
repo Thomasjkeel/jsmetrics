@@ -145,6 +145,12 @@ class TestArcherCaldeira2008(unittest.TestCase):
         test_data = self.data.isel(plev=1)
         # should fail because needs two plevs
         self.assertRaises(ValueError, lambda: tested_func(test_data))
+        self.assertRaises(
+            KeyError,
+            lambda: jet_statistics.archer_caldeira_2008(
+                self.data.isel(time=0).drop("time")
+            ),
+        )
 
 
 class TestWoollings2010(unittest.TestCase):
@@ -300,6 +306,12 @@ class TestBarnesSimpson2017(unittest.TestCase):
         result = test_func(self.data)
         self.assertEqual(round(float(result["jet_lat"].mean()), 5), 36.25)
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.05004)
+        self.assertRaises(
+            KeyError,
+            lambda: jet_statistics.barnes_simpson_2017(
+                self.data["ua"].isel(time=0).drop("time")
+            ),
+        )
 
 
 class TestBracegirdle2018(unittest.TestCase):
@@ -316,6 +328,12 @@ class TestBracegirdle2018(unittest.TestCase):
         self.assertEqual(float(result["annual_JPOS"].max()), 37.725)
         self.assertEqual(round(float(result["seasonal_JSTR"].max()), 3), 8.589)
         self.assertEqual(round(float(result["annual_JSTR"].max()), 3), 8.589)
+        self.assertRaises(
+            KeyError,
+            lambda: jet_statistics.bracegirdle_et_al_2018(
+                self.data["ua"].isel(time=0).drop("time")
+            ),
+        )
 
 
 class TestCeppi2018(unittest.TestCase):
@@ -344,6 +362,12 @@ class TestCeppi2018(unittest.TestCase):
             ValueError,
             lambda: tested_func(
                 self.data.sel(lon=slice(0, 0), lat=slice(0, 0)), lon_resolution=1.875
+            ),
+        )
+        self.assertRaises(
+            KeyError,
+            lambda: jet_statistics.ceppi_et_al_2018(
+                self.data["ua"].isel(time=0).drop("time")
             ),
         )
 
@@ -376,6 +400,12 @@ class TestZappa2018(unittest.TestCase):
                 self.data.sel(lon=slice(0, 0), lat=slice(0, 0)), lon_resolution=1.875
             ),
         )
+        self.assertRaises(
+            KeyError,
+            lambda: jet_statistics.zappa_et_al_2018(
+                self.data["ua"].isel(time=0).drop("time")
+            ),
+        )
 
 
 class TestKerr2020(unittest.TestCase):
@@ -390,6 +420,12 @@ class TestKerr2020(unittest.TestCase):
         self.assertEqual(float(result["jet_lat"].max()), 72.5)
         self.assertEqual(float(result["smoothed_jet_lat"].max()), 65.0)
         self.assertEqual(result["smoothed_jet_lat"].isel(time=0).dropna("lon").size, 61)
+        self.assertRaises(
+            KeyError,
+            lambda: jet_statistics.kerr_et_al_2020(
+                self.data["ua"].isel(time=0).drop("time")
+            ),
+        )
 
 
 if __name__ == "__main__":

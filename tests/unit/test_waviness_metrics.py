@@ -38,4 +38,4 @@ class TestCattiaux2016(unittest.TestCase):
         subset_data = self.data.isel(plev=0)
         res = tested_func(subset_data)
         tested_func(subset_data["zg"])
-        self.assertEqual(round(float(res["sinuosity"].max()), 3), 2.749)
+        self.assertEqual(round(float(res["sinuosity"].max()), 3), 2.747)

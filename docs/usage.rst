@@ -165,7 +165,7 @@ within the boundaries of the detected jet (where values are >0).
     jet_boundary_ws_threshold = 30 # Jet boundaries around the cores will be defines as regions with windspeeds of a minimum of 30 m/s.
     
     ## The algorithm run should take about 5-15 seconds depending on CPI
-    manney_outputs = jet_core_algorithms.manney_et_al_2011(uv_sub), jet_core_plev_limit=jet_core_plev_limit, jet_core_ws_threshold=jet_core_ws_threshold, jet_boundary_ws_threshold=jet_boundary_ws_threshold)
+    manney_outputs = jet_core_algorithms.manney_et_al_2011(uv_sub, jet_core_plev_limit=jet_core_plev_limit, jet_core_ws_threshold=jet_core_ws_threshold, jet_boundary_ws_threshold=jet_boundary_ws_threshold)
 
     # Instead of looking at one pressure level, lets take the maximum from each level.
     jet_regions = manney_outputs['jet_region_mask'].max('plev')

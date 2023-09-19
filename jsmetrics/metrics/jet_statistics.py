@@ -28,20 +28,27 @@ def archer_caldeira_2008(data):
     This method calculates three monthly-averaged jet stream properties (windspeed, pressure and latitude) via integrated quantities from u-component wind.
 
     This method returns three properties:
-        1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:
-         .. math::
-            WS_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k}}
-        where :math:`u_{i,j,k}` and :math:`v_{i,j,k}` are the monthly-average horizontal wind components at grid point (i,j,k), and :math:`m_{k}` is the mass at level `k`.
 
-        2. **mass flux weighted pressure** -- the average pressure of flows by the tropopause (:math:`P`), calculated by:
-         .. math::
-            P_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \times p_k}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
-        where :math:`p_k` is the pressure at level :math:`k`.
+    1. **weighted-average wind speed** -- jet stream wind speed (:math:`WS`), calculated by:
 
-        3. **mass flux weighted latitude** -- Latitude of the Northern Hemisphere jet (:math:`L^{NH}`), calculated by:
-         .. math::
-            L_{i}^{NH} =  \frac{\sum\limits_{j=15°N}^{j=70°N} \left[\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \right] \times \phi_{i,j}}{\sum\limits_{j=15N}^{j=70N} \sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
-        where :math:`\phi_{i,j}` is the grid cell latitude.
+    .. math::
+        WS_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k}}
+
+    where :math:`u_{i,j,k}` and :math:`v_{i,j,k}` are the monthly-average horizontal wind components at grid point (i,j,k), and :math:`m_{k}` is the mass at level `k`.
+
+    2. **mass flux weighted pressure** -- the average pressure of flows by the tropopause (:math:`P`), calculated by:
+
+    .. math::
+        P_{i, j} =  \frac{\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \times p_k}{\sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
+
+    where :math:`p_k` is the pressure at level :math:`k`.
+
+    3. **mass flux weighted latitude** -- Latitude of the Northern Hemisphere jet (:math:`L^{NH}`), calculated by:
+
+    .. math::
+        L_{i}^{NH} =  \frac{\sum\limits_{j=15°N}^{j=70°N} \left[\sum\limits_{k=400hPa}^{k=100hPa} \left(m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}\right) \right] \times \phi_{i,j}}{\sum\limits_{j=15N}^{j=70N} \sum\limits_{k=400hPa}^{k=100hPa} m_{k} \times \sqrt{u^{2}_{i, j, k} + v^{2}_{i, j, k}}}
+
+    where :math:`\phi_{i,j}` is the grid cell latitude.
 
     This method was originally introduce in Archer & Caldiera (2008) (https://doi.org/10.1029/2008GL033614)
     and is described in Section 3 of that study.

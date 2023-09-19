@@ -283,6 +283,12 @@ class TestGrisePolvani2016(unittest.TestCase):
         self.assertEqual(float(result["jet_lat"].min()), 35.38)
         self.assertEqual(float(result["jet_lat"].max()), 36.41)
         self.assertEqual(round(float(result["jet_speed"].max()), 5), 22.92644)
+        self.assertRaises(
+            KeyError,
+            lambda: jet_statistics.grise_polvani_2016(
+                self.data["ua"].isel(time=0).drop("time")
+            ),
+        )
 
 
 class TestBarnesSimpson2017(unittest.TestCase):

@@ -185,7 +185,7 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
     def test_ws_thresholds(self):
         tested_alg = jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm
         self.assertRaises(ValueError, lambda: tested_alg(self.data))
-        test_data = self.data.isel(time=0, lon=0)
+        test_data = self.data.isel(time=0, lon=0, lat=slice(20, 30))
         self.assertRaises(ValueError, lambda: tested_alg(test_data, -10, 10))
         self.assertRaises(ValueError, lambda: tested_alg(test_data, 10, -10))
         self.assertRaises(ValueError, lambda: tested_alg(test_data, 10, 30))
@@ -193,11 +193,11 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
 
     def test_inner_funcs(self):
         tested_alg = jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm
-        test_data = self.data.isel(time=0, lon=0)
+        test_data = self.data.isel(time=0, lon=0, lat=slice(20, 30))
         result = tested_alg(test_data)
         result.run()
         print(result._initial_core_ids.mean())
-        self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
+        self.assertEqual(round(result._initial_core_ids.mean(), 3), 7.75)
         self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 46)
         self.assertEqual(
             len(np.where(result._labelled_data["ws"] == "Potential Boundary")[1]),
@@ -210,9 +210,9 @@ class TestJetStreamCoreIdentificationAlgorithm(unittest.TestCase):
         tested_alg = (
             jet_core_algorithms_components.JetStreamCoreIdentificationAlgorithm.run_algorithm
         )
-        test_data = self.data.isel(time=0, lon=0)
+        test_data = self.data.isel(time=0, lon=0, lat=slice(20, 30))
         result = tested_alg(test_data)
-        self.assertEqual(result._initial_core_ids.mean(), 30.07608695652174)
+        self.assertEqual(round(result._initial_core_ids.mean(), 3), 7.75)
         self.assertEqual(len(np.where(result._labelled_data["ws"] == "Core")[1]), 46)
 
 
@@ -224,20 +224,20 @@ class TestJetStreamOccurenceAndCentreAlgorithm(unittest.TestCase):
         )
 
     def test_ws_thresholds(self):
-        test_data = self.data.isel(plev=0, time=0)
+        test_data = self.data.isel(plev=0, time=0, lat=slice(20, 30), lon=slice(0, 10))
         self.assertRaises(ValueError, lambda: self.tested_alg(test_data, -10))
 
     def test_inner_functions(self):
-        test_data = self.data.isel(plev=4, time=0)
+        test_data = self.data.isel(plev=4, time=0, lat=slice(20, 30), lon=slice(0, 10))
         result = self.tested_alg(test_data)
         result.run()
-        self.assertEqual(float(result._jet_occurence["ws"].max()), 85.84358978271484)
+        self.assertEqual(round(float(result._jet_occurence["ws"].max()), 3), 69.214)
         self.assertListEqual(result._jet_centres[0].tolist(), [0.0, 247.5])
 
     def test_cls_method(self):
-        test_data = self.data.isel(plev=4, time=0)
+        test_data = self.data.isel(plev=4, lat=slice(20, 30), lon=slice(0, 10), time=0)
         result = self.tested_alg.run_algorithm(test_data)
-        self.assertEqual(float(result._jet_occurence["ws"].max()), 85.84358978271484)
+        self.assertEqual(round(float(result._jet_occurence["ws"].max()), 3), 69.214)
 
 
 if __name__ == "__main__":

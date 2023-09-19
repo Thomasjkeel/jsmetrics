@@ -2,6 +2,12 @@
 History
 =======
 
+0.1.7-alpha (2023-09-19)
+-------------------------
+* Update Cattiaux method to deal with Matplotlib depreciation warning about using 'allsegs'
+or 'collections' in contour plot
+* Add tests for new spatial utils method 'seperate_one_contour_into_line_segments'
+
 
 0.1.6 (2023-09-14)
 -------------------------

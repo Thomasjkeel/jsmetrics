@@ -30,13 +30,12 @@ All methods are implementation from existing research which have been translated
    Metric                                                                          Status              Metric                                                                          Status                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Archer & Caldiera 2008 <http://doi.wiley.com/10.1029/2008GL033614>`_           Complete            `Woollings et al. 2010 <https://onlinelibrary.wiley.com/doi/10.1002/qj.625>`_   Complete
-   `Barnes & Polvani 2013 <https://doi.org/10.1175/JCLI-D-12-00536.1>`_            Complete            `Screen & Simmonds 2013 <http://doi.wiley.com/10.1002/grl.50174>`_              In progress*        
-   `Barnes & Polvani 2015 <https://doi.org/10.1175/JCLI-D-14-00589.1>`_            Complete            `Francis & Vavrus 2015 <https://doi.org/10.1088/1748-9326/10/1/014005>`_        Complete            
-   `Grise & Polvani 2016 <https://doi.org/10.1002/2015JD024687>`_                  Complete            `Barnes & Simpson 2017 <https://doi.org/10.1175/JCLI-D-17-0299.1>`_             Complete            
-   `Chenoli et al. 2017 <http://link.springer.com/10.1007/s00382-016-3102-y>`_     In progress         `Molnos et al. 2017  <https://doi.org/10.5194/esd-8-75-2017>`_                  In progress*                   
-   `Bracegirdle et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0320.1>`_           Complete            `Ceppi et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0323.1>`_                 Complete 
-   `Zappa et al. 2018 <https://doi.org/10.1029/2019GL083653>`_                     Complete            `Rikus 2018 <http://dx.doi.org/10.1007/s00382-015-2560-y>`_                     In progress
-   `Kerr et al. 2020 <https://doi.org/10.1029/2020JD032735>`_                      To verify
+   `Barnes & Polvani 2013 <https://doi.org/10.1175/JCLI-D-12-00536.1>`_            Complete            `Screen & Simmonds 2013 <http://doi.wiley.com/10.1002/grl.50174>`_              In progress*    
+   `Barnes & Polvani 2015 <https://doi.org/10.1175/JCLI-D-14-00589.1>`_            Complete            `Grise & Polvani 2016 <https://doi.org/10.1002/2015JD024687>`_                  Complete    
+   `Barnes & Simpson 2017 <https://doi.org/10.1175/JCLI-D-17-0299.1>`_             Complete            `Chenoli et al. 2017 <http://link.springer.com/10.1007/s00382-016-3102-y>`_     In progress
+   `Molnos et al. 2017  <https://doi.org/10.5194/esd-8-75-2017>`_                  In progress*        `Bracegirdle et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0320.1>`_           Complete
+   `Ceppi et al. 2018 <https://doi.org/10.1175/JCLI-D-17-0323.1>`_                 Complete            `Zappa et al. 2018 <https://doi.org/10.1029/2019GL083653>`_                     Complete
+   `Rikus 2018 <http://dx.doi.org/10.1007/s00382-015-2560-y>`_                     In progress         `Kerr et al. 2020 <https://doi.org/10.1029/2020JD032735>`_                      To verify
    =============================================================================== ==============  ==  =============================================================================== ==============
 
 \* == help needed

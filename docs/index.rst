@@ -17,7 +17,7 @@ The package currently contains 17 jet statistics and jet core algorithms (in the
 *Why use jsmetrics?:*
 
 The planet's jet streams are complex and not well defined at any one scale (see :ref:`what are jet streams <What are jet streams?>`),
-and as such there have are a wide range of metrics, algorithms and statistics which have been employed in research to help
+and as such there are a wide range of metrics, algorithms and statistics which have been employed in research to help
 identify and characterise them. However, it has been generally quite difficult to reconcile various types of information provided
 by different techniques. The motivation for this package was thus to standardise the most common methods developed for the
 identification and characterisation of jet streams, so that various techniques are immediately available for anyone wishing to

@@ -216,7 +216,7 @@ def manney_et_al_2011(
     below a windspeed threshold (default is 25 m/s, see 'ws_drop_threshold')
 
     This method returns four outputs
-        1. **jet_core_mask** -- Regions within each latitude-altitude slice that are local maxima have windspeeds above the 'jet_core_ws_threshold'
+        1. **jet_core_mask** -- Regions within each latitude-altitude slice that are local maxima and have windspeeds above the 'jet_core_ws_threshold'
         2. **jet_region_mask** -- Regions above, below, left and right of any given jet core with windspeed above the 'jet_boundary_ws_threshold'
         3. **jet_region_contour_mask** -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
         4. **ws** -- Resultant wind speed calculated from 'ua', 'va' inputs.

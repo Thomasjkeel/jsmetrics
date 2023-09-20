@@ -208,18 +208,18 @@ def manney_et_al_2011(
     jet_core_lat_distance=15,
 ):
     r"""
-    This method detects jet cores and a boundary region surrounding those cores based on two windspeed thresholds.
-    Two checks are applied after initial detection of cores to check whether boundaries with more then one core
-    are part of the same feature (the default threshold for these boundaries is 30 m/s, see 'jet_boundary_ws_threshold').
-    The two checks seperate cores based on whether the cores are more than a certain distance apart
+    This method detects jet cores (within an altitude range see 'jet_core_plev_limit') and a boundary region surrounding
+    those cores based on two windspeed thresholds. Two checks are applied after initial detection of cores to check whether
+    boundaries with more then one core are part of the same feature (the default threshold for these boundaries is 30 m/s,
+    see 'jet_boundary_ws_threshold'). The two checks seperate cores based on whether the cores are more than a certain distance apart
     (default is 15 degrees, see 'jet_core_lat_distance') and whether the windspeed between two given cores does not drop
     below a windspeed threshold (default is 25 m/s, see 'ws_drop_threshold')
 
     This method returns four outputs
-        1. **jet_core_mask** -- Regions within each latitude/altitude that are local maxima have windspeeds above the 'jet_core_ws_threshold'
-        2. **jet_region_mask** -- Regions above, below, left and right of the jet core with windspeed above the 'jet_boundary_ws_threshold'
+        1. **jet_core_mask** -- Regions within each latitude-altitude slice that are local maxima have windspeeds above the 'jet_core_ws_threshold'
+        2. **jet_region_mask** -- Regions above, below, left and right of any given jet core with windspeed above the 'jet_boundary_ws_threshold'
         3. **jet_region_contour_mask** -- All contigious regions of windspeeds emcompassing a jet core above the 'jet_boundary_ws_threshold' (i.e. not just above, below, left and right)
-        4. **ws** -- Wind speed calculated from 'ua', 'va' inputs.
+        4. **ws** -- Resultant wind speed calculated from 'ua', 'va' inputs.
 
     This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
     and is described in Section 3.1 of that study. This method is also known as JETPAC, and available in its

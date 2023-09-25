@@ -24,8 +24,8 @@ Quick start
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | I would like to...                                     | Reccomendation                                                    |
    +========================================================+===================================================================+
-   | | Read in my wind-speed data from NetCDF (.nc) or      | | Python's *xarray* library can read in climate data in a .nc     |
-   | | GRIB (.grib) format                                  | | or .grib format by default. And all metrics in *jsmetrics*      |
+   | | Read in wind-speed data from NetCDF (.nc) or GRIB    | | Python's *xarray* library can read in climate data in a .nc     |
+   | | (.grib) format                                       | | or .grib format by default. And all metrics in *jsmetrics*      |
    | |                                                      | | have been implementated to work with *xarray* data types        |
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | Know the mean position of the jet stream               | | The most common method for this would be to calculate the       |
@@ -45,8 +45,8 @@ Quick start
    |                                                        | | of methods available in *jsmetrics*. These methods all produce  |
    |                                                        | | masks of the latitude/longitude/level coordinates where a given |
    |                                                        | | algorithm has discovered jet cores. Our reccomendation is to    |
-   |                                                        | | use 'koch_et_al_2006', which provides a weighted windspeed and  |
-   |                                                        | | or 'manney_et_al_2011' which will seperate different jet cores  |
+   |                                                        | | use 'koch_et_al_2006', which provides a weighted windspeed  or  |
+   |                                                        | | 'manney_et_al_2011' which will seperate different jet cores     |
    |                                                        | | within the same region. Be warned that most of the 5 jet core   |
    |                                                        | | algorithms available are computationally expensive, so read the |
    |                                                        | | docstring of a given method for some information about run time |

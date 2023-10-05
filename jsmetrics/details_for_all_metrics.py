@@ -132,14 +132,14 @@ METRIC_DETAILS = {
         "description": "This method calculates a sinousity metric for upper-air flow using geopotential height. This is achieved by comparing an isohype at the Z500 average over 30-70 N to the perimeter at 50∘N. For more information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
         "doi": "https://doi.org/10.1002/2016GL070309",
     },
-    "GrisePolvani2016": {
+    "GrisePolvani2014": {
         "variables": ["ua"],
         "coords": {"plev": [850, 850], "lat": [-65, -30]},
         "plev_units": "hPa",
-        "metric": jet_statistics.grise_polvani_2016,
-        "name": "Grise & Polvani 2016",
+        "metric": jet_statistics.grise_polvani_2014,
+        "name": "Grise & Polvani 2014",
         "description": "This method calculates the latitude of the midlatitude eddy-driven jet by finding the peak value of the input u-wind field. A polynomial fit is then applied to get an appropriate value of 'jet_lat' at a resolution 0.01 degrees. For more information see 'Notes' for this method available on the ReadTheDocs for jsmetrics.",
-        "doi": "https://doi.org/10.1002/2015JD024687",
+        "doi": "https://doi.org/10.1002/2013GL058466",
     },
     "BarnesSimpson2017_NorthAtlantic": {
         "variables": ["ua"],

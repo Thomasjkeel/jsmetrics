@@ -381,6 +381,101 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
+def grise_polvani_2014(data):
+    r"""
+    This method calculates the latitude of the midlatitude eddy-driven jet ('jet_lat') by finding the peak value of the input u-wind field.
+    A polynomial fit is then applied to get an appropriate value of 'jet_lat' at a resolution 0.01 degrees.
+    As opposed to the original method, this implementation also returns the speed at the 'jet_lat': the 'jet_speed'
+
+    This method was originally introduce in Grise & Polvani (2014) https://doi.org/10.1002/2013GL058466
+    and is described in Section 2 of that study.
+
+    Please see 'Notes' below for any additional information about the implementation of this method
+    to this package.
+
+    Parameters
+    ----------
+    data : xarray.Dataset
+        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
+
+    Returns
+    ----------
+    output : xarray.Dataset
+        Data containing the two outputs: 'jet_lat' and 'jet_speed'
+
+    Notes
+    -----
+    This method was originally developed for the jet streams in the Southern Hemisphere.
+
+    The original paper also includes two other metrics for zonal mean atmospheric circulation.
+
+    Examples
+    --------
+    .. code-block:: python
+
+        import jsmetrics
+        import xarray as xr
+
+        # Load in dataset with u component wind:
+        ua_data = xr.open_dataset('path_to_u_data')
+
+        # Subset dataset to range used in original methodology (850 hPa &  -65--30N)):
+        ua_sub = ua.sel(plev=850, lat=slice(-65, -30))
+
+        # Run statistic:
+        gp16 = jsmetrics.jet_statistics.grise_polvani_2014(ua_sub)
+    """
+    if isinstance(data, xarray.DataArray):
+        data = data.to_dataset()
+
+    # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
+    if data["time"].size == 1 and "time" not in data.dims:
+        data = data.expand_dims("time")
+
+    # Step 1. Calculate zonal-mean
+    zonal_mean = windspeed_utils.get_zonal_mean(data)
+
+    # Step 2. Get the 3 latitudes and speeds around max zonal wind-speed (e.g. lat-1, lat, lat+1)
+    all_max_lats_and_ws = np.array(
+        list(
+            map(
+                jet_statistics_components.get_3_latitudes_and_speed_around_max_ws,
+                zonal_mean["ua"],
+            )
+        )
+    )
+
+    #  Step 3. Apply quadratic function to get max latitude at 0.01 degree resolution
+    scaled_max_lats = []
+    scaled_max_ws = []
+    for max_lat_and_ws in all_max_lats_and_ws:
+        try:
+            (
+                scaled_max_lat,
+                scaled_ws,
+            ) = jet_statistics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
+                max_lat_and_ws, lat_resolution=0.01
+            )
+        except Exception as e:
+            print(e)
+            scaled_max_lat = np.nan
+            scaled_ws = np.nan
+        scaled_max_lats.append(scaled_max_lat)
+        scaled_max_ws.append(scaled_ws)
+
+    #  Step 4. Assign scaled max lats back to data
+    output = data.assign(
+        {
+            "jet_lat": (("time"), scaled_max_lats),
+            "jet_speed": (("time"), scaled_max_ws),
+        }
+    )
+    return output
+
+
+@sort_xarray_data_coords(coords=["lat", "lon"])
 def barnes_polvani_2015(data):
     r"""
     This method calculates the jet positon and wind speed at that position by fitting a parabola around the
@@ -438,101 +533,6 @@ def barnes_polvani_2015(data):
         output = zonal_mean.groupby("time").map(
             jet_statistics_components.get_jet_lat_and_speed_using_parabola_by_day
         )
-    return output
-
-
-@sort_xarray_data_coords(coords=["lat", "lon"])
-def grise_polvani_2016(data):
-    r"""
-    This method calculates the latitude of the midlatitude eddy-driven jet ('jet_lat') by finding the peak value of the input u-wind field.
-    A polynomial fit is then applied to get an appropriate value of 'jet_lat' at a resolution 0.01 degrees.
-    As opposed to the original method, this implementation also returns the speed at the 'jet_lat': the 'jet_speed'
-
-    This method was originally introduce in Grise & Polvani (2016) https://doi.org/10.1002/2015JD024687
-    and is described in Section 2 of that study.
-
-    Please see 'Notes' below for any additional information about the implementation of this method
-    to this package.
-
-    Parameters
-    ----------
-    data : xarray.Dataset
-        Data which should containing the variables: 'ua', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
-
-    Returns
-    ----------
-    output : xarray.Dataset
-        Data containing the two outputs: 'jet_lat' and 'jet_speed'
-
-    Notes
-    -----
-    This method was originally developed for the jet streams in the Southern Hemisphere.
-
-    The original paper also includes two other metrics for zonal mean atmospheric circulation.
-
-    Examples
-    --------
-    .. code-block:: python
-
-        import jsmetrics
-        import xarray as xr
-
-        # Load in dataset with u component wind:
-        ua_data = xr.open_dataset('path_to_u_data')
-
-        # Subset dataset to range used in original methodology (850 hPa &  -65--30N)):
-        ua_sub = ua.sel(plev=850, lat=slice(-65, -30))
-
-        # Run statistic:
-        gp16 = jsmetrics.jet_statistics.grise_polvani_2016(ua_sub)
-    """
-    if isinstance(data, xarray.DataArray):
-        data = data.to_dataset()
-
-    # Step 0: Expand time dimensions so we can map a function to the dataset properly
-    if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
-    if data["time"].size == 1 and "time" not in data.dims:
-        data = data.expand_dims("time")
-
-    # Step 1. Calculate zonal-mean
-    zonal_mean = windspeed_utils.get_zonal_mean(data)
-
-    # Step 2. Get the 3 latitudes and speeds around max zonal wind-speed (e.g. lat-1, lat, lat+1)
-    all_max_lats_and_ws = np.array(
-        list(
-            map(
-                jet_statistics_components.get_3_latitudes_and_speed_around_max_ws,
-                zonal_mean["ua"],
-            )
-        )
-    )
-
-    #  Step 3. Apply quadratic function to get max latitude at 0.01 degree resolution
-    scaled_max_lats = []
-    scaled_max_ws = []
-    for max_lat_and_ws in all_max_lats_and_ws:
-        try:
-            (
-                scaled_max_lat,
-                scaled_ws,
-            ) = jet_statistics_components.get_latitude_and_speed_where_max_ws_at_reduced_resolution(
-                max_lat_and_ws, lat_resolution=0.01
-            )
-        except Exception as e:
-            print(e)
-            scaled_max_lat = np.nan
-            scaled_ws = np.nan
-        scaled_max_lats.append(scaled_max_lat)
-        scaled_max_ws.append(scaled_ws)
-
-    #  Step 4. Assign scaled max lats back to data
-    output = data.assign(
-        {
-            "jet_lat": (("time"), scaled_max_lats),
-            "jet_speed": (("time"), scaled_max_ws),
-        }
-    )
     return output
 
 

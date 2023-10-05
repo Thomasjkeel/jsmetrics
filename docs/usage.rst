@@ -52,9 +52,9 @@ was developed for in the file: `details_for_all_metrics.py <https://github.com/T
     # Select and run a few jet statistics
     w10 = jet_statistics.woollings_et_al_2010(u_sub, window_size=20, filter_freq=5)
     bp13 = jet_statistics.barnes_polvani_2013(u_sub, window_size=20, filter_freq=5)
-    gp16 = jet_statistics.grise_polvani_2016(u_sub)
+    gp14 = jet_statistics.grise_polvani_2014(u_sub)
     z18 = jet_statistics.zappa_et_al_2018(u_sub)
-    all_metrics = [w10, bp13, gp16, z18]
+    all_metrics = [w10, bp13, gp14, z18]
 
     # Plot a time series of the jet latitude and speed estimations
     fig, axes = plt.subplots(1, 2, sharex=True, figsize=(8, 3))
@@ -94,8 +94,8 @@ In this case to run the jet statistic on each longitude in the input dataset, si
     # Subset to a given season and hemisphere (for purpose of the example)
     u_sub = u_data.sel(time=slice("2021-01", "2021-02"), lat=slice(0, 90))
 
-    # In this example we will use the jet latitude statistic from Grise & Polvani 2016
-    jet_statistics_to_use = jet_statistics.grise_polvani_2016
+    # In this example we will use the jet latitude statistic from Grise & Polvani 2014
+    jet_statistics_to_use = jet_statistics.grise_polvani_2014
 
     # Define a function that will allow us to calculate a given metric for each longitude in our input data.
     def calc_jet_lat_by_lon(data_row, jet_statistic_func):
@@ -131,7 +131,7 @@ In this case to run the jet statistic on each longitude in the input dataset, si
    :align: center
    :alt: Jet latitude by long
 
-   Example 2. By longitude estimation of the jet latitude in the Northern Hemisphere as determined by Grise & Polvani 2016 method. Notice how the Atlantic and Pacific have relatively low variability. Data is from the ERA5 and is in a 1*1 degree resolution.
+   Example 2. By longitude estimation of the jet latitude in the Northern Hemisphere as determined by Grise & Polvani 2014 method. Notice how the Atlantic and Pacific have relatively low variability. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 
 

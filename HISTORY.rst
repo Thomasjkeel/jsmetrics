@@ -2,6 +2,11 @@
 History
 =======
 
+0.1.7-beta (2023-10-05)
+-------------------------
+* Rename to Barnes & Polvani 2014 and update tests and all mentions of
+
+
 0.1.7-alpha (2023-09-19)
 -------------------------
 * Update Cattiaux method to deal with Matplotlib depreciation warning about using 'allsegs'

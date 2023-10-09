@@ -222,8 +222,9 @@ def manney_et_al_2011(
         4. **ws** -- Resultant wind speed calculated from 'ua', 'va' inputs.
 
     This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
-    and is described in Section 3.1 of that study. This method is also known as JETPAC, and available in its
-    original form from NASA JPL.
+    and is described in Section 3.1 of that study. This method is also known as the JETPAC (Jet and
+    Tropopause Products for Analysis and Characterization) software package, and available in its original
+    form from NASA JPL.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.

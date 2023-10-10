@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20 # Consider increasing timeout
     steps:
       - uses: actions/checkout@v4
       - name: Install Python 3

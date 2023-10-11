@@ -286,7 +286,7 @@ def manney_et_al_2011(
 
     if not jet_core_plev_limit:
         raise KeyError(
-            "Please provide a pressure level limit for jet cores returned by this metric. As an example the original methodology used a limit of 100-400 hPa (to replicate this, pass the parameter jet_core_plev_limit=(100, 400))"
+            "Please provide a pressure level limit for jet cores returned by this metric. As an example the original methodology used a limit of 100-400 hPa. To replicate this, pass the parameter jet_core_plev_limit=(100, 400)."
         )
 
     # Step 1. Calculate wind speed from ua and va components.

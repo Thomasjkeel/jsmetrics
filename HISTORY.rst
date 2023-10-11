@@ -2,6 +2,14 @@
 History
 =======
 
+0.1.7 (2023-10-10)
+-------------------------
+* Changes:
+* **MAJOR:** Rename to Barnes & Polvani 2014 and update tests and all mentions of
+* Update Cattiaux method to deal with Matplotlib depreciation warning about using 'allsegs' or 'collections' in contour plot
+* Add tests for new spatial utils method 'seperate_one_contour_into_line_segments'
+* Add readthedocs.yml
+
 0.1.7-beta (2023-10-05)
 -------------------------
 * Rename to Barnes & Polvani 2014 and update tests and all mentions of
@@ -9,8 +17,7 @@ History
 
 0.1.7-alpha (2023-09-19)
 -------------------------
-* Update Cattiaux method to deal with Matplotlib depreciation warning about using 'allsegs'
-or 'collections' in contour plot
+* Update Cattiaux method to deal with Matplotlib depreciation warning about using 'allsegs' or 'collections' in contour plot
 * Add tests for new spatial utils method 'seperate_one_contour_into_line_segments'
 
 

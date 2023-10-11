@@ -56,7 +56,7 @@ def koch_et_al_2006(data, ws_threshold=30):
     Returns
     ----------
     output : xr.Dataset
-        Data containing the outpyt variable 'jet_events_ws'
+        Data containing the output variable 'jet_events_ws'
 
     Notes
     -----

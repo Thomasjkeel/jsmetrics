@@ -262,6 +262,75 @@ def get_local_minima(arr, axis=0):
     return scipy.signal.argrelextrema(arr, np.less, axis=axis)
 
 
+def filter_local_extremes_to_min_distance(local_extrema, min_distance_threshold=2):
+    """
+    Filter local extremes (i.e. outputs of minima or maxima from scipy.signal.argrelextrema)
+    so that no neighbours remain in array.
+
+    Parameters
+    ----------
+    local_extrema : array-like
+        likely (stacked) outputs of scipy.signal.argrelextrema
+    min_distance_threshold : int
+        Minimum distances between indexes in array (default: 2 indexes)
+
+    Returns
+    -------
+    filtered_extrema : array-like
+        (stacked) outputs of scipy.signal.argrelextrema with values less than a min_distance_threshold away removed
+
+    Examples
+    --------
+    maxima_indices = np.column_stack(jsmetrics.utils.data_utils.get_local_maxima(current['ws'].data))
+    filtered_indices = filter_local_extremes_so_no_neighbours(maxima_indices, min_distance_threshold=2)
+    """
+    filtered_extrema = []
+
+    for idx in local_extrema:
+        if not any(
+            np.linalg.norm(idx - existing_maxima) < min_distance_threshold
+            for existing_maxima in filtered_extrema
+        ):
+            filtered_extrema.append(idx)
+
+    filtered_extrema = np.array(filtered_extrema)
+    return filtered_extrema
+
+
+def find_intersection_between_two_array_of_arrays(array1, array2):
+    """
+    Find the intersection between two arrays of arrays. See examples for example.
+
+    Parameters
+    ----------
+    array1 : np.array
+        First array of arrays to compare with array2
+    array2 : np.array
+        Second array of arrays to compare with array1
+
+    Returns
+    -------
+    intersection : np.array
+        Intesection of the two arrays returning only the arrays within the original two that are in both.
+
+    Examples
+    --------
+    array1 = [[1, 2], [3, 4]]
+    array2 = [[1, 2], [4, 3]]
+    find_intersection_between_two_array_of_arrays(array1, array2)
+    # returns [[1, 2]]
+
+    """
+    intersection = []
+    for arr1 in array1:
+        for arr2 in array2:
+            if np.array_equal(arr1, arr2):
+                intersection.append(arr1)
+                break
+    intersection = np.array(intersection)
+    return intersection
+
+
 def get_num_of_decimal_places(num):
     """
     Gets number of decimal places in a float

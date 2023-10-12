@@ -128,7 +128,7 @@ def get_all_hPa_list(data):
     return plevs
 
 
-def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
+def get_local_jet_occurence(row, ws_threshold, u_threshold):
     r"""
     Each jet occurence is detected based on three rules applied to inputted
     wind speed (V = [u, v]):
@@ -146,6 +146,8 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
         Data of a single time unit containing windspeed (ws), plev, lat, lon
     ws_threshold : int or float
         Windspeed threshold used to extract jet events (default: 30 ms-1)
+    u_threshold : int or float
+        Windspeed threshold used to extract u-component wind speed (default: 0 ms^{-1})
 
     Returns
     ----------
@@ -157,22 +159,53 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
     )
+    all_jet_occurences = []
     for lon in row["lon"]:
-        for plev in row["plev"]:
-            current = row.sel(lon=lon, plev=plev, method="nearest")
-            current = current.where(
-                (abs(current["ws"]) >= ws_threshold) & (current["ua"] > 0)
+        current = row.sel(lon=lon, method="nearest")
+
+        # Finding local maxima indices in the 2D array
+        maxima_indices_ax0 = np.column_stack(
+            data_utils.get_local_maxima(current["ws"].data, axis=0)
+        )
+        maxima_indices_ax1 = np.column_stack(
+            data_utils.get_local_maxima(current["ws"].data, axis=1)
+        )
+        # find intersection of the two arrays intersection
+        maxima_indices = data_utils.find_intersection_between_two_array_of_arrays(
+            maxima_indices_ax0, maxima_indices_ax1
+        )
+
+        # Filter indices to remove maximas that neighbour each other (taking the first instance)
+        filtered_maxima_indices = data_utils.filter_local_extremes_to_min_distance(
+            maxima_indices, min_distance_threshold=2
+        )
+        if len(filtered_maxima_indices) > 0:
+            # Creating a boolean mask for the filtered maxima
+            maxima_mask = np.zeros_like(current["ws"], dtype=bool)
+            maxima_mask[
+                filtered_maxima_indices[:, 0], filtered_maxima_indices[:, 1]
+            ] = True
+
+            # Mask coordinates of filtered maxima
+            current["jet_occurence"] = current["ws"].where(
+                (maxima_mask)
+                & (abs(current["ws"]) >= ws_threshold)
+                & (current["ua"] > u_threshold)
             )
-            local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
-            if len(local_maxima_lat_inds) > 0:
-                for lat_ind in local_maxima_lat_inds:
-                    row["jet_occurence"].loc[
-                        dict(
-                            lat=current["lat"].data[lat_ind],
-                            lon=lon,
-                            plev=plev,
-                        )
-                    ] = 1.0
+        else:
+            # Set all values to np.nan
+            current["jet_occurence"] = current["jet_occurence"].where(
+                current["jet_occurence"] > 0
+            )
+        all_jet_occurences.append(current["jet_occurence"])
+    all_jet_occurences_dataarray = xr.concat(all_jet_occurences, dim="lon")
+
+    # Set all non-NaN values to 1
+    all_jet_occurences_dataarray = (
+        all_jet_occurences_dataarray / all_jet_occurences_dataarray
+    )
+    row["jet_occurence"] = all_jet_occurences_dataarray.transpose("plev", "lat", "lon")
+
     return row
 
 

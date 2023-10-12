@@ -7,6 +7,7 @@ History
 * Fix CI and Github actions
 * Finish overhaul the ReadTheDocs documentation in the package
 * Confirm completed and to verify metrics
+* Update Schiemann et al. 2009 method to run faster and introduce u_threshold parameter default
 
 0.1.7 (2023-10-10)
 -------------------------

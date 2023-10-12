@@ -127,8 +127,8 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     2. :math:`|V| \ge 30 m s^{-1}`
     3. :math:`u \ge 0 m s^{-1}`.
 
-    The method allows you to edit the :math:`|V|` threshold (see parameter 'ws_threshold', default is :math: `30 m s^{-1}`),
-    and :math:`u` threshold (see parameter 'u_threshold', default is :math: `0 m s^{-1}`).
+    The implementation of this method here allows you to edit the :math:`|V|` threshold (see parameter 'ws_threshold',
+    default is :math: `30 m s^{-1}`), and :math:`u` threshold (see parameter 'u_threshold', default is :math: `0 m s^{-1}`).
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.

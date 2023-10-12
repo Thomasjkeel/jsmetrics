@@ -156,7 +156,7 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     This implementation will work where there is only one pressure level, so a 3-d slice (time, lat, lon).
 
     **Slow method:** due to the nature of this method, it currently takes a moderately long time to run,
-    i.e. 3 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
+    i.e. 7.6 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
 
     Examples
     --------

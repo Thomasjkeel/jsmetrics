@@ -322,13 +322,11 @@ def find_intersection_between_two_array_of_arrays(array1, array2):
 
     """
     intersection = []
-
     for arr1 in array1:
         for arr2 in array2:
             if np.array_equal(arr1, arr2):
                 intersection.append(arr1)
                 break
-
     intersection = np.array(intersection)
     return intersection
 

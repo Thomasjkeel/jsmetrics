@@ -262,6 +262,41 @@ def get_local_minima(arr, axis=0):
     return scipy.signal.argrelextrema(arr, np.less, axis=axis)
 
 
+def filter_local_extremes_to_min_distance(local_extrema, min_distance_threshold=2):
+    """
+    Filter local extremes (i.e. outputs of minima or maxima from scipy.signal.argrelextrema)
+    so that no neighbours remain in array.
+
+    Parameters
+    ----------
+    local_extrema : array-like
+        likely (stacked) outputs of scipy.signal.argrelextrema
+    min_distance_threshold : int
+        Minimum distances between indexes in array (default: 2 indexes)
+
+    Returns
+    -------
+    filtered_extrema : array-like
+        (stacked) outputs of scipy.signal.argrelextrema with values less than a min_distance_threshold away removed
+
+    Examples
+    --------
+    maxima_indices = np.column_stack(jsmetrics.utils.data_utils.get_local_maxima(current['ws'].data))
+    filtered_indices = filter_local_extremes_so_no_neighbours(maxima_indices, min_distance_threshold=2)
+    """
+    filtered_extrema = []
+
+    for idx in local_extrema:
+        if not any(
+            np.linalg.norm(idx - existing_maxima) < min_distance_threshold
+            for existing_maxima in filtered_extrema
+        ):
+            filtered_extrema.append(idx)
+
+    filtered_extrema = np.array(filtered_extrema)
+    return filtered_extrema
+
+
 def get_num_of_decimal_places(num):
     """
     Gets number of decimal places in a float

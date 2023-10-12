@@ -14,7 +14,6 @@
 from jsmetrics.utils import data_utils, windspeed_utils
 import numpy as np
 import scipy.ndimage
-import scipy.signal
 import xarray as xr
 
 # docs
@@ -161,21 +160,34 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold, u_threshold):
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
     )
     for lon in row["lon"]:
-        for plev in row["plev"]:
-            current = row.sel(lon=lon, plev=plev, method="nearest")
-            current = current.where(
-                (abs(current["ws"]) >= ws_threshold) & (current["ua"] > u_threshold)
+        current = row.sel(lon=lon, method="nearest")
+        current = current.where(
+            (abs(current["ws"]) >= ws_threshold) & (current["ua"] > 0), other=0
+        )
+
+        # Finding local maxima indices in the 2D array
+        maxima_indices = np.column_stack(
+            data_utils.get_local_maxima(current["ws"].data)
+        )
+        # Filter indices to remove maximas that neighbour each other (taking the first instance)
+        filtered_maxima_indices = data_utils.filter_local_extremes_to_min_distance(
+            maxima_indices, min_distance_threshold=2
+        )
+        if len(filtered_maxima_indices) > 0:
+            # Creating a boolean mask for the filtered maxima
+            maxima_mask = np.zeros_like(current["ws"], dtype=bool)
+            maxima_mask[
+                filtered_maxima_indices[:, 0], filtered_maxima_indices[:, 1]
+            ] = True
+
+            # Mask coordinates of filtered maxima
+            filtered_maxima_coords = current["ws"].where(maxima_mask)
+            current["jet_occurence"] = filtered_maxima_coords
+        else:
+            # Set all values to np.nan
+            current["jet_occurence"] = current["jet_occurence"].where(
+                current["jet_occurence"] > 0
             )
-            local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
-            if len(local_maxima_lat_inds) > 0:
-                for lat_ind in local_maxima_lat_inds:
-                    row["jet_occurence"].loc[
-                        dict(
-                            lat=current["lat"].data[lat_ind],
-                            lon=lon,
-                            plev=plev,
-                        )
-                    ] = 1.0
     return row
 
 

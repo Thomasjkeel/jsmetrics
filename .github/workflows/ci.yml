@@ -16,6 +16,8 @@ jobs:
       - name: Install Python 3 and set up env
         uses: conda-incubator/setup-miniconda@v2.2.0 # actions/setup-python@v1
         with:
+          cache-downloads: true
+          cache-environment: true
           activate-environment: jsmet
           environment-file: environment.yml
           python-version: 3.9

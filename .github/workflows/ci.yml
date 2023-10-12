@@ -12,19 +12,19 @@ jobs:
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Python 3
-        uses: conda-incubator/setup-miniconda@v2 # actions/setup-python@v1
+      - uses: actions/checkout@v4.1.0
+      - name: Set up Mamba with Python 3 and install dependencies
+        uses: mamba-org/setup-micromamba@v1.4.4 #conda-incubator/setup-miniconda@v2.2.0 # actions/setup-python@v1
         with:
+          cache-downloads: true
+          cache-environment: true
+          activate-environment: jsmet
+          environment-file: environment.yml
           python-version: 3.9
-      - name: Install dependencies
+          auto-activate-base: false
+      - name: Run pytest coverage
+        shell: bash -el {0}
         run: |
-          conda env create -f environment.yml
-          conda run -n jsmet pip install pytest
-          conda run -n jsmet pip install parameterized==0.8.1
-          conda run -n jsmet pip install pytest-cov
-      - name: Run tests with pytest-cov
-        run: |
-          conda run -n jsmet pytest --cov
+          pytest --cov
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2

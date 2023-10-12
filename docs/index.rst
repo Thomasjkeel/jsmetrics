@@ -8,13 +8,14 @@ Welcome to jsmetrics' documentation!
 This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising :ref:`jet streams<What are jet streams?>`
 written in Python and built from `*xarray* <https://docs.xarray.dev/en/stable/>`_.
 
+The package currently contains 17 jet statistics and jet core algorithms (in the *complete* or *verification* phase), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
+
 .. note:: 
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    
   - example jupyter notebooks on `Github <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-The package currently contains 17 jet statistics and jet core algorithms (in the *complete* or *verification* phase), and you can find a full list of them :ref:`here <Metrics & Algorithms>`
-
-*Why use jsmetrics?:*
+Why use jsmetrics?:
+-------------------
 
 The planet's jet streams are complex and not well defined at any one scale (see :ref:`what are jet streams <What are jet streams?>`),
 and as such there are a wide range of metrics, algorithms and statistics which have been employed in research to help
@@ -62,8 +63,8 @@ For examples please check out the :ref:`Examples of Use`.
 
 Some example jupyter notebooks are also made available `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-DISCLAIMER
--------------
+Disclaimer
+----------
 We have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
 However, in some cases, we have chosen to exclude or alter parts of the methodology which reduce the resolution of the output (i.e. grouping into season or region) with the hope to preserve the parts of the method that specifically isolate a characteristics of the jet-stream at any inputted scale.
 Again, any further subsetting is passed onto the user.

@@ -118,7 +118,7 @@ def koch_et_al_2006(data, ws_threshold=30):
 
 
 @sort_xarray_data_coords(coords=["lat", "lon"])
-def schiemann_et_al_2009(data, ws_threshold=30):
+def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     r"""
     This method detects 'jet occurrences', whereby each jet occurence is detected based
     on three rules applied to inputted wind speed (:math:`V = [u, v]`):
@@ -126,6 +126,9 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     1. :math:`|V|` is a local maxima in latitude and altitude plane
     2. :math:`|V| \ge 30 m s^{-1}`
     3. :math:`u \ge 0 m s^{-1}`.
+
+    The method allows you to edit the :math:`|V|` threshold (see parameter 'ws_threshold', default is :math: `30 m s^{-1}`),
+    and :math:`u` threshold (see parameter 'u_threshold', default is :math: `0 m s^{-1}`).
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.
@@ -137,9 +140,10 @@ def schiemann_et_al_2009(data, ws_threshold=30):
     ----------
     data : xarray.Dataset
         Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
-
     ws_threshold : int or float
-        Windspeed threshold used to extract jet maxima (default: 30 ms-1)
+        Windspeed threshold used to extract jet maxima from resultant windspeed (default: 30 ms^{-1})
+    u_threshold : int or float
+        Windspeed threshold used to extract u-component wind speed (default: 0 ms^{-1})
 
     Returns
     ----------
@@ -187,13 +191,16 @@ def schiemann_et_al_2009(data, ws_threshold=30):
             data = data.squeeze("time")
         output = (
             jet_core_algorithms_components.get_local_jet_occurence_by_oneday_by_plev(
-                data, ws_threshold=ws_threshold
+                data, ws_threshold=ws_threshold, u_threshold=u_threshold
             )
         )
     else:
         output = data.groupby("time").map(
             jet_core_algorithms_components.get_local_jet_occurence_by_oneday_by_plev,
-            (ws_threshold,),
+            (
+                ws_threshold,
+                u_threshold,
+            ),
         )
     return output
 

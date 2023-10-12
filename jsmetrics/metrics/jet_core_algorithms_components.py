@@ -129,7 +129,7 @@ def get_all_hPa_list(data):
     return plevs
 
 
-def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
+def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold, u_threshold):
     r"""
     Each jet occurence is detected based on three rules applied to inputted
     wind speed (V = [u, v]):
@@ -147,6 +147,8 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
         Data of a single time unit containing windspeed (ws), plev, lat, lon
     ws_threshold : int or float
         Windspeed threshold used to extract jet events (default: 30 ms-1)
+    u_threshold : int or float
+        Windspeed threshold used to extract u-component wind speed (default: 0 ms^{-1})
 
     Returns
     ----------
@@ -162,7 +164,7 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold=30):
         for plev in row["plev"]:
             current = row.sel(lon=lon, plev=plev, method="nearest")
             current = current.where(
-                (abs(current["ws"]) >= ws_threshold) & (current["ua"] > 0)
+                (abs(current["ws"]) >= ws_threshold) & (current["ua"] > u_threshold)
             )
             local_maxima_lat_inds = data_utils.get_local_maxima(current["ws"].data)[0]
             if len(local_maxima_lat_inds) > 0:

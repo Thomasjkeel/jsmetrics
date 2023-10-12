@@ -128,7 +128,7 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     3. :math:`u \ge 0 m s^{-1}`.
 
     The implementation of this method here allows you to edit the :math:`|V|` threshold (see parameter 'ws_threshold',
-    default is :math: `30 m s^{-1}`), and :math:`u` threshold (see parameter 'u_threshold', default is :math: `0 m s^{-1}`).
+    default is :math: 30 m/s), and :math:`u` threshold (see parameter 'u_threshold', default is :math: 0 m/s).
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.
@@ -141,9 +141,9 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     data : xarray.Dataset
         Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     ws_threshold : int or float
-        Windspeed threshold used to extract jet maxima from resultant windspeed (default: 30 ms^{-1})
+        Windspeed threshold used to extract jet maxima from resultant windspeed (default: 30 m/s)
     u_threshold : int or float
-        Windspeed threshold used to extract u-component wind speed (default: 0 ms^{-1})
+        Windspeed threshold used to extract u-component wind speed (default: 0 m/s)
 
     Returns
     ----------

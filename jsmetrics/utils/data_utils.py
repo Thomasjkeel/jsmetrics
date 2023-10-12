@@ -297,6 +297,42 @@ def filter_local_extremes_to_min_distance(local_extrema, min_distance_threshold=
     return filtered_extrema
 
 
+def find_intersection_between_two_array_of_arrays(array1, array2):
+    """
+    Find the intersection between two arrays of arrays. See examples for example.
+
+    Parameters
+    ----------
+    array1 : np.array
+        First array of arrays to compare with array2
+    array2 : np.array
+        Second array of arrays to compare with array1
+
+    Returns
+    -------
+    intersection : np.array
+        Intesection of the two arrays returning only the arrays within the original two that are in both.
+
+    Examples
+    --------
+    array1 = [[1, 2], [3, 4]]
+    array2 = [[1, 2], [4, 3]]
+    find_intersection_between_two_array_of_arrays(array1, array2)
+    # returns [[1, 2]]
+
+    """
+    intersection = []
+
+    for arr1 in array1:
+        for arr2 in array2:
+            if np.array_equal(arr1, arr2):
+                intersection.append(arr1)
+                break
+
+    intersection = np.array(intersection)
+    return intersection
+
+
 def get_num_of_decimal_places(num):
     """
     Gets number of decimal places in a float

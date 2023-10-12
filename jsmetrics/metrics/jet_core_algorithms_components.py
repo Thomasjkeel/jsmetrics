@@ -162,16 +162,19 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
     all_jet_occurences = []
     for lon in row["lon"]:
         current = row.sel(lon=lon, method="nearest")
-        current = current.where(
-            (abs(current["ws"]) >= ws_threshold) & (current["ua"] > 0), other=0
-        )
 
         # Finding local maxima indices in the 2D array
-        maxima_indices = np.column_stack(
-            data_utils.get_local_maxima(current["ws"].data)
+        maxima_indices_ax0 = np.column_stack(
+            data_utils.get_local_maxima(current["ws"].data, axis=0)
         )
-        if lon == 0:
-            print(maxima_indices)
+        maxima_indices_ax1 = np.column_stack(
+            data_utils.get_local_maxima(current["ws"].data, axis=1)
+        )
+        # find intersection of the two arrays intersection
+        maxima_indices = data_utils.find_intersection_between_two_array_of_arrays(
+            maxima_indices_ax0, maxima_indices_ax1
+        )
+
         # Filter indices to remove maximas that neighbour each other (taking the first instance)
         filtered_maxima_indices = data_utils.filter_local_extremes_to_min_distance(
             maxima_indices, min_distance_threshold=2
@@ -184,16 +187,21 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
             ] = True
 
             # Mask coordinates of filtered maxima
-            # filtered_maxima_coords = current["ws"].where(maxima_mask)
-            # print(filtered_maxima_coords)
-            current["jet_occurence"] = current["ws"].where(maxima_mask)
+            current["jet_occurence"] = current["ws"].where(
+                (maxima_mask)
+                & (abs(current["ws"]) >= ws_threshold)
+                & (current["ua"] > u_threshold)
+            )
+
         else:
             # Set all values to np.nan
             current["jet_occurence"] = current["jet_occurence"].where(
                 current["jet_occurence"] > 0
             )
         all_jet_occurences.append(current["jet_occurence"])
-    row["jet_occurence"] = xr.concat(all_jet_occurences, dim="lon")
+    all_jet_occurences_dataarray = xr.concat(all_jet_occurences, dim="lon")
+    row["jet_occurence"] = all_jet_occurences_dataarray.transpose("plev", "lat", "lon")
+
     return row
 
 

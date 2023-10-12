@@ -30,6 +30,7 @@ jobs:
       - name: Run tests with pytest-cov
         shell: bash -l {0}
         run: |
+          conda activate jsmet
           pytest --cov
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2

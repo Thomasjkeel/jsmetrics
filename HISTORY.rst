@@ -8,7 +8,6 @@ History
 * Finish overhaul the ReadTheDocs documentation in the package
 * Confirm completed and to verify metrics
 
-
 0.1.7 (2023-10-10)
 -------------------------
 * Changes:
@@ -21,12 +20,10 @@ History
 -------------------------
 * Rename to Barnes & Polvani 2014 and update tests and all mentions of
 
-
 0.1.7-alpha (2023-09-19)
 -------------------------
 * Update Cattiaux method to deal with Matplotlib depreciation warning about using 'allsegs' or 'collections' in contour plot
 * Add tests for new spatial utils method 'seperate_one_contour_into_line_segments'
-
 
 0.1.6 (2023-09-14)
 -------------------------
@@ -46,7 +43,6 @@ History
 * Move old method to new metric: 'jet_core_identification_algorithm'
 * Update docs for Manney 2011 and sub-components
 
-
 0.1.5-beta (2023-08-16)
 -------------------------
 * Update Schiemann method with new variable name (jet occurence), docstring and changes to sub-component function names
@@ -60,7 +56,6 @@ History
 * Add notes and example to Koch et al. 2006 metric
 * Rename variable returned by K06 to jet_events_ws
 
-
 0.1.4 (2023-08-02)
 -------------------------
 * Add new metric to package: Zappa et al. 2018 (This method builds on Ceppi et al. 2018)
@@ -69,7 +64,6 @@ History
 0.1.4-alpha (2023-07-21)
 -------------------------
 * add KeyError raise if no time coordinate is passed to various metrics
-
 
 0.1.3 (2023-07-07)
 -------------------------
@@ -80,17 +74,14 @@ History
 * Fix  Barnes & Polvani 2013 to better deal when min max jet lat is at edge data 
 * Add check for NoLeapDatetime
 
-
 0.1.2-alpha (2023-05-27)
 -------------------------
 * Add check for NoLeapDatetime
-
 
 0.1.1 (2023-05-26)
 -------------------------
 * Fix Woollings et al. 2010 and filter windows to use day timeunits for window to stop it removing too much data.
 * Add data util function to add number of days to 360Day Datetime type
-
 
 0.1.1-beta (2023-04-07)
 -------------------------
@@ -106,7 +97,6 @@ History
 * Add fix for BP15 to except errors where all nan data
 * Add warning for BS17 when more than 10 days resolution
 
-
 0.1.0 (2023-01-22)
 -------------------------
 * MAJOR UPDATE: re-organise the structure of the package into core, metrics and utils
@@ -115,12 +105,10 @@ History
 * move waviness metrics to new file
 * Update appropriate tests
 
-
 0.0.19-alpha (2022-12-21)
 -------------------------
 * Update JetStreamOccurenceAndCentreAlgorithm to skip longitude values outside lon range in data
 * Make changes to work with Shapely version 1.8/2.0. Means changes to Cattiaux et al. 2016
-
 
 0.0.18 (2022-11-23)
 -------------------------
@@ -133,7 +121,6 @@ History
 0.0.17 (2022-11-13)
 -------------------------
 * add try and except for Grise & Polvani 2017 to account for missing vals
-
 
 0.0.16 (2022-11-09)
 -------------------------
@@ -157,30 +144,25 @@ History
 * Fix CI 
 * Add millibars to get_all_hPa_list
 
-
 0.0.13 (2022-10-19)
 -------------------------
-* fox workflow for publish to PyPi and TestPyPi
-
+* fix workflow for publish to PyPi and TestPyPi
 
 0.0.12 (2022-10-19)
 -------------------------
 * fix kuang to work for southern hemisphere as well
 * add workflow for publish to PyPi
 
-
 0.0.12-alpha (2022-10-18)
 -------------------------
 * Update calc_latitude_and_speed_where_max_ws to use numpy methods
 * Fix Barnes and Simpson 2017 method so it runs on each longitude
-
 
 0.0.11 (2022-09-15)
 -------------------------
 * Update and fix the JetStreamOccurenceAndCentreAlgorithm method for Kuang
 * Change LICENSE
 * Upload to Zenodo
-
 
 0.0.10 (2022-08-21)
 -------------------

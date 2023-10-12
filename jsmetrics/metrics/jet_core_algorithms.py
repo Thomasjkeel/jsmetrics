@@ -155,8 +155,8 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     While the original method is built on a four dimension slice of wind speed (time, lat, lon, plev),
     This implementation will work where there is only one pressure level, so a 3-d slice (time, lat, lon).
 
-    **Slow method:** due to the nature of this method, it currently takes a very long time to run,
-    i.e. 8 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
+    **Slow method:** due to the nature of this method, it currently takes a moderately long time to run,
+    i.e. 3 seconds per time unit on AMD Ryzen 5 3600 6-core processor.
 
     Examples
     --------
@@ -189,14 +189,12 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     if data["time"].size == 1:
         if "time" in data.dims:
             data = data.squeeze("time")
-        output = (
-            jet_core_algorithms_components.get_local_jet_occurence_by_oneday_by_plev(
-                data, ws_threshold=ws_threshold, u_threshold=u_threshold
-            )
+        output = jet_core_algorithms_components.get_local_jet_occurence(
+            data, ws_threshold=ws_threshold, u_threshold=u_threshold
         )
     else:
         output = data.groupby("time").map(
-            jet_core_algorithms_components.get_local_jet_occurence_by_oneday_by_plev,
+            jet_core_algorithms_components.get_local_jet_occurence,
             (
                 ws_threshold,
                 u_threshold,

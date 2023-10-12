@@ -68,7 +68,7 @@ translated to Python for this package.
    =============================================================================== ==============  ==  =============================================================================== ==============
    Algorithm                                                                       Status              Algorithm                                                                       Status                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
-   `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      Complete            `Schiemann et al. 2009 <https://doi.org/10.1175/2008JCLI2625.1>`_               Complete          
+   `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      Complete            `Schiemann et al. 2009 <https://doi.org/10.1175/2008JCLI2625.1>`_               To verify          
    `Manney et al. 2011 <https://acp.copernicus.org/articles/11/6115/2011/>`_       To verify           `Pena-Ortiz et al. 2013 <http://doi.wiley.com/10.1002/jgrd.50305>`_             To verify      
    `Kuang et al. 2014 <http://link.springer.com/10.1007/s00704-013-0994-x>`_       To verify                 
    =============================================================================== ==============  ==  =============================================================================== ==============

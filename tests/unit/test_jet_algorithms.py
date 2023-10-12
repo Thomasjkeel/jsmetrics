@@ -82,11 +82,11 @@ class TestSchiemann2009(unittest.TestCase):
 
     def test_metric(self):
         tested_func = jet_core_algorithms.schiemann_et_al_2009
-        sub_data = self.data.isel(time=slice(0, 1), plev=slice(3, 5), lon=slice(0, 30))
+        sub_data = self.data.isel(time=slice(0, 1), plev=slice(2, 5))
         result = tested_func(sub_data, ws_threshold=10)
-        print(result)
+        print(result["jet_occurence"].max())
         self.assertTrue(result)
-        self.assertEqual(int(result["jet_occurence"].isel(plev=0, lat=50, lon=10)), 1)
+        self.assertEqual(int(result["jet_occurence"].isel(plev=1, lat=50, lon=10)), 1)
         self.assertRaises(
             KeyError,
             lambda: tested_func(self.data.isel(time=0).drop("time")),

@@ -128,7 +128,7 @@ def get_all_hPa_list(data):
     return plevs
 
 
-def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold, u_threshold):
+def get_local_jet_occurence(row, ws_threshold, u_threshold):
     r"""
     Each jet occurence is detected based on three rules applied to inputted
     wind speed (V = [u, v]):
@@ -159,6 +159,7 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold, u_threshold):
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
     )
+    all_jet_occurences = []
     for lon in row["lon"]:
         current = row.sel(lon=lon, method="nearest")
         current = current.where(
@@ -169,6 +170,8 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold, u_threshold):
         maxima_indices = np.column_stack(
             data_utils.get_local_maxima(current["ws"].data)
         )
+        if lon == 0:
+            print(maxima_indices)
         # Filter indices to remove maximas that neighbour each other (taking the first instance)
         filtered_maxima_indices = data_utils.filter_local_extremes_to_min_distance(
             maxima_indices, min_distance_threshold=2
@@ -181,13 +184,16 @@ def get_local_jet_occurence_by_oneday_by_plev(row, ws_threshold, u_threshold):
             ] = True
 
             # Mask coordinates of filtered maxima
-            filtered_maxima_coords = current["ws"].where(maxima_mask)
-            current["jet_occurence"] = filtered_maxima_coords
+            # filtered_maxima_coords = current["ws"].where(maxima_mask)
+            # print(filtered_maxima_coords)
+            current["jet_occurence"] = current["ws"].where(maxima_mask)
         else:
             # Set all values to np.nan
             current["jet_occurence"] = current["jet_occurence"].where(
                 current["jet_occurence"] > 0
             )
+        all_jet_occurences.append(current["jet_occurence"])
+    row["jet_occurence"] = xr.concat(all_jet_occurences, dim="lon")
     return row
 
 

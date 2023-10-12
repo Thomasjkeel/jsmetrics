@@ -23,8 +23,8 @@ dependencies:
   - bump2version
   - pre_commit
   - pylint
-  - pytest
   - pip
   - pip:
       - shapely
+      - pytest-cov
       - parameterized

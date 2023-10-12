@@ -22,12 +22,8 @@ jobs:
           environment-file: environment.yml
           python-version: 3.9
           auto-activate-base: false
-      - shell: bash -el {0}
-        run: |
-          pip install pytest
-          pip install parameterized
-          pip install pytest-cov
-        name: Run pytest coverage
+      - name: Run pytest coverage
+        shell: bash -el {0}
         run: |
           pytest --cov
       - name: Coveralls GitHub Action

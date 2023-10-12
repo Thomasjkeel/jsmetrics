@@ -128,8 +128,7 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
     3. :math:`u \ge 0 m s^{-1}`.
 
     The implementation of this method here allows you to edit the :math:`|V|` threshold
-    (see parameter 'ws_threshold',default is 30 m/s), and :math:`u` threshold
-    (see parameter 'u_threshold', default is 0 m/s).
+    (by changing 'ws_threshold'), and :math:`u` threshold (by changing 'u_threshold').
 
     This method was originally introduce in Schiemann et al 2009 (https://doi.org/10.1175/2008JCLI2625.1)
     and is described in Section 2 of that study.

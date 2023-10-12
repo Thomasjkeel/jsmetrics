@@ -88,6 +88,7 @@ class TestSchiemann2009(unittest.TestCase):
         self.assertEqual(
             int(result["jet_occurence"].max("plev").sel(lat=50, lon=136.875)), 1
         )
+        self.assertEqual(int(result["jet_occurence"].max("plev").sum()), 327)
         self.assertRaises(
             KeyError,
             lambda: tested_func(self.data.isel(time=0).drop("time")),

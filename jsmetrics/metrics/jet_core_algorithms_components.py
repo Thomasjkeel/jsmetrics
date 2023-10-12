@@ -14,6 +14,7 @@
 from jsmetrics.utils import data_utils, windspeed_utils
 import numpy as np
 import scipy.ndimage
+import scipy.signal
 import xarray as xr
 
 # docs

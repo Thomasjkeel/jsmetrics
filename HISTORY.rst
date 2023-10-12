@@ -2,6 +2,13 @@
 History
 =======
 
+0.2.0 (2023-10-12)
+-------------------------
+* Fix CI and Github actions
+* Finish overhaul the ReadTheDocs documentation in the package
+* Confirm completed and to verify metrics
+
+
 0.1.7 (2023-10-10)
 -------------------------
 * Changes:

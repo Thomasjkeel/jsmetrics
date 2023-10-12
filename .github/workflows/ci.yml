@@ -29,6 +29,7 @@ jobs:
           pip install pytest-cov
       - name: Run tests with pytest-cov
         run: |
+          conda activate jsmet
           pytest --cov
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2

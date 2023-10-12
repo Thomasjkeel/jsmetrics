@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4.1.0
-      - name: Install Python 3 and set up env
+      - name: Set up Mamba with Python 3 and install dependencies
         uses: mamba-org/setup-micromamba@v1.4.4 #conda-incubator/setup-miniconda@v2.2.0 # actions/setup-python@v1
         with:
           cache-downloads: true

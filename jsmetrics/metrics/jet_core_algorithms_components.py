@@ -192,7 +192,6 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
                 & (abs(current["ws"]) >= ws_threshold)
                 & (current["ua"] > u_threshold)
             )
-
         else:
             # Set all values to np.nan
             current["jet_occurence"] = current["jet_occurence"].where(
@@ -200,6 +199,11 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
             )
         all_jet_occurences.append(current["jet_occurence"])
     all_jet_occurences_dataarray = xr.concat(all_jet_occurences, dim="lon")
+
+    # Set all non-NaN values to 1
+    all_jet_occurences_dataarray = (
+        all_jet_occurences_dataarray / all_jet_occurences_dataarray
+    )
     row["jet_occurence"] = all_jet_occurences_dataarray.transpose("plev", "lat", "lon")
 
     return row

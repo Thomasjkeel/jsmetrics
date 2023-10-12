@@ -24,10 +24,11 @@ jobs:
           auto-activate-base: false
       - shell: bash -el {0}
         run: |
-          pip install --upgrade pip
           pip install pytest
           pip install parameterized
           pip install pytest-cov
+        name: Run pytest coverage
+        run: |
           pytest --cov
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2

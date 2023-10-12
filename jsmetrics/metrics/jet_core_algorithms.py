@@ -224,7 +224,7 @@ def manney_et_al_2011(
     This method was originally introduce in Manney et al. (2011) (https://doi.org/10.5194/acp-11-6115-2011),
     and is described in Section 3.1 of that study. This method is also known as the JETPAC (Jet and
     Tropopause Products for Analysis and Characterization) software package, and available in its original
-    form from NASA JPL.
+    form at request to NASA JPL.
 
     Please see 'Notes' below for any additional information about the implementation of this method
     to this package.
@@ -251,8 +251,8 @@ def manney_et_al_2011(
 
     Notes
     -----
-    The implementation of this method varies slightly from the original, in that this method will return
-    variables that have 0, 1+ values, so that the user can use these as a mask on other variables such as windspeed
+    The implementation of this method varies slightly from the original, because this method will return a mask rather
+    than dynamical values, the intention was to allow these masks to be used to subset other variables such as windspeed
     (see 'Examples' for demonstration of how to use the mask).
 
     There is an update to this method introduced in Manney & Hegglin 2018 to include physically-based method to extract the

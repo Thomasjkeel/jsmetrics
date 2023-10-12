@@ -20,6 +20,7 @@ jobs:
       - name: Install dependencies
         run: |
           conda env create -f environment.yml
+          python -m pip install --upgrade pip
           conda run -n jsmet pip install pytest
           conda run -n jsmet pip install parameterized
           conda run -n jsmet pip install pytest-cov

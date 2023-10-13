@@ -8,6 +8,8 @@ History
 * Finish overhaul the ReadTheDocs documentation in the package
 * Confirm completed and to verify metrics
 * Update Schiemann et al. 2009 method to run faster and introduce u_threshold parameter default
+* Add more complete inline 'Steps' to each metric in the package for readability. 
+* Remove Screen & Simmonds and Local Wave Activity leftover code
 
 0.1.7 (2023-10-10)
 -------------------------

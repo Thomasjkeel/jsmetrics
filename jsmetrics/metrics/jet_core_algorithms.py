@@ -89,30 +89,30 @@ def koch_et_al_2006(data, ws_threshold=30):
         koch_season_climatology = koch_outputs.groupby("time.season").mean("time")
 
     """
+    # Step 1. Check there are at least two plev coordinates for weighted average.
     if data["plev"].count() < 2:
         raise ValueError(
             "Need at least two plevs to calculate weighted average windspeed"
         )
 
-    # Step 1: get all pressure levels (hPa) as list
+    # Step 2: get all pressure levels (hPa) as list
     all_plevs_hPa = jet_core_algorithms_components.get_all_hPa_list(data)
 
-    # Step 2: get weighted sum windspeed
+    # Step 3: get weighted sum windspeed
     sum_weighted_ws = jet_core_algorithms_components.get_sum_weighted_ws(
         data, all_plevs_hPa
     )
 
-    # Step 3: calculate average weighted
+    # Step 4: calculate average weighted
     weighted_average_ws = jet_core_algorithms_components.get_weighted_average_ws(
         sum_weighted_ws, all_plevs_hPa
     )
 
-    # Step 4: Apply windspeed threshold to get jet event dataset
+    # Step 5: Apply windspeed threshold to get jet event array
     jet_events = weighted_average_ws.where(weighted_average_ws >= ws_threshold)
-
     jet_events = jet_events.fillna(0.0)
 
-    # Step 5: turn into dataset
+    # Step 6: Turn jet event array into dataset
     jet_event_ds = jet_events.rename("jet_events_ws").to_dataset()
     return jet_event_ds
 
@@ -173,6 +173,9 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
 
         # Run algorithm:
         schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
+
+        # Get jet occurence for first day in data
+        schiemann_jet_occurence_first_day = schiemann_outputs['jet_occurence'].isel(time=0).max('plev')
 
         # Produce a jet occurence count across all pressure levels
         schiemann_jet_counts_all_levels = schiemann_outputs['jet_occurence'].sum(('time', 'plev'))
@@ -286,20 +289,22 @@ def manney_et_al_2011(
         manney_jet_ws = manney_outputs.where(manney_outputs['jet_core_mask'])['ws']
 
     """
+    # Step 1. Check plev and time coordinate in data
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
 
+    # Step 2. Check a pressure level limit is provided by the user
     if not jet_core_plev_limit:
         raise KeyError(
             "Please provide a pressure level limit for jet cores returned by this metric. As an example the original methodology used a limit of 100-400 hPa. To replicate this, pass the parameter jet_core_plev_limit=(100, 400)."
         )
 
-    # Step 1. Calculate wind speed from ua and va components.
+    # Step 3. Calculate wind speed from ua and va components.
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
-    # Step 2. Run Algorithm
-    if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+    # Step 4. Run Algorithm and return outputs
     if data["time"].size == 1:
         if "time" in data.dims:
             data = data.squeeze("time")
@@ -483,13 +488,14 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
         kuang_jet_ws = kuang_outputs.where(kuang_outputs['jet_ocurrence1_jet_centre2'] > 0)['ws']
 
     """
+    # Step 1. Check one and only plev is provided by data input
     if "plev" in data.dims:
         if data["plev"].count() == 1:
             data = data.isel(plev=0)
         else:
             raise ValueError("Please subset to one plev value for algorithm")
 
-    # Step 1. Run Jet-stream Occurence and Centre Algorithm
+    # Step 2. Run Jet-stream Occurence and Centre Algorithm and return outputs
     if "time" not in data.coords:
         output = (
             jet_core_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day(
@@ -561,10 +567,11 @@ def jet_core_identification_algorithm(
         jca_outputs = jsmetrics.jet_core_algorithms.jet_core_identification_algorithm(uv_sub, ws_core_threshold=40, ws_boundary_threshold=30)
 
     """
+    # Step 1. Check plev coordinate in data
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
 
-    # Step 1. Run Jet-stream Core Idenfication Algorithm
+    # Step 2. Run Jet-stream Core Idenfication Algorithm and return outputs
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:

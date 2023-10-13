@@ -95,7 +95,7 @@ def archer_caldeira_2008(data):
         strong_jet = archer_outputs['mass_weighted_average_ws'].where(lambda row: row > windspeed_threshold)
 
     """
-    #  Step 1. Get monthly means
+    #  Step 1. Calculate monthly means
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1:
@@ -110,20 +110,26 @@ def archer_caldeira_2008(data):
     #  Step 2. Calculate wind-speed from u and v-component wind
     mon_mean["ws"] = windspeed_utils.get_resultant_wind(mon_mean["ua"], mon_mean["va"])
 
-    #  Step 3. Calculate mass weighted average
+    #  Step 3. Calculate mass weighted average windspeed
     mass_weighted_average = jet_statistics_components.calc_mass_weighted_average(
         mon_mean, ws_col="ws"
     )
+
+    #  Step 4. Calculate mass flux weighted pressure
     mass_flux_weighted_pressure = (
         jet_statistics_components.calc_mass_flux_weighted_pressure(
             mon_mean, ws_col="ws"
         )
     )
+
+    #  Step 5. Calculate mass flux weighted latitude
     mass_flux_weighted_latitude = (
         jet_statistics_components.calc_mass_flux_weighted_latitude(
             mon_mean, lat_min=15, lat_max=75, ws_col="ws"
         )
     )
+
+    #  Step 6. Assign the three new output variables to the original data
     output = data.assign(
         {
             "mass_weighted_average_ws": (
@@ -200,8 +206,10 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         w10_seasonal_anomalies = w10.groupby('time.season').apply(lambda row: row['jet_lat'] - row['ff_jet_lat'])
 
     """
+    # Initial translation of data from dataArray to dataset
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
+
     # Step 1: Calculate long and/or plev mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
@@ -232,6 +240,8 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
     fourier_filtered_ws = jet_statistics_components.apply_low_freq_fourier_filter(
         climatology["jet_speed"].values, highest_freq_to_keep=2
     )
+
+    #  Step 6. Assign the new output variables to the original data
     time_dim = climatology["jet_speed"].dims[0]
     output = jet_statistics_components.assign_filtered_lats_and_ws_to_data(
         zonal_mean_lat_ws,
@@ -370,6 +380,7 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
         )
     )
 
+    #  Step 7. Assign the new output variables to the original data
     output = data.assign(
         {
             "jet_lat": (("time"), scaled_max_lats),
@@ -428,16 +439,16 @@ def grise_polvani_2014(data):
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
 
-    # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    # Step 1. Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
-    # Step 1. Calculate zonal-mean
+    # Step 2. Calculate zonal-mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
-    # Step 2. Get the 3 latitudes and speeds around max zonal wind-speed (e.g. lat-1, lat, lat+1)
+    # Step 3. Get the 3 latitudes and speeds around max zonal wind-speed (e.g. lat-1, lat, lat+1)
     all_max_lats_and_ws = np.array(
         list(
             map(
@@ -447,7 +458,7 @@ def grise_polvani_2014(data):
         )
     )
 
-    #  Step 3. Apply quadratic function to get max latitude at 0.01 degree resolution
+    #  Step 4. Apply quadratic function to get max latitude at 0.01 degree resolution
     scaled_max_lats = []
     scaled_max_ws = []
     for max_lat_and_ws in all_max_lats_and_ws:
@@ -465,7 +476,7 @@ def grise_polvani_2014(data):
         scaled_max_lats.append(scaled_max_lat)
         scaled_max_ws.append(scaled_ws)
 
-    #  Step 4. Assign scaled max lats back to data
+    #  Step 5. Assign scaled max lats back to data
     output = data.assign(
         {
             "jet_lat": (("time"), scaled_max_lats),
@@ -522,7 +533,7 @@ def barnes_polvani_2015(data):
     # Step 1. Get zonal mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
-    # Step 2. Get jet lat and jet speed values
+    # Step 2. Get jet lat and jet speed values and assign to output data
     if zonal_mean["time"].size == 1:
         if "time" in zonal_mean.dims:
             zonal_mean = zonal_mean.squeeze("time")
@@ -584,6 +595,7 @@ def barnes_simpson_2017(data):
         bp17_np = jsmetrics.jet_statistics.barnes_simpson_2017(ua_np)
 
     """
+    # Step 1. Run checks on the 'plev' coordinate. There should only be 1 for this method, but this implementation allows for multiple.
     if "plev" in data.dims:
         if data["plev"].count() == 1:
             data = data.isel(plev=0)
@@ -593,13 +605,16 @@ def barnes_simpson_2017(data):
             )
             data = data.mean("plev")
     data = data.mean("lon")
+
+    # Step 1. Run check on time coordinate. The data should be able to be resampled into 10 days for this method.
+    # Check 1. Is time coordinate is in data and is monotonically increasing.
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
     if not data.indexes["time"].is_monotonic_increasing:
         raise IndexError("Data needs to have a montonic increasing index")
-    # Check that data can be resampled into 10 days
+    # Check 2. Can that data be resampled into 10 days
     if not data["time"].size == 1:
         time_step_in_data = int((data["time"][1] - data["time"][0]).dt.days)
         if time_step_in_data <= 10:
@@ -609,8 +624,10 @@ def barnes_simpson_2017(data):
             print(
                 f"Warning this method was developed for 10 day average and data has larger time-step than 10 days. Time step is {time_step_in_data} days"
             )
-    #  Drop all NaN slices
-    data = data.dropna("time")
+    data = data.dropna("time")  # Drop all NaN slices
+
+    # Step 3. Calculate jet lat and jet speed.
+
     data = jet_statistics_components.calc_latitude_and_speed_where_max_ws(data)
     return data
 
@@ -658,6 +675,7 @@ def bracegirdle_et_al_2018(data):
         # Run statistic:
         b18 = jsmetrics.jet_statistics.bracegirdle_et_al_2018(ua_sub)
     """
+    # Checks on plev
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
     if "plev" in data.dims:
@@ -670,21 +688,21 @@ def bracegirdle_et_al_2018(data):
             data = data.mean("plev")
             # raise ValueError("Please subset to one plev value for this metric")
 
-    # Step 0: Expand time dimensions so we can map a function to the dataset properly
+    # Step 1: Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
-    #  Step 1. Make seasonal & annual climatologies
+    #  Step 2. Calculate seasonal & annual climatologies
     seasonal_climatology = jet_statistics_components.get_climatology(data, "season")
     annual_climatology = jet_statistics_components.get_climatology(data, "year")
 
-    #  Step 2. Get zonal mean from climatologies
+    #  Step 3. Get zonal mean from climatologies
     seasonal_zonal_mean = seasonal_climatology.mean("lon")
     annual_zonal_mean = annual_climatology.mean("lon")
 
-    #  Step 3. Cubic spline interpolation to each climatology at latitude resolution of 0.075 degrees
+    #  Step 4. Cubic spline interpolation to each climatology at latitude resolution of 0.075 degrees
     (
         seasonal_max_lats,
         seasonal_max_ws,
@@ -698,7 +716,7 @@ def bracegirdle_et_al_2018(data):
         annual_zonal_mean, lat_resolution=0.075, time_col="year"
     )
 
-    # Step 4. Assign jet-stream position (JPOS) and jet-stream strength (JSTR) back to data
+    # Step 5. Assign jet-stream position (JPOS) and jet-stream strength (JSTR) back to data
     output = data.assign(
         {
             "seasonal_JPOS": (("season"), seasonal_max_lats),
@@ -794,14 +812,14 @@ def ceppi_et_al_2018(data, lon_resolution=None):
         zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
     )
 
-    # Expand time dimension
+    # Step 4. Expand time dimension
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
 
-    # Step 4 (adapted from original methodology): Get nearest latitude actually in data to the one determined by metric
+    # Step 5 (adapted from original methodology): Get nearest latitude actually in data to the one determined by metric
     nearest_latitudes_to_jet_lat_estimates = np.array(
         list(
             map(
@@ -813,7 +831,7 @@ def ceppi_et_al_2018(data, lon_resolution=None):
         )
     )
 
-    # Step 5 (adapted from original methodology): Get speed of associated nearest latitude
+    # Step 6 (adapted from original methodology): Get speed of associated nearest latitude
     data["jet_speed"] = (
         ("time",),
         np.array(
@@ -919,14 +937,14 @@ def zappa_et_al_2018(data, lon_resolution=None):
         zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
     )
 
-    # Expand time dimension
+    # Step 4. Expand time dimension
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
 
-    # Step 4 (adapted from original methodology): Get nearest latitude actually in data to the one determined by metric
+    # Step 5 (adapted from original methodology): Get nearest latitude actually in data to the one determined by metric
     nearest_latitudes_to_jet_lat_estimates = np.array(
         list(
             map(
@@ -938,7 +956,7 @@ def zappa_et_al_2018(data, lon_resolution=None):
         )
     )
 
-    # Step 5 (adapted from original methodology): Get speed of associated nearest latitude
+    # Step 6 (adapted from original methodology): Get speed of associated nearest latitude
     data["jet_speed"] = (
         ("time",),
         np.array(
@@ -1001,6 +1019,7 @@ def kerr_et_al_2020(data, width_of_pulse=10):
         # Run statistic:
         k20 = jsmetrics.jet_statistics.kerr_et_al_2020(ua_sub)
     """
+    # Checks on plev coordinate
     if "plev" in data.dims:
         if data["plev"].count() == 1:
             data = data.isel(plev=0)
@@ -1009,7 +1028,8 @@ def kerr_et_al_2020(data, width_of_pulse=10):
                 "this metric was meant to only work on one plev, please subset plev to one value. For now taking the mean..."
             )
             data = data.mean("plev")
-            # raise ValueError("Please subset to one plev value for this metric")
+
+    # Step 1. Calculateed smoothed jet lats by lon
     if "time" not in data.coords:
         raise KeyError("Please provide a time coordinate for data to run this metric")
     elif data["time"].size == 1:

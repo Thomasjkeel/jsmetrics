@@ -174,6 +174,9 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
         # Run algorithm:
         schiemann_outputs = jsmetrics.jet_core_algorithms.schiemann_et_al_2009(uv_sub, ws_threshold=30)
 
+        # Get jet occurence for first day in data
+        schiemann_jet_occurence_first_day = schiemann_outputs['jet_occurence'].isel(time=0).max('plev')
+
         # Produce a jet occurence count across all pressure levels
         schiemann_jet_counts_all_levels = schiemann_outputs['jet_occurence'].sum(('time', 'plev'))
 

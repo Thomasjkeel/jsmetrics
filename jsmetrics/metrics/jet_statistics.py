@@ -206,8 +206,10 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
         w10_seasonal_anomalies = w10.groupby('time.season').apply(lambda row: row['jet_lat'] - row['ff_jet_lat'])
 
     """
+    # Initial translation of data from dataArray to dataset
     if isinstance(data, xarray.DataArray):
         data = data.to_dataset()
+
     # Step 1: Calculate long and/or plev mean
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 

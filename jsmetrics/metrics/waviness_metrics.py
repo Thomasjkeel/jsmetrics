@@ -21,42 +21,6 @@ __email__ = "thomas.keel.18@ucl.ac.uk"
 __status__ = "Development"
 
 
-# @sort_xarray_data_coords(coords=["lat", "lon"])
-# def screen_and_simmonds_2013(data):
-#     """
-#     Slightly adjusted in Screen and Simmonds 2014
-#     Method from Screen & Simmonds (2013) https://doi.org/10.1002/grl.50174
-
-#     Parameters
-#     ----------
-#     data : xarray.Dataset
-#         Data containing geopotential height (zg)
-
-#     Returns
-#     ----------
-#     data : xarray.Dataset
-#         Data containing u- and v- component wind speed
-#     """
-#     if isinstance(data, xarray.DataArray):
-#         data = data.to_dataset()
-#     return data
-
-
-# @sort_xarray_data_coords(coords=["lat", "lon"])
-# def local_wave_activity(data):
-#     """
-#     Introduced by Huang and Nakamura for Potential Vorticity, but then used by:
-#     Martineau 2017, Chen 2015 and Blackport & Screen 2020 use LWA
-#     with 500 hPa zg instead of pv
-
-#     Parameters
-#     ----------
-#     data : xarray.Dataset
-#         Data containing geopotential height (zg)
-#     """
-#     return data
-
-
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def francis_vavrus_2015(data):
     r"""

@@ -122,6 +122,30 @@ def add_num_of_days_to_NoLeapDatetime(datetime_noleap, num_of_days_to_add):
     )
 
 
+def add_pad_to_array(arr, pad_width=1, constant_values=0):
+    """
+    Add a edge of constant values around a numpy array
+
+    Parameters
+    ----------
+    arr : array-like
+        A 2-D array with numeric values (i.e. dtypes float or int)
+    pad_width : int
+        Width of values to add to edges (default: 1)
+    constant_values : int
+        Value to add to edges (default: 0)
+
+    Returns
+    ----------
+    padded_arr : array-like
+        A 2-D array with new dimensions as a pad has been added at the edges
+    """
+    padded_arr = np.pad(
+        arr, pad_width, mode="constant", constant_values=constant_values
+    )
+    return padded_arr
+
+
 def check_at_least_n_plevs_in_data(data, n_plevs):
     """
     Checks there are at least two pressure-levels (plevs) in xarray dataset

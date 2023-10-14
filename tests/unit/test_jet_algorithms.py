@@ -115,7 +115,7 @@ class TestManney2011(unittest.TestCase):
             subset_data, jet_core_plev_limit=(10000, 40000), jet_core_ws_threshold=10
         )
         self.assertEqual(
-            int(res["jet_core_mask"].isel(lon=0).where(lambda x: x).count()), 4
+            int(res["jet_core_mask"].isel(lon=0).where(lambda x: x).count()), 5
         )
         self.assertRaises(
             KeyError,

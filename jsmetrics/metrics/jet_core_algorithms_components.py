@@ -375,6 +375,9 @@ def find_local_maxima_in_2d_dataarray(arr):
             print(f"Local maximum at ({i}, {j}): {data_array[i, j]}")
 
     """
+    # Add padding to array to allow edges to be picked up
+    arr = data_utils.add_pad_to_array(arr)
+
     # Calculate neighbors for all interior points
     neighbors = np.stack(
         [
@@ -390,10 +393,7 @@ def find_local_maxima_in_2d_dataarray(arr):
     interior_maxima = arr[1:-1, 1:-1] > np.max(neighbors, axis=-1)
     interior_indices = np.transpose(np.where(interior_maxima))
 
-    # Adjust indices to account for offset
-    adjusted_indices = interior_indices + np.array([1, 1])
-
-    return np.array(adjusted_indices)
+    return np.array(interior_indices)
 
 
 def get_all_jet_core_mask(local_maximas_dict, mask_shape):

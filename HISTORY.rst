@@ -10,6 +10,7 @@ History
 * Update Schiemann et al. 2009 method to run faster and introduce u_threshold parameter default
 * Add more complete inline 'Steps' to each metric in the package for readability. 
 * Remove Screen & Simmonds and Local Wave Activity leftover code
+* Update Manney et al. 2011 further with padding to capture cores near the edge of dataset
 
 0.1.7 (2023-10-10)
 -------------------------

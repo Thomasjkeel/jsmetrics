@@ -18,7 +18,7 @@ identify or characterise atmospheric jet streams.
 The package is built using `xarray <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
 consisting of jet statistics, waviness metrics and jet core algorithms (described `here <https://jsmetrics.readthedocs.io/en/latest/metrics.html>`_).
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
-You can find a full list of methods and their current progress state :ref:`here <Methods in *jsmetrics*>`
+You can find a full list of methods and their current progress state :ref:`here <Methods in *jsmetrics*>`_.
 
 Installation 
 -------------

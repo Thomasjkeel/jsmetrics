@@ -98,7 +98,7 @@ Examples
 -------------
 For examples please check out the `examples <https://jsmetrics.readthedocs.io/en/latest/usage.html>`_
 
-Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
+Some example notebooks are available `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 560

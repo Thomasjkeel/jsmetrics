@@ -7,23 +7,22 @@
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
 
-|pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
-------------------------------------------------------------------------------
+*jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms developed to
+identify or characterise atmospheric jet streams.
+
+The package is built using `xarray <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
+consisting of jet statistics, waviness metrics and jet core algorithms (described `here <https://jsmetrics.readthedocs.io/en/latest/metrics.html>`_).
+As this is an ongoing project, we are always in the process of finding and implementing new methods.
+You can find a full list of methods and their current state `here <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
+
+|made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
+--------------------------------------------------------------------------------------------------
+
+
+----
+
 **preprint now available here: https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/**   
 **example notebooks: https://github.com/Thomasjkeel/jsmetrics-examples**
-
-This is jsmetrics, a package containing implementations of various metrics and algorithms for identifying or characterising jet-streams
-written in Python and built from xarray.
-
-*Why use jsmetrics?:*
-
-The planet's jet streams are complex and not well defined at any one scale (see `what are jet streams <https://jsmetrics.readthedocs.io/en/latest/statement.html#what-are-jet-streams>`_),
-and as such there are a wide range of metrics, algorithms and statistics which have been employed in research to help
-identify and characterise them. However, it has been generally quite difficult to reconcile various types of information provided
-by different techniques. The motivation for this package was thus to standardise the most common methods developed for the
-identification and characterisation of jet streams, so that various techniques are immediately available for anyone wishing to
-look at jet streams in data. Also, it is hoped that *jsmetrics* provides a foundation for new metrics and for researchers to be
-able to quantitatively compare differences provided by existing techniques. 
 
 Installation 
 -------------
@@ -89,6 +88,16 @@ Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetr
 *By latitude estimation of the jet latitude of the subtropical and polar jet stream. Data is monthly ERA5 differenced-250 hPa (orange) and 700-850 hPa (blue) u-wind between 1980-2020.*
 
 
+*Why use jsmetrics?:*
+---------------------
+The planet's jet streams are complex and not well defined at any one scale (see `what are jet streams <https://jsmetrics.readthedocs.io/en/latest/statement.html#what-are-jet-streams>`_),
+and as such there are a wide range of metrics, algorithms and statistics which have been employed in research to help
+identify and characterise them. However, it has been generally quite difficult to reconcile various types of information provided
+by different techniques. The motivation for this package was thus to standardise the most common methods developed for the
+identification and characterisation of jet streams, so that various techniques are immediately available for anyone wishing to
+look at jet streams in data. Also, it is hoped that *jsmetrics* provides a foundation for new metrics and for researchers to be
+able to quantitatively compare differences provided by existing techniques. 
+
 
 DISCLAIMER
 -------------
@@ -102,11 +111,9 @@ Also note that, the data we used to test these metrics may have a different reso
 Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 This project is very much a work in progress, so contributors are very welcome.
 
-You can find details of each metric or algorithm here: `all metrics`_.
 
-
-Metrics & Algorithms
---------------------
+Jet stream metrics
+------------------
 See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric and algorithm. For progress on their completion see `Status`_.
 
 
@@ -115,7 +122,7 @@ See `all metrics`_ for specifications of each 'Complete' or 'In progress' metric
    :widths: auto
    
    =============================================================================== ==============  ==  =============================================================================== ==============
-   Metric/Algorithm                                                                `Status`_           Metric/Algorithm                                                                `Status`_                                                                                
+   Statistic/Algorithm                                                             `Status`_           Statistic/Algorithm                                                             `Status`_                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Gallego et al. 2005 <http://link.springer.com/10.1007/s00382-005-0006-7>`_     To start            `Strong & Davis 2005 <http://doi.wiley.com/10.1029/2004GL022039>`_              To start
    `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      Complete            `Archer & Caldiera 2008 <http://doi.wiley.com/10.1029/2008GL033614>`_           Complete
@@ -190,15 +197,20 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 
-.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8123560.svg
-        :target:  https://doi.org/10.5281/zenodo.8123560
+.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8428289.svg
+        :target:  https://doi.org/10.5281/zenodo.8428289
         :alt: DOI
+
 .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest
        :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest
        :alt: Documentation Status
+
 .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
         :target: https://pypi.org/project/jsmetrics/
         :alt: Python Package Index Build
+
+.. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
+   :target: https://www.python.org/
 
 .. .. |conda| image:: https://img.shields.io/conda/vn/conda-forge/jsmetrics.svg
 ..         :target: https://anaconda.org/conda-forge/jsmetrics

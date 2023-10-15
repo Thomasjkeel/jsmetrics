@@ -15,8 +15,8 @@ consisting of jet statistics, waviness metrics and jet core algorithms (describe
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
 You can find a full list of methods and their current state `here <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
 
-|pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
-------------------------------------------------------------------------------
+|made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
+-------------------------------------------------------------------------------------------------
 **preprint now available here: https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/**   
 **example notebooks: https://github.com/Thomasjkeel/jsmetrics-examples**
 
@@ -202,6 +202,8 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
         :target: https://pypi.org/project/jsmetrics/
         :alt: Python Package Index Build
+.. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
+   :target: https://www.python.org/
 
 .. .. |conda| image:: https://img.shields.io/conda/vn/conda-forge/jsmetrics.svg
 ..         :target: https://anaconda.org/conda-forge/jsmetrics

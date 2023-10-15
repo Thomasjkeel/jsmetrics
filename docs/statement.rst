@@ -107,6 +107,19 @@ The philosophy of this package was to keep the methodology of each metric as clo
 
 The motivation for this was to allow the user to handle these factors and allow for the comparison of various metrics on the same underlying data. 
 
+
+Disclaimer
+----------
+We have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
+However, in some cases, we have chosen to exclude or alter parts of the methodology which reduce the resolution of the output (i.e. grouping into season or region) with the hope to preserve the parts of the method that specifically isolate a characteristics of the jet-stream at any inputted scale.
+Again, any further subsetting is passed onto the user.
+*If data input is at a daily resolution, part of the output should also be daily resolution.*  
+
+Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.   
+
+Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
+This project is very much a work in progress, so contributors are very welcome.
+
 .. Built from sub-components
 .. ----------------------------
 .. All statistics and algorithms in this package are built ontop of various one-purpose functions which we refer to as 'sub-components'. 

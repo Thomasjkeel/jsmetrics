@@ -16,7 +16,7 @@ As this is an ongoing project, we are always in the process of finding and imple
 You can find a full list of methods and their current state `here <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
 
 |made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
--------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------
 **preprint now available here: https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/**   
 **example notebooks: https://github.com/Thomasjkeel/jsmetrics-examples**
 
@@ -193,15 +193,18 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 
-.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8123560.svg
-        :target:  https://doi.org/10.5281/zenodo.8123560
+.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8428289.svg
+        :target:  https://doi.org/10.5281/zenodo.8428289
         :alt: DOI
+
 .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest
        :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest
        :alt: Documentation Status
+
 .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
         :target: https://pypi.org/project/jsmetrics/
         :alt: Python Package Index Build
+
 .. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
    :target: https://www.python.org/
 

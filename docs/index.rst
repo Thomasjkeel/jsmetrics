@@ -6,26 +6,26 @@
 Welcome to jsmetrics' documentation!
 ==============================================
 *jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms developed to
-identify or charactere atmospheric :ref:`jet streams<What are jet streams?>`.
+identify or characterise atmospheric :ref:`jet streams<What are jet streams?>`.
 
 The package is built using `*xarray* <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
 consisting of jet statistics, waviness metrics and jet core algorithms (described :ref:`here <Statistics & Algorithms>`).
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
-You can find a full list of methods and their current progress state :ref:`here <Methods in jsmetrics>`
+You can find a full list of methods and their current progress state :ref:`here <Jet stream metrics>`
 
 .. note:: 
   - preprint now available on `EGUsphere <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_    
   - example jupyter notebooks on `Github <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 
-Methods in jsmetrics
---------------------
+Jet stream metrics
+------------------
 .. table::
    :align: left
    :widths: auto
    
    =============================================================================== ==============  ==  =============================================================================== ==============
-   Metric/Algorithm                                                                `Status`_           Metric/Algorithm                                                                `Status`_                                                                                
+   Statistic/Algorithm                                                             `Status`_           Statistic/Algorithm                                                             `Status`_                                                                                
    =============================================================================== ==============  ==  =============================================================================== ==============
    `Gallego et al. 2005 <http://link.springer.com/10.1007/s00382-005-0006-7>`_     To start            `Strong & Davis 2005 <http://doi.wiley.com/10.1029/2004GL022039>`_              To start
    `Koch et al. 2006 <https://onlinelibrary.wiley.com/doi/10.1002/joc.1255>`_      Complete            `Archer & Caldiera 2008 <http://doi.wiley.com/10.1029/2008GL033614>`_           Complete

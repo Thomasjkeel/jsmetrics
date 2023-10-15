@@ -15,10 +15,12 @@ consisting of jet statistics, waviness metrics and jet core algorithms (describe
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
 You can find a full list of methods and their current state `here <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
 
-----
-
 |made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 --------------------------------------------------------------------------------------------------
+
+
+----
+
 **preprint now available here: https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/**   
 **example notebooks: https://github.com/Thomasjkeel/jsmetrics-examples**
 

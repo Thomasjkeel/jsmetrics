@@ -16,7 +16,7 @@ This is jsmetrics, a package containing implementations of various metrics and a
 written in Python and built from xarray.
 
 *Why use jsmetrics?:*
-
+---------------------
 The planet's jet streams are complex and not well defined at any one scale (see `what are jet streams <https://jsmetrics.readthedocs.io/en/latest/statement.html#what-are-jet-streams>`_),
 and as such there are a wide range of metrics, algorithms and statistics which have been employed in research to help
 identify and characterise them. However, it has been generally quite difficult to reconcile various types of information provided

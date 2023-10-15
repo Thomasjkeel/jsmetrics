@@ -18,7 +18,8 @@ You can find a full list of methods and their current state `here <https://jsmet
 |made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 --------------------------------------------------------------------------------------------------
 
-**preprint now available** `here <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_   
+**preprint now available** `here <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_     
+
 **example notebooks available** `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 ----

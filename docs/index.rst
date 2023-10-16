@@ -47,7 +47,7 @@ Jet stream metrics
 See our `specification file`_ for details of each 'Complete' or 'In progress' metric and algorithm.
 We track the progress of each method using a GitHub Kanban, and you can see their `status`_.
 
-.. _specifcication file: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
+.. _specification file: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py
 .. _status: https://github.com/Thomasjkeel/jsmetrics/projects/1
 
 

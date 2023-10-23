@@ -242,15 +242,15 @@ def manney_et_al_2011(
     data : xarray.Dataset
         Data which should containing the variables: 'ua' and 'va', and the coordinates: 'lon', 'lat', 'plev' and 'time'.
     jet_core_plev_limit: tuple or array
-        Sequence of two values relating to the pressure level limit of the jet cores (original paper uses 100hPa 400 hPa)
+        Sequence of two values relating to the pressure level limit of the jet cores (original paper uses 100-400 hPa)
     jet_core_ws_threshold : int or float
-        Threshold used for jet-stream core point (default=40 m/s)
+        Threshold used for jet cores (default=40 m/s)
     jet_boundary_ws_threshold : int or float
-        Threshold for jet-stream boundary point (default=30 m/s)
+        Threshold for jet boundaries (default=30 m/s)
     ws_drop_threshold : int or float
-        Threshold for drop in windspeed along the line between cores (default: 25 m/s)
+        Threshold for drop in windspeed along direct interpolated path between cores (default: 25 m/s)
     jet_core_lat_distance : int or float
-        Threshold for maximum distance between cores to be counted the same (default: 15 degrees)
+        Threshold for maximum latitudinal distance between cores to be counted as the same feature (default: 15 degrees)
 
     Returns
     ----------
@@ -260,14 +260,14 @@ def manney_et_al_2011(
     Notes
     -----
     The implementation of this method varies slightly from the original, because this method will return a mask rather
-    than dynamical values, the intention was to allow these masks to be used to subset other variables such as windspeed
-    (see 'Examples' for demonstration of how to use the mask).
+    than dynamical values. The intention of this, is to allow these masks to be used to subset other variables such as windspeed
+    (see 'Examples' for demonstration of how to use these masks).
 
     There is an update to this method introduced in Manney & Hegglin 2018 to include physically-based method to extract the
-    subtropical jet is identified (and thus distinguished from polar jets).
+    subtropical jet is identified (and thus distinguished from polar jets). This update is not included in jsmetrics.
 
-    'jet_region_above_ws_threshold_mask' is provided here as a alternative to using a contour to check which regions
-    encompass jet cores.
+    'jet_region_above_ws_threshold_mask' is provided here, but not explicitly in the original methodology. It is meant as
+    an alternative to using a contour to check which regions encompass jet cores.
 
     Examples
     --------

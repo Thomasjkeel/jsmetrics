@@ -324,7 +324,6 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
     # Load in dataset with a geopotential height variable: 'zg' and coordinates: 'time', 'plev', 'lon' and 'lat':
     zg_data = xr.open_dataset('path_to_zg_data')
 
-
     # Subset the datasets to a sensible range for the purpose of this example (Feb 2021, 500 hPa &.0-90 N, 220-300 E):
     uv_sub = uv_data.sel(time="2021-02", plev=500, lat=slice(0, 90), lon=slice(220,300))
     zg_sub = uv_data.sel(time="2021-02", plev=500, lat=slice(0, 90), lon=slice(220,300))

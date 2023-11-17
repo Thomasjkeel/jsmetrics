@@ -410,5 +410,5 @@ of how to load in and merge data using xarray.
 
 If you have lots of different sources of data, and you would like to calculate various jet statistics on the fly from your data 
 (i.e. on JASMIN), we reccomend leaning on specification files which store information about metrics and subsetting like the 
-'details_for_all_metrics.py' available in this package. It is my (Tom) intention to upload the scripts which I have personally used to run
-and log outputs of various similar metrics from *jsmetrics* in batch on JASMIN.
+'details_for_all_metrics.py' available in this package. I (Tom) have uploaded the scripts which I have personally used to run
+and log outputs of various similar metrics from *jsmetrics* in batch on JASMIN, available here: https://github.com/Thomasjkeel/jsmetrics-analysis-runner

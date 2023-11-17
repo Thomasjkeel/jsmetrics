@@ -2,6 +2,13 @@
 History
 =======
 
+
+0.2.1 (2023-11-??)
+-------------------------
+* Update Manney et al. 2011 method to include 'check_diagonals' parameter
+* Update examples of use and quick start table in docs
+
+
 0.2.0 (2023-10-12)
 -------------------------
 * Fix CI and Github actions

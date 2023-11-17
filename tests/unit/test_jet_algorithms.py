@@ -124,6 +124,23 @@ class TestManney2011(unittest.TestCase):
             ),
         )
 
+    def test_check_diagonals(self):
+        tested_func = jet_core_algorithms.manney_et_al_2011
+        subset_data = self.data.sel(plev=slice(50000, 10000)).isel(
+            time=slice(0, 1), lon=slice(0, 100)
+        )
+        res_diagonal = tested_func(
+            subset_data, jet_core_plev_limit=(10000, 40000), check_diagonals=True
+        )
+        res_non_diagonal = tested_func(
+            subset_data, jet_core_plev_limit=(10000, 40000), check_diagonals=False
+        )
+
+        self.assertNotEqual(
+            int(res_non_diagonal["jet_core_mask"].where(lambda x: x).count()),
+            int(res_diagonal["jet_core_mask"].where(lambda x: x).count()),
+        )
+
 
 class TestPenaOrtiz2013(unittest.TestCase):
     def setUp(self):

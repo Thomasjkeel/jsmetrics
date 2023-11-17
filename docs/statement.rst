@@ -24,9 +24,17 @@ Quick start
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | I would like to...                                     | Reccomendation                                                    |
    +========================================================+===================================================================+
-   | | Read in wind-speed data from NetCDF (.nc) or GRIB    | | Python's *xarray* library can read in climate data in a .nc     |
-   | | (.grib) format                                       | | or .grib format by default. And all metrics in *jsmetrics*      |
-   | |                                                      | | have been implementated to work with *xarray* data types        |
+   | Read in wind-speed data from NetCDF (.nc) or GRIB      | | Python's *xarray* library can read in climate data in a .nc     |
+   | (.grib) format                                         | | or .grib format by default. And all metrics in *jsmetrics*      |
+   |                                                        | | have been implementated to work with *xarray* data types.       |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | Rename data coords so that they are compatible with    | | Python's *xarray* library provide functions to `rename`_ data   |
+   |  jsmetrics e.g. to standarise names (i.e. lat, lon).   | | and we provide some basic examples of renaming your data        |
+   |                                                        | | :ref:`here <4. Renaming data coords>`                           |
+   +--------------------------------------------------------+-------------------------------------------------------------------+
+   | Merge u and v components of wind                       | | Python's *xarray* library can `merge`_ data, but be careful     |
+   |                                                        | | that the data you are merging has the exact same time, lat      |
+   |                                                        | | and lon dimensions, otherwise the merge can take a long time.   |
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | Know the mean position of the jet stream               | | The most common method for this would be to calculate the       |
    |                                                        | | 'jet latitude', which are provided by *jsmetrics* under the     |
@@ -49,14 +57,15 @@ Quick start
    |                                                        | | 'manney_et_al_2011' which will seperate different jet cores     |
    |                                                        | | within the same region. Be warned that most of the 5 jet core   |
    |                                                        | | algorithms available are computationally expensive, so read the |
-   |                                                        | | docstring of a given method for some information about run time |
+   |                                                        | | docstring of a given method for information about the run time. |
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | Know the waviness of the jet stream or upper-air flow  | | Methods for quantifying the waviness of the jet stream are      |
    |                                                        | | provided by the :ref:`waviness metrics <waviness metrics>`      |
    |                                                        | | available in *jsmetrics*. These are fairly quick to run methods |
    |                                                        | | and there are currently only two available in this package.     |
    +--------------------------------------------------------+-------------------------------------------------------------------+
-   | ...                                                    | ...                                                               |
+   | ...                                                    | | Please send me an email if you would like some more help the    |
+   |                                                        | | package.                                                        |
    +--------------------------------------------------------+-------------------------------------------------------------------+
 
 
@@ -125,4 +134,7 @@ This project is very much a work in progress, so contributors are very welcome.
 .. All statistics and algorithms in this package are built ontop of various one-purpose functions which we refer to as 'sub-components'. 
 .. These sub-component functions should have one role (e.g. to calculate atmospheric mass at a given atmospheric level), and should allow yet to be added metrics an easier implementation.
  
+
+.. _merge: https://docs.xarray.dev/en/stable/generated/xarray.merge.html
+.. _rename: https://docs.xarray.dev/en/stable/generated/xarray.Dataset.rename.html
 

@@ -27,6 +27,10 @@ more effectively if you wish to run some of the more advanced use cases.
     2. :ref:`Jet core algorithms <2. Using the jet core algorithms>`
     3. :ref:`Waviness metrics <3. Using the waviness metrics>`
 
+We also provide an examples of some basic data formatting using xarray to get your data standardised for use with jsmetrics:
+    4. :ref:`Renaming data <4. Renaming data coords>` 
+    5. :ref:`Merging data <5. Merging data>` 
+
 *Please note that we also provide some examples in a jupyter notebook format available* `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_.
 
 1. Using the jet statistics 
@@ -152,8 +156,12 @@ within the boundaries of the detected jet (where values are >0).
     import matplotlib.pyplot as plt # for plotting, not essential
     import cartopy.crs as ccrs # for plotting, not essential 
 
-    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
-    uv_data = xr.open_dataset('path_to_uv_data')
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # Merge data together (note: data needs to have exact same dimensions)
+    uv_data = xr.merge([u_data, v_data])
 
     # Subset dataset to a sensible range for the purpose of this example (100-400 hPa &.0-90 N, 220-300 E):
     uv_sub = uv_data.sel(time="2021-02-15", plev=slice(100, 400), lat=slice(0, 90), lon=slice(220-300))
@@ -230,8 +238,12 @@ events over a given region. In this example we use Manney et al. 2011 and only u
     import matplotlib.pyplot as plt # for plotting, not essential
     import cartopy.crs as ccrs # for plotting, not essential 
 
-    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
-    uv_data = xr.open_dataset('path_to_uv_data')
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # Merge data together (note: data needs to have exact same dimensions)
+    uv_data = xr.merge([u_data, v_data])
 
     # Subset dataset to a sensible range for the purpose of this example (Feb 2021, 100-400 hPa &.0-90 N, 220-300 E):
     uv_sub = uv_data.sel(time="2021-02", plev=slice(100, 400), lat=slice(0, 90), lon=slice(220,300))
@@ -306,11 +318,15 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
     import jsmetrics.metrics.waviness_metrics as waviness_metrics
     import xarray as xr
 
-    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
-    uv_data = xr.open_dataset('path_to_uv_data')
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # Merge data together (note: data needs to have exact same dimensions)
+    uv_data = xr.merge([u_data, v_data])
+
     # Load in dataset with a geopotential height variable: 'zg' and coordinates: 'time', 'plev', 'lon' and 'lat':
     zg_data = xr.open_dataset('path_to_zg_data')
-
 
     # Subset the datasets to a sensible range for the purpose of this example (Feb 2021, 500 hPa &.0-90 N, 220-300 E):
     uv_sub = uv_data.sel(time="2021-02", plev=500, lat=slice(0, 90), lon=slice(220,300))
@@ -340,11 +356,59 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
 
    Example 5. Meridional Circulation Index and Sinuosity from the two waviness metrics available in *jsmetrics*. Data is from the ERA5 and is in a 1*1 degree resolution.
 
-4. Running the jsmetrics in batch 
+4. Renaming data coords
+#######################
+Any data that you use to run any statistic or algorithm in jsmetrics will need to have standardised names such as 'ua', 'va', 'lon', 'lat', 'plev'.
+As data can come from various sources, there will be different naming conventions for the coordinates. Below we show you how to 
+rename data coords, so that your data can interface with the methods in jsmetrics.
+
+.. code-block:: python
+
+    import xarray as xr
+
+    # Load in some u data with the coordinates: 'time', 'level', 'longitude' and 'latitude':
+    u_data = xr.open_dataset('path_to_u_data')
+
+    # Rename coordinates to the standarised names expected by the jsmetrics methods
+    u_data = u_data.rename({'u': 'ua', 'level':'plev', 'longitude':'lon', 'latitude':'lat'})
+
+    # [Potential option] drop unneccesary variables
+    u_data = u_data.drop('<name_of_var>')
+
+
+5. Merging data
+###############
+For various jet core algorithms you will need to have data with both 'ua' and 'va' variables, below we provide an example
+of how to load in and merge data using xarray.  
+
+.. code-block:: python
+
+    import xarray as xr
+
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # 1st scenario: data has the exact same dimensions i.e. time:2000-2023, lat:0-90, lon:0-360, same resolution
+    uv_data = xr.merge([u_data, v_data])
+    
+    # 2nd scenario: data has different dimensions (be careful and check data at each stage)
+    u_data = u_data.sel(time=slice(2000, 2023), lon=slice(0, 90), lon=slice(0, 180))
+    v_data = u_data.sel(time=slice(2000, 2023), lon=slice(0, 90), lon=slice(0, 180))
+    uv_data = xr.merge([u_data, v_data])
+    
+    # 3rd scenario: data has different time resolution i.e. u-data has monthly resolution and v-data has daily resolution
+    v_data = v_data.resample(time="monthly").mean()
+    uv_data = xr.merge([u_data, v_data])
+
+    # For other types of scenarios, see at the xarray docs
+
+
+6. Running the jsmetrics in batch 
 #################################
 *Work in progress, please email me if you are interested*
 
 If you have lots of different sources of data, and you would like to calculate various jet statistics on the fly from your data 
 (i.e. on JASMIN), we reccomend leaning on specification files which store information about metrics and subsetting like the 
-'details_for_all_metrics.py' available in this package. It is my (Tom) intention to upload the scripts which I have personally used to run
-and log outputs of various similar metrics from *jsmetrics* in batch on JASMIN.
+'details_for_all_metrics.py' available in this package. I (Tom) have uploaded the scripts which I have personally used to run
+and log outputs of various similar metrics from *jsmetrics* in batch on JASMIN, available here: https://github.com/Thomasjkeel/jsmetrics-analysis-runner

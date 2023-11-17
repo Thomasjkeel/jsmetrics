@@ -214,6 +214,7 @@ def manney_et_al_2011(
     jet_boundary_ws_threshold=30,
     ws_drop_threshold=25,
     jet_core_lat_distance=15,
+    check_diagonals=False,
 ):
     r"""
     This method detects jet cores (within an altitude range see 'jet_core_plev_limit') and a boundary region surrounding
@@ -250,7 +251,9 @@ def manney_et_al_2011(
     ws_drop_threshold : int or float
         Threshold for drop in windspeed along direct interpolated path between cores (default: 25 m/s)
     jet_core_lat_distance : int or float
-        Threshold for maximum latitudinal distance between cores to be counted as the same feature (default: 15 degrees)
+        Threshold for maximum distance between cores to be counted the same (default: 15 degrees)
+    check_diagonals : bool
+        Whether to check the diagonal edges of each maxima in the latitude-altitude plane. The original method does not include this (default: False).
 
     Returns
     ----------
@@ -316,6 +319,7 @@ def manney_et_al_2011(
                 jet_boundary_ws_threshold,
                 ws_drop_threshold,
                 jet_core_lat_distance,
+                check_diagonals,
             )
         )
     else:
@@ -327,6 +331,7 @@ def manney_et_al_2011(
                 jet_boundary_ws_threshold,
                 ws_drop_threshold,
                 jet_core_lat_distance,
+                check_diagonals,
             ),
         )
     return output

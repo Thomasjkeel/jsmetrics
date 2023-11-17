@@ -152,8 +152,12 @@ within the boundaries of the detected jet (where values are >0).
     import matplotlib.pyplot as plt # for plotting, not essential
     import cartopy.crs as ccrs # for plotting, not essential 
 
-    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
-    uv_data = xr.open_dataset('path_to_uv_data')
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # Merge data together (note: data needs to have exact same dimensions)
+    uv_data = xr.merge([u_data, v_data])
 
     # Subset dataset to a sensible range for the purpose of this example (100-400 hPa &.0-90 N, 220-300 E):
     uv_sub = uv_data.sel(time="2021-02-15", plev=slice(100, 400), lat=slice(0, 90), lon=slice(220-300))
@@ -230,8 +234,12 @@ events over a given region. In this example we use Manney et al. 2011 and only u
     import matplotlib.pyplot as plt # for plotting, not essential
     import cartopy.crs as ccrs # for plotting, not essential 
 
-    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
-    uv_data = xr.open_dataset('path_to_uv_data')
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # Merge data together (note: data needs to have exact same dimensions)
+    uv_data = xr.merge([u_data, v_data])
 
     # Subset dataset to a sensible range for the purpose of this example (Feb 2021, 100-400 hPa &.0-90 N, 220-300 E):
     uv_sub = uv_data.sel(time="2021-02", plev=slice(100, 400), lat=slice(0, 90), lon=slice(220,300))
@@ -306,8 +314,13 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
     import jsmetrics.metrics.waviness_metrics as waviness_metrics
     import xarray as xr
 
-    # Load in dataset with the variables 'ua', 'va' and coordinates: 'time', 'plev', 'lon' and 'lat':
-    uv_data = xr.open_dataset('path_to_uv_data')
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # Merge data together (note: data needs to have exact same dimensions)
+    uv_data = xr.merge([u_data, v_data])
+
     # Load in dataset with a geopotential height variable: 'zg' and coordinates: 'time', 'plev', 'lon' and 'lat':
     zg_data = xr.open_dataset('path_to_zg_data')
 

@@ -28,8 +28,9 @@ Quick start
    | (.grib) format                                         | | or .grib format by default. And all metrics in *jsmetrics*      |
    |                                                        | | have been implementated to work with *xarray* data types.       |
    +--------------------------------------------------------+-------------------------------------------------------------------+
-   | Rename data coords so that they are compatible with    | | Python's *xarray* library can `rename`_ data and we provide an  |
-   | jsmetrics e.g. to standarise names (i.e. lat, lon).    | | example of doing this in the :ref:`Examples <Examples of Use>`  |
+   | Rename data coords so that they are compatible with    | | Python's *xarray* library provide functions to `rename`_ data   |
+   |  jsmetrics e.g. to standarise names (i.e. lat, lon).   | | and we provide some basic examples of renaming your data        |
+   |                                                        | | :ref:`here <4. Renaming data coords>`                           |
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | Merge u and v components of wind                       | | Python's *xarray* library can `merge`_ data, but be careful     |
    |                                                        | | that the data you are merging has the exact same time, lat      |

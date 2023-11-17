@@ -27,6 +27,10 @@ more effectively if you wish to run some of the more advanced use cases.
     2. :ref:`Jet core algorithms <2. Using the jet core algorithms>`
     3. :ref:`Waviness metrics <3. Using the waviness metrics>`
 
+We also provide an examples of some basic data formatting using xarray to get your data standardised for use with jsmetrics:
+    4. :ref:`Renaming data <4. Renaming data coords>` 
+    5. :ref:`Merging data <5. Merging data>` 
+
 *Please note that we also provide some examples in a jupyter notebook format available* `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_.
 
 1. Using the jet statistics 
@@ -352,7 +356,55 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
 
    Example 5. Meridional Circulation Index and Sinuosity from the two waviness metrics available in *jsmetrics*. Data is from the ERA5 and is in a 1*1 degree resolution.
 
-4. Running the jsmetrics in batch 
+4. Renaming data coords
+#######################
+Any data that you use to run any statistic or algorithm in jsmetrics will need to have standardised names such as 'ua', 'va', 'lon', 'lat', 'plev'.
+As data can come from various sources, there will be different naming conventions for the coordinates. Below we show you how to 
+rename data coords, so that your data can interface with the methods in jsmetrics.
+
+.. code-block:: python
+
+    import xarray as xr
+
+    # Load in some u data with the coordinates: 'time', 'level', 'longitude' and 'latitude':
+    u_data = xr.open_dataset('path_to_u_data')
+
+    # Rename coordinates to the standarised names expected by the jsmetrics methods
+    u_data = u_data.rename({'u': 'ua', 'level':'plev', 'longitude':'lon', 'latitude':'lat'})
+
+    # [Potential option] drop unneccesary variables
+    u_data = u_data.drop('<name_of_var>')
+
+
+5. Merging data
+###############
+For various jet core algorithms you will need to have data with both 'ua' and 'va' variables, below we provide an example
+of how to load in and merge data using xarray.  
+
+.. code-block:: python
+
+    import xarray as xr
+
+    # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
+    u_data = xr.open_dataset('path_to_u_data')
+    v_data = xr.open_dataset('path_to_v_data')
+
+    # 1st scenario: data has the exact same dimensions i.e. time:2000-2023, lat:0-90, lon:0-360, same resolution
+    uv_data = xr.merge([u_data, v_data])
+    
+    # 2nd scenario: data has different dimensions (be careful and check data at each stage)
+    u_data = u_data.sel(time=slice(2000, 2023), lon=slice(0, 90), lon=slice(0, 180))
+    v_data = u_data.sel(time=slice(2000, 2023), lon=slice(0, 90), lon=slice(0, 180))
+    uv_data = xr.merge([u_data, v_data])
+    
+    # 3rd scenario: data has different time resolution i.e. u-data has monthly resolution and v-data has daily resolution
+    v_data = v_data.resample(time="monthly").mean()
+    uv_data = xr.merge([u_data, v_data])
+
+    # For other types of scenarios, see at the xarray docs
+
+
+6. Running the jsmetrics in batch 
 #################################
 *Work in progress, please email me if you are interested*
 

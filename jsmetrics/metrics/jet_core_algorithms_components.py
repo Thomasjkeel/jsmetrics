@@ -920,8 +920,10 @@ def run_checks_on_jet_cores_and_return_jet_cores(
         core_and_location = np.array(core_and_location)
 
         if len(core_and_location) == 0:
-            # no cores found
-            continue
+            # No cores found, so selecting the cell with maximum wind speed for this lon slice
+            core_and_location = np.array(
+                [np.concatenate(np.where(ws_one_lon == ws_one_lon.max()))]
+            )
 
         region_ind, num_cores_in_region = np.unique(
             core_and_location[::, 1], return_counts=True

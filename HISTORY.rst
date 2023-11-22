@@ -6,6 +6,7 @@ History
 0.2.1 (2023-11-??)
 -------------------------
 * Update Manney et al. 2011 method to include 'check_diagonals' parameter
+* Update Manney et al. 2011 method to select maximum windspeed if no cores found above threshold
 * Update examples of use and quick start table in docs
 
 

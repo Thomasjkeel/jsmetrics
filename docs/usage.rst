@@ -398,7 +398,7 @@ of how to load in and merge data using xarray.
     uv_data = xr.merge([u_data, v_data])
     
     # 3rd scenario: data has different time resolution i.e. u-data has monthly resolution and v-data has daily resolution
-    v_data = v_data.resample(time="monthly").mean()
+    v_data = v_data.resample(time="m").mean()
     uv_data = xr.merge([u_data, v_data])
 
     # For other types of scenarios, see at the xarray docs

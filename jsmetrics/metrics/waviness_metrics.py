@@ -81,7 +81,7 @@ def francis_vavrus_2015(data):
 def cattiaux_et_al_2016(data):
     r"""
     This method calculates a sinousity metric for upper-air flow using geopotential height.
-    The value of sinuosity is selected using an isohype which precisely corresponds to the Z500 average over 30-70∘N .
+    The value of sinuosity is selected using an isohypse which precisely corresponds to the Z500 average over 30-70∘N .
     Then this value is compared to the perimeter at 50∘N to calculate sinuosity.
 
     This method was first introduce in Cattiaux et al (2016) https://doi.org/10.1002/2016GL070309 and

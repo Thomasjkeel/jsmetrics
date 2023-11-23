@@ -248,7 +248,7 @@ def find_nearest_value_to_array(array, value):
         Closest value to input value in input array
     """
     array = np.asarray(array)
-    idx = (np.abs(array - value)).argmin()
+    idx = np.argmin(np.abs(array - value))
     return array[idx]
 
 
@@ -438,10 +438,11 @@ def remove_unwanted_coords_from_data(
 
 def rescale_lat_resolution(lats, lat_resolution):
     """
+    Rescale latitude resolution to input lat resolution in degrees.
+
     Component of method from Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
     & Grise & Polvani 2014 https://doi.org/10.1002/2013GL058466
     & Bracegirdle et al (2018) https://doi.org/10.1175/JCLI-D-17-0320.1
-
 
     Parameters
     ----------
@@ -456,3 +457,24 @@ def rescale_lat_resolution(lats, lat_resolution):
         Rescaled array of latitude values
     """
     return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
+
+
+def slice_array_by_index_breaks(array_to_slice, index_breaks):
+    """
+    Will break an array down into segments based on a list of indexes containing information about where to create slices
+
+    Parameters
+    ----------
+    array_to_slice : array-like
+        Array to break down based on slice breaks
+    index_breaks : array-like
+        Indexes from which to slice array
+
+    Returns
+    ----------
+    output: list
+        Broken down slices of original array_to_slice
+    """
+    return [
+        array_to_slice[i:j] for i, j in zip([0] + index_breaks, index_breaks + [None])
+    ]

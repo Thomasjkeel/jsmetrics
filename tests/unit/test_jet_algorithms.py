@@ -91,7 +91,7 @@ class TestSchiemann2009(unittest.TestCase):
         self.assertEqual(int(result["jet_occurence"].max("plev").sum()), 327)
         self.assertRaises(
             KeyError,
-            lambda: tested_func(self.data.isel(time=0).drop("time")),
+            lambda: tested_func(self.data.isel(time=0).drop_vars("time")),
         )
 
 
@@ -120,7 +120,8 @@ class TestManney2011(unittest.TestCase):
         self.assertRaises(
             KeyError,
             lambda: tested_func(
-                self.data.isel(time=0).drop("time"), jet_core_plev_limit=(10000, 40000)
+                self.data.isel(time=0).drop_vars("time"),
+                jet_core_plev_limit=(10000, 40000),
             ),
         )
 
@@ -154,7 +155,7 @@ class TestPenaOrtiz2013(unittest.TestCase):
         self.assertEqual(res["subtropical_jet"].max(), 1)
         self.assertRaises(
             KeyError,
-            lambda: tested_func(self.data.isel(time=0).drop("time")),
+            lambda: tested_func(self.data.isel(time=0).drop_vars("time")),
         )
 
     def test_get_empty_local_wind_maxima(self):

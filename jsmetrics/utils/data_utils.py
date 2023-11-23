@@ -248,7 +248,7 @@ def find_nearest_value_to_array(array, value):
         Closest value to input value in input array
     """
     array = np.asarray(array)
-    idx = (np.abs(array - value)).argmin()
+    idx = np.argmin(np.abs(array - value))
     return array[idx]
 
 

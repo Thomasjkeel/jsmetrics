@@ -456,3 +456,22 @@ def rescale_lat_resolution(lats, lat_resolution):
         Rescaled array of latitude values
     """
     return np.arange(min(lats), max(lats) + lat_resolution, lat_resolution)
+
+
+def split_index_slices(array_to_slice, slice_breaks):
+    """
+    Parameters
+    ----------
+    array_to_slice : array-like
+        Array to break down based on slice breaks
+    slice_breaks : array-like
+        Indexes from which to slice array
+
+    Returns
+    ----------
+    output: list
+        Broken down slices of original array_to_slice
+    """
+    return [
+        array_to_slice[i:j] for i, j in zip([0] + slice_breaks, slice_breaks + [None])
+    ]

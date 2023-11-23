@@ -872,6 +872,112 @@ def has_ws_drop_between_cores(ws_between_cores, ws_drop_threshold):
         return False
 
 
+def get_index_of_cores_to_drop_based_on_multicore_regions(
+    local_maxima_ind_slices, current_local_maximas, multi_core_region_ws
+):
+    """
+    Get index of cores to remove in same region based on whether they contain the first occurence of
+    the maximum windspeed or not.
+
+    Parameters
+    ----------
+    local_maxima_ind_slices : np.array of np.arrays
+        Collection of index slices for current local maximas
+    current_local_maximas : np.array
+        Collection of indexes of current local maxima
+    multi_core_region_ws : xr.DataArray
+        Data containing region windspeeds
+
+    Returns
+    ----------
+    index_of_cores_to_drop : np.array
+        Mask of jet cores in current longitude plev/lat slice with multi core regions formatted
+    """
+    index_of_cores_to_drop = []
+    # Loop through each local_maxima_slice
+    for local_maxima_ind_slice in local_maxima_ind_slices:
+        if len(local_maxima_ind_slice) <= 1:
+            # This would indicate a single core, so will not be removed
+            continue
+        # Get current max windspeed for region (as fallback). Will select first occurence of max.
+        index_of_ws_maxima = get_current_region_ws_maxima_lat_and_plev_ind(
+            current_local_maximas, local_maxima_ind_slice, multi_core_region_ws
+        )
+        previous_local_maxima = [0, 0]  # temporary
+        for ind, local_maxima_ind in enumerate(local_maxima_ind_slice):
+            current_local_maxima = current_local_maximas[int(local_maxima_ind)]
+            if ind == 0:
+                previous_local_maxima = current_local_maxima
+                continue
+            # Check if current or previous is the maximum (so will need to be retained)
+            current_is_index_of_max = np.array_equal(
+                np.array([current_local_maxima[0], current_local_maxima[1]]),
+                index_of_ws_maxima,
+            )
+            previous_is_index_of_max = np.array_equal(
+                np.array([previous_local_maxima[0], previous_local_maxima[1]]),
+                index_of_ws_maxima,
+            )
+            # Store index of cores to drop
+            if current_is_index_of_max:
+                index_of_cores_to_drop.append(
+                    [previous_local_maxima[0], previous_local_maxima[1]]
+                )
+            else:
+                index_of_cores_to_drop.append(
+                    [current_local_maxima[0], current_local_maxima[1]]
+                )
+                if not previous_is_index_of_max:
+                    # occurs only if there are 3+ cores in region and maximum is not between current and previous
+                    index_of_cores_to_drop.append(
+                        [previous_local_maxima[0], previous_local_maxima[1]]
+                    )
+            previous_local_maxima = current_local_maxima
+    return index_of_cores_to_drop
+
+
+def get_current_region_ws_maxima_lat_and_plev_ind(
+    current_local_maximas, local_maxima_ind_slice, multi_core_region_ws
+):
+    """
+    Get the plev and lat index of current region windspeed maxima.
+    Will select the first occurence of maxima, if there is more than one (rare).
+
+    Parameters
+    ----------
+    current_local_maximas : np.array
+        Collection of indexes of current local maxima
+    local_maxima_ind_slice : np.array
+        Index slice for current local maxima
+    multi_core_region_ws : xr.DataArray
+        Data containing region windspeeds
+
+    Returns
+    ----------
+    output : np.array
+        Array of the plev and latitude
+    """
+    all_current_local_maximas_ind = current_local_maximas[
+        list(local_maxima_ind_slice.astype(int))
+    ]
+    all_current_local_maximas_data = multi_core_region_ws.isel(
+        plev=all_current_local_maximas_ind[:, 0],
+        lat=all_current_local_maximas_ind[:, 1],
+    )
+    max_ws_indices = np.unravel_index(
+        all_current_local_maximas_data.argmax(), all_current_local_maximas_data.shape
+    )
+    current_max_data = all_current_local_maximas_data[
+        max_ws_indices[0], max_ws_indices[1]
+    ]
+    # select first occurence of maximum if multiple
+    if current_max_data.size > 1:
+        current_max_data = current_max_data[0]
+    iplev = list(multi_core_region_ws.plev.values).index(current_max_data.plev)
+    ilat = list(multi_core_region_ws.lat.values).index(current_max_data.lat)
+    return np.array([iplev, ilat])
+
+
 def run_checks_on_jet_cores_and_return_jet_cores(
     row,
     initial_jet_core_masks,
@@ -910,6 +1016,8 @@ def run_checks_on_jet_cores_and_return_jet_cores(
         jet_region_contour_one_lon = row["jet_region_contour_mask"].sel(lon=lon)
         ws_one_lon = row["ws"].sel(lon=lon)
         current_local_maximas = local_maximas_dict[float(lon)]
+        # Get first occurence of the maximum windspeed
+        index_of_first_maximum = np.dstack(np.where(ws_one_lon == ws_one_lon.max()))[0]
 
         core_and_location = []
         for core_ind, local_maxima in enumerate(current_local_maximas):
@@ -921,9 +1029,7 @@ def run_checks_on_jet_cores_and_return_jet_cores(
 
         if len(core_and_location) == 0:
             # No cores found, so selecting the cell with maximum wind speed for this lon slice
-            core_and_location = np.array(
-                [np.concatenate(np.where(ws_one_lon == ws_one_lon.max()))]
-            )
+            core_and_location = index_of_first_maximum
 
         region_ind, num_cores_in_region = np.unique(
             core_and_location[::, 1], return_counts=True
@@ -960,13 +1066,14 @@ def run_checks_on_jet_cores_and_return_jet_cores(
             multi_core_region_ws = ws_one_lon.where(
                 jet_region_contour_one_lon == multi_core_region
             )
-
             for multi_core_region in multi_core_regions:
                 # get all the local maxima within regions of multi cores
                 local_maxima_inds = core_and_location[::, 0][
                     core_and_location[::, 1] == multi_core_region
                 ]
-                previous_local_maxima = None
+                # Step 1 of 2: loop over local maxima in multicore region and find if they need to split further
+                slicepoints_in_region = []
+                previous_local_maxima = [0, 0]  # temporary
                 for ind, local_maxima_ind in enumerate(local_maxima_inds):
                     current_local_maxima = current_local_maximas[int(local_maxima_ind)]
                     if ind == 0:
@@ -979,13 +1086,28 @@ def run_checks_on_jet_cores_and_return_jet_cores(
                             end_point=current_local_maxima,
                         )
                     )
-                    if not has_ws_drop_between_cores(
+                    # Get conditions for dropping cores
+                    ws_drops_below_threshold = has_ws_drop_between_cores(
                         windspeeds_between_cores, ws_drop_threshold=ws_drop_threshold
-                    ):
-                        # Set to 0 as the cores detected in this region are part of the same feature
-                        jet_core_masks[
-                            current_local_maxima[0], current_local_maxima[1], lon_ind
-                        ] = 0
+                    )
+                    if ws_drops_below_threshold:
+                        slicepoints_in_region.append(ind)
+                    previous_local_maxima = current_local_maxima
+                # Step 2 of 2: Remove cores in same region and retain core with maximum windspeed
+                local_maxima_ind_slices = data_utils.slice_array_by_index_breaks(
+                    local_maxima_inds, slicepoints_in_region
+                )
+                index_of_cores_to_drop = (
+                    get_index_of_cores_to_drop_based_on_multicore_regions(
+                        local_maxima_ind_slices,
+                        current_local_maximas,
+                        multi_core_region_ws,
+                    )
+                )
+                for index_of_core_to_drop in index_of_cores_to_drop:
+                    jet_core_masks[
+                        index_of_core_to_drop[0], index_of_core_to_drop[1], lon_ind
+                    ] = 0
     return jet_core_masks
 
 

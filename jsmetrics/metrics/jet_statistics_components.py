@@ -67,7 +67,7 @@ def get_atm_mass_at_one_hPa(hPa):
     return atm_mass
 
 
-def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
+def get_weighted_average_at_one_pressure_level(data, pressure_level, atm_mass, ws_col):
     """
     Get weighted average wind speed at one pressure level.
 
@@ -78,8 +78,8 @@ def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
     ----------
     data : xarray.Dataset
         Data containing windspeed ('ws') or u-, v-component wind
-    Pa : int or float
-        Pressure level in Pascals
+    pressure_level : int or float
+        Pressure level to subset
     atm_mass : int or float
         Atmospheric mass at given hPa pressure level
     ws_col : string
@@ -90,7 +90,7 @@ def get_weighted_average_at_one_Pa(data, Pa, atm_mass, ws_col):
     output : xarray.Dataset
         Data with weighted average at a single pressure level
     """
-    return atm_mass * (data[ws_col].sel(plev=Pa))
+    return atm_mass * (data[ws_col].sel(plev=pressure_level))
 
 
 def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
@@ -119,11 +119,15 @@ def get_mass_weighted_average_wind(data, ws_col, plev_flux=False):
     """
     data_utils.check_at_least_n_plevs_in_data(data, n_plevs=2)
     sum_weighted_ws = None
-    for plev_Pa in data["plev"].data:
-        plev_hPa = plev_Pa / 100
+    (
+        hPa_multiplying_factor,
+        _,
+    ) = get_hPa_or_mbar_and_Pa_or_bar_multiplying_factors_for_plev(data)
+    for plev_step in data["plev"].data:
+        plev_hPa = plev_step * hPa_multiplying_factor
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
-        weighted_average = get_weighted_average_at_one_Pa(
-            data, plev_Pa, atm_mass, ws_col
+        weighted_average = get_weighted_average_at_one_pressure_level(
+            data, plev_step, atm_mass, ws_col
         )
         if sum_weighted_ws is None:
             if plev_flux:
@@ -157,11 +161,51 @@ def get_sum_atm_mass(data):
     """
     sum_atm_mass = 0
     data_utils.check_at_least_n_plevs_in_data(data, n_plevs=2)
-    for plev_Pa in data["plev"].data:
-        plev_hPa = plev_Pa / 100
+    (
+        hPa_multiplying_factor,
+        _,
+    ) = get_hPa_or_mbar_and_Pa_or_bar_multiplying_factors_for_plev(data)
+    for plev_level in data["plev"].data:
+        plev_hPa = plev_level * hPa_multiplying_factor
         atm_mass = get_atm_mass_at_one_hPa(plev_hPa)
         sum_atm_mass += atm_mass
     return sum_atm_mass
+
+
+def get_hPa_or_mbar_and_Pa_or_bar_multiplying_factors_for_plev(data):
+    """
+    Will get the multiplying factor for plev units.
+    E.g. if data contains plev with the unit: Pa the two multiplying factors will be 0.01 and 1
+    E.g. if data contains plev with the unit: hPa the two multiplying factors will be 1 and 100
+
+    Component of method from Archer & Caldiera (2008) https://doi.org/10.1029/2008GL033614
+    & Barnes & Polvani (2013) https://doi.org/10.1175/JCLI-D-12-00536.1
+
+    Parameters
+    ----------
+    data : xr.DataArray or xr.Dataset
+        Data containing plev coord and units for plev
+
+    Returns
+    ----------
+    hPa_multiplying_factor : int
+        Factor to multiply plev units to convert them to hPa
+    Pa_multiplying_factor : int
+        Factor to multiply plev units to convert them to Pa
+
+    """
+    hPa_multiplying_factor = 1
+    Pa_multiplying_factor = 1
+    plev_units = data_utils.check_plev_units(
+        data, ["Pa", "hPa", "mbar", "millibars", "bars"]
+    )
+
+    if plev_units in ["hPa", "mbar", "millibars"]:
+        Pa_multiplying_factor *= 100
+    else:
+        hPa_multiplying_factor /= 100
+
+    return hPa_multiplying_factor, Pa_multiplying_factor
 
 
 def calc_mass_weighted_average(data, ws_col):

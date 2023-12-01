@@ -5,10 +5,10 @@
 
 Welcome to jsmetrics' documentation!
 ==============================================
-*jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms developed to
-identify or characterise atmospheric :ref:`jet streams<What are jet streams?>`.
+*jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms which have been 
+developed to identify or characterise :ref:`jet streams<What are jet streams?>`.
 
-The package is built using `*xarray* <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
+The package is built on top of `*xarray* <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
 consisting of jet statistics, waviness metrics and jet core algorithms (described :ref:`here <Statistics & Algorithms>`).
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
 You can find a full list of methods and their current progress state :ref:`here <Jet stream metrics>`
@@ -44,7 +44,7 @@ Jet stream metrics
 
 \* == help needed
 
-See our `specification file`_ for details of each 'Complete' or 'In progress' metric and algorithm.
+For details of each 'Complete' or 'In progress' metric and algorithm, see our `specification file`_.
 We track the progress of each method using a GitHub Kanban, and you can see their `status`_.
 
 .. _specification file: https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py

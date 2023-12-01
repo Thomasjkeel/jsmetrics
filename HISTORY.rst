@@ -11,6 +11,7 @@ History
 * Update examples of use and quick start table in docs
 * Add check for plev units to data_utils
 * Update Archer & Calidera to more properly check for whether data plev coords are Pa or hPa.
+* Fix typos and clarify writing in docs
 
 
 0.2.0 (2023-10-12)

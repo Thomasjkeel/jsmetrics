@@ -1,15 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Methods that isolate parts of the atmospheric column associated with jet-streams based on various techniques from the literature.
-    In each case, these algorithms output a mask of the input data, and so can be used to further characterise variables at the same location
-    as the jet core mask.
-    Algorithms are treated seperately to jet statistics, as in general, jet statistics are used to summarise information about the jet-stream,
-    the jet core algorithms simply identify it.
+    Methods that return a mask of coordinates related to the jet location, e.g., identifying the maximum
+    wind speed throughout the horizontal and/or vertical plane within a given time window.
 
-    All functions return a xarray.Dataset.
-
-    The following algorithms are ordered by paper publish year.
+    The following algorithms each return a xarray.Dataset and are ordered by paper publish year.
 """
 
 # imports

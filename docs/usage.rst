@@ -2,13 +2,12 @@
 Examples of Use
 ===============
 
-:code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_ 
-(which is a Python library useful for dealing with earth science datasets).
+:code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_.
 An extensive knowledge of Python or *xarray* is **not** required to use *jsmetrics*, although it will help you use the package
-more effectively if you wish to run some of the more advanced use cases. 
+more effectively if you wish to run some more advanced use cases. 
 
 .. note:: 
-    To run any metric in :code:`jsmetrics` the syntax will be something like:
+    To run any metric in :code:`jsmetrics` the syntax will be like:
 
     .. code-block:: python
 
@@ -38,8 +37,8 @@ We also provide an examples of some basic data formatting using xarray to get yo
 ...to compare estimations of jet latitude and speed
 ---------------------------------------------------
 The most simple use of the jet statistics is to just run them on the same dataset. Below we use the Wintertime (J,F)
-lower tropospheric North Pacific jet as an example. More detail is provided about the exact regions each jet statistics
-was developed for in the file: `details_for_all_metrics.py <https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py>`_ 
+lower tropospheric North Pacific jet as an example. More detail is provided about the exact regions each of the jet statistics
+were developed for in the file: `details_for_all_metrics.py <https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py>`_ 
 
 .. code-block:: python
 
@@ -83,7 +82,7 @@ was developed for in the file: `details_for_all_metrics.py <https://github.com/T
 
 ...to calculate the jet latitude by longitude
 ---------------------------------------------
-In this second example, we introduce how jsmetrics allows you to run a given jet statistic outside of its original purpose.
+In this second example, we introduce the some of the flexibility afforded by jsmetrics.
 In this case to run the jet statistic on each longitude in the input dataset, similar to the method from `Liu et al. 2021 <https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2021JD034876>`_
 
 .. code-block:: python
@@ -229,7 +228,7 @@ While a mask is useful for visualising the coordinates of the jet, we can also u
 ...to produce a count of jet cores:
 ------------------------------------
 If you want to look at the frequency of jet locations, below we provide a simple example of how to produce a count of jet core
-events over a given region. In this example we use Manney et al. 2011 and only use data from February 2021.
+events over a given region. In this example we use Manney et al. 2011 and data from February 2021.
 
 .. code-block:: python
 

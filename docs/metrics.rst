@@ -16,8 +16,8 @@ For progress on their completion see `issues`_.
 
 Jet statistics
 ##############
-Metrics and indices used to characterise features of jet-streams (e.g. location, speed, waviness and width).
-All methods are implementation from existing research which have been translated to Python for this package.
+Statistics for isolating individual quantities synonymous with the jet stream from upper-level wind speed
+within a given time window (e.g. latitude, speed, width).
 
 **Overview table:**
 
@@ -52,11 +52,8 @@ All methods are implementation from existing research which have been translated
 
 Jet core algorithms
 ###################
-Methods that isolate parts of the atmospheric column associated with jet-streams based on various techniques from the literature.
-In each case, these algorithms output a mask of the input data, and so can be used to further characterise variables at the same location
-as the jet core mask. Algorithms are treated seperately to jet statistcs, as in general, the jet statistic are used to summarise information
-about the jet-stream, the jet core algorithms simply identify it. All methods are implementation from existing research which have been
-translated to Python for this package.
+Methods that return a mask of coordinates related to the jet location, e.g., identifying the maximum
+wind speed throughout the horizontal and/or vertical plane within a given time window.
 
 
 **Overview table:**
@@ -87,8 +84,8 @@ translated to Python for this package.
 
 Waviness metrics
 ################
-Methods that characterise 'waviness' or 'sinousity' in parts of the atmospheric column based on various techniques from the literature.
-All methods are implementation from existing research which have been translated to Python for this package.
+Statistics and algorithms for determining the "waviness" of upper-level mean flow within a given time window.
+These metrics only have meaning at an integrated global scale.
 
 
 **Overview table:**

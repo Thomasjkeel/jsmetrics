@@ -22,7 +22,7 @@ __status__ = "Development"
 @sort_xarray_data_coords(coords=["lat", "lon"])
 def francis_vavrus_2015(data):
     r"""
-    This method calculates a waviness metric called: Meridional Circulation Index (MCI) from u- and v-components of wind.
+    This method calculates a waviness metric: Meridional Circulation Index (MCI) from u- and v-components of wind.
 
     MCI is calculated as follows:
 

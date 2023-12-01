@@ -7,8 +7,8 @@
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
 
-*jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms developed to
-identify or characterise atmospheric jet streams.
+*jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms which have been 
+developed to identify or characterise jet streams.
 
 The package is built using `xarray <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
 consisting of jet statistics, waviness metrics and jet core algorithms (described `here <https://jsmetrics.readthedocs.io/en/latest/metrics.html>`_).

@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Methods which define jet-stream waviness from upper-air.
-    All methods are implementation from existing research which have been translated to Python for this package.
+    Statistics and algorithms for determining the "waviness" of upper-level mean flow within a given
+    time window. These metrics only have meaning at an integrated global scale.
 
-    All functions return a xarray.Dataset.
-
-    The following waviness metrics are ordered by paper publish year.
+    The following metrics each return a xarray.Dataset and are ordered by paper publish year.
 """
 
 # imports

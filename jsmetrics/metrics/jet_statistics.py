@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Metrics and indices used to characterise features of jet-streams (e.g. location, speed, waviness and width).
-    All methods are implementation from existing research which have been translated to Python for this package.
+    Statistics for isolating individual quantities synonymous with the jet stream from upper-level wind speed
+    within a given time window (e.g. latitude, speed, width).
 
-    All functions return a xarray.Dataset.
-
-    The following jet statistics are ordered by paper publish year.
+    The following statistics each return a xarray.Dataset and are ordered by paper publish year.
 """
 
 # imports

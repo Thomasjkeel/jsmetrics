@@ -3,7 +3,7 @@ History
 =======
 
 
-0.2.1 (2023-12-??)
+0.2.1 (2023-12-01)
 -------------------------
 * Update Manney et al. 2011 method to include 'check_diagonals' parameter
 * Update Manney et al. 2011 method to select maximum windspeed if no cores found above threshold

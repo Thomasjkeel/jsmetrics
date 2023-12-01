@@ -13,14 +13,14 @@ developed to identify or characterise jet streams.
 The package is built using `xarray <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
 consisting of jet statistics, waviness metrics and jet core algorithms (described `here <https://jsmetrics.readthedocs.io/en/latest/metrics.html>`_).
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
-You can find a full list of methods and their current state `here <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
+You can find a full list of methods and their current state in the `docs <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
 
 |made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 --------------------------------------------------------------------------------------------------
 
-**preprint now available** `here <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_     
+**preprint now `available <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_** 
 
-**example notebooks available** `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_
+**example `notebooks <https://github.com/Thomasjkeel/jsmetrics-examples>`_** 
 
 ----
 
@@ -96,9 +96,9 @@ Below we introduce a simple use of the package to run a single jet statistic.
 
 Examples
 -------------
-For examples please check out the `examples <https://jsmetrics.readthedocs.io/en/latest/usage.html>`_
+For examples please check out the examples here: https://jsmetrics.readthedocs.io/en/latest/usage.html
 
-Some example notebooks are available `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_
+Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 560

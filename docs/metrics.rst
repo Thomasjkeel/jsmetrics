@@ -2,9 +2,9 @@
 Statistics & Algorithms
 =======================
 :code:`jsmetrics` contains metrics of three types: 
-   1. **jet statistics** -- methods that extract a single quantity describing the jet stream (i.e. latitude, speed, width)
-   2. **jet core algorithms** -- methods that return a multi-dimensional mask at coordinates identified to be the jet streams.
-   3. **waviness metrics** -- methods that characterise the sinousity of the upper-level winds (acts as a proxy for jet stream waviness).
+   1. **jet statistics** -- statistics for isolating individual quantities synonymous with the jet stream from upper-level wind speed (e.g. latitude, speed, width).
+   2. **jet core algorithms** -- methods that return a mask of coordinates related to the jet location throughout the horizontal and/or vertical plane.
+   3. **waviness metrics** -- statistics and algorithms for determining the "waviness" of upper-level mean flow.
 
 
 For specification details of each metric's DOI and original study area please see `all metrics`_.

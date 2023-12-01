@@ -207,6 +207,41 @@ def check_if_data_is_xarray_datatype(data):
         raise TypeError("input needs to be xarray.DataSet or xarray.DataArray")
 
 
+def check_plev_units(data, expected_plev_units):
+    """
+    Will check that pressure level units are in data plev coord (i.e. Pa, hPa, mbar, millibars).
+
+    Parameters
+    ----------
+    data : xr.DataArray or xr.Dataset
+        Data containing plev coord and units for plev
+    expected_plev_units : list
+        List of names of plev units (i.e. mbar, Pa, hPa, etc.)
+
+    Returns
+    ----------
+    units : str
+        Units of plev coord
+
+    Raises
+    ----------
+    KeyError
+        If plev is not a coord in input 'data'. And if the units of plev are not in expected plev units
+
+    """
+    if "plev" not in data.coords:
+        raise KeyError(
+            "Please provide a plev coordinate for data to determine plev units"
+        )
+
+    if data["plev"].units not in expected_plev_units:
+        raise KeyError(
+            f"plev unit: {data['plev'].units} is not in {expected_plev_units}. You will need assign units to plev to run this method."
+        )
+    else:
+        return data["plev"].units
+
+
 def check_variables_in_data(data, req_variables):
     """
     What it says on the tin.

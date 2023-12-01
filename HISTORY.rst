@@ -3,12 +3,14 @@ History
 =======
 
 
-0.2.1 (2023-11-??)
+0.2.1 (2023-12-01)
 -------------------------
 * Update Manney et al. 2011 method to include 'check_diagonals' parameter
 * Update Manney et al. 2011 method to select maximum windspeed if no cores found above threshold
 * Add 'slice_array_by_index_breaks' to data utils
 * Update examples of use and quick start table in docs
+* Add check for plev units to data_utils
+* Update Archer & Calidera to more properly check for whether data plev coords are Pa or hPa.
 
 
 0.2.0 (2023-10-12)

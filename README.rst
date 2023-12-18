@@ -18,9 +18,9 @@ You can find a full list of methods and their current state in the `docs <https:
 |made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 --------------------------------------------------------------------------------------------------
 
-**preprint now `available <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_** 
+preprint now `available <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_
 
-**example `notebooks <https://github.com/Thomasjkeel/jsmetrics-examples>`_** 
+example `notebooks <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 ----
 

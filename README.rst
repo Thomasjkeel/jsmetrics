@@ -15,10 +15,10 @@ consisting of jet statistics, waviness metrics and jet core algorithms (describe
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
 You can find a full list of methods and their current state in the `docs <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
 
-|made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
+|made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |gmd| |zenodo|  
 --------------------------------------------------------------------------------------------------
 
-preprint now `available <https://egusphere.copernicus.org/preprints/2023/egusphere-2023-661/>`_
+GMD article now `available <https://doi.org/10.5194/gmd-17-1229-2024>`_
 
 example `notebooks <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
@@ -145,7 +145,6 @@ Finally, although these metric were found with a literature search, this is not 
 This project is very much a work in progress, so contributors are very welcome.
 
 
-
 Contributing
 ------------
 jsmetrics is in active development. 
@@ -156,9 +155,16 @@ jsmetrics is in active development.
 
 .. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
 .. _Contributing Guidelines: https://jsmetrics.readthedocs.io/en/latest/contributing.html
-.. How to cite this package
-.. ------------------------
-.. If you wish to cite `jsmetrics` in a research publication, we kindly ask that you use the bibliographical reference information available through `Zenodo`
+
+How to cite this package
+------------------------
+If you wish to cite `jsmetrics` in a research publication, we kindly ask that you use:
+
+   Keel, T., Brierley, C., and Edwards, T.: jsmetrics v0.2.0: a Python package for metrics and algorithms used to identify or characterise atmospheric jet streams, Geosci. Model Dev., 17, 1229–1247, https://doi.org/10.5194/gmd-17-1229-2024, 2024
+
+
+A reference to a specific version of this software is also available through Zenodo i.e.:
+   Keel, T.: Thomasjkeel/jsmetrics: v0.2.1 (0.2.1), Zenodo [code], https://doi.org/10.5281/zenodo.10246319, 2024.
 
 
 Project To-Do's
@@ -168,7 +174,6 @@ Project To-Do's
 
 Credits
 -------------
-
 The layout and content of this project and was inspired by xclim (https://github.com/Ouranosinc/xclim) 
 which contains other climate indices and metrics.
 
@@ -193,9 +198,13 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 
+.. |gmd| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8428289.svg
+        :target: https://doi.org/10.5194/gmd-17-1229-2024
+        :alt: GMD DOI
+
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8428289.svg
         :target:  https://doi.org/10.5281/zenodo.8428289
-        :alt: DOI
+        :alt: Zenodo
 
 .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest
        :target: https://jsmetrics.readthedocs.io/en/latest/?badge=latest

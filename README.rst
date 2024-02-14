@@ -77,19 +77,6 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 .. look at jet streams in data. Also, it is hoped that *jsmetrics* provides a foundation for new metrics and for researchers to be
 .. able to quantitatively compare differences provided by existing techniques. 
 
-DISCLAIMER
--------------
-We have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
-However, in some cases, we have chosen to exclude or alter parts of the methodology which reduce the resolution of the output (i.e. grouping into season or region) with the hope to preserve the parts of the method that specifically isolate a characteristics of the jet-stream at any inputted scale.
-Again, any further subsetting is passed onto the user.
-*If data input is at a daily resolution, part of the output should also be daily resolution.*  
-
-Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.   
-
-Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
-This project is very much a work in progress, so contributors are very welcome.
-
-
 Contributing
 ------------
 jsmetrics is in active development. 
@@ -124,6 +111,18 @@ The layout and content of this project and was inspired by xclim (https://github
 which contains other climate indices and metrics.
 
 This package was created with Cookiecutter and the audreyr/cookiecutter-pypackage project template.
+
+Disclaimer
+-------------
+We have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
+However, in some cases, we have chosen to exclude or alter parts of the methodology which reduce the resolution of the output (i.e. grouping into season or region) with the hope to preserve the parts of the method that specifically isolate a characteristics of the jet-stream at any inputted scale.
+Again, any further subsetting is passed onto the user.
+*If data input is at a daily resolution, part of the output should also be daily resolution.*  
+
+Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.   
+
+Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
+This project is very much a work in progress, so contributors are very welcome.
 
 .. |license| image:: https://img.shields.io/github/license/thomasjkeel/jsmetrics
         :target: https://github.com/Thomasjkeel/jsmetrics/blob/master/LICENSE

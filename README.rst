@@ -15,10 +15,11 @@ consisting of jet statistics, waviness metrics and jet core algorithms (describe
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
 You can find a full list of methods and their current state in the `docs <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
 
-|made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |gmd| |zenodo|  
+|made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 --------------------------------------------------------------------------------------------------
 
-GMD article now `available <https://doi.org/10.5194/gmd-17-1229-2024>`_
+GMD article describing jsmetrics v0.2.0:
+   Keel, T., Brierley, C., and Edwards, T.: jsmetrics v0.2.0: a Python package for metrics and algorithms used to identify or characterise atmospheric jet streams, Geosci. Model Dev., 17, 1229–1247, https://doi.org/10.5194/gmd-17-1229-2024, 2024
 
 example `notebooks <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
@@ -142,10 +143,6 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
    
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
-
-.. |gmd| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8428289.svg
-        :target: https://doi.org/10.5194/gmd-17-1229-2024
-        :alt: GMD DOI
 
 .. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8428289.svg
         :target:  https://doi.org/10.5281/zenodo.8428289

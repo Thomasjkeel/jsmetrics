@@ -6,6 +6,7 @@
 ============================================
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
+|pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 
 *jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms which have been 
 developed to identify or characterise jet streams.
@@ -15,7 +16,6 @@ consisting of jet statistics, waviness metrics and jet core algorithms (describe
 As this is an ongoing project, we are always in the process of finding and implementing new methods.
 You can find a full list of methods and their current state in the `docs <https://jsmetrics.readthedocs.io/en/latest/index.html>`_.
 
-|made-with-python| |pypi| |pre-commit| |codefactor| |coveralls| |docs| |license| |black| |zenodo|  
 --------------------------------------------------------------------------------------------------
 
 GMD article describing jsmetrics v0.2.0:
@@ -155,9 +155,6 @@ This package was created with Cookiecutter and the audreyr/cookiecutter-pypackag
 .. |pypi| image:: https://img.shields.io/pypi/v/jsmetrics.svg
         :target: https://pypi.org/project/jsmetrics/
         :alt: Python Package Index Build
-
-.. |made-with-python| image:: https://img.shields.io/badge/Made%20with-Python-1f425f.svg
-   :target: https://www.python.org/
 
 .. .. |conda| image:: https://img.shields.io/conda/vn/conda-forge/jsmetrics.svg
 ..         :target: https://anaconda.org/conda-forge/jsmetrics

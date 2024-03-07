@@ -67,6 +67,33 @@ For examples please check out the examples here: https://jsmetrics.readthedocs.i
 
 Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
+Examples
+-------------
+For examples please check out the `examples <https://jsmetrics.readthedocs.io/en/latest/usage.html>`_
+
+Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
+
+.. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
+  :width: 560
+  :align: center
+  :alt: Comparison of jet core algorithms during Feb 2021 Texas Cold Wave
+
+*Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 100-500 hPa u-v-wind.*
+
+.. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png
+  :width: 560
+  :align: center
+  :alt: Jet latitude circbars with errorbars
+
+*Estimation of North Pacific mean jet latitude by month with 1-stdev errorbars. Data is monthly ERA5 700-850 hPa u-wind between 1980-2020.*
+
+.. image:: docs/_static/images/all_jet_lats_stj_pfj_npac_maps_more_metrics.png
+  :width: 560
+  :align: center
+  :alt: STJ and PFJ by metric and longitude
+
+*By latitude estimation of the jet latitude of the subtropical and polar jet stream. Data is monthly ERA5 differenced-250 hPa (orange) and 700-850 hPa (blue) u-wind between 1980-2020.*
+
 .. *Why use jsmetrics?:*
 .. ---------------------
 .. The planet's jet streams are complex and not well defined at any one scale (see `what are jet streams <https://jsmetrics.readthedocs.io/en/latest/statement.html#what-are-jet-streams>`_),

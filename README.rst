@@ -67,7 +67,8 @@ For examples please check out the examples here: https://jsmetrics.readthedocs.i
 
 Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-**Compare algorithms for jet stream core detection:**
+**Compare algorithms for jet stream core detection:**  
+
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 560
   :align: center
@@ -75,7 +76,8 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 
 *Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 100-500 hPa u-v-wind.*
 
-**Ask questions with jet statistics built for a similar purpose:**
+**Ask questions with jet statistics built for a similar purpose:**  
+
 .. image:: docs/_static/images/jet_shift_violin.png
   :width: 560
   :align: center
@@ -83,7 +85,8 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 
 *Estimation of mean jet latitude shift. Data is monthly ERA5 700-850 hPa u-wind between 1990-2020.*
 
-**Extend the original jet metric definitions using jsmetrics flexibility:**
+**Extend the original jet metric definitions using jsmetrics flexibility:**  
+
 .. image:: docs/_static/images/all_jet_lats_stj_pfj_npac_maps_more_metrics.png
   :width: 560
   :align: center

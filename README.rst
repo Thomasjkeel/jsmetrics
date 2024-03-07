@@ -70,7 +70,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 **Compare algorithms for jet stream core detection:**  
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
-  :width: 560
+  :width: 360
   :align: center
   :alt: Comparison of jet core algorithms during Feb 2021 Texas Cold Wave
 
@@ -79,7 +79,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 **Ask questions with jet statistics built for a similar purpose:**  
 
 .. image:: docs/_static/images/jet_shift_violin.png
-  :width: 560
+  :width: 360
   :align: center
   :alt: Jet latitude circbars with errorbars
 
@@ -88,7 +88,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 **Extend the original jet metric definitions using jsmetrics flexibility:**  
 
 .. image:: docs/_static/images/all_jet_lats_stj_pfj_npac_maps_more_metrics.png
-  :width: 560
+  :width: 360
   :align: center
   :alt: STJ and PFJ by metric and longitude
 

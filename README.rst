@@ -67,12 +67,7 @@ For examples please check out the examples here: https://jsmetrics.readthedocs.i
 
 Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-Examples
--------------
-For examples please check out the `examples <https://jsmetrics.readthedocs.io/en/latest/usage.html>`_
-
-Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetrics-examples
-
+**Compare algorithms for jet stream core detection:**
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 560
   :align: center
@@ -80,13 +75,15 @@ Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetr
 
 *Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 100-500 hPa u-v-wind.*
 
-.. image:: docs/_static/images/all_metrics_jetlat_circbar_w_errorbars.png
+**Ask questions with jet statistics built for a similar purpose:**
+.. image:: docs/_static/images/jet_shift_violin.png
   :width: 560
   :align: center
   :alt: Jet latitude circbars with errorbars
 
-*Estimation of North Pacific mean jet latitude by month with 1-stdev errorbars. Data is monthly ERA5 700-850 hPa u-wind between 1980-2020.*
+*Estimation of mean jet latitude shift. Data is monthly ERA5 700-850 hPa u-wind between 1990-2020.*
 
+**Extend the original jet metric definitions using jsmetrics flexibility:**
 .. image:: docs/_static/images/all_jet_lats_stj_pfj_npac_maps_more_metrics.png
   :width: 560
   :align: center
@@ -104,16 +101,6 @@ Some example notebooks are available here: https://github.com/Thomasjkeel/jsmetr
 .. look at jet streams in data. Also, it is hoped that *jsmetrics* provides a foundation for new metrics and for researchers to be
 .. able to quantitatively compare differences provided by existing techniques. 
 
-Contributing
-------------
-jsmetrics is in active development. 
-
-* If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker`_
-
-* If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
-
-.. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
-.. _Contributing Guidelines: https://jsmetrics.readthedocs.io/en/latest/contributing.html
 
 How to cite this package
 ------------------------
@@ -126,11 +113,16 @@ A reference to a specific version of this software is also available through Zen
 
    Keel, T.: Thomasjkeel/jsmetrics: v0.2.1 (0.2.1), Zenodo [code], https://doi.org/10.5281/zenodo.10246319, 2024.
 
+Contributing
+------------
+jsmetrics is in active development. 
 
-Project To-Do's
----------------
-        - ADD: cf_xarray (see: https://cf-xarray.readthedocs.io/en/latest/index.html)
-        - ADD: pint (see: https://pint.readthedocs.io/en/stable/)
+* If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker`_
+
+* If you would like to contribute code or documentation (which is greatly appreciated!), check out the `Contributing Guidelines`_ before you begin!
+
+.. _issue tracker: https://github.com/Thomasjkeel/jsmetrics/issues
+.. _Contributing Guidelines: https://jsmetrics.readthedocs.io/en/latest/contributing.html
 
 Credits
 -------------

@@ -2,7 +2,7 @@
 History
 =======
 
-0.2.2-alpha (2024-03-13)
+0.2.2-beta (2024-03-13)
 -------------------------
 * Fix error when checking for plev units in data_utils
 * Reduce README content

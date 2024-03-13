@@ -233,6 +233,10 @@ def check_plev_units(data, expected_plev_units):
         raise KeyError(
             "Please provide a plev coordinate for data to determine plev units"
         )
+    if not hasattr(data["plev"], "units"):
+        raise KeyError(
+            f"plev unit: {data['plev'].units} is not in {expected_plev_units}. You will need assign units to plev to run this method."
+        )
 
     if data["plev"].units not in expected_plev_units:
         raise KeyError(

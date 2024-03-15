@@ -177,11 +177,10 @@ class TestKuang2014(unittest.TestCase):
 
     def test_metric(self):
         tested_func = jet_core_algorithms.kuang_et_al_2014
-        lon_data = self.data.sel(plev=50000).isel(time=slice(0, 2))
-        result = tested_func(lon_data)
-        self.assertEqual(result["jet_ocurrence1_jet_centre2"].max(), 2)
         lon_data = self.data.sel(plev=slice(50000, 25000)).isel(time=slice(0, 2))
-        self.assertRaises(ValueError, lambda: tested_func(lon_data))
+        result = tested_func(lon_data)
+        self.assertEqual(result["jet_centers"].max(), 1)
+        self.assertEqual(result["jet_occurence"].max(), 1)
         plev_data = self.data.sel(plev=slice(25000, 25000)).isel(
             time=slice(0, 1), lat=slice(0, 10), lon=slice(0, 10)
         )

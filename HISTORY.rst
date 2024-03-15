@@ -2,6 +2,13 @@
 History
 =======
 
+0.2.2 (2024-03-15)
+-------------------------
+* Overhaul Kuang et al. 2014 method to work with plev-lat center check rather than lat-long jet center check.
+* Use maximum filter from scipy ndimage for diagonal check from 'find_local_maxima_in_2d_dataarray_with_diagonals' used in M11 and K14
+* Also makes a change to Manney et al. 2011 method if using diagonal check (should not affect results as it was working before)
+
+
 0.2.2-beta (2024-03-13)
 -------------------------
 * Fix error when checking for plev units in data_utils

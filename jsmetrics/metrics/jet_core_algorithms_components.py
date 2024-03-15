@@ -268,9 +268,11 @@ def run_jet_core_and_region_algorithm_on_one_day(
     )
 
     # Step 2. Get local maximas at each longitude
-    local_maximas_dict = get_local_maximas_at_each_longitude(row, check_diagonals)
+    local_maximas_dict = get_local_maximas_at_each_longitude(
+        row, check_diagonals, var_name="potential_jet_cores"
+    )
 
-    # Step 3. Loop through the local maximas and make an mask of initial jet cores (not official as some may be in same region, see check in Step X)
+    # Step 3. Loop through the local maximas and make an mask of initial jet cores (not official as some may be in same region)
     mask_shape = row["ws"].isel(lon=0).shape
     all_jet_core_mask = get_all_jet_core_mask(
         local_maximas_dict=local_maximas_dict, mask_shape=mask_shape
@@ -314,16 +316,18 @@ def run_jet_core_and_region_algorithm_on_one_day(
     return row
 
 
-def get_local_maximas_at_each_longitude(row, check_diagonals):
+def get_local_maximas_at_each_longitude(row, check_diagonals, var_name):
     """
     Runs 'find_local_maxima_in_2d_dataarray' on each longitude (see docs for find_local_maxima_in_2d_dataarray for more information)
 
     Parameters
     ----------
     row : xr.DataArray
-        Data of single time unit containing the variables: 'potential_jet_cores', and the coordinates: 'lon', 'lat', 'plev'
+        Data of single time unit containing the variables: `var_name`, and the coordinates: 'lon', 'lat', 'plev'
     check_diagonals : bool
         Whether to check the diagonal edges of each maxima in the latitude-altitude plane.
+    var_name : str
+        Name of data array variable to find local maxima from e.g. 'potential_jet_cores'
 
     Returns
     ----------
@@ -333,7 +337,7 @@ def get_local_maximas_at_each_longitude(row, check_diagonals):
     """
     local_maximas_dict = {}
     for _, lon in enumerate(row["lon"]):
-        pot_core_one_lon = row["potential_jet_cores"].sel(lon=lon)
+        pot_core_one_lon = row[var_name].sel(lon=lon)
         if check_diagonals:
             local_maximas = find_local_maxima_in_2d_dataarray_with_diagonals(
                 pot_core_one_lon
@@ -406,12 +410,13 @@ def find_local_maxima_in_2d_dataarray(arr):
     return np.array(interior_indices)
 
 
-def find_local_maxima_in_2d_dataarray_with_diagonals(arr):
+def find_local_maxima_in_2d_dataarray_with_diagonals(arr, threshold=10):
     """
     Find indices of local maximas within a 2-D array with check for the diagonals.
     Should return two values which relate to the position of local maximas (if any).
 
-    Component of method  from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+    Component of method from Manney et al. (2011) https://doi.org/10.5194/acp-11-6115-2011
+    & Kuang et al (2014) (https://doi.org/10.1007/s00704-013-0994-x)
 
     Parameters
     ----------
@@ -453,50 +458,20 @@ def find_local_maxima_in_2d_dataarray_with_diagonals(arr):
     # Add padding to array to allow edges to be picked up
     arr = data_utils.add_pad_to_array(arr)
 
-    # Calculate neighbors for all interior points
-    neighbors = np.stack(
-        [
-            arr[:-2, 1:-1],  # Above
-            arr[2:, 1:-1],  # Below
-            arr[1:-1, :-2],  # Left
-            arr[1:-1, 2:],  # Right
-        ],
-        axis=-1,
+    # Find local maximum values in a window around each element
+    neighborhood_size = 3
+    local_max = scipy.ndimage.filters.maximum_filter(
+        arr, footprint=np.ones((neighborhood_size, neighborhood_size))
     )
 
-    # Find local maximas
-    interior_maxima = arr[1:-1, 1:-1] > np.max(neighbors, axis=-1)
-    interior_indices = np.transpose(np.where(interior_maxima))
-    local_maxima.extend([(i, j) for i, j in interior_indices])
-
-    # Check edges and corners
-    top_maxima = np.where(arr[1, 1:-1] > np.maximum(arr[0, 1:-1], arr[2, 1:-1]))[0]
-    local_maxima.extend([(0, j) for j in top_maxima])
-    bottom_maxima = np.where(arr[-2, 1:-1] > np.maximum(arr[-1, 1:-1], arr[-3, 1:-1]))[
-        0
-    ]
-
-    # arr.shape[0] - 3 becuase padding added to array
-    local_maxima.extend([(arr.shape[0] - 3, j) for j in bottom_maxima])
-
-    left_maxima = np.where(arr[1:-1, 1] > np.maximum(arr[1:-1, 0], arr[1:-1, 2]))[0]
-    local_maxima.extend([(i, 0) for i in left_maxima])
-
-    right_maxima = np.where(arr[1:-1, -2] > np.maximum(arr[1:-1, -1], arr[1:-1, -3]))[0]
-    local_maxima.extend([(i, arr.shape[1] - 3) for i in right_maxima])
-
-    # Check corners
-    if arr[0, 0] > np.maximum(arr[1, 0], arr[0, 1]):
-        local_maxima.append((0, 0))
-    if arr[0, -1] > np.maximum(arr[1, -1], arr[0, -2]):
-        local_maxima.append((0, arr.shape[1] - 3))
-    if arr[-1, 0] > np.maximum(arr[-2, 0], arr[-1, 1]):
-        local_maxima.append((arr.shape[0] - 3, 0))
-    if arr[-1, -1] > np.maximum(arr[-2, -1], arr[-1, -2]):
-        local_maxima.append((arr.shape[0] - 3, arr.shape[1] - 3))
+    # Compare local maximum with the threshold and original array
+    local_maxima = (arr == local_max) & (arr > threshold)
 
     # Remove duplicates (this strategy can produce duplicates)
     local_maxima = np.unique(np.array(local_maxima), axis=0)
+
+    # get index of local maxima
+    local_maxima = np.dstack(np.where(local_maxima))[0] - 1
     return local_maxima
 
 
@@ -1299,9 +1274,30 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
     occ_alg.output_data : xarray.Dataset
         Data with jet occurence and centre points (1 for occurence, 2 for centre)
     """
-    occ_alg = JetStreamOccurenceAndCentreAlgorithm(row, occurence_ws_threshold)
-    occ_alg.run()
-    return occ_alg.output_data
+    # Step 1. Get jet occurences
+    row["jet_occurence"] = row["ws"].where(
+        lambda val: (val >= occurence_ws_threshold), 0
+    )
+
+    # Step 2. Get jet centers (local maximas) at each longitude
+    local_maximas_dict = get_local_maximas_at_each_longitude(
+        row, check_diagonals=True, var_name="jet_occurence"
+    )
+
+    # Step 3. Loop through the local maximas and make an mask of jet centers
+    mask_shape = row["ws"].isel(lon=0).shape
+    all_jet_centers_mask = get_all_jet_core_mask(
+        local_maximas_dict=local_maximas_dict, mask_shape=mask_shape
+    )
+
+    # Step 4. Clip to between 0-1 and return row
+    row["jet_occurence"] = np.clip(row["jet_occurence"], 0, 1)
+
+    row["jet_centers"] = (
+        ("plev", "lat", "lon"),
+        np.clip(all_jet_centers_mask, 0, 1),
+    )
+    return row
 
 
 class JetStreamOccurenceAndCentreAlgorithm:

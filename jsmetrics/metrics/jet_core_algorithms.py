@@ -488,12 +488,14 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
         kuang_jet_ws = kuang_outputs.where(kuang_outputs['jet_ocurrence1_jet_centre2'] > 0)['ws']
 
     """
-    # Step 1. Check one and only plev is provided by data input
-    if "plev" in data.dims:
-        if data["plev"].count() == 1:
-            data = data.isel(plev=0)
-        else:
-            raise ValueError("Please subset to one plev value for algorithm")
+    # Step 1. Check plev and time coordinate in data
+    if "plev" not in data.dims:
+        data = data.expand_dims("plev")
+    if "time" not in data.coords:
+        raise KeyError("Please provide a time coordinate for data to run this metric")
+
+    # Step 2. Calculate wind speed from ua and va components.
+    data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
     # Step 2. Run Jet-stream Occurence and Centre Algorithm and return outputs
     if "time" not in data.coords:

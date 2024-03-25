@@ -67,6 +67,26 @@ For examples please check out the examples here: https://jsmetrics.readthedocs.i
 
 Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
+**Example of jet latitude statistic:**  
+
+.. image:: docs/_static/images/example_jet_lat.png
+  :width: 450
+  :align: center
+  :alt: Example of jet statistic from K20
+
+*Example output of the jet latitude statistic from Ceppi et al. 2018 for 00:00 1st January 2021. Data is ERA5 850 hPa u-wind.*
+
+
+**Example of jet core algorithm:**  
+
+.. image:: docs/_static/images/jetcore_example_m11.png
+  :width: 450
+  :align: center
+  :alt: Example of jet core algorithm from M11
+
+*Example output of the jet core algorithm from Manney et al. 2011. The cores shown are of a windspeed slice at 32E longitude at 12:00 on 1st January 2024. Data is 6-hourly ERA5 1000-50 hPa u-v-wind.*
+
+
 **Compare algorithms for jet stream core detection:**  
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
@@ -74,7 +94,10 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
   :align: center
   :alt: Comparison of jet core algorithms during Feb 2021 Texas Cold Wave
 
-*Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 100-500 hPa u-v-wind.*
+*Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 500-100 hPa u-v-wind.*
+
+
+
 
 **Ask questions with jet statistics built for a similar purpose:**  
 
@@ -83,7 +106,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
   :align: center
   :alt: Jet latitude circbars with errorbars
 
-*Estimation of mean jet latitude shift. Data is monthly ERA5 700-850 hPa u-wind between 1990-2020.*
+*Estimation of mean jet latitude shift. Data is monthly ERA5 850-700 hPa u-wind between 1990-2020.*
 
 **Extend the original jet metric definitions using jsmetrics flexibility:**  
 
@@ -92,7 +115,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
   :align: center
   :alt: STJ and PFJ by metric and longitude
 
-*By latitude estimation of the jet latitude of the subtropical and polar jet stream. Data is monthly ERA5 differenced-250 hPa (orange) and 700-850 hPa (blue) u-wind between 1980-2020.*
+*By latitude estimation of the jet latitude of the subtropical and polar jet stream. Data is monthly ERA5 differenced-250 hPa (orange) and 850-700 hPa (blue) u-wind between 1980-2020.*
 
 .. *Why use jsmetrics?:*
 .. ---------------------

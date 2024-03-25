@@ -70,7 +70,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 **Example of jet latitude statistic:**  
 
 .. image:: docs/_static/images/example_jet_lat.png
-  :width: 450
+  :width: 350
   :align: center
   :alt: Example of jet statistic from K20
 
@@ -84,7 +84,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
   :align: center
   :alt: Example of jet core algorithm from M11
 
-*Example output of the jet core algorithm from Manney et al. 2011. The cores shown are of a windspeed slice at 32E longitude at 12:00 on 1st January 2024. Data is 6-hourly ERA5 1000-50 hPa u-v-wind.*
+*Example output of the jet core algorithm from Manney et al. 2011. The cores shown are extracted from a windspeed slice at 32E longitude at 12:00 on 1st January 2024. Data is 6-hourly ERA5 1000-50 hPa u-v-wind.*
 
 
 **Compare algorithms for jet stream core detection:**  
@@ -95,7 +95,6 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
   :alt: Comparison of jet core algorithms during Feb 2021 Texas Cold Wave
 
 *Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 500-100 hPa u-v-wind.*
-
 
 
 

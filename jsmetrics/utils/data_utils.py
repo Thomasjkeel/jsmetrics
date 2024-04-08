@@ -235,12 +235,12 @@ def check_plev_units(data, expected_plev_units):
         )
     if not hasattr(data["plev"], "units"):
         raise KeyError(
-            f"You will need assign units (i.e {expected_plev_units}) to plev to run this method."
+            f'You will need assign units (i.e {expected_plev_units}) to plev to run this method e.g. data["plev"] = data["plev"].assign_attrs(units="Pa")'
         )
 
     if data["plev"].units not in expected_plev_units:
         raise KeyError(
-            f"plev unit: {data['plev'].units} is not in {expected_plev_units}. You will need assign units to plev to run this method."
+            f'plev unit: {data["plev"].units} is not in {expected_plev_units}. You will need assign units to plev to run this method  e.g. data["plev"] = data["plev"].assign_attrs(units="Pa")'
         )
     else:
         return data["plev"].units

@@ -2,6 +2,12 @@
 History
 =======
 
+
+0.2.3-alpha (2024-04-08)
+-------------------------
+* Add example of assigning units to plev in data_utils
+
+
 0.2.2 (2024-03-15)
 -------------------------
 * Overhaul Kuang et al. 2014 method to work with plev-lat center check rather than lat-long jet center check.

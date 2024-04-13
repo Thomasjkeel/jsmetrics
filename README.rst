@@ -136,7 +136,7 @@ If you wish to cite `jsmetrics` in a research publication, we kindly ask that yo
 
 A reference to a specific version of this software is also available through Zenodo e.g.:
 
-   Keel, T.: Thomasjkeel/jsmetrics: v0.2.1 (0.2.1), Zenodo [code], https://doi.org/10.5281/zenodo.10246319, 2024.
+   Keel, T.: Thomasjkeel/jsmetrics: v0.2.2 (0.2.2), Zenodo [code], https://doi.org/10.5281/zenodo.10822662, 2024.
 
 Contributing
 ------------
@@ -187,8 +187,8 @@ This project is very much a work in progress, so contributors are very welcome.
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 
-.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.8428289.svg
-        :target:  https://doi.org/10.5281/zenodo.8428289
+.. |zenodo| image:: https://zenodo.org/badge/DOI/10.5281/zenodo.10822662.svg
+        :target: https://doi.org/10.5281/zenodo.10822662
         :alt: Zenodo
 
 .. |docs| image:: https://readthedocs.org/projects/jsmetrics/badge/?version=latest

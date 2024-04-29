@@ -27,4 +27,5 @@ jobs:
         run: |
           pytest --cov
       - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2
+        uses: coverallsapp/github-action@v2.2.3
+            

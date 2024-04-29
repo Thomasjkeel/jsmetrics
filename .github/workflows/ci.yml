@@ -25,6 +25,6 @@ jobs:
       - name: Run pytest coverage
         shell: bash -el {0}
         run: |
-          pytest --cov-report
+          pytest --cov-report term --cov=jsmetrics tests/
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.2.3

@@ -25,6 +25,8 @@ jobs:
       - name: Run pytest coverage
         shell: bash -el {0}
         run: |
-          pytest --cov-report term --cov=jsmetrics tests/
+          python -m pytest --cov=./jsmetrics --cov-report xml
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.2.3
+        with: 
+          path-to-lcov: coverage.xml

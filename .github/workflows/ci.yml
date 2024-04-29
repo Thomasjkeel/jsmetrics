@@ -25,9 +25,6 @@ jobs:
       - name: Run pytest coverage
         shell: bash -el {0}
         run: |
-          pytest --cov
+          pytest --cov-report
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.2.3
-        with:
-          github-token: ${{ github.token }}
-            

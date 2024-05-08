@@ -12,9 +12,14 @@ jobs:
       fail-fast: false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.0
+      - name: Harden Runner
+        uses: step-security/harden-runner@a4aa98b93cab29d9b1101a6143fb8bce00e2eac4 # v2.7.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Set up Mamba with Python 3 and install dependencies
-        uses: mamba-org/setup-micromamba@v1.4.4 #conda-incubator/setup-miniconda@v2.2.0 # actions/setup-python@v1
+        uses: mamba-org/setup-micromamba@2b72821d5ad7f6da3c003a3684ce341bf187b46f # v1.4.4
         with:
           cache-downloads: true
           cache-environment: true
@@ -27,7 +32,7 @@ jobs:
         run: |
           python -m pytest --cov=./jsmetrics --cov-report xml
       - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2.2.3
+        uses: coverallsapp/github-action@3dfc5567390f6fa9267c0ee9c251e4c8c3f18949 # v2.2.3
         with: 
           path-to-lcov: coverage.xml
             

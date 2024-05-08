@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4.1.0
       - name: Set up Mamba with Python 3 and install dependencies
-        uses: mamba-org/setup-micromamba@2b72821d5ad7f6da3c003a3684ce341bf187b46f # v1.4.4
+        uses: mamba-org/setup-micromamba@422500192359a097648154e8db4e39bdb6c6eed7 # v1.8.1
         with:
           cache-downloads: true
           cache-environment: true

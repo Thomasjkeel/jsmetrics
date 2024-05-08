@@ -11,6 +11,11 @@ repos:
     hooks:
       - id: black
         language_version: python3.9
+  - repo: https://github.com/pylint-dev/pylint
+    rev: v3.1.0
+    hooks:
+      - id: pylint
+        args: [ '--errors-only', '--jobs=0', '--disable=import-error' ]
   - repo: https://github.com/PyCQA/flake8
     rev: 7.0.0
     hooks:

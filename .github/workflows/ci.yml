@@ -29,7 +29,5 @@ jobs:
       - name: Coveralls GitHub Action
         uses: coverallsapp/github-action@v2.2.3
         with: 
-          path-to-lcov: coverage.xml 
-      - name: OSSF Scorecard action
-        uses: ossf/scorecard-action@v2.3.1
+          path-to-lcov: coverage.xml
             

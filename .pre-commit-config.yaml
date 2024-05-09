@@ -12,7 +12,8 @@ repos:
     hooks:
       - id: flake8
         args: ["--ignore=E203 E501 W503"]
-  # - repo: https://github.com/gitleaks/gitleaks
-  #   rev: v8.16.3
-  #   hooks:
-  #     - id: gitleaks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace

@@ -7,7 +7,7 @@ identify and characterise them. However, it has been generally quite difficult t
 provided by different techniques. The motivation for this package was thus to standardise the most common methods developed for the
 identification and characterisation of jet streams, so that various techniques are immediately available for anyone wishing to
 look at jet streams in data. Also, it is hoped that *jsmetrics* provides a foundation for new metrics and for researchers to be
-able to quantitatively compare differences provided by existing techniques. 
+able to quantitatively compare differences provided by existing techniques.
 
 For more information about the standardisation process of the metrics into Python, see :ref:`the philosophy of jsmetrics <The philosophy of *jsmetrics*>`.
 
@@ -20,7 +20,7 @@ Quick start
    :align: left
    :widths: auto
 
-   
+
    +--------------------------------------------------------+-------------------------------------------------------------------+
    | I would like to...                                     | Reccomendation                                                    |
    +========================================================+===================================================================+
@@ -48,7 +48,7 @@ Quick start
    |                                                        | | Around 8 jet speed methods are available in this package,       |
    |                                                        | | the most commonly used is 'woollings_et_al_2010'.               |
    +--------------------------------------------------------+-------------------------------------------------------------------+
-   | Make a map of the jet stream                           | | Methods for identifying the coordinates of jets on are provided | 
+   | Make a map of the jet stream                           | | Methods for identifying the coordinates of jets on are provided |
    |                                                        | | by the :ref:`jet core algorithms <jet core algorithms>` group   |
    |                                                        | | of methods available in *jsmetrics*. These methods all produce  |
    |                                                        | | masks of the latitude/longitude/level coordinates where a given |
@@ -72,7 +72,7 @@ Quick start
 What are jet streams?
 ---------------------
 Jet streams are features of the atmospheric circulation that manifest as fast-flowing ribbons of air, usually around
-8-12 km above the surface. 
+8-12 km above the surface.
 They are generated and maintained in regions with extreme temperature gradients. These extreme gradients are produced
 on the Earth by two major processes: (1) disturbances in the zonal mean-flow (known as eddy-driven processes) and (2)
 conservation of angular momentum at the poleward edge of the Hadley Cell (known as thermally-driven processes).
@@ -108,13 +108,13 @@ The philosophy of *jsmetrics*
 The philosophy of this package was to keep the methodology of each metric as close as possible to the given research paper's description of it (if not exact),
 *but* to not limit the method to a given:
 
-        * time period,  
-        * time unit (i.e. day, month, DJF),  
-        * latitude/longitude resolution,  
-        * region (where possible),  
-        * pressure level height.  
+        * time period,
+        * time unit (i.e. day, month, DJF),
+        * latitude/longitude resolution,
+        * region (where possible),
+        * pressure level height.
 
-The motivation for this was to allow the user to handle these factors and allow for the comparison of various metrics on the same underlying data. 
+The motivation for this was to allow the user to handle these factors and allow for the comparison of various metrics on the same underlying data.
 
 
 Disclaimer
@@ -122,19 +122,18 @@ Disclaimer
 We have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
 However, in some cases, we have chosen to exclude or alter parts of the methodology which reduce the resolution of the output (i.e. grouping into season or region) with the hope to preserve the parts of the method that specifically isolate a characteristics of the jet-stream at any inputted scale.
 Again, any further subsetting is passed onto the user.
-*If data input is at a daily resolution, part of the output should also be daily resolution.*  
+*If data input is at a daily resolution, part of the output should also be daily resolution.*
 
-Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.   
+Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.
 
 Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 This project is very much a work in progress, so contributors are very welcome.
 
 .. Built from sub-components
 .. ----------------------------
-.. All statistics and algorithms in this package are built ontop of various one-purpose functions which we refer to as 'sub-components'. 
+.. All statistics and algorithms in this package are built ontop of various one-purpose functions which we refer to as 'sub-components'.
 .. These sub-component functions should have one role (e.g. to calculate atmospheric mass at a given atmospheric level), and should allow yet to be added metrics an easier implementation.
- 
+
 
 .. _merge: https://docs.xarray.dev/en/stable/generated/xarray.merge.html
 .. _rename: https://docs.xarray.dev/en/stable/generated/xarray.Dataset.rename.html
-

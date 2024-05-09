@@ -10,9 +10,9 @@
 # imports
 import numpy as np
 import xarray
-from . import jet_statistics_components
 from jsmetrics.utils import data_utils, spatial_utils, windspeed_utils
 from jsmetrics.core.check_data import sort_xarray_data_coords
+from . import jet_statistics_components
 
 # docs
 __author__ = "Thomas Keel"

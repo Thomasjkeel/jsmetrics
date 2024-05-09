@@ -2,11 +2,10 @@
 History
 =======
 
-
 0.2.3-alpha (2024-04-08)
 -------------------------
 * Add example of assigning units to plev in data_utils
-
+* Add step-security-bot and dependenabot for OSSF scorecard
 
 0.2.2 (2024-03-15)
 -------------------------
@@ -38,7 +37,7 @@ History
 * Finish overhaul the ReadTheDocs documentation in the package
 * Confirm completed and to verify metrics
 * Update Schiemann et al. 2009 method to run faster and introduce u_threshold parameter default
-* Add more complete inline 'Steps' to each metric in the package for readability. 
+* Add more complete inline 'Steps' to each metric in the package for readability.
 * Remove Screen & Simmonds and Local Wave Activity leftover code
 * Update Manney et al. 2011 further with padding to capture cores near the edge of dataset
 
@@ -63,10 +62,10 @@ History
 -------------------------
 * Overhaul the ReadTheDocs documentation in the package
     * Write a more detailed description of each metric
-    * Add examples and implementation notes to each metric  
+    * Add examples and implementation notes to each metric
     * Update listing in 'details_for_all_metrics.py'
     * Update the 'Why jsmetrics' section with notes about what jets are and quick start help
-    * Add some Examples of Use for each type of metric 
+    * Add some Examples of Use for each type of metric
 * Add ws_threshold parameter to Pena-Ortiz method
 * Rename Pena-Ortiz method to 'pena_ortiz_et_al_2016' (as earlier paper)
 
@@ -105,7 +104,7 @@ History
 
 0.1.2 (2023-06-06)
 -------------------------
-* Fix  Barnes & Polvani 2013 to better deal when min max jet lat is at edge data 
+* Fix  Barnes & Polvani 2013 to better deal when min max jet lat is at edge data
 * Add check for NoLeapDatetime
 
 0.1.2-alpha (2023-05-27)
@@ -159,7 +158,7 @@ History
 0.0.16 (2022-11-09)
 -------------------------
 * skipna=True for calc_latitude_and_speed_where_max_ws
-* Barnes and Simpson mean over longitude for jet lat 
+* Barnes and Simpson mean over longitude for jet lat
 
 0.0.15 (2022-11-09)
 -------------------------
@@ -175,7 +174,7 @@ History
 -------------------------
 * update Pena Ortiz so that it returns monthyear and by day local wind maxima
 * remove make_empty_local_wind_maxima_data func
-* Fix CI 
+* Fix CI
 * Add millibars to get_all_hPa_list
 
 0.0.13 (2022-10-19)
@@ -214,8 +213,8 @@ History
 ------------------
 * Format the readme
 * seperate metrics into metrics and algorithms
-* Reorder and write better docstrings for the utils files 
-* Update year on LICENSE 
+* Reorder and write better docstrings for the utils files
+* Update year on LICENSE
 
 0.0.7-beta (2022-06-30)
 -----------------------
@@ -227,11 +226,11 @@ History
 * update spatial_utils with lazy method for guessing bounds and assuming a regular grid (func is "_standardise_diffs_by_making_all_most_common_diff")
 * update Pena-Ortiz method to seperate into subtropical and polar front jet
 * remove prints from windspeed utils
-* rename bp13 jet lat 
+* rename bp13 jet lat
 
 0.0.6 (2022-06-09)
 ------------------
-* add Barnes & Polvani 2015 
+* add Barnes & Polvani 2015
 * add Kerr et al. 2020
 * add nearest method function to general utils
 * Speed up Ceppi and fix integration method within (still need to verify)
@@ -244,15 +243,15 @@ History
 0.0.6-alpha (2022-05-25)
 ------------------------
 * add Barnes & Polvani 2013
-* Fix 'get_latitude_and_speed_where_max_ws' so it can take one value 
+* Fix 'get_latitude_and_speed_where_max_ws' so it can take one value
 * Fix Barnes & Simpson 2017 and Woollings et al. 2010 and change name of col
-* Fix Barnes & Polvani neighbouring lats  and speed 
+* Fix Barnes & Polvani neighbouring lats  and speed
 
 0.0.5 (2022-05-23)
 ------------------
-* add Barnes & Simpson 2017 
-* Update 'get_latitude_and_speed_where_max_ws' function 
-* Update calc_mass_weighted wind 
+* add Barnes & Simpson 2017
+* Update 'get_latitude_and_speed_where_max_ws' function
+* Update calc_mass_weighted wind
 
 BIG CHANGES
 ^^^^^^^^^^^
@@ -262,12 +261,12 @@ BIG CHANGES
 0.0.5-beta (2022-05-03)
 -----------------------
 * update Woollings et al. 2010 with seasonal cycle
-* update metric details dict with 'plev_units' argument 
+* update metric details dict with 'plev_units' argument
 * fix archer and caldiera call to mass weighted ws (STILL TODO: better plev understanding)
 
 0.0.5-alpha (2022-04-24)
 ------------------------
-* add metric verification notebooks 
+* add metric verification notebooks
 
 0.0.4-beta (2022-02-09)
 -----------------------

@@ -4,9 +4,9 @@ Examples of Use
 
 :code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_.
 An extensive knowledge of Python or *xarray* is **not** required to use *jsmetrics*, although it will help you use the package
-more effectively if you wish to run some more advanced use cases. 
+more effectively if you wish to run some more advanced use cases.
 
-.. note:: 
+.. note::
     To run any metric in :code:`jsmetrics` the syntax will be like:
 
     .. code-block:: python
@@ -17,28 +17,28 @@ more effectively if you wish to run some more advanced use cases.
         # Use xarray to load in NetCDF or GRIB format data
         your_data = xr.open_dataset('path_to_your_data.nc')
 
-        # Run a metric on your data and store the outputs 
+        # Run a metric on your data and store the outputs
         output = jsmetrics.<jet_module>.<jet_metric>(your_data)
 
 
 *jsmetrics* provides three :ref:`types <Statistics & Algorithms>` of metric, we provide examples for each of them:
-    1. :ref:`Jet statistics <1. Using the jet statistics>` 
+    1. :ref:`Jet statistics <1. Using the jet statistics>`
     2. :ref:`Jet core algorithms <2. Using the jet core algorithms>`
     3. :ref:`Waviness metrics <3. Using the waviness metrics>`
 
 We also provide an examples of some basic data formatting using xarray to get your data standardised for use with jsmetrics:
-    4. :ref:`Renaming data <4. Renaming data coords>` 
-    5. :ref:`Merging data <5. Merging data>` 
+    4. :ref:`Renaming data <4. Renaming data coords>`
+    5. :ref:`Merging data <5. Merging data>`
 
 *Please note that we also provide some examples in a jupyter notebook format available* `here <https://github.com/Thomasjkeel/jsmetrics-examples>`_.
 
-1. Using the jet statistics 
+1. Using the jet statistics
 ###########################
 ...to compare estimations of jet latitude and speed
 ---------------------------------------------------
 The most simple use of the jet statistics is to just run them on the same dataset. Below we use the Wintertime (J,F)
 lower tropospheric North Pacific jet as an example. More detail is provided about the exact regions each of the jet statistics
-were developed for in the file: `details_for_all_metrics.py <https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py>`_ 
+were developed for in the file: `details_for_all_metrics.py <https://github.com/Thomasjkeel/jsmetrics/blob/main/jsmetrics/details_for_all_metrics.py>`_
 
 .. code-block:: python
 
@@ -110,8 +110,8 @@ In this case to run the jet statistic on each longitude in the input dataset, si
         data_row = data_row.isel(lon=0)
         data_row = data_row.drop('ua')
         return data_row
-    
-    # May take a few minute for 60 days 
+
+    # May take a few minute for 60 days
     output = u_sub.groupby('lon').map(calc_jet_lat_by_lon, (jet_statistics_to_use,))
 
     # Extract the by longitude mean and standard devation
@@ -138,7 +138,7 @@ In this case to run the jet statistic on each longitude in the input dataset, si
 
 
 
-2. Using the jet core algorithms 
+2. Using the jet core algorithms
 ################################
 
 ...to mask other variables (such as windspeed)
@@ -153,7 +153,7 @@ within the boundaries of the detected jet (where values are >0).
     import jsmetrics.metrics.jet_core_algorithms as jet_core_algorithms
     import xarray as xr
     import matplotlib.pyplot as plt # for plotting, not essential
-    import cartopy.crs as ccrs # for plotting, not essential 
+    import cartopy.crs as ccrs # for plotting, not essential
 
     # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
     u_data = xr.open_dataset('path_to_u_data')
@@ -170,7 +170,7 @@ within the boundaries of the detected jet (where values are >0).
     jet_core_plev_limit = (100, 400) # let's ask the algorithm to look for jet cores between 100-400 hPa
     jet_core_ws_threshold = 40 # Jet cores will have windspeeds of a minimum of 40 m/s.
     jet_boundary_ws_threshold = 30 # Jet boundaries around the cores will be defines as regions with windspeeds of a minimum of 30 m/s.
-    
+
     ## The algorithm run should take about 5-15 seconds depending on CPI
     manney_outputs = jet_core_algorithms.manney_et_al_2011(uv_sub, jet_core_plev_limit=jet_core_plev_limit, jet_core_ws_threshold=jet_core_ws_threshold, jet_boundary_ws_threshold=jet_boundary_ws_threshold)
 
@@ -209,7 +209,7 @@ While a mask is useful for visualising the coordinates of the jet, we can also u
     # Select 250 hPa windspeed in jet regions using the jet boundaries calculated by the algorithm from Manney et al. 2011
     jet_ws = uv_sub.sel(time="2021-02-15", plev=250).where(jet_boundaries)['ws']
 
-    # Plot the resulting windspeed at the same coordinates as the jet region 
+    # Plot the resulting windspeed at the same coordinates as the jet region
     fig, ax = plt.subplots(1, figsize=(7, 7), subplot_kw={'projection': projection, 'facecolor':"grey"})
     p = jet_ws.plot(transform=ccrs.PlateCarree(), cbar_kwargs={'orientation':'horizontal', 'shrink':.7, 'pad': .07})
     ax.coastlines()
@@ -235,7 +235,7 @@ events over a given region. In this example we use Manney et al. 2011 and data f
     import jsmetrics.metrics.jet_core_algorithms as jet_core_algorithms
     import xarray as xr
     import matplotlib.pyplot as plt # for plotting, not essential
-    import cartopy.crs as ccrs # for plotting, not essential 
+    import cartopy.crs as ccrs # for plotting, not essential
 
     # Load in u and v component wind datasets with the coordinates: 'time', 'plev', 'lon' and 'lat':
     u_data = xr.open_dataset('path_to_u_data')
@@ -250,7 +250,7 @@ events over a given region. In this example we use Manney et al. 2011 and data f
     # The algorithm run should take around 40-120 seconds depending on CPU
     ## We also set a lower threshold for jet cores (30 m/s)
     manney_outputs = jet_core_algorithms.manney_et_al_2011(uv_sub, jet_core_plev_limit=(100, 400),\
-                                                                     jet_core_ws_threshold=30) 
+                                                                     jet_core_ws_threshold=30)
 
     # Produce a jet core count across all pressure levels
     manney_jet_counts_feb21 = manney_outputs['jet_core_mask'].sum(('time', 'plev'))
@@ -275,7 +275,7 @@ events over a given region. In this example we use Manney et al. 2011 and data f
    Example 4.1 Counts of jet cores during February 2021 at 100-400 hPa over North America as determined by the jet core algorithm from Manney et al. 2011. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 Depending on the resolution of the initial data (in this case we are using 1 degree latitude by 1 degree longitude), the output of the jet counts
-may be sporadic. In the next example we show you how you could use a gaussian filter to smooth the jet counts. 
+may be sporadic. In the next example we show you how you could use a gaussian filter to smooth the jet counts.
 
 .. code-block:: python
 
@@ -283,7 +283,7 @@ may be sporadic. In the next example we show you how you could use a gaussian fi
 
     # Smooth the counts using a 2-sigma gaussian filter
     manney_jet_counts_feb21_gaussian = ndimage.gaussian_filter(manney_jet_counts_feb21, sigma=2.0, order=0)
-    
+
     # Save new filtered cores to outputs
     manney_outputs['jet_cores_gaussian'] = (('lat', 'lon'), manney_jet_counts_feb21_gaussian)
 
@@ -303,7 +303,7 @@ may be sporadic. In the next example we show you how you could use a gaussian fi
    Example 4.2 Gaussian filtered counts of jet cores during February 2021 at 100-400 hPa over North America as determined by the jet core algorithm from Manney et al. 2011. Data is from the ERA5 and is in a 1*1 degree resolution.
 
 
-3. Using the waviness metrics 
+3. Using the waviness metrics
 #############################
 While there are only two waviness metrics in *jsmetrics* as of version 0.6 (15th Sept 2023). There may be more in the future.
 Currently, there is one sinuosity metric which uses geopotential height (zg) (Cattiaux et al., 2016) and one meridional circulation
@@ -347,7 +347,7 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
     axes[0].set_title("Francis & Vavrus 2015")
     axes[1].set_ylabel("Sinusosity")
     axes[1].set_title("Cattiaux et al. 2016")
-    fig.subplots_adjust(wspace=.4)    
+    fig.subplots_adjust(wspace=.4)
 
 .. figure:: _static/images/fv15_c16_example.png
    :align: center
@@ -358,7 +358,7 @@ metric which uses u- and v-components of wind (Francis & Vavrus, 2015).
 4. Renaming data coords
 #######################
 Any data that you use to run any statistic or algorithm in jsmetrics will need to have standardised names such as 'ua', 'va', 'lon', 'lat', 'plev'.
-As data can come from various sources, there will be different naming conventions for the coordinates. Below we show you how to 
+As data can come from various sources, there will be different naming conventions for the coordinates. Below we show you how to
 rename data coords, so that your data can interface with the methods in jsmetrics.
 
 .. code-block:: python
@@ -378,7 +378,7 @@ rename data coords, so that your data can interface with the methods in jsmetric
 5. Merging data
 ###############
 For various jet core algorithms you will need to have data with both 'ua' and 'va' variables, below we provide an example
-of how to load in and merge data using xarray.  
+of how to load in and merge data using xarray.
 
 .. code-block:: python
 
@@ -390,12 +390,12 @@ of how to load in and merge data using xarray.
 
     # 1st scenario: data has the exact same dimensions i.e. time:2000-2023, lat:0-90, lon:0-360, same resolution
     uv_data = xr.merge([u_data, v_data])
-    
+
     # 2nd scenario: data has different dimensions (be careful and check data at each stage)
     u_data = u_data.sel(time=slice(2000, 2023), lon=slice(0, 90), lon=slice(0, 180))
     v_data = u_data.sel(time=slice(2000, 2023), lon=slice(0, 90), lon=slice(0, 180))
     uv_data = xr.merge([u_data, v_data])
-    
+
     # 3rd scenario: data has different time resolution i.e. u-data has monthly resolution and v-data has daily resolution
     v_data = v_data.resample(time="m").mean()
     uv_data = xr.merge([u_data, v_data])
@@ -403,11 +403,11 @@ of how to load in and merge data using xarray.
     # For other types of scenarios, see at the xarray docs
 
 
-6. Running the jsmetrics in batch 
+6. Running the jsmetrics in batch
 #################################
 *Work in progress, please email me if you are interested*
 
-If you have lots of different sources of data, and you would like to calculate various jet statistics on the fly from your data 
-(i.e. on JASMIN), we reccomend leaning on specification files which store information about metrics and subsetting like the 
+If you have lots of different sources of data, and you would like to calculate various jet statistics on the fly from your data
+(i.e. on JASMIN), we reccomend leaning on specification files which store information about metrics and subsetting like the
 'details_for_all_metrics.py' available in this package. I (Tom) have uploaded the scripts which I have personally used to run
 and log outputs of various similar metrics from *jsmetrics* in batch on JASMIN, available here: https://github.com/Thomasjkeel/jsmetrics-analysis-runner

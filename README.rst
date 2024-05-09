@@ -6,9 +6,9 @@
 ============================================
 jsmetrics: Jet-stream metrics and algorithms
 ============================================
-|pypi| |pre-commit| |codefactor| |coveralls| |openssf| |docs| |license| |black| |zenodo|  
+|pypi| |pre-commit| |codefactor| |coveralls| |openssf| |docs| |license| |black| |zenodo|
 
-*jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms which have been 
+*jsmetrics* is an open-source Python package containing implementations of various statistics and algorithms which have been
 developed to identify or characterise jet streams.
 
 The package is built using `xarray <https://docs.xarray.dev/en/stable/>`_ and currently contains 17 methods,
@@ -25,25 +25,25 @@ example `notebooks <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
 ----
 
-Installation 
+Installation
 -------------
 .. code-block:: bash
-    
+
     pip install jsmetrics
 
-Let me know if you have any problems installing this package, as I have not extensively tested for Mac-OS and Windows versions. 
-    
+Let me know if you have any problems installing this package, as I have not extensively tested for Mac-OS and Windows versions.
+
 Documentation
 -------------
-The official documentation is at https://jsmetrics.readthedocs.io/en/latest/  
+The official documentation is at https://jsmetrics.readthedocs.io/en/latest/
 
 My email is: thomas.keel.18@ucl.ac.uk. Please feel free to email me if you would like some help working with this package.
 
 Usage
 -------------
-:code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_. 
+:code:`jsmetrics` is designed to be easy to use and should integrate seemlessly with `*xarray* <https://docs.xarray.dev/en/stable/>`_.
 An extensive knowledge of Python or *xarray* is **not** required to use *jsmetrics*, although it will help you use the package
-more effectively if you wish to run some of the more advanced use cases. 
+more effectively if you wish to run some of the more advanced use cases.
 
 Below we introduce a simple use of the package to run a single jet statistic.
 
@@ -67,7 +67,7 @@ For examples please check out the examples here: https://jsmetrics.readthedocs.i
 
 Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/jsmetrics-examples>`_
 
-**Example of jet latitude statistic:**  
+**Example of jet latitude statistic:**
 
 .. image:: docs/_static/images/example_jet_lat.png
   :width: 350
@@ -77,7 +77,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 *Example output of the jet latitude statistic from Ceppi et al. 2018 for 00:00 1st January 2021. Data is ERA5 850 hPa u-wind.*
 
 
-**Example of jet core algorithm:**  
+**Example of jet core algorithm:**
 
 .. image:: docs/_static/images/jetcore_example_m11.png
   :width: 450
@@ -87,7 +87,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 *Example output of the jet core algorithm from Manney et al. 2011. The cores shown are extracted from a windspeed slice at 32E longitude at 12:00 on 1st January 2024. Data is 6-hourly ERA5 1000-50 hPa u-v-wind.*
 
 
-**Compare jet core algorithms:**  
+**Compare jet core algorithms:**
 
 .. image:: docs/_static/images/jet_core_algorithm_comparions_NA_5_texas2021.png
   :width: 450
@@ -97,7 +97,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 *Comparison of jet core algorithms estimation of the 6-hourly jet position. Data is 6-hourly ERA5 500-100 hPa u-v-wind.*
 
 
-**Ask questions with jet latitude statsitics:**  
+**Ask questions with jet latitude statsitics:**
 
 .. image:: docs/_static/images/jet_shift_violin.png
   :width: 450
@@ -107,7 +107,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 *Estimation of mean jet latitude shift. Data is monthly ERA5 850-700 hPa u-wind between 1990-2020.*
 
 
-**Extend the original jet metric definitions using jsmetrics flexibility:**  
+**Extend the original jet metric definitions using jsmetrics flexibility:**
 
 .. image:: docs/_static/images/all_jet_lats_stj_pfj_npac_maps_more_metrics.png
   :width: 450
@@ -124,7 +124,7 @@ Some example notebooks are available on `GitHub <https://github.com/Thomasjkeel/
 .. by different techniques. The motivation for this package was thus to standardise the most common methods developed for the
 .. identification and characterisation of jet streams, so that various techniques are immediately available for anyone wishing to
 .. look at jet streams in data. Also, it is hoped that *jsmetrics* provides a foundation for new metrics and for researchers to be
-.. able to quantitatively compare differences provided by existing techniques. 
+.. able to quantitatively compare differences provided by existing techniques.
 
 
 How to cite this package
@@ -140,7 +140,7 @@ A reference to a specific version of this software is also available through Zen
 
 Contributing
 ------------
-jsmetrics is in active development. 
+jsmetrics is in active development.
 
 * If you're interested in participating in the development of jsmetrics by suggesting new features, new metrics or algorithms or report bugs, please leave us a message on the `issue tracker`_
 
@@ -151,7 +151,7 @@ jsmetrics is in active development.
 
 Credits
 -------------
-The layout and content of this project and was inspired by xclim (https://github.com/Ouranosinc/xclim) 
+The layout and content of this project and was inspired by xclim (https://github.com/Ouranosinc/xclim)
 which contains other climate indices and metrics.
 
 This package was created with Cookiecutter and the audreyr/cookiecutter-pypackage project template.
@@ -161,9 +161,9 @@ Disclaimer
 We have tried to replicate the various metrics based on the equations and details in the methodology as accurately as possible.
 However, in some cases, we have chosen to exclude or alter parts of the methodology which reduce the resolution of the output (i.e. grouping into season or region) with the hope to preserve the parts of the method that specifically isolate a characteristics of the jet-stream at any inputted scale.
 Again, any further subsetting is passed onto the user.
-*If data input is at a daily resolution, part of the output should also be daily resolution.*  
+*If data input is at a daily resolution, part of the output should also be daily resolution.*
 
-Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.   
+Also note that, the data we used to test these metrics may have a different resolution to the one it was developed with.
 
 Finally, although these metric were found with a literature search, this is not an exaustive list of all methods used to identify or characterise the jet-stream or upper-level wind.
 This project is very much a work in progress, so contributors are very welcome.
@@ -183,7 +183,7 @@ This project is very much a work in progress, so contributors are very welcome.
 .. |codefactor| image:: https://www.codefactor.io/repository/github/thomasjkeel/jsmetrics/badge
    :target: https://www.codefactor.io/repository/github/thomasjkeel/jsmetrics
    :alt: CodeFactor
-   
+
 .. |coveralls| image:: https://coveralls.io/repos/github/Thomasjkeel/jsmetrics/badge.svg?branch=main
    :target: https://coveralls.io/github/Thomasjkeel/jsmetrics?branch=main
 

@@ -2,10 +2,16 @@
 History
 =======
 
+0.2.3 (2024-05-10)
+-------------------------
+* Add example of assigning units to plev in for docstrings in data_utils
+* Add step-security-bot and dependenabot for OSSF scorecard
+* Update dependencies and workflows
+
+
 0.2.3-alpha (2024-04-08)
 -------------------------
 * Add example of assigning units to plev in data_utils
-* Add step-security-bot and dependenabot for OSSF scorecard
 
 0.2.2 (2024-03-15)
 -------------------------

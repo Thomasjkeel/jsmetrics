@@ -13,7 +13,7 @@ repos:
       - id: flake8
         args: ["--ignore=E203 E501 W503"]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v4.6.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace

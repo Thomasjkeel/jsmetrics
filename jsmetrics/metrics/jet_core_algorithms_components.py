@@ -942,7 +942,8 @@ def get_current_region_ws_maxima_lat_and_plev_ind(
     if all_current_local_maximas_data.isnull().all():
         return []
     max_ws_indices = np.unravel_index(
-        all_current_local_maximas_data.argmax(), all_current_local_maximas_data.shape
+        np.nanargmax(all_current_local_maximas_data),
+        all_current_local_maximas_data.shape,
     )
     current_max_data = all_current_local_maximas_data[
         max_ws_indices[0], max_ws_indices[1]

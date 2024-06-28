@@ -27,14 +27,14 @@ with open("HISTORY.rst", encoding="utf-8") as history_file:
 
 requirements = [
     "numpy>=1.21.2,<=1.26.4",
-    "pandas>=0.23",
+    "pandas>=1.4",
     "matplotlib>=3.3.2",
-    "xarray>=0.19.0",
+    "xarray>=2023.1.0",
     "scipy>=1.5.3",
     "dask[array]",
     "netCDF4>=1.5.5.1",
     "bottleneck",
-    "cf_xarray",
+    "cf_xarray>=0.6.1",
     "Shapely",
 ]
 

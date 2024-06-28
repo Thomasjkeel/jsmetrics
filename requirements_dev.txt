@@ -2,9 +2,9 @@
 pip
 xarray>=2023.1.0
 numpy>=1.21.2,<=1.26.4
-scipy
+scipy>=1.5.3
 numba
-pandas>=1.1
+pandas>=1.4
 cftime>=1.4.1
 dask
 netCDF4

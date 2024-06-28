@@ -7,6 +7,7 @@ History
 * Fix scipy.ndimage depreciation warning
 * Change argmax to nanargmax
 * update max numpy version to 1.26 so 'np.RankWarning' still exists (in future prepare for np v2.0)
+* Make sure requirement files have same versions
 
 0.2.3 (2024-05-10)
 -------------------------

@@ -460,7 +460,7 @@ def find_local_maxima_in_2d_dataarray_with_diagonals(arr, threshold=10):
 
     # Find local maximum values in a window around each element
     neighborhood_size = 3
-    local_max = scipy.ndimage.filters.maximum_filter(
+    local_max = scipy.ndimage.maximum_filter(
         arr, footprint=np.ones((neighborhood_size, neighborhood_size))
     )
 

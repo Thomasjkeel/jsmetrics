@@ -4,7 +4,7 @@
 from setuptools import find_packages, setup
 
 NAME = "jsmetrics"
-DESCRIPTION = "Library of algorithms and metrics used to characterise and/or identify jet-streams."
+DESCRIPTION = "Library of algorithms and metrics used to characterise jet-streams."
 URL = "https://github.com/Thomasjkeel/jsmetrics"
 AUTHOR = "Thomas Keel"
 AUTHOR_EMAIL = "thomas.keel.18@ucl.ac.uk"

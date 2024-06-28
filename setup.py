@@ -4,7 +4,7 @@
 from setuptools import find_packages, setup
 
 NAME = "jsmetrics"
-DESCRIPTION = "Library of algorithms and metrics used to characterise and/or identify jet-streams, based on xarray."
+DESCRIPTION = "Library of algorithms and metrics used to characterise jet-streams."
 URL = "https://github.com/Thomasjkeel/jsmetrics"
 AUTHOR = "Thomas Keel"
 AUTHOR_EMAIL = "thomas.keel.18@ucl.ac.uk"
@@ -14,10 +14,10 @@ LICENSE = "MIT License"
 
 KEYWORDS = "jet-stream climate metrics algorithms xarray"
 
-with open("README.rst") as file:
+with open("README.rst", encoding="utf-8") as file:
     readme = file.read()
 
-with open("HISTORY.rst") as history_file:
+with open("HISTORY.rst", encoding="utf-8") as history_file:
     history = history_file.read()
 
 # dev_requirements = []
@@ -26,15 +26,15 @@ with open("HISTORY.rst") as history_file:
 #         dev_requirements.append(dependency)
 
 requirements = [
-    "numpy>=1.21.2",
-    "pandas>=0.23",
+    "numpy>=1.21.2,<=1.26.4",
+    "pandas>=1.4",
     "matplotlib>=3.3.2",
-    "xarray>=0.19.0",
+    "xarray>=2023.1.0",
     "scipy>=1.5.3",
     "dask[array]",
     "netCDF4>=1.5.5.1",
     "bottleneck",
-    "cf_xarray",
+    "cf_xarray>=0.6.1",
     "Shapely",
 ]
 

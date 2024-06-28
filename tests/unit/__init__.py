@@ -55,7 +55,7 @@ def set_up_nan_dataset():
     time = pd.date_range("2014-09-06", periods=3)
     reference_time = pd.Timestamp("2014-09-05")
     an_array = np.empty((2, 2, 3))
-    an_array[:] = np.NaN
+    an_array[:] = np.nan
     da = xr.DataArray(
         data=an_array,
         dims=["x", "y", "time"],

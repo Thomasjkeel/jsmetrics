@@ -460,7 +460,7 @@ def find_local_maxima_in_2d_dataarray_with_diagonals(arr, threshold=10):
 
     # Find local maximum values in a window around each element
     neighborhood_size = 3
-    local_max = scipy.ndimage.filters.maximum_filter(
+    local_max = scipy.ndimage.maximum_filter(
         arr, footprint=np.ones((neighborhood_size, neighborhood_size))
     )
 
@@ -942,7 +942,8 @@ def get_current_region_ws_maxima_lat_and_plev_ind(
     if all_current_local_maximas_data.isnull().all():
         return []
     max_ws_indices = np.unravel_index(
-        all_current_local_maximas_data.argmax(), all_current_local_maximas_data.shape
+        np.nanargmax(all_current_local_maximas_data),
+        all_current_local_maximas_data.shape,
     )
     current_max_data = all_current_local_maximas_data[
         max_ws_indices[0], max_ws_indices[1]

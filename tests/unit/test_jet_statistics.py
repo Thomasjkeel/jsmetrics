@@ -137,7 +137,7 @@ class TestArcherCaldeira2008(unittest.TestCase):
             # self.assertEqual(10, result[col].max())
 
         self.assertEqual(
-            float(result["mass_weighted_average_ws"].max()), 23.904821395874023
+            round(float(result["mass_weighted_average_ws"].max()), 4), 23.9048
         )
 
     def test_get_mass_weighted_average_windspeed(self):

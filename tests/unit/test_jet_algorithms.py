@@ -34,7 +34,7 @@ class TestKoch2006(unittest.TestCase):
         result = tested_func(self.data, ws_threshold=8)
         # check an exact value. Is this necessary?
         self.assertIsInstance(result, xr.Dataset)
-        self.assertEqual(float(result["jet_events_ws"].max()), 8.775158882141113)
+        self.assertEqual(round(float(result["jet_events_ws"].max()), 4), 8.7752)
         new_data = self.data.isel(plev=0)
         self.assertRaises(ValueError, lambda: tested_func(new_data))
 

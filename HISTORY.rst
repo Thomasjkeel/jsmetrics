@@ -6,7 +6,7 @@ History
 -------------------------
 * Fix scipy.ndimage depreciation warning
 * Change argmax to nanargmax
-
+* update min numpy version to 1.25 so includes 'exceptions' module
 
 0.2.3 (2024-05-10)
 -------------------------

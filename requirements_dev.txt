@@ -1,7 +1,7 @@
 # Testing and development dependencies
 pip
 xarray>=2023.1.0
-numpy>=1.25
+numpy>=1.21.2,<=1.26.4
 scipy
 numba
 pandas>=1.1

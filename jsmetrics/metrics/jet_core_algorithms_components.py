@@ -257,6 +257,7 @@ def run_jet_core_and_region_algorithm_on_one_day(
     """
     # Step 0. Squeeze time for method
     if row["time"].size == 1:
+        row = row.expand_dims("time")
         row = row.squeeze("time")
 
     # Step 1. Get potential cores (to later subset) using the wind speed thresholds and jet core pressure level limit.

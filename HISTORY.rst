@@ -2,6 +2,10 @@
 History
 =======
 
+0.2.5 (2024-09-23)
+-------------------------
+* Add expand_dims and squeeze to time dimensions of 'run_jet_core_and_region_algorithm_on_one_day' to fix manney_et_al_2011
+
 0.2.4 (2024-09-23)
 -------------------------
 * Fix scipy.ndimage depreciation warning

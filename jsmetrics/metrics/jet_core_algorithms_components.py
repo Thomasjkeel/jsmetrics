@@ -255,6 +255,10 @@ def run_jet_core_and_region_algorithm_on_one_day(
     row : xarray.Dataset
         Data for one time unit containing four new variables (ws, jet_core_mask, jet_region_mask, jet_region_above_ws_threshold_mask)
     """
+    # Step 0. Squeeze time for method
+    if row["time"].size == 1:
+        row = row.expand_dims("time")
+        row = row.squeeze("time")
 
     # Step 1. Get potential cores (to later subset) using the wind speed thresholds and jet core pressure level limit.
     row["potential_jet_cores"] = row["ws"].where(
@@ -313,6 +317,9 @@ def run_jet_core_and_region_algorithm_on_one_day(
     # Step 8. Remove old and add actual jet core mask
     row = row.drop_vars("potential_jet_cores")
     row["jet_core_mask"] = (("plev", "lat", "lon"), jet_core_masks)
+
+    # Step 9. Expand dims to time again
+    row = row.expand_dims("time")
     return row
 
 

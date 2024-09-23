@@ -2,7 +2,7 @@
 History
 =======
 
-0.2.4-alpha (2024-06-28)
+0.2.4 (2024-09-23)
 -------------------------
 * Fix scipy.ndimage depreciation warning
 * Change argmax to nanargmax

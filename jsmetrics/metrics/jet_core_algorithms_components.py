@@ -256,8 +256,7 @@ def run_jet_core_and_region_algorithm_on_one_day(
         Data for one time unit containing four new variables (ws, jet_core_mask, jet_region_mask, jet_region_above_ws_threshold_mask)
     """
     # Step 0. Squeeze time for method
-    if row["time"].size == 1:
-        row = row.expand_dims("time")
+    if "time" in row.dims:
         row = row.squeeze("time")
 
     # Step 1. Get potential cores (to later subset) using the wind speed thresholds and jet core pressure level limit.

@@ -82,6 +82,8 @@ class TestSchiemann2009(unittest.TestCase):
 
     def test_metric(self):
         tested_func = jet_core_algorithms.schiemann_et_al_2009
+        sub_data = self.data.isel(time=slice(0, 2), plev=slice(3, 6))
+        result = tested_func(sub_data, ws_threshold=30)
         sub_data = self.data.isel(time=slice(0, 1), plev=slice(3, 6))
         result = tested_func(sub_data, ws_threshold=30)
         self.assertTrue(result)
@@ -102,8 +104,15 @@ class TestManney2011(unittest.TestCase):
     def test_metric(self):
         tested_func = jet_core_algorithms.manney_et_al_2011
         subset_data = self.data.sel(plev=slice(50000, 10000)).isel(
+            time=slice(0, 2), lon=slice(0, 100)
+        )
+        res = tested_func(subset_data, jet_core_plev_limit=(10000, 40000))
+        self.assertEqual(int(res["jet_core_mask"].astype(int).max()), 1)
+        subset_data = self.data.sel(plev=slice(50000, 10000)).isel(
             time=slice(0, 1), lon=slice(0, 100)
         )
+        squeezed_data = subset_data.isel(plev=0)
+        res = tested_func(squeezed_data, jet_core_plev_limit=(10000, 40000))
         res = tested_func(subset_data, jet_core_plev_limit=(10000, 40000))
         self.assertEqual(int(res["jet_core_mask"].astype(int).max()), 1)
         self.assertEqual(int(res["jet_region_mask"].astype(int).max()), 1)
@@ -123,6 +132,10 @@ class TestManney2011(unittest.TestCase):
                 self.data.isel(time=0).drop_vars("time"),
                 jet_core_plev_limit=(10000, 40000),
             ),
+        )
+        self.assertRaises(
+            KeyError,
+            lambda: tested_func(self.data.isel(time=0), jet_core_plev_limit=False),
         )
 
     def test_check_diagonals(self):
@@ -185,6 +198,10 @@ class TestKuang2014(unittest.TestCase):
             time=slice(0, 1), lat=slice(0, 10), lon=slice(0, 10)
         )
         tested_func(plev_data)
+        self.assertRaises(
+            KeyError,
+            lambda: tested_func(self.data.isel(time=0).drop_vars("time")),
+        )
 
 
 class TestJetCoreIdentificationAlgorithm(unittest.TestCase):

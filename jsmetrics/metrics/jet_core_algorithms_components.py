@@ -320,9 +320,6 @@ def run_jet_core_and_region_algorithm_on_one_day(
     # Step 8. Remove old and add actual jet core mask
     row = row.drop_vars("potential_jet_cores")
     row["jet_core_mask"] = (("plev", "lat", "lon"), jet_core_masks)
-
-    # Step 9. Expand dims to time again
-    row = row.expand_dims("time")
     return row
 
 

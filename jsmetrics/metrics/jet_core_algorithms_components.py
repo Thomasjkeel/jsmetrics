@@ -1281,6 +1281,10 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
     occ_alg.output_data : xarray.Dataset
         Data with jet occurence and centre points (1 for occurence, 2 for centre)
     """
+    # Step 0. Squeeze time for method
+    if "time" in row.dims:
+        row = row.squeeze("time")
+
     # Step 1. Get jet occurences
     row["jet_occurence"] = row["ws"].where(
         lambda val: (val >= occurence_ws_threshold), 0
@@ -1304,6 +1308,9 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
         ("plev", "lat", "lon"),
         np.clip(all_jet_centers_mask, 0, 1),
     )
+
+    # Step 5. Expand dims to time again
+    row = row.expand_dims("time")
     return row
 
 

@@ -304,8 +304,6 @@ def manney_et_al_2011(
 
     # Step 4. Run Algorithm and return outputs
     if data["time"].size == 1:
-        if "time" in data.dims:
-            data = data.squeeze("time")
         output = (
             jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day(
                 data,

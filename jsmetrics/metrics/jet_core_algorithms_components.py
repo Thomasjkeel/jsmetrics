@@ -155,6 +155,10 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
         Data of a single time unit with value for jet-maxima (1 == maxima, 0 == none)
 
     """
+    # Step 0. Squeeze time for method
+    if "time" in row.dims:
+        row = row.squeeze("time")
+
     row["jet_occurence"] = (
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),
@@ -316,9 +320,6 @@ def run_jet_core_and_region_algorithm_on_one_day(
     # Step 8. Remove old and add actual jet core mask
     row = row.drop_vars("potential_jet_cores")
     row["jet_core_mask"] = (("plev", "lat", "lon"), jet_core_masks)
-
-    # Step 9. Expand dims to time again
-    row = row.expand_dims("time")
     return row
 
 
@@ -1281,6 +1282,10 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
     occ_alg.output_data : xarray.Dataset
         Data with jet occurence and centre points (1 for occurence, 2 for centre)
     """
+    # Step 0. Squeeze time for method
+    if "time" in row.dims:
+        row = row.squeeze("time")
+
     # Step 1. Get jet occurences
     row["jet_occurence"] = row["ws"].where(
         lambda val: (val >= occurence_ws_threshold), 0

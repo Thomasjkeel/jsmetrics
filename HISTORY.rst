@@ -2,9 +2,15 @@
 History
 =======
 
+0.2.7 (2024-09-24)
+-------------------------
+* Fix scipy.ndimage maximum filter error
+* Corrects Kuang et al. 2014 and Schiemann et al. 2009
+
 0.2.6 (2024-09-23)
 -------------------------
 * Add expand_dims and squeeze to time dimensions of 'run_jet_core_and_region_algorithm_on_one_day' to fix manney_et_al_2011
+
 
 0.2.4 (2024-09-23)
 -------------------------
@@ -12,6 +18,7 @@ History
 * Change argmax to nanargmax
 * update max numpy version to 1.26 so 'np.RankWarning' still exists (in future prepare for np v2.0)
 * Make sure requirement files have same versions
+
 
 0.2.3 (2024-05-10)
 -------------------------
@@ -23,6 +30,7 @@ History
 0.2.3-alpha (2024-04-08)
 -------------------------
 * Add example of assigning units to plev in data_utils
+
 
 0.2.2 (2024-03-15)
 -------------------------

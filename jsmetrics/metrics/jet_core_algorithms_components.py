@@ -155,6 +155,10 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
         Data of a single time unit with value for jet-maxima (1 == maxima, 0 == none)
 
     """
+    # Step 0. Squeeze time for method
+    if "time" in row.dims:
+        row = row.squeeze("time")
+
     row["jet_occurence"] = (
         ("plev", "lat", "lon"),
         np.zeros((row["plev"].size, row["lat"].size, row["lon"].size)),

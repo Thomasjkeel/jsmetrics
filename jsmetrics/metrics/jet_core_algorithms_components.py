@@ -1308,9 +1308,6 @@ def run_jet_occurence_and_centre_alg_on_one_day(row, occurence_ws_threshold):
         ("plev", "lat", "lon"),
         np.clip(all_jet_centers_mask, 0, 1),
     )
-
-    # Step 5. Expand dims to time again
-    row = row.expand_dims("time")
     return row
 
 

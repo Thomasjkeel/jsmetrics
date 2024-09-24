@@ -5,7 +5,7 @@ History
 0.2.7 (2024-09-24)
 -------------------------
 * Fix scipy.ndimage maximum filter error
-* Corrects Kuang et al. 2014 and Schiemann et al. 2009
+* Corrects Kuang et al. 2014 and Schiemann et al. 2009 methods
 
 0.2.6 (2024-09-23)
 -------------------------

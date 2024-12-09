@@ -3,7 +3,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/psf/black
-    rev: 24.8.0
+    rev: 24.10.0
     hooks:
       - id: black
         language_version: python3.9
@@ -13,7 +13,7 @@ repos:
       - id: flake8
         args: ["--ignore=E203 E501 W503"]
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: end-of-file-fixer
       - id: trailing-whitespace

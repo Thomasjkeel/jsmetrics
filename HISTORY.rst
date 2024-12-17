@@ -2,6 +2,12 @@
 History
 =======
 
+0.2.8 (2024-12-17)
+-------------------------
+* Fix scipy.optimize.least_sq depreciation warning
+* Fix xarray groupby squeeze depreciation warning
+* Fix numpy depreciation warning
+
 0.2.7 (2024-09-24)
 -------------------------
 * Fix scipy.ndimage maximum filter error

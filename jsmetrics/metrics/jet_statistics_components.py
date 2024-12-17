@@ -1048,7 +1048,8 @@ def fit_parabola(x, y):
 
     Component of method from Barnes & Polvani (2015) http://journals.ametsoc.org/doi/10.1175/JCLI-D-14-00589.1
     """
-    coeff, _ = scipy.optimize.curve_fit(parabola, x, y)
+
+    coeff, _ = scipy.optimize.curve_fit(parabola, x.flatten(), y.flatten())
     fitted_parabola = parabola(x, coeff[0], coeff[1], coeff[2])
     return fitted_parabola, coeff
 

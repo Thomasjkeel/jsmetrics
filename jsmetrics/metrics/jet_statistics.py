@@ -1039,7 +1039,7 @@ def kerr_et_al_2020(data, width_of_pulse=10):
             )
         )
     else:
-        output = data.groupby("time", squeeze=False).map(
+        output = data.groupby("time").map(
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day,
             (width_of_pulse,),
         )

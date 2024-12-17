@@ -1308,6 +1308,8 @@ def get_jet_lat_by_lon(data_row):
     output : xarray.DataArray
         Data detailing the latitude of jet-stream at each longitude of one time unit
     """
+    if "time" in data_row.dims:
+        data_row = data_row.squeeze("time")
     argmax_lat_indices = xr.DataArray(
         dims=("lon",),
         data=np.nanargmax(data_row, axis=data_row.get_axis_num("lat")),

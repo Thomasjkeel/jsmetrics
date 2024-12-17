@@ -877,7 +877,7 @@ def get_3_latitudes_and_speed_around_max_ws(row):
             np.array([np.nan, np.nan, np.nan], dtype="float64"),
             np.array([np.nan, np.nan, np.nan], dtype="float64"),
         )
-    max_lat_argwhere = int(np.argwhere(row["lat"].data == max_lat))
+    max_lat_argwhere = np.argwhere(row["lat"].data == max_lat)[0][0]
 
     if max_lat_argwhere == 0:
         neighbouring_lats_ind = [max_lat_argwhere, max_lat_argwhere + 1]

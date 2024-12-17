@@ -146,7 +146,7 @@ def cattiaux_et_al_2016(data):
             data, circle_50N
         )
     else:
-        output = data.groupby("time").map(
+        output = data.groupby("time", squeeze=False).map(
             lambda row: waviness_metrics_components.get_sinuosity_of_zonal_mean_zg(
                 row, circle_50N
             )

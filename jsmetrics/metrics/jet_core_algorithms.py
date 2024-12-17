@@ -191,7 +191,7 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
             data, ws_threshold=ws_threshold, u_threshold=u_threshold
         )
     else:
-        output = data.groupby("time").map(
+        output = data.groupby("time", squeeze=False).map(
             jet_core_algorithms_components.get_local_jet_occurence,
             (
                 ws_threshold,
@@ -316,7 +316,7 @@ def manney_et_al_2011(
             )
         )
     else:
-        output = data.groupby("time").map(
+        output = data.groupby("time", squeeze=False).map(
             jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day,
             (
                 jet_core_plev_limit,
@@ -409,7 +409,7 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
     output = jet_core_algorithms_components.get_empty_local_wind_maxima_data(data)
 
     #  Step 3. Find local wind maxima locations by day
-    output = output.groupby("time").map(
+    output = output.groupby("time", squeeze=False).map(
         jet_core_algorithms_components.get_local_wind_maxima_by_timeunit,
         (ws_threshold,),
     )
@@ -510,7 +510,7 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
                 data, occurence_ws_threshold
             )
         else:
-            output = data.groupby("time").map(
+            output = data.groupby("time", squeeze=False).map(
                 jet_core_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day,
                 (occurence_ws_threshold,),
             )

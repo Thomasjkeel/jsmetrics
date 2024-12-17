@@ -539,7 +539,7 @@ def barnes_polvani_2015(data):
             zonal_mean
         )
     else:
-        output = zonal_mean.groupby("time").map(
+        output = zonal_mean.groupby("time", squeeze=False).map(
             jet_statistics_components.get_jet_lat_and_speed_using_parabola_by_day
         )
     return output
@@ -1039,7 +1039,7 @@ def kerr_et_al_2020(data, width_of_pulse=10):
             )
         )
     else:
-        output = data.groupby("time").map(
+        output = data.groupby("time", squeeze=False).map(
             jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day,
             (width_of_pulse,),
         )

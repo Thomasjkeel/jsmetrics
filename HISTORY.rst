@@ -2,6 +2,11 @@
 History
 =======
 
+0.2.9 (2025-01-16)
+-------------------------
+* Fix ongoing numpy dependency issue and update requirement for numpy version so it is less strict
+* Remove warnings.RankWarning fix for quadratic function. This should fix Cattiaux
+
 0.2.8 (2024-12-17)
 -------------------------
 * Fix scipy.optimize.least_sq depreciation warning

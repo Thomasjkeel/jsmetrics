@@ -292,8 +292,8 @@ def get_one_contour_linestring(dataarray, contour_level):
     try:
         assert contour_level == False
     except:
-        raise AssertionError(f"FAILED: {contour_level}")
-    one_contour = dataarray.plot.contour(levels=[float(contour_level)])
+        raise AssertionError(f"FAILED: {type(contour_level)}")
+    one_contour = dataarray.plot.contour(levels=[float(contour_level[0])])
     matplotlib.pyplot.close()
     one_contour_segments = seperate_one_contour_into_line_segments(
         one_contour.get_paths()[0]

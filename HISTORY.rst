@@ -2,6 +2,10 @@
 History
 =======
 
+0.2.9 (2025-01-16)
+-------------------------
+* Fix numpy dependency issue
+
 0.2.8 (2024-12-17)
 -------------------------
 * Fix scipy.optimize.least_sq depreciation warning

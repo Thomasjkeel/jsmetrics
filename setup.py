@@ -9,7 +9,7 @@ URL = "https://github.com/Thomasjkeel/jsmetrics"
 AUTHOR = "Thomas Keel"
 AUTHOR_EMAIL = "thomasjames.keel@gmail.com"
 REQUIRES_PYTHON = ">=3.8.0"
-VERSION = "0.2.7"
+VERSION = "0.2.9"
 LICENSE = "MIT License"
 
 KEYWORDS = "jet-stream climate metrics algorithms xarray"

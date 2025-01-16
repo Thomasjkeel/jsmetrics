@@ -26,7 +26,7 @@ with open("HISTORY.rst", encoding="utf-8") as history_file:
 #         dev_requirements.append(dependency)
 
 requirements = [
-    "numpy>=1.21.2,<=1.26.4",
+    "numpy>=2.1",
     "pandas>=1.4",
     "matplotlib>=3.3.2",
     "xarray>=2023.1.0",

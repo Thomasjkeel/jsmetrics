@@ -37,7 +37,7 @@ Documentation
 -------------
 The official documentation is at https://jsmetrics.readthedocs.io/en/latest/
 
-My email is: thomas.keel.18@ucl.ac.uk. Please feel free to email me if you would like some help working with this package.
+My email is: thomasjames.keel@gmail.com. Please feel free to email me if you would like some help working with this package.
 
 Usage
 -------------

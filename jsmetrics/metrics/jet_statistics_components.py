@@ -979,9 +979,7 @@ def quadratic_func(x, y):
     y : xr.DataArray or array-like
         Array 2
     """
-    with warnings.catch_warnings():
-        warnings.filterwarnings("ignore", category=np.RankWarning)
-        p = np.polyfit(x, y, deg=2)
+    p = np.polyfit(x, y, deg=2)
     return p
 
 

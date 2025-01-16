@@ -289,7 +289,10 @@ def get_one_contour_linestring(dataarray, contour_level):
     ), "Data array needs to have latitude and longitude coords"
     if "time" in dataarray.dims:
         dataarray = dataarray.squeeze("time")
-    assert contour_level == False
+    try:
+        assert contour_level == False
+    except:
+        raise AssertionError(f"FAILED: {contour_level}")
     one_contour = dataarray.plot.contour(levels=[float(contour_level)])
     matplotlib.pyplot.close()
     one_contour_segments = seperate_one_contour_into_line_segments(

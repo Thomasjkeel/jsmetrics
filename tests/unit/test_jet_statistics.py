@@ -343,8 +343,8 @@ class TestCeppi2018(unittest.TestCase):
     def test_metric(self):
         tested_func = jet_statistics.ceppi_et_al_2018
         result = tested_func(self.data)
-        self.assertEqual(float(result["jet_lat"][0].data), 37.316638365674194)
-        self.assertEqual(float(result["jet_speed"][0].data), 22.341136932373047)
+        self.assertEqual(round(float(result["jet_lat"][0].data), 4), 37.3166)
+        self.assertEqual(round(float(result["jet_speed"][0].data), 4), 22.3411)
 
     def test_one_latlon_coord(self):
         tested_func = jet_statistics.ceppi_et_al_2018

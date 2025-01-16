@@ -4,7 +4,7 @@
 from setuptools import find_packages, setup
 
 NAME = "jsmetrics"
-DESCRIPTION = "Library of algorithms and metrics used to characterise jet-streams."
+DESCRIPTION = "Library of algorithms and metrics used to characterise jet streams."
 URL = "https://github.com/Thomasjkeel/jsmetrics"
 AUTHOR = "Thomas Keel"
 AUTHOR_EMAIL = "thomasjames.keel@gmail.com"
@@ -26,7 +26,7 @@ with open("HISTORY.rst", encoding="utf-8") as history_file:
 #         dev_requirements.append(dependency)
 
 requirements = [
-    "numpy>=2.1",
+    "numpy",
     "pandas>=1.4",
     "matplotlib>=3.3.2",
     "xarray>=2023.1.0",

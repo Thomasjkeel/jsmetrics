@@ -1,7 +1,7 @@
 """Top-level package for jsmetrics."""
 
 __author__ = """Tom Keel"""
-__email__ = "thomas.keel.18@ucl.ac.uk"
+__email__ = "thomasjames.keel@gmail.com"
 __version__ = "0.2.9"
 
 from . import details_for_all_metrics

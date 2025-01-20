@@ -15,7 +15,7 @@ from jsmetrics.core.check_data import sort_xarray_data_coords
 
 # docs
 __author__ = "Thomas Keel"
-__email__ = "thomas.keel.18@ucl.ac.uk"
+__email__ = "thomasjames.keel@gmail.com"
 __status__ = "Development"
 
 

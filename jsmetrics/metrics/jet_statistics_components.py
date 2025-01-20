@@ -20,7 +20,7 @@ from jsmetrics.utils import data_utils
 
 # docs
 __author__ = "Thomas Keel"
-__email__ = "thomas.keel.18@ucl.ac.uk"
+__email__ = "thomasjames.keel@gmail.com"
 __status__ = "Development"
 
 

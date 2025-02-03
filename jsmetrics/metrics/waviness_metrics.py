@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Statistics and algorithms for determining the "waviness" of upper-level mean flow within a given
-    time window. These metrics only have meaning at an integrated global scale.
+Statistics and algorithms for determining the "waviness" of upper-level mean flow within a given
+time window. These metrics only have meaning at an integrated global scale.
 
-    The following metrics each return a xarray.Dataset and are ordered by paper publish year.
+The following metrics each return a xarray.Dataset and are ordered by paper publish year.
 """
 
 # imports

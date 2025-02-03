@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Methods that return a mask of coordinates related to the jet location, e.g., identifying the maximum
-    wind speed throughout the horizontal and/or vertical plane within a given time window.
+Methods that return a mask of coordinates related to the jet location, e.g., identifying the maximum
+wind speed throughout the horizontal and/or vertical plane within a given time window.
 
-    The following algorithms each return a xarray.Dataset and are ordered by paper publish year.
+The following algorithms each return a xarray.Dataset and are ordered by paper publish year.
 """
 
 # imports

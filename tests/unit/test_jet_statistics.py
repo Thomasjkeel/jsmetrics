@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Tests for jet metrics (jetstream_metrics.py & jetstream_metrics_utils)
-    Includes:
-        – tests for each metric defined and expected outputs
-        – test for each utility function used in the metric
+Tests for jet metrics (jetstream_metrics.py & jetstream_metrics_utils)
+Includes:
+    – tests for each metric defined and expected outputs
+    – test for each utility function used in the metric
 """
 
 # imports

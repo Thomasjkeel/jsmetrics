@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    Wrappers for checking inputs to the metrics
+Wrappers for checking inputs to the metrics
 """
 import functools
 import xarray

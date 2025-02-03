@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    Tests for general and data utils (data_utils.py)
+Tests for general and data utils (data_utils.py)
 """
 
 # imports

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-    Statistics for isolating individual quantities synonymous with the jet stream from upper-level wind speed
-    within a given time window (e.g. latitude, speed, width).
+Statistics for isolating individual quantities synonymous with the jet stream from upper-level wind speed
+within a given time window (e.g. latitude, speed, width).
 
-    The following statistics each return a xarray.Dataset and are ordered by paper publish year.
+The following statistics each return a xarray.Dataset and are ordered by paper publish year.
 """
 
 # imports

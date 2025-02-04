@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-    All spatial operations needed for the jet-stream metrics and algorithms
+All spatial operations needed for the jet-stream metrics and algorithms
 
-    Classes and Functions ordered alphabetically.
+Classes and Functions ordered alphabetically.
 """
 
 import numpy as np

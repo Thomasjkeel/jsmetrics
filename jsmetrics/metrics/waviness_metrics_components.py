@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-    Algorithms and calculations for the waviness metrics used to
-    characterise waviness in jet-stream in the literature.
+Algorithms and calculations for the waviness metrics used to
+characterise waviness in jet-stream in the literature.
 
-    This file is in order of publish year of the metrics
-    (see jsmetrics.details_for_all_metrics)
+This file is in order of publish year of the metrics
+(see jsmetrics.details_for_all_metrics)
 
-    Functions and Classes ordered by the year of the paper that uses each metric component first
+Functions and Classes ordered by the year of the paper that uses each metric component first
 """
 
 # imports

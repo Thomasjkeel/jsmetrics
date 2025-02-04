@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-    Tests for spatial utils (spatial_utils.py)
+Tests for spatial utils (spatial_utils.py)
 """
 
 # imports

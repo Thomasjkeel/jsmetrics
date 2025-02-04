@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-    Algorithms and calculations for the metrics used to
-    identify or classify jet-stream in the literature.
+Algorithms and calculations for the metrics used to
+identify or classify jet-stream in the literature.
 
-    This file is in order of publish year of the metrics
-    (see details_for_all_metrics.py)
+This file is in order of publish year of the metrics
+(see details_for_all_metrics.py)
 
-    Functions and Classes ordered by the year of the paper that uses each metric component first
+Functions and Classes ordered by the year of the paper that uses each metric component first
 """
 
 # imports

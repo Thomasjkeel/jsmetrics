@@ -7,22 +7,18 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+- jsmetrics version:
+- Python version:
+- Operating System:
 
-**To Reproduce**
-Steps to reproduce the behavior:
+### Description
 
-**Expected behaviour**
-A clear and concise description of what you expected to happen.
+Describe what you were trying to get done.
+Tell us what happened, what went wrong, and what you expected to happen.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+### What I Did
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Version [e.g. 22]
-
-
-**Additional context**
-Add any other context about the problem here.
+```
+Paste the command(s) you ran and the output.
+If there was a crash, please include the traceback here.
+```

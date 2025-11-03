@@ -24,7 +24,9 @@ __email__ = "thomasjames.keel@gmail.com"
 __status__ = "Development"
 
 
-def calc_atmospheric_mass_at_kPa(pressure, gravity=9.81, atmospheric_area=5.1e8):
+def calc_atmospheric_mass_at_kPa(
+    pressure, gravity=9.81, atmospheric_area=5.1e8
+):
     """
     Will calculate the atmospheric mass at a given pressure level.
 
@@ -66,7 +68,9 @@ def get_atm_mass_at_one_hPa(hPa):
     return atm_mass
 
 
-def get_weighted_average_at_one_pressure_level(data, pressure_level, atm_mass, ws_col):
+def get_weighted_average_at_one_pressure_level(
+    data, pressure_level, atm_mass, ws_col
+):
     """
     Get weighted average wind speed at one pressure level.
 
@@ -295,7 +299,9 @@ def calc_mass_flux_weighted_latitude(data, lat_min, lat_max, ws_col):
         else:
             sum_weighted_ws_by_lat += lat_sum_weighted_ws
             sum_weighted_lat_flux += lat_sum_weighted_ws * lat
-    mass_flux_weighted_latitude = sum_weighted_lat_flux / sum_weighted_ws_by_lat
+    mass_flux_weighted_latitude = (
+        sum_weighted_lat_flux / sum_weighted_ws_by_lat
+    )
     return mass_flux_weighted_latitude
 
 
@@ -391,7 +397,9 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
             f"Warning: The 'apply_lanczos_filter' function was built to work on a datetime index of freq 'D'. Frequency in data is '{xr.infer_freq(dataarray['time'])}'"
         )
 
-    assert isinstance(dataarray, xr.DataArray), "Input data needs to be a data array"
+    assert isinstance(
+        dataarray, xr.DataArray
+    ), "Input data needs to be a data array"
 
     try:
         start_date = dataarray["time"].astype(np.datetime64)[0]
@@ -411,9 +419,13 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
                 f"Error: datetime type inputted ({start_date}) cannot be coerced into numpy.datetime64 and is not in cftime format."
             )
         if start_date.calendar == "360_day":
-            datetime_added_func_to_use = data_utils.add_num_of_days_to_360Datetime
+            datetime_added_func_to_use = (
+                data_utils.add_num_of_days_to_360Datetime
+            )
         elif start_date.calendar == "noleap":
-            datetime_added_func_to_use = data_utils.add_num_of_days_to_NoLeapDatetime
+            datetime_added_func_to_use = (
+                data_utils.add_num_of_days_to_NoLeapDatetime
+            )
         else:
             raise ValueError(
                 f"Error: datetime type inputted ({start_date}) cannot be coerced into numpy.datetime64 and is not in cftime format."
@@ -438,7 +450,9 @@ def apply_lanczos_filter(dataarray, filter_freq, window_size):
     actual_window_size = dataarray.sel(
         time=slice(start_date, window_end_date)
     ).time.size
-    lanczos_weights = calc_low_pass_weights(actual_window_size, 1 / actual_filter_freq)
+    lanczos_weights = calc_low_pass_weights(
+        actual_window_size, 1 / actual_filter_freq
+    )
     lanczos_weights_arr = xr.DataArray(lanczos_weights, dims=["window"])
     window_cons = (
         dataarray.rolling(time=len(lanczos_weights_arr), center=True)
@@ -551,10 +565,12 @@ def assign_jet_lat_and_speed_to_data(
     data_with_max_lats_ws = data.assign(
         {max_lats_col: (("time"), max_lats), max_ws_col: (("time"), max_ws)}
     )
-    data_with_max_lats_ws[max_lats_col] = data_with_max_lats_ws[max_lats_col].astype(
-        float
-    )
-    data_with_max_lats_ws[max_ws_col] = data_with_max_lats_ws[max_ws_col].astype(float)
+    data_with_max_lats_ws[max_lats_col] = data_with_max_lats_ws[
+        max_lats_col
+    ].astype(float)
+    data_with_max_lats_ws[max_ws_col] = data_with_max_lats_ws[
+        max_ws_col
+    ].astype(float)
     return data_with_max_lats_ws
 
 
@@ -595,7 +611,9 @@ def apply_low_freq_fourier_filter(data, highest_freq_to_keep):
     return filtered_sig
 
 
-def assign_filtered_lats_and_ws_to_data(data, filtered_max_lats, filtered_max_ws, dim):
+def assign_filtered_lats_and_ws_to_data(
+    data, filtered_max_lats, filtered_max_ws, dim
+):
     """
     Assigns the filtered data back to the returned dataset
 
@@ -649,8 +667,8 @@ def calc_jet_width_for_one_day(data_row, jet_lat, jet_speed):
     lat_resolution = float(data_row["lat"][1] - data_row["lat"][0])
     if not jet_speed:
         return np.nan
-    possible_surrounding_jet_vals = get_possible_surrounding_jet_lat_vals_for_one_day(
-        data_row, jet_speed
+    possible_surrounding_jet_vals = (
+        get_possible_surrounding_jet_lat_vals_for_one_day(data_row, jet_speed)
     )
     if possible_surrounding_jet_vals.size == data_row["lat"].size:
         print("No jet-width determined")
@@ -662,7 +680,9 @@ def calc_jet_width_for_one_day(data_row, jet_lat, jet_speed):
     return jet_width
 
 
-def get_possible_surrounding_jet_lat_vals_for_one_day(one_day_wind_data, jet_speed):
+def get_possible_surrounding_jet_lat_vals_for_one_day(
+    one_day_wind_data, jet_speed
+):
     """
     Returns array of windspeed values that are within half speed of the jet_speed given.
 
@@ -955,7 +975,9 @@ def get_3_neighbouring_coord_values(coord_val, coord_resolution):
     get_3_neighbouring_coord_values(45.0, 1.25)
     >>> np.array([43.75, 45.0, 46.25])
     """
-    if not isinstance(coord_val, float) or not isinstance(coord_resolution, float):
+    if not isinstance(coord_val, float) or not isinstance(
+        coord_resolution, float
+    ):
         coord_val = float(coord_val)
         coord_resolution = float(coord_resolution)
 
@@ -1125,7 +1147,9 @@ def cubic_spline_interpolation(x, y):
     cubic_interpolation : np.array
         Cubic spline interpolation
     """
-    return scipy.interpolate.interp1d(x, y, kind="cubic", fill_value="extrapolate")
+    return scipy.interpolate.interp1d(
+        x, y, kind="cubic", fill_value="extrapolate"
+    )
 
 
 def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
@@ -1152,7 +1176,9 @@ def run_cubic_spline_interpolation_to_get_max_lat_and_ws(
     max_ws : float
         maximum wind-speed at the given latitude for time period
     """
-    scaled_lats = data_utils.rescale_lat_resolution(data["lat"], lat_resolution)
+    scaled_lats = data_utils.rescale_lat_resolution(
+        data["lat"], lat_resolution
+    )
     csi = cubic_spline_interpolation(data["lat"], data[ua_col])
     interpolated_ws = csi(scaled_lats)
     max_lat = scaled_lats[np.argmax(interpolated_ws)]
@@ -1242,7 +1268,9 @@ def get_latitude_value_in_data_row(data_row, lat_val):
     return float(data_row.sel(lat=lat_val, method="nearest"))
 
 
-def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row, width_of_pulse=10):
+def get_moving_averaged_smoothed_jet_lats_for_one_day(
+    data_row, width_of_pulse=10
+):
     """
     Get moving average of smoothed_jet_lats for one day. Used in combination with a groupby mapping.
 
@@ -1259,13 +1287,17 @@ def get_moving_averaged_smoothed_jet_lats_for_one_day(data_row, width_of_pulse=1
         Data containing jet-stream position
     """
     data_row["jet_lat"] = get_jet_lat_by_lon(data_row["ua"])
-    data_row["smoothed_jet_lat"] = smooth_jet_lat_across_lon_with_rectangular_pulse(
-        data_row["jet_lat"], width_of_pulse=width_of_pulse
+    data_row["smoothed_jet_lat"] = (
+        smooth_jet_lat_across_lon_with_rectangular_pulse(
+            data_row["jet_lat"], width_of_pulse=width_of_pulse
+        )
     )
     return data_row
 
 
-def smooth_jet_lat_across_lon_with_rectangular_pulse(jet_lat_data, width_of_pulse):
+def smooth_jet_lat_across_lon_with_rectangular_pulse(
+    jet_lat_data, width_of_pulse
+):
     """
     Smooth jet position (jet latitude) by carrying out a convolution with a rectangular pulse.
 

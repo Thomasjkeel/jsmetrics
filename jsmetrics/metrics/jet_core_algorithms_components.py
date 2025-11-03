@@ -50,7 +50,9 @@ def get_sum_weighted_ws(data, all_plevs_hPa):
         raise KeyError("Data does not contain coord: 'plev'")
 
     if not isinstance(all_plevs_hPa, (list, np.ndarray)):
-        raise TypeError("array of pressure level needs to be list or numpy.array")
+        raise TypeError(
+            "array of pressure level needs to be list or numpy.array"
+        )
 
     sum_weighted_ws = 0
     for plev, (i, plev_hPa) in zip(data["plev"], enumerate(all_plevs_hPa)):
@@ -90,7 +92,9 @@ def get_weighted_average_ws(sum_weighted_ws, all_plevs_hPa):
         Data containing weighted average windspeed values
     """
     if not isinstance(all_plevs_hPa, (np.ndarray)):
-        raise TypeError("array of pressure level needs to be a list or numpy.array")
+        raise TypeError(
+            "array of pressure level needs to be a list or numpy.array"
+        )
     weighted_average_ws = sum_weighted_ws * (
         1 / (all_plevs_hPa.max() - all_plevs_hPa.min())
     )
@@ -175,13 +179,17 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
             data_utils.get_local_maxima(current["ws"].data, axis=1)
         )
         # find intersection of the two arrays intersection
-        maxima_indices = data_utils.find_intersection_between_two_array_of_arrays(
-            maxima_indices_ax0, maxima_indices_ax1
+        maxima_indices = (
+            data_utils.find_intersection_between_two_array_of_arrays(
+                maxima_indices_ax0, maxima_indices_ax1
+            )
         )
 
         # Filter indices to remove maximas that neighbour each other (taking the first instance)
-        filtered_maxima_indices = data_utils.filter_local_extremes_to_min_distance(
-            maxima_indices, min_distance_threshold=2
+        filtered_maxima_indices = (
+            data_utils.filter_local_extremes_to_min_distance(
+                maxima_indices, min_distance_threshold=2
+            )
         )
         if len(filtered_maxima_indices) > 0:
             # Creating a boolean mask for the filtered maxima
@@ -208,7 +216,9 @@ def get_local_jet_occurence(row, ws_threshold, u_threshold):
     all_jet_occurences_dataarray = (
         all_jet_occurences_dataarray / all_jet_occurences_dataarray
     )
-    row["jet_occurence"] = all_jet_occurences_dataarray.transpose("plev", "lat", "lon")
+    row["jet_occurence"] = all_jet_occurences_dataarray.transpose(
+        "plev", "lat", "lon"
+    )
 
     return row
 
@@ -510,7 +520,9 @@ def get_all_jet_core_mask(local_maximas_dict, mask_shape):
         if ind == 0:
             all_jet_core_mask = current_jet_core_mask
             continue
-        all_jet_core_mask = np.dstack([all_jet_core_mask, current_jet_core_mask])
+        all_jet_core_mask = np.dstack(
+            [all_jet_core_mask, current_jet_core_mask]
+        )
     return all_jet_core_mask
 
 
@@ -564,7 +576,8 @@ def get_all_jet_region_contour_mask(row, local_maximas_dict):
     all_jet_region_contour_mask = np.array([])
     for ind, lon in enumerate(row.lon):
         current_jet_region_contour_mask = get_jet_region_contour_mask(
-            row["potential_jet_regions"].sel(lon=lon), local_maximas_dict[float(lon)]
+            row["potential_jet_regions"].sel(lon=lon),
+            local_maximas_dict[float(lon)],
         )
         if ind == 0:
             all_jet_region_contour_mask = current_jet_region_contour_mask
@@ -663,11 +676,15 @@ def subset_jet_region_mask_to_regions_with_cores(
     """
     for reg_num in np.unique(potential_jet_regions_mask):
         if reg_num not in actual_jet_region_nums:
-            potential_jet_regions_mask[potential_jet_regions_mask == reg_num] = 0
+            potential_jet_regions_mask[
+                potential_jet_regions_mask == reg_num
+            ] = 0
     return potential_jet_regions_mask
 
 
-def get_all_jet_regions_mask(row, all_jet_region_contour_mask, local_maximas_dict):
+def get_all_jet_regions_mask(
+    row, all_jet_region_contour_mask, local_maximas_dict
+):
     """
     Get all jet regions mask by looping over each longitude in row.
     See also docs of 'refine_jet_region_to_leftright_and_abovebelow'
@@ -768,7 +785,9 @@ def refine_jet_region_to_leftright_and_abovebelow(array, x, y):
     return refined_array
 
 
-def get_values_along_a_line_between_two_coordinates(data, start_point, end_point):
+def get_values_along_a_line_between_two_coordinates(
+    data, start_point, end_point
+):
     """
     Get all values along a shortest path between two coordinates in a 2-D numpy array.
 
@@ -824,7 +843,9 @@ def get_values_along_a_line_between_two_coordinates(data, start_point, end_point
         path_coordinates.append((row, col))
 
     # Extract values along the path
-    values_along_path = [float(data[row, col]) for row, col in path_coordinates]
+    values_along_path = [
+        float(data[row, col]) for row, col in path_coordinates
+    ]
 
     return values_along_path
 
@@ -846,9 +867,13 @@ def has_ws_drop_between_cores(ws_between_cores, ws_drop_threshold):
         True if windspeeds input have a drop greater than 'ws_drop_threshold'
 
     """
-    if any(ws_between_cores[0] - np.array(ws_between_cores) > ws_drop_threshold):
+    if any(
+        ws_between_cores[0] - np.array(ws_between_cores) > ws_drop_threshold
+    ):
         return True
-    elif any(ws_between_cores[-1] - np.array(ws_between_cores) > ws_drop_threshold):
+    elif any(
+        ws_between_cores[-1] - np.array(ws_between_cores) > ws_drop_threshold
+    ):
         return True
     else:
         return False
@@ -998,11 +1023,15 @@ def run_checks_on_jet_cores_and_return_jet_cores(
     """
     jet_core_masks = np.copy(initial_jet_core_masks)
     for lon_ind, lon in enumerate(row.lon):
-        jet_region_contour_one_lon = row["jet_region_contour_mask"].sel(lon=lon)
+        jet_region_contour_one_lon = row["jet_region_contour_mask"].sel(
+            lon=lon
+        )
         ws_one_lon = row["ws"].sel(lon=lon)
         current_local_maximas = local_maximas_dict[float(lon)]
         # Get first occurence of the maximum windspeed
-        index_of_first_maximum = np.dstack(np.where(ws_one_lon == ws_one_lon.max()))[0]
+        index_of_first_maximum = np.dstack(
+            np.where(ws_one_lon == ws_one_lon.max())
+        )[0]
 
         core_and_location = []
         for core_ind, local_maxima in enumerate(current_local_maximas):
@@ -1060,7 +1089,9 @@ def run_checks_on_jet_cores_and_return_jet_cores(
                 slicepoints_in_region = []
                 previous_local_maxima = [0, 0]  # temporary
                 for ind, local_maxima_ind in enumerate(local_maxima_inds):
-                    current_local_maxima = current_local_maximas[int(local_maxima_ind)]
+                    current_local_maxima = current_local_maximas[
+                        int(local_maxima_ind)
+                    ]
                     if ind == 0:
                         previous_local_maxima = current_local_maxima
                         continue
@@ -1073,14 +1104,17 @@ def run_checks_on_jet_cores_and_return_jet_cores(
                     )
                     # Get conditions for dropping cores
                     ws_drops_below_threshold = has_ws_drop_between_cores(
-                        windspeeds_between_cores, ws_drop_threshold=ws_drop_threshold
+                        windspeeds_between_cores,
+                        ws_drop_threshold=ws_drop_threshold,
                     )
                     if ws_drops_below_threshold:
                         slicepoints_in_region.append(ind)
                     previous_local_maxima = current_local_maxima
                 # Step 2 of 2: Remove cores in same region and retain core with maximum windspeed
-                local_maxima_ind_slices = data_utils.slice_array_by_index_breaks(
-                    local_maxima_inds, slicepoints_in_region
+                local_maxima_ind_slices = (
+                    data_utils.slice_array_by_index_breaks(
+                        local_maxima_inds, slicepoints_in_region
+                    )
                 )
                 index_of_cores_to_drop = (
                     get_index_of_cores_to_drop_based_on_multicore_regions(
@@ -1091,7 +1125,9 @@ def run_checks_on_jet_cores_and_return_jet_cores(
                 )
                 for index_of_core_to_drop in index_of_cores_to_drop:
                     jet_core_masks[
-                        index_of_core_to_drop[0], index_of_core_to_drop[1], lon_ind
+                        index_of_core_to_drop[0],
+                        index_of_core_to_drop[1],
+                        lon_ind,
                     ] = 0
     return jet_core_masks
 
@@ -1128,7 +1164,9 @@ def get_empty_local_wind_maxima_data(
     return data
 
 
-def get_potential_local_wind_maximas_by_ws_threshold(ws_slice, ws_threshold=30):
+def get_potential_local_wind_maximas_by_ws_threshold(
+    ws_slice, ws_threshold=30
+):
     """
     Will return a 2-d array of potential local windspeed maximas
 
@@ -1177,7 +1215,9 @@ def get_local_wind_maxima_by_timeunit(row, ws_threshold):
         pot_local_maximas = get_potential_local_wind_maximas_by_ws_threshold(
             current["ws"], ws_threshold
         ).data
-        ind_local_wind_maximas = data_utils.get_local_maxima(pot_local_maximas, axis=1)
+        ind_local_wind_maximas = data_utils.get_local_maxima(
+            pot_local_maximas, axis=1
+        )
         # Turn into 2-d numpy array
         ind_local_wind_maximas = np.array(
             [
@@ -1260,7 +1300,9 @@ def subdivide_local_wind_maxima_into_stj_pfj(
     data["polar_front_jet"] = xr.merge([MAM_SON_PFJ, JJA_PFJ, SH_PFJ])[
         local_wind_column_name
     ]
-    data["subtropical_jet"] = xr.merge([DJF_STJ, SH_STJ])[local_wind_column_name]
+    data["subtropical_jet"] = xr.merge([DJF_STJ, SH_STJ])[
+        local_wind_column_name
+    ]
     return data
 
 
@@ -1336,7 +1378,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
             ) from e
 
         # Load in data as a pressure level 2d wind-speed slice
-        self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(data).values
+        self.plev_ws_slice = windspeed_utils.PressureLevelWindSpeedSlice(
+            data
+        ).values
         self.plev_ws_slice["jet_ocurrence1_jet_centre2"] = self.plev_ws_slice[
             "ws"
         ].copy()
@@ -1424,7 +1468,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
         """
         for coord in self._all_coords_arr:
             coord_ws = float(
-                self.output_data.sel(lat=coord[0], lon=coord[1], method="nearest")["ws"]
+                self.output_data.sel(
+                    lat=coord[0], lon=coord[1], method="nearest"
+                )["ws"]
             )
             lat_grid_vals = np.arange(
                 coord[0] - self._lat_resolution,
@@ -1451,7 +1497,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
                 if (
                     float(
                         self.output_data.sel(
-                            lat=val_to_check[0], lon=val_to_check[1], method="nearest"
+                            lat=val_to_check[0],
+                            lon=val_to_check[1],
+                            method="nearest",
                         )["ws"]
                     )
                     > coord_ws
@@ -1474,7 +1522,9 @@ class JetStreamOccurenceAndCentreAlgorithm:
         ].where(lambda x: ((x == 0) | (x == 2)), 1)
 
 
-def run_jet_core_algorithm_on_one_day(row, ws_core_threshold, ws_boundary_threshold):
+def run_jet_core_algorithm_on_one_day(
+    row, ws_core_threshold, ws_boundary_threshold
+):
     """
     Runs JetStreamCoreIdentificationAlgorithm method on a single time unit.
 
@@ -1593,7 +1643,11 @@ class JetStreamCoreIdentificationAlgorithm:
             print(
                 "A total of %d initial Jet-stream cores have been found\
                  in the wind-speed slice"
-                % (self._labelled_data["ws"].where(lambda x: x == "Core").count())
+                % (
+                    self._labelled_data["ws"]
+                    .where(lambda x: x == "Core")
+                    .count()
+                )
             )
             print(
                 "A total of %d potential Jet-stream boundaries have been found\
@@ -1606,11 +1660,16 @@ class JetStreamCoreIdentificationAlgorithm:
             )
             return repr(self._labelled_data)
         else:
-            print("A total of %d cores have been discovered" % (self.num_of_cores))
+            print(
+                "A total of %d cores have been discovered"
+                % (self.num_of_cores)
+            )
             return repr(self.output_data)
 
     @classmethod
-    def run_algorithm(cls, data, ws_core_threshold=40, ws_boundary_threshold=30):
+    def run_algorithm(
+        cls, data, ws_core_threshold=40, ws_boundary_threshold=30
+    ):
         """
         Class method for running algorithm
         """
@@ -1636,7 +1695,9 @@ class JetStreamCoreIdentificationAlgorithm:
         Will return the indexes in the ws data that ARE jet-stream cores
         and COULD BE jet-stream core boundaries
         """
-        pot_boundary_ids = np.where(self._labelled_data["ws"] == "Potential Boundary")
+        pot_boundary_ids = np.where(
+            self._labelled_data["ws"] == "Potential Boundary"
+        )
         initial_core_ids = np.where(self._labelled_data["ws"] == "Core")
         pot_boundary_ids = np.stack(pot_boundary_ids, axis=-1)
         initial_core_ids = np.stack(initial_core_ids, axis=-1)
@@ -1716,13 +1777,17 @@ class JetStreamCoreIdentificationAlgorithm:
             if pot_boundary.tolist() in already_covered:
                 continue
             vals_to_check = self._get_indexes_to_check(pot_boundary)
-            area, core_found = self._get_pot_jetcore_area(vals_to_check, area=[])
+            area, core_found = self._get_pot_jetcore_area(
+                vals_to_check, area=[]
+            )
             already_covered.extend(area)
             already_covered = data_utils.remove_duplicates(already_covered)
             # add area to js_core_indexes if part of core
             if core_found:
                 id_number += 1
-                js_core_indexes.extend([{"id": id_number, "index_of_area": area}])
+                js_core_indexes.extend(
+                    [{"id": id_number, "index_of_area": area}]
+                )
         self.num_of_cores = id_number
         return js_core_indexes
 

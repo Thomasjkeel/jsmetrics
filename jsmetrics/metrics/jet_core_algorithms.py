@@ -99,8 +99,10 @@ def koch_et_al_2006(data, ws_threshold=30):
     )
 
     # Step 4: calculate average weighted
-    weighted_average_ws = jet_core_algorithms_components.get_weighted_average_ws(
-        sum_weighted_ws, all_plevs_hPa
+    weighted_average_ws = (
+        jet_core_algorithms_components.get_weighted_average_ws(
+            sum_weighted_ws, all_plevs_hPa
+        )
     )
 
     # Step 5: Apply windspeed threshold to get jet event array
@@ -183,7 +185,9 @@ def schiemann_et_al_2009(data, ws_threshold=30, u_threshold=0):
 
     #  Step 2. Calculate jet occurences
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1:
         if "time" in data.dims:
             data = data.squeeze("time")
@@ -291,7 +295,9 @@ def manney_et_al_2011(
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
 
     # Step 2. Check a pressure level limit is provided by the user
     if not jet_core_plev_limit:
@@ -304,16 +310,14 @@ def manney_et_al_2011(
 
     # Step 4. Run Algorithm and return outputs
     if data["time"].size == 1:
-        output = (
-            jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day(
-                data,
-                jet_core_plev_limit,
-                jet_core_ws_threshold,
-                jet_boundary_ws_threshold,
-                ws_drop_threshold,
-                jet_core_lat_distance,
-                check_diagonals,
-            )
+        output = jet_core_algorithms_components.run_jet_core_and_region_algorithm_on_one_day(
+            data,
+            jet_core_plev_limit,
+            jet_core_ws_threshold,
+            jet_boundary_ws_threshold,
+            ws_drop_threshold,
+            jet_core_lat_distance,
+            check_diagonals,
         )
     else:
         output = data.groupby("time", squeeze=False).map(
@@ -403,10 +407,14 @@ def penaortiz_et_al_2013(data, ws_threshold=30):
 
     #  Step 2. Make array of zeros for local wind maxima location algorithm
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
-    output = jet_core_algorithms_components.get_empty_local_wind_maxima_data(data)
+    output = jet_core_algorithms_components.get_empty_local_wind_maxima_data(
+        data
+    )
 
     #  Step 3. Find local wind maxima locations by day
     output = output.groupby("time", squeeze=False).map(
@@ -490,17 +498,17 @@ def kuang_et_al_2014(data, occurence_ws_threshold=30):
     if "plev" not in data.dims:
         data = data.expand_dims("plev")
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
 
     # Step 2. Calculate wind speed from ua and va components.
     data["ws"] = windspeed_utils.get_resultant_wind(data["ua"], data["va"])
 
     # Step 2. Run Jet-stream Occurence and Centre Algorithm and return outputs
     if "time" not in data.coords:
-        output = (
-            jet_core_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day(
-                data, occurence_ws_threshold
-            )
+        output = jet_core_algorithms_components.run_jet_occurence_and_centre_alg_on_one_day(
+            data, occurence_ws_threshold
         )
     else:
         if data["time"].size == 1:
@@ -573,12 +581,16 @@ def jet_core_identification_algorithm(
 
     # Step 2. Run Jet-stream Core Idenfication Algorithm and return outputs
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1:
         if "time" in data.dims:
             data = data.squeeze("time")
-        output = jet_core_algorithms_components.run_jet_core_algorithm_on_one_day(
-            data, ws_core_threshold, ws_boundary_threshold
+        output = (
+            jet_core_algorithms_components.run_jet_core_algorithm_on_one_day(
+                data, ws_core_threshold, ws_boundary_threshold
+            )
         )
     else:
         output = data.groupby("time").map(

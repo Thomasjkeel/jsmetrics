@@ -1,4 +1,8 @@
-from jsmetrics.metrics import jet_core_algorithms, jet_statistics, waviness_metrics
+from jsmetrics.metrics import (
+    jet_core_algorithms,
+    jet_statistics,
+    waviness_metrics,
+)
 
 
 # RULES for METRIC_DETAILS dictionary:

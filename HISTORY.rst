@@ -2,6 +2,11 @@
 History
 =======
 
+0.3.0 (2025-11-03)
+-------------------------
+* requires Python 3.10+
+* modernise package so pyproject.toml instead of setup.py
+
 0.2.9 (2025-01-16)
 -------------------------
 * Fix ongoing numpy dependency issue and update requirement for numpy version so it is less strict

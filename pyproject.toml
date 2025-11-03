@@ -1,0 +1,180 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jsmetrics"
+version = "0.3.0"
+description = "Library of algorithms and metrics used to characterise jet streams."
+readme = "README.rst"
+requires-python = ">=3.10.0"
+license = { text = "MIT License" }
+authors = [
+  { name = "Thomas Keel", email = "thomasjames.keel@gmail.com" },
+]
+keywords = [
+  "jet-stream",
+  "climate",
+  "metrics",
+  "algorithms",
+  "xarray",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Atmospheric Science",
+]
+
+dependencies = [
+  "numpy",
+  "pandas>=1.4",
+  "matplotlib>=3.3.2",
+  "xarray>=2023.1.0",
+  "scipy>=1.5.3",
+  "dask[array]",
+  "netCDF4>=1.5.5.1",
+  "bottleneck",
+  "numba",
+  "cf_xarray>=0.6.1",
+  "cftime>=1.4.1",
+  "Shapely",
+]
+
+[project.optional-dependencies]
+dev = [
+  "bump2version",
+  "black",
+  "pytest",
+  "pytest-cov",
+  "flake8",
+  "parameterized",
+  "pre_commit",
+  "pylint",
+  "sphinx",
+  "numpydoc",
+  "sphinx-rtd-theme",
+]
+data_install = ["cdsapi>=0.5.1"]
+
+[project.urls]
+Homepage = "https://github.com/Thomasjkeel/jsmetrics"
+
+[tool.setuptools.packages.find]
+include = ["jsmetrics*"]
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+
+[tool.bumpversion]
+current_version = "0.3.0"
+commit = true
+message = "Bump version: {current_version} → {new_version}"
+commit_args = ""
+allow_dirty = false
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)(\\-(?P<release>[a-z]+))?"
+serialize = ["{major}.{minor}.{patch}-{release}", "{major}.{minor}.{patch}"]
+search = "{current_version}"
+replace = "{new_version}"
+regex = false
+ignore_missing_version = false
+tag = false
+sign_tags = false
+tag_name = "v{new_version}"
+tag_message = "Bump version: {current_version} → {new_version}"
+
+
+[[tool.bumpversion.files]]
+filename = "jsmetrics/__init__.py"
+search = "__version__ = \"{current_version}\""
+replace = "__version__ = \"{new_version}\""
+
+[tool.bumpversion.parts.release]
+optional_value = "gamma"
+values = ["alpha", "beta", "gamma"]
+
+[tool.flake8]
+max-line-length = 79
+exclude = [
+  ".git",
+  "docs/conf.py",
+  "build",
+  ".eggs",
+  "jsmetrics/__init__.py",
+]
+ignore = ["E203", "E501", "W503"]
+
+[tool.pytest.ini_options]
+addopts = "--verbose"
+
+[tool.isort]
+profile = "black"
+
+# ------------------------------------------------------------
+# BLACK CONFIGURATION
+# ------------------------------------------------------------
+[tool.black]
+line-length = 79
+target-version = ["py38", "py39", "py310", "py311"]
+skip-string-normalization = true
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.tox
+  | \.eggs
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# ------------------------------------------------------------
+# TOX CONFIGURATION
+# ------------------------------------------------------------
+[tool.tox]
+requires = ["tox>=4.0", "pip>=21.0"]
+env_list = ["py38", "py39", "py310", "py311", "flake8"]
+opts = "-v"
+
+[tool.tox.envs.py]
+set_env = { PYTHONPATH = "{toxinidir}" }
+deps = ["-r{toxinidir}/requirements_dev.txt"]
+commands = [
+  "pip install -U pip",
+  "pytest --basetemp={envtmpdir}",
+]
+
+[tool.tox.envs.flake8]
+basepython = "python"
+deps = ["flake8"]
+commands = ["flake8 jsmetrics tests"]
+
+# ------------------------------------------------------------
+# COVERAGE CONFIGURATION
+# ------------------------------------------------------------
+[tool.coverage.run]
+relative_files = true
+branch = true
+source = ["jsmetrics"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 85
+precision = 2
+exclude_lines = [
+  "pragma: no cover",
+  "def __repr__",
+  "if self\\.debug",
+  "if __name__ == .__main__.:",
+]

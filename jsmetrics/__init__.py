@@ -2,7 +2,19 @@
 
 __author__ = """Tom Keel"""
 __email__ = "thomasjames.keel@gmail.com"
-__version__ = "0.2.9"
+__version__ = "0.3.0"
 
-from . import details_for_all_metrics
-from .metrics import jet_core_algorithms, jet_statistics, waviness_metrics
+from jsmetrics import details_for_all_metrics
+from jsmetrics.metrics import (
+    jet_core_algorithms,
+    jet_statistics,
+    waviness_metrics,
+)
+
+
+__all__ = [
+    "details_for_all_metrics",
+    "jet_core_algorithms",
+    "jet_statistics",
+    "waviness_metrics",
+]

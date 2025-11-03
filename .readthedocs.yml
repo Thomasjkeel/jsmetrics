@@ -13,9 +13,6 @@ sphinx:
   configuration: docs/conf.py
   # fail_on_warning: true
 
-# conda:
-#   environment: environment.yml
-
 python:
   install:
     - requirements: requirements_dev.txt

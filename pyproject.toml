@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jsmetrics"
-version = "0.3.0"
+version = "0.3.1"
 description = "Library of algorithms and metrics used to characterise jet streams."
 readme = "README.rst"
 requires-python = ">=3.10.0"
@@ -76,7 +76,7 @@ include-package-data = true
 zip-safe = false
 
 [tool.bumpversion]
-current_version = "0.3.0"
+current_version = "0.3.1"
 commit = true
 message = "Bump version: {current_version} → {new_version}"
 commit_args = ""

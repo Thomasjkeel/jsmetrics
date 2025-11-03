@@ -11,7 +11,11 @@ repos:
     rev: 7.3.0
     hooks:
       - id: flake8
-        args: ["--ignore=E203 E501 W503"]
+        language_version: python3.10
+        args: [
+          "--ignore=E203,E501,W503",
+          "--exclude=.git,__pycache__,.venv,.tox,build,dist,docs/conf.py,jsmetrics/__init__.py"
+        ]
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:

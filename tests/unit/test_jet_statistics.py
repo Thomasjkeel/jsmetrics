@@ -44,7 +44,9 @@ class TestMetricDetailsDict(unittest.TestCase):
     def test_metric_dict_values(self):
         for metric in self.metric_details.values():
             self.assertIsInstance(metric, dict)
-            self.assertEqual(len(metric.keys()), MAX_VARIABLES_IN_METRIC_DETAIL_DICT)
+            self.assertEqual(
+                len(metric.keys()), MAX_VARIABLES_IN_METRIC_DETAIL_DICT
+            )
             self.assertListEqual(
                 list(metric.keys()),
                 [
@@ -83,7 +85,9 @@ class TestMetricDetailsDict(unittest.TestCase):
         for metric in self.metric_details.values():
             if coord in metric["coords"].keys():
                 self.assertEqual(len(metric["coords"][coord]), 2)
-                self.assertGreaterEqual(min(metric["coords"][coord]), min_value)
+                self.assertGreaterEqual(
+                    min(metric["coords"][coord]), min_value
+                )
                 self.assertLessEqual(max(metric["coords"][coord]), max_value)
 
     def test_funcs(self):
@@ -104,7 +108,10 @@ class TestMetricsOnOneDay(unittest.TestCase):
             uvdata = self.uvdata.copy(deep=True)
             zgdata = self.zgdata.copy(deep=True)
             # do not include w10 or bp13 as they have a time window requirement
-            if "Woollings2010" in metric_name or "BarnesPolvani2013" in metric_name:
+            if (
+                "Woollings2010" in metric_name
+                or "BarnesPolvani2013" in metric_name
+            ):
                 try:
                     self.metric_details[metric_name]["metric"](uvdata)
                 except ValueError:
@@ -166,9 +173,9 @@ class TestWoollings2010(unittest.TestCase):
         time_step = 0.25
         period = 5.0
         time_vec = np.arange(0, 5, time_step)
-        test_sig = np.sin(2 * np.pi / period * time_vec) + 0.5 * np.random.randn(
-            time_vec.size
-        )
+        test_sig = np.sin(
+            2 * np.pi / period * time_vec
+        ) + 0.5 * np.random.randn(time_vec.size)
         return test_sig
 
     def test_metric(self):
@@ -194,10 +201,14 @@ class TestWoollings2010(unittest.TestCase):
             ValueError,
             lambda: tested_func(test_ua, 2, test_ua["time"].count() + 1),
         )
-        self.assertEqual(round(float(tested_func(test_ua, 2, 4).max()), 2), 99.18)
+        self.assertEqual(
+            round(float(tested_func(test_ua, 2, 4).max()), 2), 99.18
+        )
 
     def test_get_latitude_and_speed_where_max_ws(self):
-        tested_func = jet_statistics_components.get_latitude_and_speed_where_max_ws
+        tested_func = (
+            jet_statistics_components.get_latitude_and_speed_where_max_ws
+        )
         self.assertRaises(AttributeError, lambda: tested_func(["lol"]))
         tested_data = self.data["ua"].isel(plev=0, lon=0, time=0)
         self.assertEqual(tested_func(tested_data)[0], 81.25)
@@ -235,7 +246,9 @@ class TestBarnesPolvani2013(unittest.TestCase):
         self.assertTrue(
             np.isnan(
                 test_func(
-                    self.data["ua"].isel(time=0, plev=0, lon=0, lat=slice(2, 5)),
+                    self.data["ua"].isel(
+                        time=0, plev=0, lon=0, lat=slice(2, 5)
+                    ),
                     0,
                     1,
                 )
@@ -243,7 +256,9 @@ class TestBarnesPolvani2013(unittest.TestCase):
         )
 
     def test_get_3_latitudes_and_speed_around_max_ws(self):
-        test_func = jet_statistics_components.get_3_latitudes_and_speed_around_max_ws
+        test_func = (
+            jet_statistics_components.get_3_latitudes_and_speed_around_max_ws
+        )
         test_data = self.data["ua"].isel(time=0, plev=0, lat=slice(0, 2))
         res = test_func(test_data["lat"])
         self.assertEqual(len(res[0]), 3)
@@ -348,8 +363,12 @@ class TestCeppi2018(unittest.TestCase):
 
     def test_one_latlon_coord(self):
         tested_func = jet_statistics.ceppi_et_al_2018
-        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lon=0)))
-        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lat=0)))
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.isel(lon=0))
+        )
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.isel(lat=0))
+        )
         self.assertRaises(
             ValueError, lambda: tested_func(self.data.sel(lat=slice(0, 0)))
         )
@@ -361,7 +380,8 @@ class TestCeppi2018(unittest.TestCase):
         self.assertRaises(
             ValueError,
             lambda: tested_func(
-                self.data.sel(lon=slice(0, 0), lat=slice(0, 0)), lon_resolution=1.875
+                self.data.sel(lon=slice(0, 0), lat=slice(0, 0)),
+                lon_resolution=1.875,
             ),
         )
         self.assertRaises(
@@ -384,8 +404,12 @@ class TestZappa2018(unittest.TestCase):
 
     def test_one_latlon_coord(self):
         tested_func = jet_statistics.zappa_et_al_2018
-        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lon=0)))
-        self.assertRaises(ValueError, lambda: tested_func(self.data.isel(lat=0)))
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.isel(lon=0))
+        )
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data.isel(lat=0))
+        )
         self.assertRaises(
             ValueError, lambda: tested_func(self.data.sel(lat=slice(0, 0)))
         )
@@ -397,7 +421,8 @@ class TestZappa2018(unittest.TestCase):
         self.assertRaises(
             ValueError,
             lambda: tested_func(
-                self.data.sel(lon=slice(0, 0), lat=slice(0, 0)), lon_resolution=1.875
+                self.data.sel(lon=slice(0, 0), lat=slice(0, 0)),
+                lon_resolution=1.875,
             ),
         )
         self.assertRaises(
@@ -416,10 +441,14 @@ class TestKerr2020(unittest.TestCase):
         tested_func = jet_statistics.kerr_et_al_2020
         test_data = self.data.sel(plev=50000)
         result = tested_func(test_data)
-        self.assertEqual(result["jet_lat"].isel(time=0).dropna("lon").size, 192)
+        self.assertEqual(
+            result["jet_lat"].isel(time=0).dropna("lon").size, 192
+        )
         self.assertEqual(float(result["jet_lat"].max()), 72.5)
         self.assertEqual(float(result["smoothed_jet_lat"].max()), 65.0)
-        self.assertEqual(result["smoothed_jet_lat"].isel(time=0).dropna("lon").size, 61)
+        self.assertEqual(
+            result["smoothed_jet_lat"].isel(time=0).dropna("lon").size, 61
+        )
         self.assertRaises(
             KeyError,
             lambda: jet_statistics.kerr_et_al_2020(

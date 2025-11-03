@@ -283,7 +283,9 @@ def get_one_contour_linestring(dataarray, contour_level):
     contour_line : shapely.geometry.LineString or shapely.geometry.MultiLineString
         Contour line of geopotential height (zg) a given contour
     """
-    assert isinstance(dataarray, xr.DataArray), "Data needs to be type xr.DataArray"
+    assert isinstance(
+        dataarray, xr.DataArray
+    ), "Data needs to be type xr.DataArray"
     assert (
         "lat" in dataarray.coords and "lon" in dataarray.coords
     ), "Data array needs to have latitude and longitude coords"

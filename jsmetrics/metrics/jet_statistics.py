@@ -95,7 +95,9 @@ def archer_caldeira_2008(data):
     """
     #  Step 1. Calculate monthly means
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1:
         print(
             "Warning: only found one time step, and the time coord is being renamed month."
@@ -106,11 +108,15 @@ def archer_caldeira_2008(data):
         mon_mean = data.groupby("time.month").mean()
 
     #  Step 2. Calculate wind-speed from u and v-component wind
-    mon_mean["ws"] = windspeed_utils.get_resultant_wind(mon_mean["ua"], mon_mean["va"])
+    mon_mean["ws"] = windspeed_utils.get_resultant_wind(
+        mon_mean["ua"], mon_mean["va"]
+    )
 
     #  Step 3. Calculate mass weighted average windspeed
-    mass_weighted_average = jet_statistics_components.calc_mass_weighted_average(
-        mon_mean, ws_col="ws"
+    mass_weighted_average = (
+        jet_statistics_components.calc_mass_weighted_average(
+            mon_mean, ws_col="ws"
+        )
     )
 
     #  Step 4. Calculate mass flux weighted pressure
@@ -225,18 +231,26 @@ def woollings_et_al_2010(data, filter_freq=10, window_size=61):
             )
         )
     )
-    zonal_mean_lat_ws = jet_statistics_components.assign_jet_lat_and_speed_to_data(
-        zonal_mean, max_lat_ws
+    zonal_mean_lat_ws = (
+        jet_statistics_components.assign_jet_lat_and_speed_to_data(
+            zonal_mean, max_lat_ws
+        )
     )
     # Step 4: Make seasonal climatology
-    climatology = jet_statistics_components.get_climatology(zonal_mean_lat_ws, "season")
+    climatology = jet_statistics_components.get_climatology(
+        zonal_mean_lat_ws, "season"
+    )
 
     # Step 5: Apply low-freq fourier filter to both max lats and max ws
-    fourier_filtered_lats = jet_statistics_components.apply_low_freq_fourier_filter(
-        climatology["jet_lat"].values, highest_freq_to_keep=2
+    fourier_filtered_lats = (
+        jet_statistics_components.apply_low_freq_fourier_filter(
+            climatology["jet_lat"].values, highest_freq_to_keep=2
+        )
     )
-    fourier_filtered_ws = jet_statistics_components.apply_low_freq_fourier_filter(
-        climatology["jet_speed"].values, highest_freq_to_keep=2
+    fourier_filtered_ws = (
+        jet_statistics_components.apply_low_freq_fourier_filter(
+            climatology["jet_speed"].values, highest_freq_to_keep=2
+        )
     )
 
     #  Step 6. Assign the new output variables to the original data
@@ -314,17 +328,21 @@ def barnes_polvani_2013(data, filter_freq=10, window_size=41):
         bp13_np = jsmetrics.jet_statistics.barnes_polvani_2013(ua_np, filter_freq=10, window_size=41)
     """
     #  Step 1. Get pressure-weighted u-component wind
-    pressure_weighted_ua = jet_statistics_components.calc_mass_weighted_average(
-        data, ws_col="ua"
+    pressure_weighted_ua = (
+        jet_statistics_components.calc_mass_weighted_average(data, ws_col="ua")
     )
     #  Step 2. Filter pressure-weighted u-component wind with low-pass Lanczos filter
-    filtered_pressure_weighted_ua = jet_statistics_components.apply_lanczos_filter(
-        pressure_weighted_ua,
-        filter_freq=filter_freq,
-        window_size=window_size,
+    filtered_pressure_weighted_ua = (
+        jet_statistics_components.apply_lanczos_filter(
+            pressure_weighted_ua,
+            filter_freq=filter_freq,
+            window_size=window_size,
+        )
     )
     #  Step 3. Turn dataarray into dataset for next part
-    filtered_pressure_weighted_ua = filtered_pressure_weighted_ua.to_dataset(name="ua")
+    filtered_pressure_weighted_ua = filtered_pressure_weighted_ua.to_dataset(
+        name="ua"
+    )
 
     #  Step 4.  Get max latitude and wind speed at max
     zonal_mean = windspeed_utils.get_zonal_mean(filtered_pressure_weighted_ua)
@@ -439,7 +457,9 @@ def grise_polvani_2014(data):
 
     # Step 1. Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
@@ -607,7 +627,9 @@ def barnes_simpson_2017(data):
     # Step 1. Run check on time coordinate. The data should be able to be resampled into 10 days for this method.
     # Check 1. Is time coordinate is in data and is monotonically increasing.
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
     if not data.indexes["time"].is_monotonic_increasing:
@@ -688,13 +710,19 @@ def bracegirdle_et_al_2018(data):
 
     # Step 1: Expand time dimensions so we can map a function to the dataset properly
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
 
     #  Step 2. Calculate seasonal & annual climatologies
-    seasonal_climatology = jet_statistics_components.get_climatology(data, "season")
-    annual_climatology = jet_statistics_components.get_climatology(data, "year")
+    seasonal_climatology = jet_statistics_components.get_climatology(
+        data, "season"
+    )
+    annual_climatology = jet_statistics_components.get_climatology(
+        data, "year"
+    )
 
     #  Step 3. Get zonal mean from climatologies
     seasonal_zonal_mean = seasonal_climatology.mean("lon")
@@ -788,7 +816,9 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:
         total_area_m2 = spatial_utils.grid_cell_areas(data["lon"], data["lat"])
-    elif lon_resolution and not data["lat"].size == 1 and data["lon"].size == 1:
+    elif (
+        lon_resolution and not data["lat"].size == 1 and data["lon"].size == 1
+    ):
         lons_to_use = [float(data["lon"]), float(data["lon"]) + lon_resolution]
         total_area_m2 = spatial_utils.grid_cell_areas(lons_to_use, data["lat"])
         total_area_m2 = total_area_m2.mean(axis=1)
@@ -806,13 +836,17 @@ def ceppi_et_al_2018(data, lon_resolution=None):
     zonal_mean = windspeed_utils.get_zonal_mean(data)
 
     # Step 3: Assign laitude of jet-stream centroids to main data
-    data["jet_lat"] = jet_statistics_components.calc_centroid_jet_lat_from_zonal_mean(
-        zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
+    data["jet_lat"] = (
+        jet_statistics_components.calc_centroid_jet_lat_from_zonal_mean(
+            zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
+        )
     )
 
     # Step 4. Expand time dimension
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
@@ -912,7 +946,9 @@ def zappa_et_al_2018(data, lon_resolution=None):
     #  Step 1. Get area in m2 by latitude/longitude grid cells
     if not data["lon"].size == 1 and not data["lat"].size == 1:
         total_area_m2 = spatial_utils.grid_cell_areas(data["lon"], data["lat"])
-    elif lon_resolution and not data["lat"].size == 1 and data["lon"].size == 1:
+    elif (
+        lon_resolution and not data["lat"].size == 1 and data["lon"].size == 1
+    ):
         lons_to_use = [float(data["lon"]), float(data["lon"]) + lon_resolution]
         total_area_m2 = spatial_utils.grid_cell_areas(lons_to_use, data["lat"])
         total_area_m2 = total_area_m2.mean(axis=1)
@@ -931,13 +967,17 @@ def zappa_et_al_2018(data, lon_resolution=None):
     zonal_mean["ua"] = zonal_mean["ua"].where(lambda x: x > 0, 0)
 
     # Step 3: Assign laitude of jet-stream centroids to main data
-    data["jet_lat"] = jet_statistics_components.calc_centroid_jet_lat_from_zonal_mean(
-        zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
+    data["jet_lat"] = (
+        jet_statistics_components.calc_centroid_jet_lat_from_zonal_mean(
+            zonal_mean, area_by_lat=zonal_mean["total_area_m2"]
+        )
     )
 
     # Step 4. Expand time dimension
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1 and "time" not in data.dims:
         data = data.expand_dims("time")
         zonal_mean = zonal_mean.expand_dims("time")
@@ -1029,14 +1069,14 @@ def kerr_et_al_2020(data, width_of_pulse=10):
 
     # Step 1. Calculateed smoothed jet lats by lon
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     elif data["time"].size == 1:
         if "time" in data.dims:
             data = data.squeeze("time")
-        output = (
-            jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
-                data, width_of_pulse
-            )
+        output = jet_statistics_components.get_moving_averaged_smoothed_jet_lats_for_one_day(
+            data, width_of_pulse
         )
     else:
         output = data.groupby("time").map(

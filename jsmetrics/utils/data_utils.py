@@ -162,7 +162,8 @@ def check_at_least_n_plevs_in_data(data, n_plevs):
     """
     if data["plev"].count() < n_plevs:
         raise ValueError(
-            "Need at least %s pressure levels (plevs) for calculation" % (n_plevs)
+            "Need at least %s pressure levels (plevs) for calculation"
+            % (n_plevs)
         )
 
 
@@ -325,7 +326,9 @@ def get_local_minima(arr, axis=0):
     return scipy.signal.argrelextrema(arr, np.less, axis=axis)
 
 
-def filter_local_extremes_to_min_distance(local_extrema, min_distance_threshold=2):
+def filter_local_extremes_to_min_distance(
+    local_extrema, min_distance_threshold=2
+):
     """
     Filter local extremes (i.e. outputs of minima or maxima from scipy.signal.argrelextrema)
     so that no neighbours remain in array.
@@ -515,5 +518,6 @@ def slice_array_by_index_breaks(array_to_slice, index_breaks):
         Broken down slices of original array_to_slice
     """
     return [
-        array_to_slice[i:j] for i, j in zip([0] + index_breaks, index_breaks + [None])
+        array_to_slice[i:j]
+        for i, j in zip([0] + index_breaks, index_breaks + [None])
     ]

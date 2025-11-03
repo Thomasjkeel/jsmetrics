@@ -2,7 +2,7 @@
 
 __author__ = """Tom Keel"""
 __email__ = "thomasjames.keel@gmail.com"
-__version__ = "0.2.9"
+__version__ = "0.3.0-alpha"
 
 from jsmetrics import details_for_all_metrics
 from jsmetrics.metrics import (

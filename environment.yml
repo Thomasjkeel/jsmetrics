@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - default
 dependencies:
-  - python>=3.8
+  - python>=3.10
   - xarray>=2023.1.0
   - cf_xarray>=0.6.1
   - numpy

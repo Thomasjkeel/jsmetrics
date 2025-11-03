@@ -76,7 +76,7 @@ include-package-data = true
 zip-safe = false
 
 [tool.bumpversion]
-current_version = "0.3.0-beta"
+current_version = "0.3.0"
 commit = true
 message = "Bump version: {current_version} → {new_version}"
 commit_args = ""

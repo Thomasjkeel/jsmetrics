@@ -71,7 +71,9 @@ def francis_vavrus_2015(data):
         fv15_seasonal_anomalies = (mci['mci'] - mci['mci'].groupby('time.season').mean())
     """
     #  Step 1. calculating Meridional Circulation Index from data
-    data["mci"] = waviness_metrics_components.calc_meridional_circulation_index(data)
+    data["mci"] = (
+        waviness_metrics_components.calc_meridional_circulation_index(data)
+    )
     return data
 
 
@@ -128,7 +130,9 @@ def cattiaux_et_al_2016(data):
 
     #  Step 1. get zonal average for each timestep
     if "time" not in data.coords:
-        raise KeyError("Please provide a time coordinate for data to run this metric")
+        raise KeyError(
+            "Please provide a time coordinate for data to run this metric"
+        )
     if data["time"].size == 1:
         data = data.expand_dims("time")
     data["zonal_mean_zg_30Nto70N"] = (

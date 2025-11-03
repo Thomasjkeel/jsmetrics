@@ -37,8 +37,12 @@ class TestWindSpeedSlice(unittest.TestCase):
         self.data = set_up_test_uv_data()
 
     def test_basic(self):
-        self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None))
-        self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None))
+        self.assertRaises(
+            TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None)
+        )
+        self.assertRaises(
+            TypeError, lambda: windspeed_utils.WindSpeedSlice(None)
+        )
 
     def test_get_values(self):
         wsslice = windspeed_utils.PressureLevelWindSpeedSlice(
@@ -49,7 +53,9 @@ class TestWindSpeedSlice(unittest.TestCase):
 
 class TestLatitudeWindSpeedSlice(unittest.TestCase):
     def test_basic(self):
-        self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None))
+        self.assertRaises(
+            TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None)
+        )
         self.assertRaises(
             TypeError, lambda: windspeed_utils.WindSpeedSlice("asf", None)
         )
@@ -60,7 +66,9 @@ class TestLatitudeWindSpeedSlice(unittest.TestCase):
 
 class TestPressureLevelWindSpeedSlice(unittest.TestCase):
     def test_basic(self):
-        self.assertRaises(TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None))
+        self.assertRaises(
+            TypeError, lambda: windspeed_utils.WindSpeedSlice(None, None)
+        )
         self.assertRaises(
             TypeError, lambda: windspeed_utils.WindSpeedSlice("asf", None)
         )

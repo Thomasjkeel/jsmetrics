@@ -23,7 +23,9 @@ from . import set_up_test_uv_data, set_up_test_zg_data
 
 class TestStandardiseDiffsByMakingAllMostCommonDiff(unittest.TestCase):
     def test_basic(self):
-        test_func = spatial_utils._standardise_diffs_by_making_all_most_common_diff
+        test_func = (
+            spatial_utils._standardise_diffs_by_making_all_most_common_diff
+        )
         test_func([0, 1])
 
 
@@ -31,7 +33,9 @@ class TestQuadrant_area(unittest.TestCase):
     def test_basic(self):
         self.assertRaises(
             ValueError,
-            lambda: spatial_utils._quadrant_area(np.array([0, 1, 2]), None, None),
+            lambda: spatial_utils._quadrant_area(
+                np.array([0, 1, 2]), None, None
+            ),
         )
 
 
@@ -80,12 +84,14 @@ class TestGetOneContourLinestring(unittest.TestCase):
         one_contour_multi = test_func(test_data, 5095)
         self.assertTrue(
             isinstance(
-                one_contour_single, shapely.geometry.multilinestring.MultiLineString
+                one_contour_single,
+                shapely.geometry.multilinestring.MultiLineString,
             )
         )
         self.assertTrue(
             isinstance(
-                one_contour_multi, shapely.geometry.multilinestring.MultiLineString
+                one_contour_multi,
+                shapely.geometry.multilinestring.MultiLineString,
             )
         )
         self.assertEqual(len(one_contour_single.geoms), 1)
@@ -99,8 +105,12 @@ class TestSeperateOneContourIntoLineSegments(unittest.TestCase):
     def test_basic(self):
         test_func = spatial_utils.seperate_one_contour_into_line_segments
         test_data = self.data.isel(time=0).sel(plev=50000)["zg"]
-        one_contour_multi = test_data.plot.contour(levels=[5095]).get_paths()[0]
-        one_contour_single = test_data.plot.contour(levels=[5395]).get_paths()[0]
+        one_contour_multi = test_data.plot.contour(levels=[5095]).get_paths()[
+            0
+        ]
+        one_contour_single = test_data.plot.contour(levels=[5395]).get_paths()[
+            0
+        ]
         matplotlib.pyplot.close()
         self.assertEqual(len(test_func(one_contour_multi)), 2)
         self.assertEqual(len(test_func(one_contour_single)), 1)

@@ -26,7 +26,9 @@ class TestXarrayDataCheck(unittest.TestCase):
 
     def test_check_coords_in_data(self):
         tested_func = data_utils.check_coords_in_data
-        self.assertRaises(KeyError, lambda: tested_func(self.data, ("notthere",)))
+        self.assertRaises(
+            KeyError, lambda: tested_func(self.data, ("notthere",))
+        )
 
     def test_check_variables_in_data(self):
         tested_func = data_utils.check_variables_in_data
@@ -38,7 +40,9 @@ class TestXarrayDataCheck(unittest.TestCase):
     def test_check_at_least_n_plevs_in_data(self):
         tested_func = data_utils.check_at_least_n_plevs_in_data
         tested_func(self.data, n_plevs=1)
-        self.assertRaises(ValueError, lambda: tested_func(self.data, n_plevs=10))
+        self.assertRaises(
+            ValueError, lambda: tested_func(self.data, n_plevs=10)
+        )
 
     def test_check_if_data_is_xarray_datatype(self):
         tested_func = data_utils.check_if_data_is_xarray_datatype
@@ -88,7 +92,9 @@ class TestAddNumDaysto360Datetime(unittest.TestCase):
         )
         self.assertRaises(
             AssertionError,
-            lambda: tested_func(cftime.DatetimeAllLeap(day=1, month=1, year=2000), 1),
+            lambda: tested_func(
+                cftime.DatetimeAllLeap(day=1, month=1, year=2000), 1
+            ),
         )
         self.assertRaises(ValueError, lambda: tested_func(test_date, 0))
         self.assertRaises(ValueError, lambda: tested_func(test_date, -1))
@@ -130,7 +136,9 @@ class TestAddNumDaystoNoLeapDatetime(unittest.TestCase):
         )
         self.assertRaises(
             AssertionError,
-            lambda: tested_func(cftime.DatetimeAllLeap(day=1, month=1, year=2000), 1),
+            lambda: tested_func(
+                cftime.DatetimeAllLeap(day=1, month=1, year=2000), 1
+            ),
         )
         self.assertRaises(ValueError, lambda: tested_func(test_date, 0))
         self.assertRaises(ValueError, lambda: tested_func(test_date, -1))
@@ -143,14 +151,22 @@ class TestLocalMinimaMaxima(unittest.TestCase):
     def test_get_local_maxima(self):
         tested_func = data_utils.get_local_maxima
         self.assertListEqual(
-            list(tested_func(self.data["ua"].isel(time=0, plev=0, lon=0).data)[0]),
+            list(
+                tested_func(self.data["ua"].isel(time=0, plev=0, lon=0).data)[
+                    0
+                ]
+            ),
             [4, 30, 38, 44, 56, 61, 70],
         )
 
     def test_get_local_minima(self):
         tested_func = data_utils.get_local_minima
         self.assertListEqual(
-            list(tested_func(self.data["ua"].isel(time=0, plev=0, lon=0).data)[0]),
+            list(
+                tested_func(self.data["ua"].isel(time=0, plev=0, lon=0).data)[
+                    0
+                ]
+            ),
             [43, 48, 58, 65],
         )
 

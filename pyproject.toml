@@ -7,7 +7,7 @@ name = "jsmetrics"
 version = "0.2.9"
 description = "Library of algorithms and metrics used to characterise jet streams."
 readme = "README.rst"
-requires-python = ">=3.8.0"
+requires-python = ">=3.10.0"
 license = { text = "MIT License" }
 authors = [
   { name = "Thomas Keel", email = "thomasjames.keel@gmail.com" },
@@ -27,10 +27,10 @@ classifiers = [
   "Natural Language :: English",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Topic :: Scientific/Engineering :: Atmospheric Science",
 ]
 
@@ -43,7 +43,9 @@ dependencies = [
   "dask[array]",
   "netCDF4>=1.5.5.1",
   "bottleneck",
+  "numba",
   "cf_xarray>=0.6.1",
+  "cftime>=1.4.1",
   "Shapely",
 ]
 
@@ -87,11 +89,6 @@ serialize = [
 optional_value = "gamma"
 first_value = "alpha"
 values = ["alpha", "beta", "gamma"]
-
-[[tool.bumpversion.file]]
-filename = "setup.py"
-search = 'VERSION = "{current_version}"'
-replace = 'VERSION = "{new_version}"'
 
 [[tool.bumpversion.file]]
 filename = "jsmetrics/__init__.py"

@@ -935,9 +935,8 @@ def zappa_et_al_2018(data, lon_resolution=None):
         ua_data = xr.open_dataset('path_to_u_data')
 
         # Subset dataset to range used in original methodology (850 hPa &  20-70N, 140∘E-240∘E or 300-360 E))):
-        ua_na = ua.sel(plev=850, lat=slice(20, 70), lon=slice(140, 240))
-        ua_np = ua.sel(plev=850, lat=slice(20, 70), lon=slice(300, 360))
-
+        ua_na = ua.sel(plev=850, lat=slice(20, 70), lon=slice(300, 360))
+        ua_np = ua.sel(plev=850, lat=slice(20, 70), lon=slice(140, 240))
 
         # Run statistic:
         z18_na = jsmetrics.jet_statistics.zappa_et_al_2018(ua_na)

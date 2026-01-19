@@ -12,7 +12,6 @@ import math
 import shapely.geometry
 import matplotlib.pyplot
 
-
 EARTH_RADIUS = 6371000.0  # m
 
 

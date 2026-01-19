@@ -23,7 +23,6 @@ from . import (
     set_up_nan_dataset,
 )
 
-
 # docs
 __author__ = "Thomas Keel"
 __email__ = "thomasjames.keel@gmail.com"

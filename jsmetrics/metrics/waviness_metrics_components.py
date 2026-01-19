@@ -13,7 +13,6 @@ Functions and Classes ordered by the year of the paper that uses each metric com
 # imports
 from jsmetrics.utils import spatial_utils
 
-
 # docs
 __author__ = "Thomas Keel"
 __email__ = "thomasjames.keel@gmail.com"

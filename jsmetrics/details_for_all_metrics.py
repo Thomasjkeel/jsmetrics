@@ -4,7 +4,6 @@ from jsmetrics.metrics import (
     waviness_metrics,
 )
 
-
 # RULES for METRIC_DETAILS dictionary:
 # 1. must have the keys: 'variables', 'coords' 'metric', 'plev_units', 'metric', 'name', 'description, and 'doi'
 # 2. 'variables' will contain the required variable names in the data conforming to the CMIP Controlled Vocabulary (Taylor et al. 2011)

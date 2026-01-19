@@ -473,8 +473,7 @@ def remove_unwanted_coords_from_data(
     if len(difference) > 0:
         raise ValueError(
             "Unwanted coords in data: %s.\
-             Please subset/remove so that the slice can be 2D."
-            % (difference,)
+             Please subset/remove so that the slice can be 2D." % (difference,)
         )
 
 

@@ -3,6 +3,7 @@
 """
 Wrappers for checking inputs to the metrics
 """
+
 import functools
 import xarray
 

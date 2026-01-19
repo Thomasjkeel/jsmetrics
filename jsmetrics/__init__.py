@@ -11,7 +11,6 @@ from jsmetrics.metrics import (
     waviness_metrics,
 )
 
-
 __all__ = [
     "details_for_all_metrics",
     "jet_core_algorithms",

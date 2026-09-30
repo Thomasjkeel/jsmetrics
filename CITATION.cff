@@ -1,0 +1,24 @@
+cff-version: "1.2.0"
+authors:
+  - family-names: Keel
+    given-names: Tom
+    orcid: "https://orcid.org/0000-0001-9193-5271"
+date-published: 2024-02-14
+doi: 10.5194/gmd-17-1229-2024
+message: If you use this software, please cite our article in 
+  Geoscientific Model Development.
+preferred-citation:
+  authors:
+  - family-names: Keel
+    given-names: Tom
+    orcid: "https://orcid.org/0000-0001-9193-5271"
+  issue: 3
+  journal: Geoscientific Model Development
+  publisher:
+    name: Copernicus Publications
+  start: 5415
+  title: "jsmetrics v0.2.0: a Python package for metrics and algorithms used to identify or characterise atmospheric jet streams"
+  type: article
+  url: "https://doi.org/10.5194/gmd-17-1229-2024"
+  volume: 17
+title: "jsmetrics: a Python package for metrics and algorithms used to identify or characterise atmospheric jet streams"
